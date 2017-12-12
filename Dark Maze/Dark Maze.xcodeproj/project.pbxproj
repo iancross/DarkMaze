@@ -67,27 +67,27 @@
 			isa = PBXGroup;
 			children = (
 				C3EF4A131FD7749000528247 /* AppDelegate.swift */,
-				C3189E071FD7991E000A52A6 /* GameScene.sks */,
-				C3EF4A191FD7749000528247 /* GameScene.swift */,
 				C3EF4A1B1FD7749000528247 /* GameViewController.swift */,
+				C3EF4A191FD7749000528247 /* GameScene.swift */,
+				C3189E071FD7991E000A52A6 /* GameScene.sks */,
 				C3EF4A1D1FD7749000528247 /* Main.storyboard */,
 				C3EF4A201FD7749000528247 /* Assets.xcassets */,
 				C3EF4A221FD7749000528247 /* LaunchScreen.storyboard */,
 				C3EF4A251FD7749000528247 /* Info.plist */,
 				C3189E011FD77D0B000A52A6 /* Level1Scene.swift */,
 				C3189DFF1FD77CBF000A52A6 /* Level1Scene.sks */,
-				C3EF4A2D1FD7771900528247 /* New Group */,
+				C3EF4A2D1FD7771900528247 /* Fonts */,
 			);
 			path = "Dark Maze";
 			sourceTree = "<group>";
 		};
-		C3EF4A2D1FD7771900528247 /* New Group */ = {
+		C3EF4A2D1FD7771900528247 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
 				C3EF4A2B1FD7770600528247 /* MYBLS___.TTF */,
 				C3EF4A2C1FD7771100528247 /* MYSCARS_.TTF */,
 			);
-			path = "New Group";
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -310,6 +310,7 @@
 				DEVELOPMENT_TEAM = 8S2E38T6C8;
 				INFOPLIST_FILE = "Dark Maze/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				"OTHER_SWIFT_FLAGS[sdk=iphonesimulator*]" = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.crossibc.Dark-Maze";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
