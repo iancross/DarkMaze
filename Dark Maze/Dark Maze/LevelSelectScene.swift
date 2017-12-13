@@ -9,16 +9,21 @@
 import SpriteKit
 import GameplayKit
 
-class Level1Scene: SKScene {
+class LevelSelectScene: SKScene {
     
     private var label : SKLabelNode?
     private var spinnyNode : SKShapeNode?
+    private var level1 : SKSpriteNode?
     
     override func didMove(to view: SKView) {
         print("level1 didmove")
-        self.view?.backgroundColor = UIColor.brown
+        level1 = self.childNode(withName: "Level1") as? SKSpriteNode
+        level1?.position = CGPoint(x: frame.midX, y: frame.midY)
     }
-        
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let gameSceneTemp = GameScene(fileNamed: "Levels1Scene")
+        self.scene?.view?.presentScene(gameSceneTemp!, transition: SKTransition.doorsCloseHorizontal(withDuration: 2))
+    }
         /*// Get label node from scene and store it for use later
         self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
         if let label = self.label {

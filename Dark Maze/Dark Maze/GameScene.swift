@@ -51,7 +51,7 @@ class GameScene: SKScene {
             for nodes in nodesAtLocation{
                 if nodes.name == "FloatingStartGameButton" {
                     print("test")
-                    let gameSceneTemp = GameScene(fileNamed: "Level1Scene")
+                    let gameSceneTemp = GameScene(fileNamed: "LevelSelectScene")
                     self.scene?.view?.presentScene(gameSceneTemp!, transition: SKTransition.doorsCloseHorizontal(withDuration: 2))
                     break
                 }
