@@ -9,16 +9,20 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
-    
-    var floatingStartButton = SKLabelNode()
+protocol TestDelegate {
+    func gameOver()
+    func levelSelect()
+}
 
+class GameScene: SKScene {
+    var floatingStartButton = SKLabelNode()
+    
     override func sceneDidLoad() {
         print("scene loaded")
     }
     
     override func didMove(to view: SKView) {
-        
+
         floatingStartButton = self.childNode(withName: "FloatingStartGameButton") as! SKLabelNode
         floatingStartButton.position = CGPoint(
             x: CGFloat(arc4random_uniform(UInt32(frame.width - floatingStartButton.frame.width))),
@@ -51,7 +55,7 @@ class GameScene: SKScene {
             for nodes in nodesAtLocation{
                 if nodes.name == "FloatingStartGameButton" {
                     print("test")
-                    let gameSceneTemp = GameScene(fileNamed: "LevelSelectScene")
+                    let gameSceneTemp = SKScene(fileNamed: "LevelSelectScene")
                     self.scene?.view?.presentScene(gameSceneTemp!, transition: SKTransition.doorsCloseHorizontal(withDuration: 2))
                     break
                 }

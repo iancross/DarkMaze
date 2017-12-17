@@ -9,8 +9,10 @@
 import SpriteKit
 import GameplayKit
 
+
 class LevelSelectScene: SKScene {
-    
+
+    var myDelegate: TestDelegate?
     private var label : SKLabelNode?
     private var spinnyNode : SKShapeNode?
     private var level1 : SKSpriteNode?
@@ -19,9 +21,10 @@ class LevelSelectScene: SKScene {
         print("level1 didmove")
         level1 = self.childNode(withName: "Level1") as? SKSpriteNode
         level1?.position = CGPoint(x: frame.midX, y: frame.midY)
+        myDelegate?.levelSelect()
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let gameSceneTemp = GameScene(fileNamed: "Levels1Scene")
+        let gameSceneTemp = SKScene(fileNamed: "Levels1Scene")
         self.scene?.view?.presentScene(gameSceneTemp!, transition: SKTransition.doorsCloseHorizontal(withDuration: 2))
     }
         /*// Get label node from scene and store it for use later

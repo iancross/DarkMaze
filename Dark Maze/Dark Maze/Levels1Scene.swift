@@ -10,12 +10,12 @@ import SpriteKit
 import GameplayKit
 
 class Levels1Scene: SKScene {
+    var myGrid = Grid()
     
     var floatingStartButton = SKLabelNode()
     
     override func didMove(to view: SKView) {
-        print("fuck")
-
+        
     }
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
@@ -23,11 +23,6 @@ class Levels1Scene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 
     }
-    /*override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-     print("test")
-     let gameSceneTemp = GameScene(fileNamed: "Level1Scene")
-     self.scene?.view?.presentScene(gameSceneTemp!, transition: SKTransition.doorsCloseHorizontal(withDuration: 2))
-     }*/
     
 }
 
