@@ -64,9 +64,9 @@
 		C364CEC11FE74FB4009140C7 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
-				C364CEC31FE750E8009140C7 /* Level1Scene.sks */,
-				C3189DFF1FD77CBF000A52A6 /* LevelSelectScene.sks */,
 				C3189E071FD7991E000A52A6 /* MenuScene.sks */,
+				C3189DFF1FD77CBF000A52A6 /* LevelSelectScene.sks */,
+				C364CEC31FE750E8009140C7 /* Level1Scene.sks */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
