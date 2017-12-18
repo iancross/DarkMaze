@@ -10,13 +10,12 @@ import UIKit
 import SpriteKit
 import GameplayKit
 
-class GameViewController: UIViewController, TestDelegate {
-    var delegate: TestDelegate?
+class GameViewController: UIViewController {
 
     override func viewDidLoad() {
         if let view = self.view as! SKView? {
             // Load the SKScene from 'GameScene.sks'
-            if let scene = SKScene(fileNamed: "GameScene") {
+            if let scene = SKScene(fileNamed: "MenuScene") {
                 // Set the scale mode to scale to fit the window
                 scene.scaleMode = .aspectFill
                 // Present the scene
@@ -24,7 +23,6 @@ class GameViewController: UIViewController, TestDelegate {
             }
             
             view.ignoresSiblingOrder = true
-            
             view.showsFPS = true
             view.showsNodeCount = true
         }
@@ -51,12 +49,5 @@ class GameViewController: UIViewController, TestDelegate {
 
     override var prefersStatusBarHidden: Bool {
         return true
-    }
-    func gameOver(){
-        print ("game over message received")
-    }
-    func levelSelect(){
-        print ("level select message received")
-
     }
 }

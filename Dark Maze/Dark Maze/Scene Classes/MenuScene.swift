@@ -14,12 +14,8 @@ protocol TestDelegate {
     func levelSelect()
 }
 
-class GameScene: SKScene {
+class MenuScene: SKScene {
     var floatingStartButton = SKLabelNode()
-    
-    override func sceneDidLoad() {
-        print("scene loaded")
-    }
     
     override func didMove(to view: SKView) {
 
@@ -28,10 +24,7 @@ class GameScene: SKScene {
             x: CGFloat(arc4random_uniform(UInt32(frame.width - floatingStartButton.frame.width))),
             y: CGFloat(arc4random_uniform(UInt32(frame.height - floatingStartButton.frame.height)))
         )
-        /*let newX = arc4random_uniform(UInt32(frame.width - floatingStartButton.frame.size.width))
-        let newY = arc4random_uniform(UInt32(frame.height - floatingStartButton.frame.size.height)) + UInt32(floatingStartButton.frame.size.height)
-        let newPoint = CGPoint(x: CGFloat(newX), y: CGFloat(newY))*/
-        var actionList = SKAction.sequence(
+        let actionList = SKAction.sequence(
             [SKAction.fadeIn(withDuration: 2.0),
             SKAction.fadeOut(withDuration: 2.0),
             SKAction.run(moveLabel)]
@@ -54,18 +47,11 @@ class GameScene: SKScene {
             let nodesAtLocation = self.nodes(at: t.location(in: self))
             for nodes in nodesAtLocation{
                 if nodes.name == "FloatingStartGameButton" {
-                    print("test")
-                    let gameSceneTemp = SKScene(fileNamed: "LevelSelectScene")
+                    let gameSceneTemp = SKScene(fileNamed: "Level1Scene") //this is temporarily bypassing the level select to save time
                     self.scene?.view?.presentScene(gameSceneTemp!, transition: SKTransition.doorsCloseHorizontal(withDuration: 2))
                     break
                 }
             }
         }
     }
-    /*override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("test")
-        let gameSceneTemp = GameScene(fileNamed: "Level1Scene")
-        self.scene?.view?.presentScene(gameSceneTemp!, transition: SKTransition.doorsCloseHorizontal(withDuration: 2))
-    }*/
-
 }
