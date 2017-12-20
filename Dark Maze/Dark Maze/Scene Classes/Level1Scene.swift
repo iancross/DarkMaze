@@ -9,34 +9,43 @@
 import SpriteKit
 
 class Level1Scene: SKScene {
-    let gridSize = 4
-    let blockBuffer = 2
+    let gridSize = 2
+    var tile2DArray = [[GridTile]]()
+    
+    //This is the number of blocks that fit on the side. Each side would be blockBuffer/2
+    let blockBuffer = 3
     
     override func didMove(to view: SKView) {
         initializeGrid()
     }
-    /*override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-
-    }*/
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for t in touches {
+            //tile2DArray[0][0].setColor(color: UIColor.purple)
+            let nodesAtLocation = self.nodes(at: t.location(in: self))
+            for node in nodesAtLocation{
+                print ("within for loop")
+                print (node.parent)
+                /*if let tile = node as? GridTile {
+                    print ("made it here")
+                    tile.touched()
+                }*/
+            }
+        }
+    }
     private func initializeGrid(){
         let blocksize = self.frame.maxX / CGFloat(gridSize + blockBuffer)
         
-        
-        for index in (blockBuffer-1)...gridSize{
-            let cgI = CGFloat(index)
-            var points = [CGPoint(x:cgI * blocksize, y: 400),
-                          CGPoint(x:cgI * blocksize + blocksize, y: 400),
-                          CGPoint(x:cgI * blocksize + blocksize, y: 400-blocksize),
-                          CGPoint(x:cgI * blocksize, y: 400-blocksize),
-                          CGPoint(x:cgI * blocksize, y: 400)
-            ]
-
-            var tile = SKShapeNode(points: &points, count: points.count)
-            tile.lineWidth = 2
-            tile.glowWidth = 2
-            self.addChild(tile)
+        //there will be an outsid for loop here
+        tile2DArray.append([GridTile]())
+        for index in 0...gridSize-1{
+            let indexX = CGFloat(Float(index) + Float(blockBuffer)/2) //need to add 1 here to offs
+            tile2DArray[0].append(GridTile(
+                parentScene: self,
+                pointArr: [CGPoint(x:indexX * blocksize, y: 400),
+                     CGPoint(x:indexX * blocksize + blocksize, y: 400),
+                     CGPoint(x:indexX * blocksize + blocksize, y: 400-blocksize),
+                     CGPoint(x:indexX * blocksize, y: 400-blocksize)]
+            ))
         }
-
-        //tempNode.run(action)
     }
 }
