@@ -9,47 +9,69 @@
 import SpriteKit
 
 class Level1Scene: SKScene {
-    let gridSize = 2
     var tile2DArray = [[GridTile]]()
+    var levelsData = LevelsData()
+    var currentLevel = 0
     
     //This is the number of blocks that fit on the side. Each side would be blockBuffer/2
-    let blockBuffer = 3
     
     override func didMove(to view: SKView) {
         initializeGrid()
+        drawSolution()
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
             handleTouch(t.location(in: self))
             print (t.location(in: self))
-            //tile2DArray[0][0].setColor(color: UIColor.purple)
             /*let nodesAtLocation = self.nodes(at: t.location(in: self))
             for node in nodesAtLocation{
-                print ("within for loop")
-                print (node.parent)
-                /*if let tile = node as? GridTile {
-                    print ("made it here")
-                    tile.touched()
-                }*/
+             
             }*/
         }
     }
     private func initializeGrid(){
-        let blocksize = self.frame.maxX / CGFloat(gridSize + blockBuffer)
+        let l = levelsData.levels[currentLevel]
+        let blocksize = max(self.frame.maxX / CGFloat(l.gridSizeX + l.blockBuffer),
+                            self.frame.maxX / CGFloat(l.gridSizeY + l.blockBuffer))
+        let botOfGridY = frame.midY - ((CGFloat(l.gridSizeY) / 2.0) * blocksize)
+        let leftOfGridX = frame.midX - ((CGFloat(l.gridSizeX) / 2.0) * blocksize)
         
-        //there will be an outsid for loop here
-        tile2DArray.append([GridTile]())
-        for index in 0...gridSize-1{
-            let indexX = CGFloat(Float(index) + Float(blockBuffer)/2) //need to add 1 here to offs
-            tile2DArray[0].append(GridTile(
-                parentScene: self,
-                pointArr: [CGPoint(x:indexX * blocksize, y: 400),
-                     CGPoint(x:indexX * blocksize + blocksize, y: 400),
-                     CGPoint(x:indexX * blocksize + blocksize, y: 400-blocksize),
-                     CGPoint(x:indexX * blocksize, y: 400-blocksize)]
-            ))
+        for row in 0...l.gridSizeY-1{
+            let offsetY = botOfGridY + blocksize * CGFloat(row)
+            tile2DArray.append([GridTile]())
+            for col in 0...l.gridSizeX-1{
+                let offsetX = leftOfGridX + blocksize * CGFloat(col)
+                let coord = (col,row)
+                let tile = GridTile(parentScene: self, coord: coord,
+                          pointArr: [CGPoint(x:offsetX, y: offsetY),
+                                     CGPoint(x:offsetX + blocksize, y: offsetY),
+                                     CGPoint(x:offsetX + blocksize, y: offsetY + blocksize),
+                                     CGPoint(x:offsetX, y: offsetY + blocksize)]
+                )
+                tile2DArray[row].append(tile)
+            }
         }
     }
+    func drawSolution(){
+        self.isUserInteractionEnabled = false
+        let l = levelsData.levels[currentLevel]
+        var actionSequence = [SKAction]()
+        let wait1 = SKAction.wait(forDuration: 1)
+        for coord in l.solutionCoords{
+            let tile = tile2DArray[coord.x][coord.y]
+            var tempAction = SKAction.run {
+                tile.touched()
+            }
+            actionSequence.append(wait1)
+            actionSequence.append(tempAction)
+        }
+        let action = SKAction.sequence(actionSequence)
+        self.run(action) {
+            self.isUserInteractionEnabled = true
+            print("Touches Enabled")
+        }
+    }
+    
     private func handleTouch(_ point: CGPoint){
         for row in tile2DArray{
             for tile in row{
