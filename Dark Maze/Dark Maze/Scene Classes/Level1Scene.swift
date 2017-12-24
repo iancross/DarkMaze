@@ -20,8 +20,10 @@ class Level1Scene: SKScene {
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
+            handleTouch(t.location(in: self))
+            print (t.location(in: self))
             //tile2DArray[0][0].setColor(color: UIColor.purple)
-            let nodesAtLocation = self.nodes(at: t.location(in: self))
+            /*let nodesAtLocation = self.nodes(at: t.location(in: self))
             for node in nodesAtLocation{
                 print ("within for loop")
                 print (node.parent)
@@ -29,7 +31,7 @@ class Level1Scene: SKScene {
                     print ("made it here")
                     tile.touched()
                 }*/
-            }
+            }*/
         }
     }
     private func initializeGrid(){
@@ -47,5 +49,13 @@ class Level1Scene: SKScene {
                      CGPoint(x:indexX * blocksize, y: 400-blocksize)]
             ))
         }
+    }
+    private func handleTouch(_ point: CGPoint){
+        for row in tile2DArray{
+            for tile in row{
+                if tile.isTouched(point: point) { print ("WEEEEEE") }
+            }
+        }
+        
     }
 }

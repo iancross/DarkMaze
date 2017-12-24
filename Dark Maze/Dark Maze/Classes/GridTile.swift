@@ -26,7 +26,6 @@ class GridTile: SKShapeNode{
         tile.glowWidth = 2
         tile.fillColor = UIColor.black
         tile.name = "Grid Tile"
-        
         //add the tile to the parent scene
         parentScene.addChild(tile)
         super.init()
@@ -34,12 +33,24 @@ class GridTile: SKShapeNode{
     func setColor(color: UIColor){
         tile.fillColor = color
     }
+    
+    func isTouched(point: CGPoint) -> Bool{
+        if tile.contains(point) {
+            self.touched()
+            return true
+        }
+        else {
+            return false
+        }
+    }
     func touched(){
         if self.black {
             tile.fillColor = UIColor.white
+            self.black = false
         }
         else{
             tile.fillColor = UIColor.black
+            self.black = true
         }
     }
     required init(coder aDecoder: NSCoder) {
