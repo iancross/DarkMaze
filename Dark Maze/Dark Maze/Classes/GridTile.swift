@@ -12,9 +12,14 @@ import SpriteKit
 
 class GridTile: SKShapeNode{
     var tile: SKShapeNode
+    var originColor = UIColor.black
     var black: Bool = true
     var points: [CGPoint]
     let gridCoord: (x: Int,y: Int)
+    var strokePresent = false
+    private var strokeAlpha = 0.0
+    private var strokeAppearing = true
+    let alphaDecrement = 0.005
     
     
     /*initialized with the points/lines in this order:
@@ -36,14 +41,19 @@ class GridTile: SKShapeNode{
         tile.glowWidth = 1
         tile.fillColor = UIColor.black
         tile.name = "Grid Tile"
-        tile.strokeColor = UIColor.gray
+        tile.strokeColor = UIColor(displayP3Red: 0.40, green: 0.40, blue: 0.40, alpha: 0.0 )
         //add the tile to the parent scene
         parentScene.addChild(tile)
         super.init()
     }
-    private func addFrame(){
-        
+    func reInit(){
+        tile.fillColor = originColor
+        black = true
+        tile.alpha = 1.0
+        tile.lineWidth = 1
+        tile.glowWidth = 1
     }
+
     func setColor(color: UIColor){
         tile.fillColor = color
     }
@@ -57,13 +67,30 @@ class GridTile: SKShapeNode{
             return false
         }
     }
+    func updateFrameAlpha(){
+        if strokePresent{
+            if strokeAlpha > 0.0 && !strokeAppearing {
+                strokeAlpha -= alphaDecrement
+            }
+            else if strokeAlpha < 1.0 && strokeAppearing {
+                strokeAlpha += alphaDecrement
+            }
+            else{
+                strokeAppearing = !strokeAppearing
+            }
+            let strokeColor = UIColor(displayP3Red: 0.40, green: 0.40, blue: 0.40, alpha: CGFloat(strokeAlpha) )
+            tile.strokeColor = strokeColor
+        }
+    }
     func touched(){
         if self.black {
             tile.fillColor = UIColor.white
+            tile.alpha = 1.0
             self.black = false
         }
         else{
             tile.fillColor = UIColor.black
+            tile.alpha = 1.0
             self.black = true
         }
     }

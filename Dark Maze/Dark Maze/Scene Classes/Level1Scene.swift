@@ -12,22 +12,79 @@ class Level1Scene: SKScene {
     var tile2DArray = [[GridTile]]()
     var levelsData = LevelsData()
     var currentLevel = 0
-    
-    //This is the number of blocks that fit on the side. Each side would be blockBuffer/2
+    var tapToBegin: SKLabelNode?
+    var countdownTime = 3
+    var gridViewable = false
+
     
     override func didMove(to view: SKView) {
-        initializeGrid()
-        drawSolution()
+        initializeTapToBegin()
+        //initializeGrid()
+        //drawSolution()
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
             handleTouch(t.location(in: self))
-            print (t.location(in: self))
             /*let nodesAtLocation = self.nodes(at: t.location(in: self))
             for node in nodesAtLocation{
              
             }*/
         }
+    }
+    override func update(_ currentTime: TimeInterval) {
+        if gridViewable {
+            for row in tile2DArray{
+                for tile in row{
+                    tile.updateFrameAlpha()
+                }
+            }
+        }
+    }
+    func initializeTapToBegin(){
+        let tapLabel = SKLabelNode(fontNamed: "My Scars")
+        tapLabel.text = "Tap to begin"
+        tapLabel.fontSize = 40
+        tapLabel.fontColor = SKColor.white
+        tapLabel.position = CGPoint(x: frame.midX, y: frame.midY)
+        addChild(tapLabel)
+        let actionList = SKAction.sequence(
+            [SKAction.fadeOut(withDuration: 2.0),
+             SKAction.fadeIn(withDuration: 2.0)]
+        )
+        tapLabel.run(SKAction.repeatForever(actionList))
+        tapToBegin = tapLabel
+    }
+    func countdown(){
+        let number = SKLabelNode(fontNamed: "My Scars")
+        number.text = "\(countdownTime)"
+        number.fontSize = 40
+        number.fontColor = SKColor.white
+        number.position = CGPoint(x: frame.midX, y: frame.midY + frame.midY/2)
+        addChild(number)
+        let actionList = SKAction.sequence(
+            [SKAction.fadeIn(withDuration: 0.5),
+             SKAction.fadeOut(withDuration: 0.5),
+             SKAction.moveTo(y: frame.midY, duration: 0),
+             SKAction.run({ self.decrementCountdown(number) }),
+            SKAction.fadeIn(withDuration: 0.5),
+            SKAction.fadeOut(withDuration: 0.5),
+            SKAction.moveTo(y: frame.midY - frame.midY/2, duration: 0),
+            SKAction.run({ self.decrementCountdown(number) }),
+            SKAction.fadeIn(withDuration: 0.5),
+            SKAction.fadeOut(withDuration: 0.5),
+            SKAction.run({
+                number.removeFromParent()
+                self.countdownTime = 3
+                self.initializeGrid()
+                self.drawSolution()
+                })
+            ]
+        )
+        number.run(actionList)
+    }
+    private func decrementCountdown(_ label: SKLabelNode) -> Void{
+        countdownTime -= 1
+        label.text = "\(countdownTime)"
     }
     private func initializeGrid(){
         let l = levelsData.levels[currentLevel]
@@ -52,32 +109,52 @@ class Level1Scene: SKScene {
             }
         }
     }
+    
     func drawSolution(){
         self.isUserInteractionEnabled = false
         let l = levelsData.levels[currentLevel]
-        var actionSequence = [SKAction]()
-        let wait1 = SKAction.wait(forDuration: 1)
-        for coord in l.solutionCoords{
+        
+        for (index,coord) in l.solutionCoords.enumerated(){
+            print ("made it to the for loop")
             let tile = tile2DArray[coord.x][coord.y]
-            var tempAction = SKAction.run {
-                tile.touched()
+            let actionList = SKAction.sequence(
+                [SKAction.wait(forDuration: l.delayTime * Double(index)),
+                 SKAction.run { tile.touched() },
+                 SKAction.fadeOut(withDuration: 2)
+                ])
+            tile.tile.run(actionList){
+                if index == l.solutionCoords.count-1{
+                    self.drawGridLines()
+                    self.isUserInteractionEnabled = true
+                    print("Touches Enabled")
+                }
             }
-            actionSequence.append(wait1)
-            actionSequence.append(tempAction)
-        }
-        let action = SKAction.sequence(actionSequence)
-        self.run(action) {
-            self.isUserInteractionEnabled = true
-            print("Touches Enabled")
         }
     }
-    
+    private func drawGridLines(){
+        for row in tile2DArray{
+            for tile in row{
+                tile.reInit()
+                tile.strokePresent = true
+            }
+        }
+        gridViewable = true
+    }
     private func handleTouch(_ point: CGPoint){
         for row in tile2DArray{
             for tile in row{
-                if tile.isTouched(point: point) { print ("WEEEEEE") }
+                if tile.isTouched(point: point) {
+                    //do other things if tile is touched
+                }
             }
         }
-        
+        if let temp = tapToBegin {
+            if temp.contains(point){
+                temp.run(SKAction.fadeOut(withDuration: 2.0)){
+                    temp.removeFromParent()
+                    self.countdown()
+                }
+            }
+        }
     }
 }
