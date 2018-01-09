@@ -69,7 +69,7 @@ class GridTile: SKShapeNode{
     }
     func updateFrameAlpha(){
         if strokePresent{
-            if strokeAlpha > 0.0 && !strokeAppearing {
+            if strokeAlpha > 0.2 && !strokeAppearing {
                 strokeAlpha -= alphaDecrement
             }
             else if strokeAlpha < 1.0 && strokeAppearing {

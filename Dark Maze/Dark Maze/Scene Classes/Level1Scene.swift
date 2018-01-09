@@ -15,12 +15,13 @@ class Level1Scene: SKScene {
     var tapToBegin: SKLabelNode?
     var countdownTime = 3
     var gridViewable = false
+    var gameHasBegun = false
+    var touchedTiles = 0
 
     
     override func didMove(to view: SKView) {
         initializeTapToBegin()
-        //initializeGrid()
-        //drawSolution()
+
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
@@ -110,13 +111,15 @@ class Level1Scene: SKScene {
         }
     }
     
+    //Once the solution is finished drawing and the grid appears,
+    //the game begins.
     func drawSolution(){
         self.isUserInteractionEnabled = false
         let l = levelsData.levels[currentLevel]
         
         for (index,coord) in l.solutionCoords.enumerated(){
             print ("made it to the for loop")
-            let tile = tile2DArray[coord.x][coord.y]
+            let tile = tile2DArray[coord.y][coord.x]
             let actionList = SKAction.sequence(
                 [SKAction.wait(forDuration: l.delayTime * Double(index)),
                  SKAction.run { tile.touched() },
@@ -127,6 +130,7 @@ class Level1Scene: SKScene {
                     self.drawGridLines()
                     self.isUserInteractionEnabled = true
                     print("Touches Enabled")
+                    self.gameHasBegun = true // <-left off here
                 }
             }
         }
@@ -141,13 +145,28 @@ class Level1Scene: SKScene {
         gridViewable = true
     }
     private func handleTouch(_ point: CGPoint){
+        let l = levelsData.levels[currentLevel]
+        
+        var tile: GridTile
         for row in tile2DArray{
             for tile in row{
                 if tile.isTouched(point: point) {
-                    //do other things if tile is touched
+                    print(l.solutionCoords, tile.gridCoord)
+                    
+                    if tupleContains(a: l.solutionCoords, v: tile.gridCoord){
+                        touchedTiles += 1
+                    }
+                    else{
+                        //display the end game screen with failure parameters
+                    }
                 }
             }
         }
+        if touchedTiles == l.solutionCoords.count {
+            endGame(failure: false)
+        }
+        
+        //if begin is touched
         if let temp = tapToBegin {
             if temp.contains(point){
                 temp.run(SKAction.fadeOut(withDuration: 2.0)){
@@ -156,5 +175,34 @@ class Level1Scene: SKScene {
                 }
             }
         }
+    }
+    
+    // If all the solutions coords are filled (and there wasn't a
+    // failure) show the end game success (failure = false). Otherwise,
+    // show the end game failure (failure = true)
+    func endGame (failure: Bool){
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+            for child in self.children {
+                child.removeFromParent()
+            }
+            self.initGameVariables()
+            self.initializeTapToBegin()
+        })
+    }
+    
+    /*checks an array of tuples for one in particular
+    https://stackoverflow.com/questions/29736244/how-do-i-check-if-an-array-of-tuples-contains-a-particular-one-in-swift
+    */
+    func tupleContains(a:[(Int, Int)], v:(Int,Int)) -> Bool {
+        let (c1, c2) = v
+        for (v1, v2) in a { if v1 == c1 && v2 == c2 { return true } }
+        return false
+    }
+    
+    func initGameVariables (){
+        countdownTime = 3
+        gridViewable = false
+        gameHasBegun = false
+        touchedTiles = 0
     }
 }

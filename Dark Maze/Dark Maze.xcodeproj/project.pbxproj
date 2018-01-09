@@ -13,7 +13,6 @@
 		C3189E021FD77D0B000A52A6 /* LevelSelectScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3189E011FD77D0B000A52A6 /* LevelSelectScene.swift */; };
 		C3189E081FD7991E000A52A6 /* MenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C3189E071FD7991E000A52A6 /* MenuScene.sks */; };
 		C32DB4731FF02A6800040BA3 /* LevelsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32DB4721FF02A6800040BA3 /* LevelsData.swift */; };
-		C364CEBD1FE6CD00009140C7 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = C364CEBC1FE6CD00009140C7 /* Grid.swift */; };
 		C364CEC01FE74F98009140C7 /* Level1Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C364CEBF1FE74F98009140C7 /* Level1Scene.swift */; };
 		C364CEC41FE750E8009140C7 /* Level1Scene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C364CEC31FE750E8009140C7 /* Level1Scene.sks */; };
 		C37B707E1FE9D94D00F71B73 /* GridTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37B707D1FE9D94D00F71B73 /* GridTile.swift */; };
@@ -30,7 +29,6 @@
 		C3189E011FD77D0B000A52A6 /* LevelSelectScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelSelectScene.swift; sourceTree = "<group>"; };
 		C3189E071FD7991E000A52A6 /* MenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MenuScene.sks; sourceTree = "<group>"; };
 		C32DB4721FF02A6800040BA3 /* LevelsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelsData.swift; sourceTree = "<group>"; };
-		C364CEBC1FE6CD00009140C7 /* Grid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
 		C364CEBF1FE74F98009140C7 /* Level1Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level1Scene.swift; sourceTree = "<group>"; };
 		C364CEC31FE750E8009140C7 /* Level1Scene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Level1Scene.sks; sourceTree = "<group>"; };
 		C37B707D1FE9D94D00F71B73 /* GridTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridTile.swift; sourceTree = "<group>"; };
@@ -61,7 +59,6 @@
 			isa = PBXGroup;
 			children = (
 				C37B707D1FE9D94D00F71B73 /* GridTile.swift */,
-				C364CEBC1FE6CD00009140C7 /* Grid.swift */,
 				C32DB4721FF02A6800040BA3 /* LevelsData.swift */,
 			);
 			path = Classes;
@@ -212,7 +209,6 @@
 				C3EF4A141FD7749000528247 /* AppDelegate.swift in Sources */,
 				C364CEC01FE74F98009140C7 /* Level1Scene.swift in Sources */,
 				C3189E021FD77D0B000A52A6 /* LevelSelectScene.swift in Sources */,
-				C364CEBD1FE6CD00009140C7 /* Grid.swift in Sources */,
 				C32DB4731FF02A6800040BA3 /* LevelsData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
