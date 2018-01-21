@@ -22,6 +22,7 @@
 		C3EF4A1F1FD7749000528247 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3EF4A1D1FD7749000528247 /* Main.storyboard */; };
 		C3EF4A211FD7749000528247 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C3EF4A201FD7749000528247 /* Assets.xcassets */; };
 		C3EF4A241FD7749000528247 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3EF4A221FD7749000528247 /* LaunchScreen.storyboard */; };
+		C3FD8ACB20141ADF006ED708 /* TextBoxButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3FD8ACA20141ADF006ED708 /* TextBoxButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		C3EF4A251FD7749000528247 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C3EF4A2B1FD7770600528247 /* MYBLS___.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MYBLS___.TTF"; sourceTree = "<group>"; };
 		C3EF4A2C1FD7771100528247 /* MYSCARS_.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = MYSCARS_.TTF; sourceTree = "<group>"; };
+		C3FD8ACA20141ADF006ED708 /* TextBoxButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextBoxButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 			children = (
 				C37B707D1FE9D94D00F71B73 /* GridTile.swift */,
 				C32DB4721FF02A6800040BA3 /* LevelsData.swift */,
+				C3FD8ACA20141ADF006ED708 /* TextBoxButton.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -203,6 +206,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3FD8ACB20141ADF006ED708 /* TextBoxButton.swift in Sources */,
 				C37B707E1FE9D94D00F71B73 /* GridTile.swift in Sources */,
 				C3EF4A1A1FD7749000528247 /* MenuScene.swift in Sources */,
 				C3EF4A1C1FD7749000528247 /* GameViewController.swift in Sources */,

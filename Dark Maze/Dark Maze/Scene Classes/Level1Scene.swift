@@ -15,12 +15,16 @@ class Level1Scene: SKScene {
     var tapToBegin: SKLabelNode?
     var countdownTime = 3
     var gridViewable = false
-    var gameHasBegun = false
+    var gameActive = false
     var touchedTiles = 0
+    var mainFontString = "My Scars" //probably should change this sometime
 
     
     override func didMove(to view: SKView) {
-        initializeTapToBegin()
+        //initializeTapToBegin() //disabling temporarily so that i can go straight to the solution (skip countdown)
+        
+        self.initializeGrid()
+        self.drawSolution()
 
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -42,7 +46,7 @@ class Level1Scene: SKScene {
         }
     }
     func initializeTapToBegin(){
-        let tapLabel = SKLabelNode(fontNamed: "My Scars")
+        let tapLabel = SKLabelNode(fontNamed: mainFontString)
         tapLabel.text = "Tap to begin"
         tapLabel.fontSize = 40
         tapLabel.fontColor = SKColor.white
@@ -55,8 +59,11 @@ class Level1Scene: SKScene {
         tapLabel.run(SKAction.repeatForever(actionList))
         tapToBegin = tapLabel
     }
+    
+    //does a 3 2 1 countdown on the screen and then
+    //starts drawing the solution
     func countdown(){
-        let number = SKLabelNode(fontNamed: "My Scars")
+        let number = SKLabelNode(fontNamed: mainFontString)
         number.text = "\(countdownTime)"
         number.fontSize = 40
         number.fontColor = SKColor.white
@@ -118,7 +125,6 @@ class Level1Scene: SKScene {
         let l = levelsData.levels[currentLevel]
         
         for (index,coord) in l.solutionCoords.enumerated(){
-            print ("made it to the for loop")
             let tile = tile2DArray[coord.y][coord.x]
             let actionList = SKAction.sequence(
                 [SKAction.wait(forDuration: l.delayTime * Double(index)),
@@ -129,8 +135,7 @@ class Level1Scene: SKScene {
                 if index == l.solutionCoords.count-1{
                     self.drawGridLines()
                     self.isUserInteractionEnabled = true
-                    print("Touches Enabled")
-                    self.gameHasBegun = true // <-left off here
+                    self.gameActive = true
                 }
             }
         }
@@ -146,23 +151,28 @@ class Level1Scene: SKScene {
     }
     private func handleTouch(_ point: CGPoint){
         let l = levelsData.levels[currentLevel]
-        
-        var tile: GridTile
-        for row in tile2DArray{
-            for tile in row{
-                if tile.isTouched(point: point) {
-                    print(l.solutionCoords, tile.gridCoord)
-                    
-                    if tupleContains(a: l.solutionCoords, v: tile.gridCoord){
-                        touchedTiles += 1
-                    }
-                    else{
-                        //display the end game screen with failure parameters
+        if gameActive{
+            //var tile: GridTile
+            for row in tile2DArray{
+                for tile in row{
+                    if tile.isTouched(point: point) {
+                        print(l.solutionCoords, tile.gridCoord)
+                        
+                        if tupleContains(a: l.solutionCoords, v: tile.gridCoord){
+                            touchedTiles += 1
+                        }
+                        else{
+                            //display the end game screen with failure parameters
+                        }
                     }
                 }
             }
         }
+        else{
+            
+        }
         if touchedTiles == l.solutionCoords.count {
+            gameActive = false
             endGame(failure: false)
         }
         
@@ -185,9 +195,33 @@ class Level1Scene: SKScene {
             for child in self.children {
                 child.removeFromParent()
             }
-            self.initGameVariables()
-            self.initializeTapToBegin()
+            
+            self.openEndGameOptions(failure: failure)
+
         })
+    }
+    
+    //first open the option modal
+    //then direct the user based on selection
+    //Main menu, level select, or next level?
+    func openEndGameOptions (failure: Bool){
+        var variableText: String
+        if failure {
+            variableText = "Try Again"
+        }
+        else {
+            variableText = "Next Level"
+        }
+        
+        let repeatOrNextButton = TextBoxButton(x: frame.midX, y: frame.midY + frame.midY/4, text: variableText, font: mainFontString, parentScene: self)
+        let levelSelectButton = TextBoxButton(x: frame.midX, y: frame.midY, text: "Level Select", font: mainFontString, parentScene: self)
+        let mainMenuButton = TextBoxButton(x: frame.midX, y: frame.midY - frame.midY/4, text: "Main Menu", font: mainFontString, parentScene: self)
+
+        /*let actionList = SKAction.sequence(
+            [SKAction.fadeOut(withDuration: 2.0),
+             SKAction.fadeIn(withDuration: 2.0)]
+        )
+        tapLabel.run(SKAction.repeatForever(actionList))*/
     }
     
     /*checks an array of tuples for one in particular
@@ -202,7 +236,7 @@ class Level1Scene: SKScene {
     func initGameVariables (){
         countdownTime = 3
         gridViewable = false
-        gameHasBegun = false
+        gameActive = false
         touchedTiles = 0
     }
 }
