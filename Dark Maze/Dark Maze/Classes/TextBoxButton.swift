@@ -43,6 +43,16 @@ class TextBoxButton: SKNode{
         super.init()
 
     }
+    
+    func within(point: CGPoint) -> Bool{
+        if outline.contains(point) {
+            return true
+        }
+        else {
+            return false
+        }
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

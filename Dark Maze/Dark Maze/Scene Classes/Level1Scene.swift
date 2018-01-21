@@ -18,18 +18,29 @@ class Level1Scene: SKScene {
     var gameActive = false
     var touchedTiles = 0
     var mainFontString = "My Scars" //probably should change this sometime
+    
+    var repeatOrNextButton: TextBoxButton? = nil
+    var levelSelectButton: TextBoxButton? = nil
+    var mainMenuButton: TextBoxButton? = nil
 
     
     override func didMove(to view: SKView) {
         //initializeTapToBegin() //disabling temporarily so that i can go straight to the solution (skip countdown)
-        
         self.initializeGrid()
         self.drawSolution()
 
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        //can we handle just first touch here?
         for t in touches {
-            handleTouch(t.location(in: self))
+            if gameActive {
+                handleTouch(t.location(in: self))
+                break
+            }
+            else {
+                handleTouchForEndGameMenu(t.location(in: self))
+                break
+            }
             /*let nodesAtLocation = self.nodes(at: t.location(in: self))
             for node in nodesAtLocation{
              
@@ -135,7 +146,7 @@ class Level1Scene: SKScene {
                 if index == l.solutionCoords.count-1{
                     self.drawGridLines()
                     self.isUserInteractionEnabled = true
-                    self.gameActive = true
+                    self.gameActive = true // <-left off here
                 }
             }
         }
@@ -151,31 +162,25 @@ class Level1Scene: SKScene {
     }
     private func handleTouch(_ point: CGPoint){
         let l = levelsData.levels[currentLevel]
-        if gameActive{
-            //var tile: GridTile
-            for row in tile2DArray{
-                for tile in row{
-                    if tile.isTouched(point: point) {
-                        print(l.solutionCoords, tile.gridCoord)
-                        
-                        if tupleContains(a: l.solutionCoords, v: tile.gridCoord){
-                            touchedTiles += 1
+        for row in tile2DArray{
+            for tile in row{
+                if tile.isTouched(point: point) {
+                    if tupleContains(a: l.solutionCoords, v: tile.gridCoord){
+                        touchedTiles += 1
+                        if touchedTiles == l.solutionCoords.count {
+                            gameActive = false
+                            endGame(failure: false)
                         }
-                        else{
-                            //display the end game screen with failure parameters
-                        }
+                    }
+                    //display the end game screen with failure parameters
+                    else{
+                        print("end game was realized")
+                        gameActive = false
+                        endGame(failure: true)
                     }
                 }
             }
         }
-        else{
-            
-        }
-        if touchedTiles == l.solutionCoords.count {
-            gameActive = false
-            endGame(failure: false)
-        }
-        
         //if begin is touched
         if let temp = tapToBegin {
             if temp.contains(point){
@@ -183,6 +188,30 @@ class Level1Scene: SKScene {
                     temp.removeFromParent()
                     self.countdown()
                 }
+            }
+        }
+    }
+    
+    func handleTouchForEndGameMenu(_ point: CGPoint){
+        if repeatOrNextButton!.within(point: point){
+            if repeatOrNextButton?.text == "Try Again"{
+                reInitGame()
+            }
+            else{
+                //do something for next level
+                print ("next level")
+            }
+        }
+        else if levelSelectButton!.within(point: point){
+            print ("level select scene")
+            let gameSceneTemp = SKScene(fileNamed: "LevelSelectScene")
+            view?.presentScene(gameSceneTemp!, transition: SKTransition.doorsCloseHorizontal(withDuration: 0.5))
+        }
+        else if mainMenuButton!.within(point: point){
+            print ("menu scene")
+            if let scene = SKScene(fileNamed: "MenuScene") {
+                scene.scaleMode = .aspectFill
+                view?.presentScene(scene)
             }
         }
     }
@@ -195,9 +224,7 @@ class Level1Scene: SKScene {
             for child in self.children {
                 child.removeFromParent()
             }
-            
             self.openEndGameOptions(failure: failure)
-
         })
     }
     
@@ -207,21 +234,17 @@ class Level1Scene: SKScene {
     func openEndGameOptions (failure: Bool){
         var variableText: String
         if failure {
+            print ("the variable text is try again")
             variableText = "Try Again"
         }
         else {
             variableText = "Next Level"
         }
         
-        let repeatOrNextButton = TextBoxButton(x: frame.midX, y: frame.midY + frame.midY/4, text: variableText, font: mainFontString, parentScene: self)
-        let levelSelectButton = TextBoxButton(x: frame.midX, y: frame.midY, text: "Level Select", font: mainFontString, parentScene: self)
-        let mainMenuButton = TextBoxButton(x: frame.midX, y: frame.midY - frame.midY/4, text: "Main Menu", font: mainFontString, parentScene: self)
+        repeatOrNextButton = TextBoxButton(x: frame.midX, y: frame.midY + frame.midY/4, text: variableText, font: mainFontString, parentScene: self)
+        levelSelectButton = TextBoxButton(x: frame.midX, y: frame.midY, text: "Level Select", font: mainFontString, parentScene: self)
+        mainMenuButton = TextBoxButton(x: frame.midX, y: frame.midY - frame.midY/4, text: "Main Menu", font: mainFontString, parentScene: self)
 
-        /*let actionList = SKAction.sequence(
-            [SKAction.fadeOut(withDuration: 2.0),
-             SKAction.fadeIn(withDuration: 2.0)]
-        )
-        tapLabel.run(SKAction.repeatForever(actionList))*/
     }
     
     /*checks an array of tuples for one in particular
@@ -233,10 +256,14 @@ class Level1Scene: SKScene {
         return false
     }
     
-    func initGameVariables (){
+    func reInitGame (){
+        removeAllChildren()
+        tile2DArray.removeAll()
         countdownTime = 3
         gridViewable = false
         gameActive = false
         touchedTiles = 0
+        initializeGrid()
+        drawSolution()
     }
 }

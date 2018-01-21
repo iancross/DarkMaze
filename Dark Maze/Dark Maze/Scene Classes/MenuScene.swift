@@ -18,7 +18,6 @@ class MenuScene: SKScene {
     var floatingStartButton = SKLabelNode()
     
     override func didMove(to view: SKView) {
-
         floatingStartButton = self.childNode(withName: "FloatingStartGameButton") as! SKLabelNode
         floatingStartButton.position = CGPoint(
             x: CGFloat(arc4random_uniform(UInt32(frame.width - floatingStartButton.frame.width))),
@@ -49,7 +48,6 @@ class MenuScene: SKScene {
                 if nodes.name == "FloatingStartGameButton" {
                     let gameSceneTemp = SKScene(fileNamed: "Level1Scene") //this is temporarily bypassing the level select to save time
                     self.scene?.view?.presentScene(gameSceneTemp!, transition: SKTransition.doorsCloseHorizontal(withDuration: 0.5))
-                    break
                 }
             }
         }
