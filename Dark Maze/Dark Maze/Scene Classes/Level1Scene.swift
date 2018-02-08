@@ -17,36 +17,19 @@ class Level1Scene: SKScene {
     var gridViewable = false
     var gameActive = false
     var touchedTiles = 0
-    var mainFontString = "My Scars" //probably should change this sometime
-    
-    var repeatOrNextButton: TextBoxButton? = nil
-    var levelSelectButton: TextBoxButton? = nil
-    var mainMenuButton: TextBoxButton? = nil
+
 
     
     override func didMove(to view: SKView) {
-        //initializeTapToBegin() //disabling temporarily so that i can go straight to the solution (skip countdown)
-        self.initializeGrid()
-        self.drawSolution()
+        gameActive = true
+        initializeTapToBegin() //disable to temporarily so that i can go straight to the solution (skip countdown)
+        
+        //self.initializeGrid() //remove comment to skip countdown
+        //self.drawSolution()  //remove comment to skip countdown
+        print(frame.midY)
+        print(frame.midY + frame.midY/4)
+    }
 
-    }
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //can we handle just first touch here?
-        for t in touches {
-            if gameActive {
-                handleTouch(t.location(in: self))
-                break
-            }
-            else {
-                handleTouchForEndGameMenu(t.location(in: self))
-                break
-            }
-            /*let nodesAtLocation = self.nodes(at: t.location(in: self))
-            for node in nodesAtLocation{
-             
-            }*/
-        }
-    }
     override func update(_ currentTime: TimeInterval) {
         if gridViewable {
             for row in tile2DArray{
@@ -57,9 +40,10 @@ class Level1Scene: SKScene {
         }
     }
     func initializeTapToBegin(){
-        let tapLabel = SKLabelNode(fontNamed: mainFontString)
+        self.isUserInteractionEnabled = true
+        let tapLabel = SKLabelNode(fontNamed: GameStyle.shared.mainFontString)
         tapLabel.text = "Tap to begin"
-        tapLabel.fontSize = 40
+        tapLabel.fontSize = GameStyle.shared.textBoxFontSize
         tapLabel.fontColor = SKColor.white
         tapLabel.position = CGPoint(x: frame.midX, y: frame.midY)
         addChild(tapLabel)
@@ -67,6 +51,7 @@ class Level1Scene: SKScene {
             [SKAction.fadeOut(withDuration: 2.0),
              SKAction.fadeIn(withDuration: 2.0)]
         )
+        
         tapLabel.run(SKAction.repeatForever(actionList))
         tapToBegin = tapLabel
     }
@@ -74,7 +59,7 @@ class Level1Scene: SKScene {
     //does a 3 2 1 countdown on the screen and then
     //starts drawing the solution
     func countdown(){
-        let number = SKLabelNode(fontNamed: mainFontString)
+        let number = SKLabelNode(fontNamed: GameStyle.shared.mainFontString)
         number.text = "\(countdownTime)"
         number.fontSize = 40
         number.fontColor = SKColor.white
@@ -151,6 +136,7 @@ class Level1Scene: SKScene {
             }
         }
     }
+    
     private func drawGridLines(){
         for row in tile2DArray{
             for tile in row{
@@ -159,6 +145,15 @@ class Level1Scene: SKScene {
             }
         }
         gridViewable = true
+    }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        //can we handle just first touch here?
+        for t in touches {
+            if gameActive {
+                handleTouch(t.location(in: self))
+                break
+            }
+        }
     }
     private func handleTouch(_ point: CGPoint){
         let l = levelsData.levels[currentLevel]
@@ -169,14 +164,17 @@ class Level1Scene: SKScene {
                         touchedTiles += 1
                         if touchedTiles == l.solutionCoords.count {
                             gameActive = false
+                            LevelsData.shared.currentLevelSuccess = true
                             endGame(failure: false)
+                            //here's where we switch scenes
                         }
                     }
                     //display the end game screen with failure parameters
                     else{
-                        print("end game was realized")
                         gameActive = false
+                        LevelsData.shared.currentLevelSuccess = false
                         endGame(failure: true)
+                        //here's where we switch scenes
                     }
                 }
             }
@@ -192,59 +190,24 @@ class Level1Scene: SKScene {
         }
     }
     
-    func handleTouchForEndGameMenu(_ point: CGPoint){
-        if repeatOrNextButton!.within(point: point){
-            if repeatOrNextButton?.text == "Try Again"{
-                reInitGame()
-            }
-            else{
-                //do something for next level
-                print ("next level")
-            }
-        }
-        else if levelSelectButton!.within(point: point){
-            print ("level select scene")
-            let gameSceneTemp = SKScene(fileNamed: "LevelSelectScene")
-            view?.presentScene(gameSceneTemp!, transition: SKTransition.doorsCloseHorizontal(withDuration: 0.5))
-        }
-        else if mainMenuButton!.within(point: point){
-            print ("menu scene")
-            if let scene = SKScene(fileNamed: "MenuScene") {
-                scene.scaleMode = .aspectFill
-                view?.presentScene(scene)
-            }
-        }
-    }
-    
     // If all the solutions coords are filled (and there wasn't a
     // failure) show the end game success (failure = false). Otherwise,
     // show the end game failure (failure = true)
     func endGame (failure: Bool){
+        self.isUserInteractionEnabled = false
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
             for child in self.children {
                 child.removeFromParent()
             }
-            self.openEndGameOptions(failure: failure)
+            self.switchToEndGameScene()
         })
     }
     
-    //first open the option modal
-    //then direct the user based on selection
-    //Main menu, level select, or next level?
-    func openEndGameOptions (failure: Bool){
-        var variableText: String
-        if failure {
-            print ("the variable text is try again")
-            variableText = "Try Again"
+    private func switchToEndGameScene(){
+        if let scene = SKScene(fileNamed: "EndGameScene") {
+            scene.scaleMode = .aspectFill
+            view?.presentScene(scene)
         }
-        else {
-            variableText = "Next Level"
-        }
-        
-        repeatOrNextButton = TextBoxButton(x: frame.midX, y: frame.midY + frame.midY/4, text: variableText, font: mainFontString, parentScene: self)
-        levelSelectButton = TextBoxButton(x: frame.midX, y: frame.midY, text: "Level Select", font: mainFontString, parentScene: self)
-        mainMenuButton = TextBoxButton(x: frame.midX, y: frame.midY - frame.midY/4, text: "Main Menu", font: mainFontString, parentScene: self)
-
     }
     
     /*checks an array of tuples for one in particular

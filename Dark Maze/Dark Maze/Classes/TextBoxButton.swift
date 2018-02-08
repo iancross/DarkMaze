@@ -15,11 +15,11 @@ class TextBoxButton: SKNode{
     var outline: SKShapeNode
     var buffer: CGFloat = 15
     
-    init(x: CGFloat, y: CGFloat, text: String, font: String, parentScene: SKScene) {
+    init(x: CGFloat, y: CGFloat, text: String, parentScene: SKScene) {
         self.text = text
-        labelNode = SKLabelNode(fontNamed: font)
+        labelNode = SKLabelNode(fontNamed: GameStyle.shared.mainFontString)
         labelNode.text = text
-        labelNode.fontSize = 35
+        labelNode.fontSize = GameStyle.shared.textBoxFontSize
         labelNode.fontColor = SKColor.white
         labelNode.position = CGPoint(x: x, y: y)
         

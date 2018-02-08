@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C30DB1C82015678E00CE670C /* EndGameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C30DB1C72015678E00CE670C /* EndGameScene.sks */; };
+		C30DB1CA2015684900CE670C /* EndGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30DB1C92015684900CE670C /* EndGameScene.swift */; };
+		C30DB1CC20156C0300CE670C /* GameStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30DB1CB20156C0300CE670C /* GameStyles.swift */; };
 		C3189DFD1FD77988000A52A6 /* MYBLS___.TTF in Resources */ = {isa = PBXBuildFile; fileRef = C3EF4A2B1FD7770600528247 /* MYBLS___.TTF */; };
 		C3189DFE1FD7798F000A52A6 /* MYSCARS_.TTF in Resources */ = {isa = PBXBuildFile; fileRef = C3EF4A2C1FD7771100528247 /* MYSCARS_.TTF */; };
 		C3189E001FD77CBF000A52A6 /* LevelSelectScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C3189DFF1FD77CBF000A52A6 /* LevelSelectScene.sks */; };
@@ -26,6 +29,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C30DB1C72015678E00CE670C /* EndGameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = EndGameScene.sks; sourceTree = "<group>"; };
+		C30DB1C92015684900CE670C /* EndGameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndGameScene.swift; sourceTree = "<group>"; };
+		C30DB1CB20156C0300CE670C /* GameStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStyles.swift; sourceTree = "<group>"; };
 		C3189DFF1FD77CBF000A52A6 /* LevelSelectScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = LevelSelectScene.sks; sourceTree = "<group>"; };
 		C3189E011FD77D0B000A52A6 /* LevelSelectScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelSelectScene.swift; sourceTree = "<group>"; };
 		C3189E071FD7991E000A52A6 /* MenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MenuScene.sks; sourceTree = "<group>"; };
@@ -63,6 +69,7 @@
 				C37B707D1FE9D94D00F71B73 /* GridTile.swift */,
 				C32DB4721FF02A6800040BA3 /* LevelsData.swift */,
 				C3FD8ACA20141ADF006ED708 /* TextBoxButton.swift */,
+				C30DB1CB20156C0300CE670C /* GameStyles.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -73,6 +80,7 @@
 				C3189E071FD7991E000A52A6 /* MenuScene.sks */,
 				C3189DFF1FD77CBF000A52A6 /* LevelSelectScene.sks */,
 				C364CEC31FE750E8009140C7 /* Level1Scene.sks */,
+				C30DB1C72015678E00CE670C /* EndGameScene.sks */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -83,6 +91,7 @@
 				C3EF4A191FD7749000528247 /* MenuScene.swift */,
 				C3189E011FD77D0B000A52A6 /* LevelSelectScene.swift */,
 				C364CEBF1FE74F98009140C7 /* Level1Scene.swift */,
+				C30DB1C92015684900CE670C /* EndGameScene.swift */,
 			);
 			path = "Scene Classes";
 			sourceTree = "<group>";
@@ -189,6 +198,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C3189DFD1FD77988000A52A6 /* MYBLS___.TTF in Resources */,
+				C30DB1C82015678E00CE670C /* EndGameScene.sks in Resources */,
 				C3189DFE1FD7798F000A52A6 /* MYSCARS_.TTF in Resources */,
 				C3189E001FD77CBF000A52A6 /* LevelSelectScene.sks in Resources */,
 				C3EF4A1F1FD7749000528247 /* Main.storyboard in Resources */,
@@ -213,7 +223,9 @@
 				C3EF4A141FD7749000528247 /* AppDelegate.swift in Sources */,
 				C364CEC01FE74F98009140C7 /* Level1Scene.swift in Sources */,
 				C3189E021FD77D0B000A52A6 /* LevelSelectScene.swift in Sources */,
+				C30DB1CA2015684900CE670C /* EndGameScene.swift in Sources */,
 				C32DB4731FF02A6800040BA3 /* LevelsData.swift in Sources */,
+				C30DB1CC20156C0300CE670C /* GameStyles.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

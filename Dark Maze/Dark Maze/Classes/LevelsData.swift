@@ -9,8 +9,13 @@
 import Foundation
 
 class LevelsData{
+    static let shared = LevelsData()
+    
+    var currentLevelSuccess: Bool
     var levels: [LevelData]
     init(){
+        
+        currentLevelSuccess = false
         levels = [LevelData]()
         
         //level 1

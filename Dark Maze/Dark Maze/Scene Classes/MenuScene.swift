@@ -46,8 +46,10 @@ class MenuScene: SKScene {
             let nodesAtLocation = self.nodes(at: t.location(in: self))
             for nodes in nodesAtLocation{
                 if nodes.name == "FloatingStartGameButton" {
-                    let gameSceneTemp = SKScene(fileNamed: "Level1Scene") //this is temporarily bypassing the level select to save time
-                    self.scene?.view?.presentScene(gameSceneTemp!, transition: SKTransition.doorsCloseHorizontal(withDuration: 0.5))
+                    if let scene = SKScene(fileNamed: "LevelSelectScene") {
+                        scene.scaleMode = .aspectFill
+                        view?.presentScene(scene)
+                    }
                 }
             }
         }
