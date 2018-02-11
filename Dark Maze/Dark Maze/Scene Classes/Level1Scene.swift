@@ -15,13 +15,11 @@ class Level1Scene: SKScene {
     var tapToBegin: SKLabelNode?
     var countdownTime = 3
     var gridViewable = false
-    var gameActive = false
     var touchedTiles = 0
 
 
     
     override func didMove(to view: SKView) {
-        gameActive = true
         initializeTapToBegin() //disable to temporarily so that i can go straight to the solution (skip countdown)
         
         //self.initializeGrid() //remove comment to skip countdown
@@ -131,7 +129,6 @@ class Level1Scene: SKScene {
                 if index == l.solutionCoords.count-1{
                     self.drawGridLines()
                     self.isUserInteractionEnabled = true
-                    self.gameActive = true // <-left off here
                 }
             }
         }
@@ -149,10 +146,8 @@ class Level1Scene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         //can we handle just first touch here?
         for t in touches {
-            if gameActive {
-                handleTouch(t.location(in: self))
-                break
-            }
+            handleTouch(t.location(in: self))
+            break //not sure if i need this
         }
     }
     private func handleTouch(_ point: CGPoint){
@@ -163,17 +158,15 @@ class Level1Scene: SKScene {
                     if tupleContains(a: l.solutionCoords, v: tile.gridCoord){
                         touchedTiles += 1
                         if touchedTiles == l.solutionCoords.count {
-                            gameActive = false
                             LevelsData.shared.currentLevelSuccess = true
-                            endGame(failure: false)
+                            endGame(success: true)
                             //here's where we switch scenes
                         }
                     }
                     //display the end game screen with failure parameters
                     else{
-                        gameActive = false
                         LevelsData.shared.currentLevelSuccess = false
-                        endGame(failure: true)
+                        endGame(success: false)
                         //here's where we switch scenes
                     }
                 }
@@ -193,7 +186,10 @@ class Level1Scene: SKScene {
     // If all the solutions coords are filled (and there wasn't a
     // failure) show the end game success (failure = false). Otherwise,
     // show the end game failure (failure = true)
-    func endGame (failure: Bool){
+    func endGame (success: Bool){
+        if levelsData.currentLevel == levelsData.nextLevelToComplete {
+            levelsData.nextLevelToComplete += 1
+        }
         self.isUserInteractionEnabled = false
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
             for child in self.children {
@@ -224,7 +220,6 @@ class Level1Scene: SKScene {
         tile2DArray.removeAll()
         countdownTime = 3
         gridViewable = false
-        gameActive = false
         touchedTiles = 0
         initializeGrid()
         drawSolution()

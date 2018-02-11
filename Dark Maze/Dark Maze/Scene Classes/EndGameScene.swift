@@ -61,6 +61,8 @@ class EndGameScene: SKScene {
             }
             else{
                 //here's where we would load the next level
+                LevelsData.shared.currentLevel += 1
+
             }
         }
         else if levelSelectButton!.within(point: point){
