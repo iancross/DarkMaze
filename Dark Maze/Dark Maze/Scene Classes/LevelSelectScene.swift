@@ -52,9 +52,19 @@ class LevelSelectScene: SKScene {
                     if Int(box.name!)! <= LevelsData.shared.nextLevelToComplete {
                         //let flip = SKAction.scaleX(to: node.xScale * -1, duration: 0.6)
                         //box.run(flip)
-                        let embiggen = SKAction.scale(to: 1.2, duration: 0.5)
-                        box.run(embiggen)
+                        print ("we are in level select:")
+                        print ("tile.frame \(box.frame)")
+                        print ("tile.position \(box.position) ---------------------")
                         LevelsData.shared.currentLevel = Int(box.name!)!
+                        let embiggen = SKAction.scale(to: 1.2, duration: 0.5)
+                        let loadScene = SKAction.run({
+                            LevelsData.shared.currentLevel = Int(box.name!)!
+                            if let scene = SKScene(fileNamed: "Level1Scene") {
+                                scene.scaleMode = .aspectFill
+                                self.view?.presentScene(scene)
+                            }
+                        })
+                        box.run(SKAction.sequence([embiggen,loadScene]))
                     }
                     else {
                         let sequence = [SKAction.rotate(byAngle: 0.1, duration: 0.3),

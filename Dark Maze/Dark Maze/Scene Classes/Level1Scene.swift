@@ -10,7 +10,6 @@ import SpriteKit
 
 class Level1Scene: SKScene {
     var tile2DArray = [[GridTile]]()
-    var levelsData = LevelsData()
     var currentLevel = 0
     var tapToBegin: SKLabelNode?
     var countdownTime = 3
@@ -24,8 +23,6 @@ class Level1Scene: SKScene {
         
         //self.initializeGrid() //remove comment to skip countdown
         //self.drawSolution()  //remove comment to skip countdown
-        print(frame.midY)
-        print(frame.midY + frame.midY/4)
     }
 
     override func update(_ currentTime: TimeInterval) {
@@ -59,7 +56,7 @@ class Level1Scene: SKScene {
     func countdown(){
         let number = SKLabelNode(fontNamed: GameStyle.shared.mainFontString)
         number.text = "\(countdownTime)"
-        number.fontSize = 40
+        number.fontSize = 90
         number.fontColor = SKColor.white
         number.position = CGPoint(x: frame.midX, y: frame.midY + frame.midY/2)
         addChild(number)
@@ -89,7 +86,7 @@ class Level1Scene: SKScene {
         label.text = "\(countdownTime)"
     }
     private func initializeGrid(){
-        let l = levelsData.levels[currentLevel]
+        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel]
         let blocksize = max(self.frame.maxX / CGFloat(l.gridSizeX + l.blockBuffer),
                             self.frame.maxX / CGFloat(l.gridSizeY + l.blockBuffer))
         let botOfGridY = frame.midY - ((CGFloat(l.gridSizeY) / 2.0) * blocksize)
@@ -116,8 +113,8 @@ class Level1Scene: SKScene {
     //the game begins.
     func drawSolution(){
         self.isUserInteractionEnabled = false
-        let l = levelsData.levels[currentLevel]
-        
+        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel]
+
         for (index,coord) in l.solutionCoords.enumerated(){
             let tile = tile2DArray[coord.y][coord.x]
             let actionList = SKAction.sequence(
@@ -151,7 +148,7 @@ class Level1Scene: SKScene {
         }
     }
     private func handleTouch(_ point: CGPoint){
-        let l = levelsData.levels[currentLevel]
+        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel]
         for row in tile2DArray{
             for tile in row{
                 if tile.isTouched(point: point) {
@@ -166,8 +163,12 @@ class Level1Scene: SKScene {
                     //display the end game screen with failure parameters
                     else{
                         LevelsData.shared.currentLevelSuccess = false
-                        endGame(success: false)
-                        //here's where we switch scenes
+                        
+                        print ("we are just before blow up:")
+                        print ("tile.tile.frame \(tile.tile.frame)")
+                        print ("tile.tile.position \(tile.tile.position)")
+                        tile.blowUp()
+//
                     }
                 }
             }
@@ -175,7 +176,7 @@ class Level1Scene: SKScene {
         //if begin is touched
         if let temp = tapToBegin {
             if temp.contains(point){
-                temp.run(SKAction.fadeOut(withDuration: 2.0)){
+                temp.run(SKAction.fadeOut(withDuration: 0.5)){
                     temp.removeFromParent()
                     self.countdown()
                 }
@@ -187,16 +188,16 @@ class Level1Scene: SKScene {
     // failure) show the end game success (failure = false). Otherwise,
     // show the end game failure (failure = true)
     func endGame (success: Bool){
-        if levelsData.currentLevel == levelsData.nextLevelToComplete {
-            levelsData.nextLevelToComplete += 1
+        if LevelsData.shared.currentLevel == LevelsData.shared.nextLevelToComplete {
+            LevelsData.shared.nextLevelToComplete += 1
         }
         self.isUserInteractionEnabled = false
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
-            for child in self.children {
-                child.removeFromParent()
-            }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+//            for child in self.children {
+//                child.removeFromParent()
+//            }
             self.switchToEndGameScene()
-        })
+//        })
     }
     
     private func switchToEndGameScene(){

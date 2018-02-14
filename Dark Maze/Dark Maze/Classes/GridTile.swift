@@ -43,8 +43,13 @@ class GridTile: SKShapeNode{
         tile.name = "Grid Tile"
         tile.strokeColor = UIColor(displayP3Red: 0.40, green: 0.40, blue: 0.40, alpha: 0.0 )
         //add the tile to the parent scene
+        print ("original tile position \(tile.position)")
+        //tile.position = CGPoint.init(x: tile.frame.midX, y: tile.frame.midY)
+
         parentScene.addChild(tile)
+
         super.init()
+
     }
     func reInit(){
         tile.fillColor = originColor
@@ -96,5 +101,21 @@ class GridTile: SKShapeNode{
     }
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func blowUp (){
+        tile.fillColor = UIColor.orange
+        print ("we are in blow up function:")
+        print ("tile.frame \(tile.frame)")
+        print ("tile.position \(tile.position)")
+        let new_tile = tile as SKShapeNode
+        //var scaleUp =
+        let embiggen = SKAction.scale(to: 1.2, duration: 4.0)
+        let sequence = [SKAction.rotate(byAngle: 0.5, duration: 0.6),
+                        SKAction.rotate(byAngle: -1, duration: 0.6),
+                        SKAction.rotate(byAngle: 0.5, duration: 0.6)]
+
+        new_tile.run(embiggen)
+
     }
 }
