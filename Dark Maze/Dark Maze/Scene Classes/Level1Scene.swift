@@ -164,9 +164,9 @@ class Level1Scene: SKScene {
                     else{
                         LevelsData.shared.currentLevelSuccess = false
                         
-                        print ("we are just before blow up:")
-                        print ("tile.tile.frame \(tile.tile.frame)")
-                        print ("tile.tile.position \(tile.tile.position)")
+//                        print ("we are just before blow up:")
+//                        print ("tile.tile.frame \(tile.tile.frame)")
+//                        print ("tile.tile.position \(tile.tile.position)")
                         tile.blowUp()
 //
                     }

@@ -50,10 +50,9 @@ class LevelSelectScene: SKScene {
             for node in nodesAtLocation{
                 if let box = node as? SKShapeNode{
                     if Int(box.name!)! <= LevelsData.shared.nextLevelToComplete {
-                        //let flip = SKAction.scaleX(to: node.xScale * -1, duration: 0.6)
-                        //box.run(flip)
                         print ("we are in level select:")
                         print ("tile.frame \(box.frame)")
+                        print ("accumulated \(box.calculateAccumulatedFrame())")
                         print ("tile.position \(box.position) ---------------------")
                         LevelsData.shared.currentLevel = Int(box.name!)!
                         let embiggen = SKAction.scale(to: 1.2, duration: 0.5)

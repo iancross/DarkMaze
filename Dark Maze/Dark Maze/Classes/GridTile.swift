@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import UIKit
 import SpriteKit
 
 class GridTile: SKShapeNode{
@@ -35,8 +35,18 @@ class GridTile: SKShapeNode{
         //add the first point to the end
         points.append(points[0])
         
+        //new plan, just create a tile with generic widths then move it to the right position?
+        //SUCCESS! don't use the point array, not sure why i was making it that way. Just use rectOf
+        //also need to take into account calc accummulated frame
+        
+        
+        
+        
+        
         //create the tile
-        tile = SKShapeNode(points: &points, count: points.count)
+        //tile = SKShapeNode(points: &points, count: points.count) // FUCK THIS LINE
+        tile = SKShapeNode(rectOf: CGSize(width: 100, height: 100))
+        tile.position = pointArr[0] //need to figure out actual spot for this
         tile.lineWidth = 1
         tile.glowWidth = 1
         tile.fillColor = UIColor.black
@@ -108,6 +118,7 @@ class GridTile: SKShapeNode{
         print ("we are in blow up function:")
         print ("tile.frame \(tile.frame)")
         print ("tile.position \(tile.position)")
+        print ("accumulated \(tile.calculateAccumulatedFrame())")
         let new_tile = tile as SKShapeNode
         //var scaleUp =
         let embiggen = SKAction.scale(to: 1.2, duration: 4.0)
