@@ -15,6 +15,8 @@ class Level1Scene: SKScene {
     var countdownTime = 3
     var gridViewable = false
     var touchedTiles = 0
+    var lastTouchedTile: GridTile?
+    
 
 
     
@@ -61,16 +63,16 @@ class Level1Scene: SKScene {
         number.position = CGPoint(x: frame.midX, y: frame.midY + frame.midY/2)
         addChild(number)
         let actionList = SKAction.sequence(
-            [SKAction.fadeIn(withDuration: 0.5),
-             SKAction.fadeOut(withDuration: 0.5),
+            [SKAction.fadeIn(withDuration: 0.4),
+             SKAction.fadeOut(withDuration: 0.4),
              SKAction.moveTo(y: frame.midY, duration: 0),
              SKAction.run({ self.decrementCountdown(number) }),
-            SKAction.fadeIn(withDuration: 0.5),
-            SKAction.fadeOut(withDuration: 0.5),
+            SKAction.fadeIn(withDuration: 0.4),
+            SKAction.fadeOut(withDuration: 0.4),
             SKAction.moveTo(y: frame.midY - frame.midY/2, duration: 0),
             SKAction.run({ self.decrementCountdown(number) }),
-            SKAction.fadeIn(withDuration: 0.5),
-            SKAction.fadeOut(withDuration: 0.5),
+            SKAction.fadeIn(withDuration: 0.4),
+            SKAction.fadeOut(withDuration: 0.4),
             SKAction.run({
                 number.removeFromParent()
                 self.countdownTime = 3
@@ -90,20 +92,16 @@ class Level1Scene: SKScene {
         let blocksize = max(self.frame.maxX / CGFloat(l.gridSizeX + l.blockBuffer),
                             self.frame.maxX / CGFloat(l.gridSizeY + l.blockBuffer))
         let botOfGridY = frame.midY - ((CGFloat(l.gridSizeY) / 2.0) * blocksize)
-        let leftOfGridX = frame.midX - ((CGFloat(l.gridSizeX) / 2.0) * blocksize)
+        let leftOfGridX = frame.midX - ((CGFloat(l.gridSizeX) / 2.0) * blocksize) + blocksize/4
         
         for row in 0...l.gridSizeY-1{
-            let offsetY = botOfGridY + blocksize * CGFloat(row)
+            let offsetY = botOfGridY + blocksize * CGFloat(row) + blocksize/4
             tile2DArray.append([GridTile]())
             for col in 0...l.gridSizeX-1{
-                let offsetX = leftOfGridX + blocksize * CGFloat(col)
+                let offsetX = leftOfGridX + blocksize * CGFloat(col) + blocksize/4
                 let coord = (col,row)
-                let tile = GridTile(parentScene: self, coord: coord,
-                          pointArr: [CGPoint(x:offsetX, y: offsetY),
-                                     CGPoint(x:offsetX + blocksize, y: offsetY),
-                                     CGPoint(x:offsetX + blocksize, y: offsetY + blocksize),
-                                     CGPoint(x:offsetX, y: offsetY + blocksize)]
-                )
+                let tile = GridTile(parentScene: self, center: CGPoint(x: offsetX, y: offsetY),
+                                    coord: coord, width: blocksize, height: blocksize)
                 tile2DArray[row].append(tile)
             }
         }
@@ -119,7 +117,7 @@ class Level1Scene: SKScene {
             let tile = tile2DArray[coord.y][coord.x]
             let actionList = SKAction.sequence(
                 [SKAction.wait(forDuration: l.delayTime * Double(index)),
-                 SKAction.run { tile.touched() },
+                 SKAction.run { tile.switchToWhite() },
                  SKAction.fadeOut(withDuration: 2)
                 ])
             tile.tile.run(actionList){
@@ -140,6 +138,7 @@ class Level1Scene: SKScene {
         }
         gridViewable = true
     }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         //can we handle just first touch here?
         for t in touches {
@@ -147,28 +146,31 @@ class Level1Scene: SKScene {
             break //not sure if i need this
         }
     }
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let point = touches.first
+        let positionInScene = point?.location(in: self)
+        handleTouch(positionInScene!)
+    }
     private func handleTouch(_ point: CGPoint){
         let l = LevelsData.shared.levels[LevelsData.shared.currentLevel]
         for row in tile2DArray{
             for tile in row{
-                if tile.isTouched(point: point) {
+                if case .untouched = tile.state, tile.isTouched(point: point) {
+                    lastTouchedTile = tile
                     if tupleContains(a: l.solutionCoords, v: tile.gridCoord){
-                        touchedTiles += 1
+                        print (tile.gridCoord)
+                         touchedTiles += 1
                         if touchedTiles == l.solutionCoords.count {
                             LevelsData.shared.currentLevelSuccess = true
-                            endGame(success: true)
-                            //here's where we switch scenes
+                            self.isUserInteractionEnabled = false
+                            tile.tile.run(SKAction.wait(forDuration: 1)){
+                                self.endGame()
+                            }
                         }
                     }
-                    //display the end game screen with failure parameters
                     else{
                         LevelsData.shared.currentLevelSuccess = false
-                        
-//                        print ("we are just before blow up:")
-//                        print ("tile.tile.frame \(tile.tile.frame)")
-//                        print ("tile.tile.position \(tile.tile.position)")
                         tile.blowUp()
-//
                     }
                 }
             }
@@ -187,17 +189,14 @@ class Level1Scene: SKScene {
     // If all the solutions coords are filled (and there wasn't a
     // failure) show the end game success (failure = false). Otherwise,
     // show the end game failure (failure = true)
-    func endGame (success: Bool){
+    func endGame (){
         if LevelsData.shared.currentLevel == LevelsData.shared.nextLevelToComplete {
             LevelsData.shared.nextLevelToComplete += 1
         }
-        self.isUserInteractionEnabled = false
-//        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
-//            for child in self.children {
-//                child.removeFromParent()
-//            }
-            self.switchToEndGameScene()
-//        })
+        for child in self.children {
+            child.removeFromParent()
+        }
+        switchToEndGameScene()
     }
     
     private func switchToEndGameScene(){

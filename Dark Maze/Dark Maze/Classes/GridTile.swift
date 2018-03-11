@@ -14,50 +14,44 @@ class GridTile: SKShapeNode{
     var tile: SKShapeNode
     var originColor = UIColor.black
     var black: Bool = true
-    var points: [CGPoint]
     let gridCoord: (x: Int,y: Int)
     var strokePresent = false
     private var strokeAlpha = 0.0
     private var strokeAppearing = true
     let alphaDecrement = 0.005
+    let parentScene: SKScene
+    var state = TileState.untouched
     
-    
+    enum TileState {
+        case untouched
+        case touched
+        //case availableToTouch
+        //case unavailable
+    }
     /*initialized with the points/lines in this order:
         Bot
         Right
         Top
         Left (repeated)
     */
-    init(parentScene: SKScene, coord: (Int,Int), pointArr: [CGPoint]) {
-        points = pointArr
+    init (parentScene: SKScene, center: CGPoint, coord: (Int, Int), width: CGFloat, height: CGFloat) {
         gridCoord = coord
-        
-        //add the first point to the end
-        points.append(points[0])
         
         //new plan, just create a tile with generic widths then move it to the right position?
         //SUCCESS! don't use the point array, not sure why i was making it that way. Just use rectOf
         //also need to take into account calc accummulated frame
-        
-        
-        
-        
-        
-        //create the tile
-        //tile = SKShapeNode(points: &points, count: points.count) // FUCK THIS LINE
-        tile = SKShapeNode(rectOf: CGSize(width: 100, height: 100))
-        tile.position = pointArr[0] //need to figure out actual spot for this
+
+        tile = SKShapeNode(rectOf: CGSize(width: width, height: height))
+        tile.position = center //need to figure out actual spot for this
         tile.lineWidth = 1
         tile.glowWidth = 1
         tile.fillColor = UIColor.black
         tile.name = "Grid Tile"
         tile.strokeColor = UIColor(displayP3Red: 0.40, green: 0.40, blue: 0.40, alpha: 0.0 )
+        
         //add the tile to the parent scene
-        print ("original tile position \(tile.position)")
-        //tile.position = CGPoint.init(x: tile.frame.midX, y: tile.frame.midY)
-
+        self.parentScene = parentScene
         parentScene.addChild(tile)
-
         super.init()
 
     }
@@ -98,35 +92,44 @@ class GridTile: SKShapeNode{
         }
     }
     func touched(){
-        if self.black {
+        switch state {
+        case .untouched:
+            print ("turn me white")
             tile.fillColor = UIColor.white
             tile.alpha = 1.0
             self.black = false
+            self.state = .touched
+        case .touched:
+            print ("touched block is touched again")
+//            tile.fillColor = UIColor.black
+//            tile.alpha = 1.0
+//            self.black = true
         }
-        else{
-            tile.fillColor = UIColor.black
+    }
+    func switchToWhite(){
+            tile.fillColor = UIColor.white
             tile.alpha = 1.0
-            self.black = true
-        }
+            self.black = false
     }
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     func blowUp (){
-        tile.fillColor = UIColor.orange
-        print ("we are in blow up function:")
-        print ("tile.frame \(tile.frame)")
-        print ("tile.position \(tile.position)")
-        print ("accumulated \(tile.calculateAccumulatedFrame())")
+        tile.fillColor = UIColor.black
+        tile.zPosition += 5 // need a better number here
+        strokeAlpha = 1.0
         let new_tile = tile as SKShapeNode
-        //var scaleUp =
-        let embiggen = SKAction.scale(to: 1.2, duration: 4.0)
-        let sequence = [SKAction.rotate(byAngle: 0.5, duration: 0.6),
-                        SKAction.rotate(byAngle: -1, duration: 0.6),
-                        SKAction.rotate(byAngle: 0.5, duration: 0.6)]
-
-        new_tile.run(embiggen)
+        let embiggen = SKAction.scale(to: 20, duration: 2.0)
+        let rotate = SKAction.rotate(byAngle: 10, duration: 2.0)
+        let group = SKAction.group([embiggen,rotate])
+        
+        new_tile.run(group){
+            if let parent = self.parentScene as? Level1Scene{
+                print ("made it")
+                parent.endGame()
+            }
+        }
 
     }
 }
