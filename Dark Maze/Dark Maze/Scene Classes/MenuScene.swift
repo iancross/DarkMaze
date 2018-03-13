@@ -42,16 +42,20 @@ class MenuScene: SKScene {
         // Called before each frame is rendered
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches {
-            let nodesAtLocation = self.nodes(at: t.location(in: self))
-            for nodes in nodesAtLocation{
-                if nodes.name == "FloatingStartGameButton" {
-                    if let scene = SKScene(fileNamed: "LevelSelectScene") {
-                        scene.scaleMode = .aspectFill
-                        view?.presentScene(scene)
-                    }
-                }
-            }
+//        for t in touches {
+//            let nodesAtLocation = self.nodes(at: t.location(in: self))
+//            for nodes in nodesAtLocation{
+//                if nodes.name == "FloatingStartGameButton" {
+//                    if let scene = SKScene(fileNamed: "LevelSelectScene") {
+//                        scene.scaleMode = .aspectFill
+//                        view?.presentScene(scene)
+//                    }
+//                }
+//            }
+//        }
+        if let scene = SKScene(fileNamed: "LevelSelectScene") {
+            scene.scaleMode = .aspectFill
+            view?.presentScene(scene)
         }
     }
 }

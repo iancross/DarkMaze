@@ -11,7 +11,7 @@ import SpriteKit
 class Level1Scene: SKScene {
     var tile2DArray = [[GridTile]]()
     var currentLevel = 0
-    var tapToBegin: SKLabelNode?
+    //var tapToBegin: SKLabelNode?
     var countdownTime = 3
     var gridViewable = false
     var touchedTiles = 0
@@ -22,8 +22,8 @@ class Level1Scene: SKScene {
 
     
     override func didMove(to view: SKView) {
-        initializeTapToBegin() //disable to temporarily so that i can go straight to the solution (skip countdown)
-        
+        //initializeTapToBegin() //disable to temporarily so that i can go straight to the solution (skip countdown)
+        countdown()
         //self.initializeGrid() //remove comment to skip countdown
         //self.drawSolution()  //remove comment to skip countdown
     }
@@ -37,22 +37,22 @@ class Level1Scene: SKScene {
             }
         }
     }
-    func initializeTapToBegin(){
-        self.isUserInteractionEnabled = true
-        let tapLabel = SKLabelNode(fontNamed: GameStyle.shared.mainFontString)
-        tapLabel.text = "Tap to begin"
-        tapLabel.fontSize = GameStyle.shared.textBoxFontSize
-        tapLabel.fontColor = SKColor.white
-        tapLabel.position = CGPoint(x: frame.midX, y: frame.midY)
-        addChild(tapLabel)
-        let actionList = SKAction.sequence(
-            [SKAction.fadeOut(withDuration: 2.0),
-             SKAction.fadeIn(withDuration: 2.0)]
-        )
-        
-        tapLabel.run(SKAction.repeatForever(actionList))
-        tapToBegin = tapLabel
-    }
+    
+//    func initializeTapToBegin(){
+//        self.isUserInteractionEnabled = true
+//        let tapLabel = SKLabelNode(fontNamed: GameStyle.shared.mainFontString)
+//        tapLabel.text = "Tap to begin"
+//        tapLabel.fontSize = GameStyle.shared.textBoxFontSize
+//        tapLabel.fontColor = SKColor.white
+//        tapLabel.position = CGPoint(x: frame.midX, y: frame.midY)
+//        addChild(tapLabel)
+//        let actionList = SKAction.sequence(
+//            [SKAction.fadeOut(withDuration: 2.0),
+//             SKAction.fadeIn(withDuration: 2.0)]
+//        )
+//        tapLabel.run(SKAction.repeatForever(actionList))
+//        tapToBegin = tapLabel
+//    }
     
     //does a 3 2 1 countdown on the screen and then
     //starts drawing the solution
@@ -65,9 +65,9 @@ class Level1Scene: SKScene {
         addChild(number)
         let actionList = SKAction.sequence(
             [SKAction.fadeIn(withDuration: 0.4),
-             SKAction.fadeOut(withDuration: 0.4),
-             SKAction.moveTo(y: frame.midY, duration: 0),
-             SKAction.run({ self.decrementCountdown(number) }),
+            SKAction.fadeOut(withDuration: 0.4),
+            SKAction.moveTo(y: frame.midY, duration: 0),
+            SKAction.run({ self.decrementCountdown(number) }),
             SKAction.fadeIn(withDuration: 0.4),
             SKAction.fadeOut(withDuration: 0.4),
             SKAction.moveTo(y: frame.midY - frame.midY/2, duration: 0),
@@ -84,12 +84,14 @@ class Level1Scene: SKScene {
         )
         number.run(actionList)
     }
+    
     private func decrementCountdown(_ label: SKLabelNode) -> Void{
         countdownTime -= 1
         label.text = "\(countdownTime)"
     }
+    
     private func initializeGrid(){
-        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel]
+        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel-1]
         blocksize = max(self.frame.maxX / CGFloat(l.gridSizeX + l.blockBuffer),
                             self.frame.maxX / CGFloat(l.gridSizeY + l.blockBuffer))
         let botOfGridY = frame.midY - ((CGFloat(l.gridSizeY) / 2.0) * blocksize)
@@ -112,7 +114,7 @@ class Level1Scene: SKScene {
     //the game begins.
     func drawSolution(){
         self.isUserInteractionEnabled = false
-        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel]
+        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel-1]
 
         for (index,coord) in l.solutionCoords.enumerated(){
             let tile = tile2DArray[coord.y][coord.x]
@@ -134,12 +136,11 @@ class Level1Scene: SKScene {
     }
     
     func beginGame(){
-        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel]
-        let tile = self.tile2DArray[(l.solutionCoords.first?.x)!][(l.solutionCoords.first?.y)!]
-        tile.updateTileState()
+        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel-1]
+        let tile = self.tile2DArray[(l.solutionCoords.first?.y)!][(l.solutionCoords.first?.x)!]
+        tile.firstTile()
         right_arrow.position = CGPoint(x: tile.tile.frame.minX - (blocksize/2.0), y: tile.tile.frame.midY)
         addChild(right_arrow)
-        //print(right_arrow.position)
     }
     private func drawGridLines(){
         for row in tile2DArray{
@@ -163,46 +164,35 @@ class Level1Scene: SKScene {
         handleTouch(positionInScene!)
     }
     private func handleTouch(_ point: CGPoint){
-        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel]
         for row in tile2DArray{
             for tile in row{
                 if tile.isTouched(point: point){
+                    //print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
+                    //return //comment out to get grid coords for levels
                     lastTouchedTile = tile
                     tile.touched()
-//                    if tupleContains(a: l.solutionCoords, v: tile.gridCoord){
-//                        touchedTiles += 1
-//                        if touchedTiles == l.solutionCoords.count {
-//                            LevelsData.shared.currentLevelSuccess = true
-//                            self.isUserInteractionEnabled = false
-//                            tile.tile.run(SKAction.wait(forDuration: 1)){
-//                                self.endGame()
-//                            }
-//                        }
-//                    }
-//                    else{
-//                        LevelsData.shared.currentLevelSuccess = false
-//                        tile.blowUp()
-//                    }
                 }
             }
         }
-        //if begin is touched
-        if let temp = tapToBegin {
-            if temp.contains(point){
-                temp.run(SKAction.fadeOut(withDuration: 0.5)){
-                    temp.removeFromParent()
-                    self.countdown()
-                }
-            }
-        }
+//        //if begin is touched
+//        if let temp = tapToBegin {
+//            if temp.contains(point){
+//                temp.run(SKAction.fadeOut(withDuration: 0.5)){
+//                    temp.removeFromParent()
+//                    self.countdown()
+//                }
+//            }
+//        }
     }
     
     // If all the solutions coords are filled (and there wasn't a
     // failure) show the end game success (failure = false). Otherwise,
     // show the end game failure (failure = true)
-    func endGame (){
+    func endGame (success: Bool){
         if LevelsData.shared.currentLevel == LevelsData.shared.nextLevelToComplete {
-            LevelsData.shared.nextLevelToComplete += 1
+            if LevelsData.shared.levels.count > LevelsData.shared.nextLevelToComplete && success{
+                LevelsData.shared.nextLevelToComplete += 1
+            }
         }
         for child in self.children {
             child.removeFromParent()
@@ -235,15 +225,17 @@ class Level1Scene: SKScene {
         initializeGrid()
         drawSolution()
     }
+    
     func updateGridState(){
         if let coord = (lastTouchedTile?.gridCoord){
-            calcTilesToWin()
             for row in tile2DArray{
                 for tile in row{
                     tile.resetState()
                 }
             }
-//            print ("last touched \(lastTouchedTile?.gridCoord)")
+            if isGameOver(){
+                return
+            }
             if coord.x - 1 >= 0{
                 checkTile(x: coord.x-1,y: coord.y)
             }
@@ -258,25 +250,30 @@ class Level1Scene: SKScene {
             }
         }
     }
+    
     func checkTile(x: Int, y: Int){
-        print (x,y)
         tile2DArray[y][x].updateTileState()
     }
-    func calcTilesToWin(){
-        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel]
+    
+    //return true if game is over
+    func isGameOver()->Bool{
+        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel-1]
         if tupleContains(a: l.solutionCoords, v: (lastTouchedTile?.gridCoord)!){
             touchedTiles += 1
             if touchedTiles == l.solutionCoords.count {
                 LevelsData.shared.currentLevelSuccess = true
                 self.isUserInteractionEnabled = false
-                lastTouchedTile?.tile.run(SKAction.wait(forDuration: 1)){
-                    self.endGame()
+                lastTouchedTile?.tile.run(SKAction.wait(forDuration: 1.0)){
+                    self.endGame(success: true)
                 }
+                return true
             }
         }
         else{
             LevelsData.shared.currentLevelSuccess = false
             lastTouchedTile?.blowUp()
+            return true
         }
+        return false
     }
 }

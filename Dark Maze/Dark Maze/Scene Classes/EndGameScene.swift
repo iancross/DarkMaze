@@ -35,8 +35,7 @@ class EndGameScene: SKScene {
         }
         successMessageNode = self.childNode(withName: "successMessage") as! SKLabelNode
         successMessageNode.text = successMessage
-        print(frame.midY)
-        print(frame.midY + frame.midY/4)
+
         
         repeatOrNextButton = TextBoxButton(x: frame.midX, y: frame.midY + frame.midY/4, text: variableText, parentScene: self)
         levelSelectButton = TextBoxButton(x: frame.midX, y: frame.midY, text: "Level Select", parentScene: self)
@@ -66,14 +65,12 @@ class EndGameScene: SKScene {
             }
         }
         else if levelSelectButton!.within(point: point){
-            print ("level select scene")
             if let scene = SKScene(fileNamed: "LevelSelectScene") {
                 scene.scaleMode = .aspectFill
                 view?.presentScene(scene)
             }
         }
         else if mainMenuButton!.within(point: point){
-            print ("menu scene")
             if let scene = SKScene(fileNamed: "MenuScene") {
                 scene.scaleMode = .aspectFill
                 view?.presentScene(scene)

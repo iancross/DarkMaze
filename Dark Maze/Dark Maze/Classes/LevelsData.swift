@@ -21,28 +21,35 @@ class LevelsData{
         
         //this determines which level is either currently being worked on or the next level
         //it will always be incomplete in the level select
-        nextLevelToComplete = 3
-        currentLevel = 3
+        nextLevelToComplete = 1
+        currentLevel = 1
         levels = [LevelData]()
+        
+        //levels info
+        //gridsize - self explanatory
+        //blockbuffer - how many blockwidths are on either side of the grid (prob won't work when we start panning
+        //
+        //
+        //levelCompleted: shows us what to color the level in level select
         
         //level 1
         levels.append (LevelData(
-            gridSizeX: 5,
-            gridSizeY: 5,
+            gridSizeX: 4,
+            gridSizeY: 4,
             blockBuffer: 3,
             delayTime: 0.5,
             solutionCoords:
-                [(0,0),(0,1),(0,2),(0,3),(1,3),(2,3),(3,3),(4,3)],
+                [(0,1),(0,2),(0,3),(1,3),(2,3),(3,3)],
             levelCompleted: false
         ))
         //level 2
         levels.append (LevelData(
-            gridSizeX: 5,
-            gridSizeY: 5,
+            gridSizeX: 4,
+            gridSizeY: 4,
             blockBuffer: 3,
             delayTime: 0.5,
             solutionCoords:
-            [(0,0),(0,1),(0,2),(0,3),(1,3),(2,3),(3,3),(4,3)],
+                [(0,2),(0,3),(1,3),(2,3),(2,2),(2,1),(2,0),(3,0)],
             levelCompleted: false
         ))
         
@@ -56,6 +63,7 @@ class LevelsData{
             [(0,0),(0,1),(0,2),(0,3),(1,3),(2,3),(3,3),(4,3)],
             levelCompleted: false
         ))
+        
         //level 4
         levels.append (LevelData(
             gridSizeX: 5,
@@ -66,6 +74,7 @@ class LevelsData{
             [(0,0),(0,1),(0,2),(0,3),(1,3),(2,3),(3,3),(4,3)],
             levelCompleted: false
         ))
+        
         //level 5
         levels.append (LevelData(
             gridSizeX: 5,
@@ -76,6 +85,7 @@ class LevelsData{
             [(0,0),(0,1),(0,2),(0,3),(1,3),(2,3),(3,3),(4,3)],
             levelCompleted: false
         ))
+        
         //level 6
         levels.append (LevelData(
             gridSizeX: 5,

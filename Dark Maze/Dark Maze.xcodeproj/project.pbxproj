@@ -21,6 +21,8 @@
 		C37B707E1FE9D94D00F71B73 /* GridTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37B707D1FE9D94D00F71B73 /* GridTile.swift */; };
 		C38464BF2055E41900239EE0 /* 006784-3d-transparent-glass-icon-arrows-double-arrowhead-right.png in Resources */ = {isa = PBXBuildFile; fileRef = C38464BE2055E41900239EE0 /* 006784-3d-transparent-glass-icon-arrows-double-arrowhead-right.png */; };
 		C38464C22055EC4700239EE0 /* nextArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = C38464C12055EC4700239EE0 /* nextArrow.png */; };
+		C3962A332057508F002C0AF9 /* TapToBeginScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3962A322057508F002C0AF9 /* TapToBeginScene.swift */; };
+		C3962A35205750DF002C0AF9 /* TapToBeginScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C3962A34205750DF002C0AF9 /* TapToBeginScene.sks */; };
 		C3EF4A141FD7749000528247 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3EF4A131FD7749000528247 /* AppDelegate.swift */; };
 		C3EF4A1A1FD7749000528247 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3EF4A191FD7749000528247 /* MenuScene.swift */; };
 		C3EF4A1C1FD7749000528247 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3EF4A1B1FD7749000528247 /* GameViewController.swift */; };
@@ -43,6 +45,8 @@
 		C37B707D1FE9D94D00F71B73 /* GridTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridTile.swift; sourceTree = "<group>"; };
 		C38464BE2055E41900239EE0 /* 006784-3d-transparent-glass-icon-arrows-double-arrowhead-right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "006784-3d-transparent-glass-icon-arrows-double-arrowhead-right.png"; sourceTree = "<group>"; };
 		C38464C12055EC4700239EE0 /* nextArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nextArrow.png; sourceTree = "<group>"; };
+		C3962A322057508F002C0AF9 /* TapToBeginScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapToBeginScene.swift; sourceTree = "<group>"; };
+		C3962A34205750DF002C0AF9 /* TapToBeginScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = TapToBeginScene.sks; sourceTree = "<group>"; };
 		C3EF4A101FD7749000528247 /* Dark Maze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dark Maze.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3EF4A131FD7749000528247 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C3EF4A191FD7749000528247 /* MenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
@@ -83,6 +87,7 @@
 			children = (
 				C3189E071FD7991E000A52A6 /* MenuScene.sks */,
 				C3189DFF1FD77CBF000A52A6 /* LevelSelectScene.sks */,
+				C3962A34205750DF002C0AF9 /* TapToBeginScene.sks */,
 				C364CEC31FE750E8009140C7 /* Level1Scene.sks */,
 				C30DB1C72015678E00CE670C /* EndGameScene.sks */,
 			);
@@ -94,6 +99,7 @@
 			children = (
 				C3EF4A191FD7749000528247 /* MenuScene.swift */,
 				C3189E011FD77D0B000A52A6 /* LevelSelectScene.swift */,
+				C3962A322057508F002C0AF9 /* TapToBeginScene.swift */,
 				C364CEBF1FE74F98009140C7 /* Level1Scene.swift */,
 				C30DB1C92015684900CE670C /* EndGameScene.swift */,
 			);
@@ -212,6 +218,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C3189DFD1FD77988000A52A6 /* MYBLS___.TTF in Resources */,
+				C3962A35205750DF002C0AF9 /* TapToBeginScene.sks in Resources */,
 				C38464C22055EC4700239EE0 /* nextArrow.png in Resources */,
 				C30DB1C82015678E00CE670C /* EndGameScene.sks in Resources */,
 				C3189DFE1FD7798F000A52A6 /* MYSCARS_.TTF in Resources */,
@@ -237,6 +244,7 @@
 				C3EF4A1A1FD7749000528247 /* MenuScene.swift in Sources */,
 				C3EF4A1C1FD7749000528247 /* GameViewController.swift in Sources */,
 				C3EF4A141FD7749000528247 /* AppDelegate.swift in Sources */,
+				C3962A332057508F002C0AF9 /* TapToBeginScene.swift in Sources */,
 				C364CEC01FE74F98009140C7 /* Level1Scene.swift in Sources */,
 				C3189E021FD77D0B000A52A6 /* LevelSelectScene.swift in Sources */,
 				C30DB1CA2015684900CE670C /* EndGameScene.swift in Sources */,

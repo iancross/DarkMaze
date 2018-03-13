@@ -51,15 +51,11 @@ class LevelSelectScene: SKScene {
             for node in nodesAtLocation{
                 if let box = node as? SKShapeNode{
                     if Int(box.name!)! <= LevelsData.shared.nextLevelToComplete {
-                        print ("we are in level select:")
-                        print ("tile.frame \(box.frame)")
-                        print ("accumulated \(box.calculateAccumulatedFrame())")
-                        print ("tile.position \(box.position) ---------------------")
                         LevelsData.shared.currentLevel = Int(box.name!)!
                         let embiggen = SKAction.scale(to: 1.2, duration: 0.5)
                         let loadScene = SKAction.run({
                             LevelsData.shared.currentLevel = Int(box.name!)!
-                            if let scene = SKScene(fileNamed: "Level1Scene") {
+                            if let scene = SKScene(fileNamed: "TapToBeginScene") {
                                 scene.scaleMode = .aspectFill
                                 self.view?.presentScene(scene)
                             }

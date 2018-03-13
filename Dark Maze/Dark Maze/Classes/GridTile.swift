@@ -87,17 +87,16 @@ class GridTile: SKShapeNode{
     func touched(){
         switch state {
         case .availableToTouch:
-            print ("turn me white")
             switchToWhite()
             self.state = .touched
             if let parent = self.parentScene as? Level1Scene{
                 parent.updateGridState()
             }
         case .touched:
-            print ("touched block is touched again")
+            return
         case .unavailable:
             //jiggle the available tiles
-            print("unavailable")
+            return
         }
     }
     func switchToWhite(){
@@ -119,13 +118,12 @@ class GridTile: SKShapeNode{
         
         new_tile.run(group){
             if let parent = self.parentScene as? Level1Scene{
-                parent.endGame()
+                parent.endGame(success: false)
             }
         }
 
     }
     func updateTileState(){
-        print("made it to tileAvailable")
         switch state{
         case .touched:
             return
@@ -142,5 +140,8 @@ class GridTile: SKShapeNode{
         default:
             return
         }
+    }
+    func firstTile(){
+        self.state = .availableToTouch
     }
 }
