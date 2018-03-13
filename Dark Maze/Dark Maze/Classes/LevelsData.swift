@@ -21,8 +21,8 @@ class LevelsData{
         
         //this determines which level is either currently being worked on or the next level
         //it will always be incomplete in the level select
-        nextLevelToComplete = 1
-        currentLevel = 1
+        nextLevelToComplete = 6
+        currentLevel = 6
         levels = [LevelData]()
         
         //levels info
@@ -55,12 +55,12 @@ class LevelsData{
         
         //level 3
         levels.append (LevelData(
-            gridSizeX: 5,
-            gridSizeY: 5,
+            gridSizeX: 4,
+            gridSizeY: 4,
             blockBuffer: 3,
             delayTime: 0.5,
             solutionCoords:
-            [(0,0),(0,1),(0,2),(0,3),(1,3),(2,3),(3,3),(4,3)],
+                [(0,0),(1,0),(1,1),(1,2),(2,2),(3,2),(3,1),(3,0)],
             levelCompleted: false
         ))
         
@@ -71,7 +71,7 @@ class LevelsData{
             blockBuffer: 3,
             delayTime: 0.5,
             solutionCoords:
-            [(0,0),(0,1),(0,2),(0,3),(1,3),(2,3),(3,3),(4,3)],
+            [(0,1),(0,0),(1,0),(2,0),(3,0),(3,1),(4,1),(4,2),(4,3)],
             levelCompleted: false
         ))
         
@@ -82,7 +82,7 @@ class LevelsData{
             blockBuffer: 3,
             delayTime: 0.5,
             solutionCoords:
-            [(0,0),(0,1),(0,2),(0,3),(1,3),(2,3),(3,3),(4,3)],
+            [(0,1),(1,1),(1,2),(2,2),(3,2),(3,1),(3,0),(4,0)],
             levelCompleted: false
         ))
         
@@ -93,7 +93,7 @@ class LevelsData{
             blockBuffer: 3,
             delayTime: 0.5,
             solutionCoords:
-            [(0,0),(0,1),(0,2),(0,3),(1,3),(2,3),(3,3),(4,3)],
+            [(0,4),(1,4),(1,3),(2,3),(2,2),(3,2),(3,1),(3,0),(4,0)],
             levelCompleted: false
         ))
     }

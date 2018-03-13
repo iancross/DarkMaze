@@ -61,6 +61,10 @@ class EndGameScene: SKScene {
             else{
                 //here's where we would load the next level
                 LevelsData.shared.currentLevel += 1
+                if let scene = SKScene(fileNamed: "Level1Scene") {
+                    scene.scaleMode = .aspectFill
+                    view?.presentScene(scene)
+                }
 
             }
         }

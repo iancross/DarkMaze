@@ -15,7 +15,7 @@ class GridTile: SKShapeNode{
     var originColor = UIColor.black
     let gridCoord: (x: Int,y: Int)
     private var strokeAlpha = 0.2
-    private var strokeAppearing = true
+    var strokeAppearing = true
     let alphaDecrement = 0.005
     let parentScene: SKScene
     var state = TileState.unavailable
@@ -53,10 +53,15 @@ class GridTile: SKShapeNode{
 
     }
     func reInit(){
+        print("reinit \(gridCoord)")
+        print ("before \(tile.fillColor)")
+
         tile.fillColor = originColor
         tile.alpha = 1.0
         tile.lineWidth = 1
         tile.glowWidth = 1
+        state = .unavailable
+        print ("after \(tile.fillColor)")
     }
 
     func setColor(color: UIColor){
@@ -100,8 +105,12 @@ class GridTile: SKShapeNode{
         }
     }
     func switchToWhite(){
-            tile.fillColor = UIColor.white
-            tile.alpha = 1.0
+        tile.fillColor = UIColor.white
+        tile.alpha = 1.0
+    }
+    func switchToBlack(){
+        tile.fillColor = UIColor.black
+        tile.alpha = 1.0
     }
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -136,6 +145,8 @@ class GridTile: SKShapeNode{
     func resetState(){
         switch state{
         case .availableToTouch:
+            self.reInit()
+        case .unavailable:
             self.reInit()
         default:
             return

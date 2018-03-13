@@ -17,12 +17,18 @@ class Level1Scene: SKScene {
     var touchedTiles = 0
     var lastTouchedTile: GridTile?
     var blocksize: CGFloat = 0
+    var cam: SKCameraNode?
     
     let right_arrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
 
     
     override func didMove(to view: SKView) {
-        //initializeTapToBegin() //disable to temporarily so that i can go straight to the solution (skip countdown)
+        super.didMove(to: view)
+        cam = SKCameraNode()
+        self.camera = cam
+        self.addChild(cam!)
+        cam?.position = CGPoint(x: frame.midX,y: frame.midY)
+
         countdown()
         //self.initializeGrid() //remove comment to skip countdown
         //self.drawSolution()  //remove comment to skip countdown
@@ -37,22 +43,6 @@ class Level1Scene: SKScene {
             }
         }
     }
-    
-//    func initializeTapToBegin(){
-//        self.isUserInteractionEnabled = true
-//        let tapLabel = SKLabelNode(fontNamed: GameStyle.shared.mainFontString)
-//        tapLabel.text = "Tap to begin"
-//        tapLabel.fontSize = GameStyle.shared.textBoxFontSize
-//        tapLabel.fontColor = SKColor.white
-//        tapLabel.position = CGPoint(x: frame.midX, y: frame.midY)
-//        addChild(tapLabel)
-//        let actionList = SKAction.sequence(
-//            [SKAction.fadeOut(withDuration: 2.0),
-//             SKAction.fadeIn(withDuration: 2.0)]
-//        )
-//        tapLabel.run(SKAction.repeatForever(actionList))
-//        tapToBegin = tapLabel
-//    }
     
     //does a 3 2 1 countdown on the screen and then
     //starts drawing the solution
@@ -129,7 +119,6 @@ class Level1Scene: SKScene {
                     self.isUserInteractionEnabled = true
                     //marking the first tile as available
                     self.beginGame()
-                    
                 }
             }
         }
@@ -139,8 +128,14 @@ class Level1Scene: SKScene {
         let l = LevelsData.shared.levels[LevelsData.shared.currentLevel-1]
         let tile = self.tile2DArray[(l.solutionCoords.first?.y)!][(l.solutionCoords.first?.x)!]
         tile.firstTile()
+        
         right_arrow.position = CGPoint(x: tile.tile.frame.minX - (blocksize/2.0), y: tile.tile.frame.midY)
         addChild(right_arrow)
+        
+        let end_arrow = right_arrow.copy() as! SKSpriteNode
+        let end_tile = self.tile2DArray[(l.solutionCoords.last?.y)!][(l.solutionCoords.last?.x)!]
+        end_arrow.position = CGPoint(x: end_tile.tile.frame.maxX + (blocksize/2.0), y: end_tile.tile.frame.midY)
+        addChild(end_arrow)
     }
     private func drawGridLines(){
         for row in tile2DArray{
@@ -174,15 +169,6 @@ class Level1Scene: SKScene {
                 }
             }
         }
-//        //if begin is touched
-//        if let temp = tapToBegin {
-//            if temp.contains(point){
-//                temp.run(SKAction.fadeOut(withDuration: 0.5)){
-//                    temp.removeFromParent()
-//                    self.countdown()
-//                }
-//            }
-//        }
     }
     
     // If all the solutions coords are filled (and there wasn't a
@@ -206,30 +192,13 @@ class Level1Scene: SKScene {
             view?.presentScene(scene)
         }
     }
-    
-    /*checks an array of tuples for one in particular
-    https://stackoverflow.com/questions/29736244/how-do-i-check-if-an-array-of-tuples-contains-a-particular-one-in-swift
-    */
-    func tupleContains(a:[(Int, Int)], v:(Int,Int)) -> Bool {
-        let (c1, c2) = v
-        for (v1, v2) in a { if v1 == c1 && v2 == c2 { return true } }
-        return false
-    }
-    
-    func reInitGame (){
-        removeAllChildren()
-        tile2DArray.removeAll()
-        countdownTime = 3
-        gridViewable = false
-        touchedTiles = 0
-        initializeGrid()
-        drawSolution()
-    }
+
     
     func updateGridState(){
         if let coord = (lastTouchedTile?.gridCoord){
             for row in tile2DArray{
                 for tile in row{
+                    print ("\(tile.gridCoord) \(tile.state)")
                     tile.resetState()
                 }
             }
@@ -271,9 +240,34 @@ class Level1Scene: SKScene {
         }
         else{
             LevelsData.shared.currentLevelSuccess = false
-            lastTouchedTile?.blowUp()
+            lastTouchedTile?.switchToBlack()
+            lastTouchedTile?.strokeAppearing = false
+            var scale = (SKAction.scale(by: 0.005, duration: 1))
+            var move = (SKAction.move(to: (lastTouchedTile?.tile.position)!, duration: 1))
+            cam?.run(SKAction.group([scale,move])){
+                self.endGame(success: false)
+            }
             return true
         }
+        return false
+    }
+    
+    func reInitGame (){
+        removeAllChildren()
+        tile2DArray.removeAll()
+        countdownTime = 3
+        gridViewable = false
+        touchedTiles = 0
+        initializeGrid()
+        drawSolution()
+    }
+    
+    /*checks an array of tuples for one in particular
+     https://stackoverflow.com/questions/29736244/how-do-i-check-if-an-array-of-tuples-contains-a-particular-one-in-swift
+     */
+    func tupleContains(a:[(Int, Int)], v:(Int,Int)) -> Bool {
+        let (c1, c2) = v
+        for (v1, v2) in a { if v1 == c1 && v2 == c2 { return true } }
         return false
     }
 }
