@@ -21,8 +21,10 @@ class LevelsData{
         
         //this determines which level is either currently being worked on or the next level
         //it will always be incomplete in the level select
-        nextLevelToComplete = 6
-        currentLevel = 6
+        nextLevelToComplete = 4
+        
+        //used by the gameplay if you play an earlier level
+        currentLevel = 0
         levels = [LevelData]()
         
         //levels info

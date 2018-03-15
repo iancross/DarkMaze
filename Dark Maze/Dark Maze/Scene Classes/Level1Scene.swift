@@ -198,7 +198,6 @@ class Level1Scene: SKScene {
         if let coord = (lastTouchedTile?.gridCoord){
             for row in tile2DArray{
                 for tile in row{
-                    print ("\(tile.gridCoord) \(tile.state)")
                     tile.resetState()
                 }
             }

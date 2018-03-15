@@ -17,12 +17,12 @@
 		C3189E081FD7991E000A52A6 /* MenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C3189E071FD7991E000A52A6 /* MenuScene.sks */; };
 		C32DB4731FF02A6800040BA3 /* LevelsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32DB4721FF02A6800040BA3 /* LevelsData.swift */; };
 		C364CEC01FE74F98009140C7 /* Level1Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C364CEBF1FE74F98009140C7 /* Level1Scene.swift */; };
-		C364CEC41FE750E8009140C7 /* Level1Scene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C364CEC31FE750E8009140C7 /* Level1Scene.sks */; };
 		C37B707E1FE9D94D00F71B73 /* GridTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37B707D1FE9D94D00F71B73 /* GridTile.swift */; };
 		C38464BF2055E41900239EE0 /* 006784-3d-transparent-glass-icon-arrows-double-arrowhead-right.png in Resources */ = {isa = PBXBuildFile; fileRef = C38464BE2055E41900239EE0 /* 006784-3d-transparent-glass-icon-arrows-double-arrowhead-right.png */; };
 		C38464C22055EC4700239EE0 /* nextArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = C38464C12055EC4700239EE0 /* nextArrow.png */; };
 		C3962A332057508F002C0AF9 /* TapToBeginScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3962A322057508F002C0AF9 /* TapToBeginScene.swift */; };
 		C3962A35205750DF002C0AF9 /* TapToBeginScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C3962A34205750DF002C0AF9 /* TapToBeginScene.sks */; };
+		C3962A3B205888F3002C0AF9 /* Level1Scene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C3962A3A205888F3002C0AF9 /* Level1Scene.sks */; };
 		C3EF4A141FD7749000528247 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3EF4A131FD7749000528247 /* AppDelegate.swift */; };
 		C3EF4A1A1FD7749000528247 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3EF4A191FD7749000528247 /* MenuScene.swift */; };
 		C3EF4A1C1FD7749000528247 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3EF4A1B1FD7749000528247 /* GameViewController.swift */; };
@@ -41,12 +41,12 @@
 		C3189E071FD7991E000A52A6 /* MenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MenuScene.sks; sourceTree = "<group>"; };
 		C32DB4721FF02A6800040BA3 /* LevelsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelsData.swift; sourceTree = "<group>"; };
 		C364CEBF1FE74F98009140C7 /* Level1Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level1Scene.swift; sourceTree = "<group>"; };
-		C364CEC31FE750E8009140C7 /* Level1Scene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Level1Scene.sks; sourceTree = "<group>"; };
 		C37B707D1FE9D94D00F71B73 /* GridTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridTile.swift; sourceTree = "<group>"; };
 		C38464BE2055E41900239EE0 /* 006784-3d-transparent-glass-icon-arrows-double-arrowhead-right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "006784-3d-transparent-glass-icon-arrows-double-arrowhead-right.png"; sourceTree = "<group>"; };
 		C38464C12055EC4700239EE0 /* nextArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nextArrow.png; sourceTree = "<group>"; };
 		C3962A322057508F002C0AF9 /* TapToBeginScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapToBeginScene.swift; sourceTree = "<group>"; };
 		C3962A34205750DF002C0AF9 /* TapToBeginScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = TapToBeginScene.sks; sourceTree = "<group>"; };
+		C3962A3A205888F3002C0AF9 /* Level1Scene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Level1Scene.sks; sourceTree = "<group>"; };
 		C3EF4A101FD7749000528247 /* Dark Maze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dark Maze.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3EF4A131FD7749000528247 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C3EF4A191FD7749000528247 /* MenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
@@ -87,8 +87,8 @@
 			children = (
 				C3189E071FD7991E000A52A6 /* MenuScene.sks */,
 				C3189DFF1FD77CBF000A52A6 /* LevelSelectScene.sks */,
+				C3962A3A205888F3002C0AF9 /* Level1Scene.sks */,
 				C3962A34205750DF002C0AF9 /* TapToBeginScene.sks */,
-				C364CEC31FE750E8009140C7 /* Level1Scene.sks */,
 				C30DB1C72015678E00CE670C /* EndGameScene.sks */,
 			);
 			path = Scenes;
@@ -225,8 +225,8 @@
 				C3189E001FD77CBF000A52A6 /* LevelSelectScene.sks in Resources */,
 				C38464BF2055E41900239EE0 /* 006784-3d-transparent-glass-icon-arrows-double-arrowhead-right.png in Resources */,
 				C3EF4A1F1FD7749000528247 /* Main.storyboard in Resources */,
+				C3962A3B205888F3002C0AF9 /* Level1Scene.sks in Resources */,
 				C3189E081FD7991E000A52A6 /* MenuScene.sks in Resources */,
-				C364CEC41FE750E8009140C7 /* Level1Scene.sks in Resources */,
 				C3EF4A211FD7749000528247 /* Assets.xcassets in Resources */,
 				C3EF4A241FD7749000528247 /* LaunchScreen.storyboard in Resources */,
 			);

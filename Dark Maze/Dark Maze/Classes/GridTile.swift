@@ -36,10 +36,9 @@ class GridTile: SKShapeNode{
         
         //new plan, just create a tile with generic widths then move it to the right position?
         //SUCCESS! don't use the point array, not sure why i was making it that way. Just use rectOf
-        //also need to take into account calc accummulated frame
 
         tile = SKShapeNode(rectOf: CGSize(width: width, height: height))
-        tile.position = center //need to figure out actual spot for this
+        tile.position = center
         tile.lineWidth = 1
         tile.glowWidth = 1
         tile.fillColor = UIColor.black
@@ -53,15 +52,11 @@ class GridTile: SKShapeNode{
 
     }
     func reInit(){
-        print("reinit \(gridCoord)")
-        print ("before \(tile.fillColor)")
-
         tile.fillColor = originColor
         tile.alpha = 1.0
         tile.lineWidth = 1
         tile.glowWidth = 1
         state = .unavailable
-        print ("after \(tile.fillColor)")
     }
 
     func setColor(color: UIColor){

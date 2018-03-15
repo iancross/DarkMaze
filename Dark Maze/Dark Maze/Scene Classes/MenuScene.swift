@@ -80,7 +80,6 @@ class MenuScene: SKScene {
         let newY = arc4random_uniform(UInt32(self.frame.height))
         let startingPoint = CGPoint(x: CGFloat(newX), y: CGFloat(newY))
         currentTile = GridTile(parentScene: self, center: startingPoint, coord: (0,0), width: 50.0, height: 50.0)
-        print(currentTile!.tile)
         blockPoints.append(CGPoint(x: (currentTile?.tile.frame.midX)!, y: (currentTile?.tile.frame.midY)!)) //first is the prev
         blockPoints.append(CGPoint(x: (currentTile?.tile.frame.midX)!, y: (currentTile?.tile.frame.midY)!)) //second is the current
     }
