@@ -55,7 +55,7 @@ class EndGameScene: SKScene {
             if repeatOrNextButton?.text == "Try Again"{
                 if let scene = SKScene(fileNamed: "Level1Scene") {
                     scene.scaleMode = .aspectFill
-                    view?.presentScene(scene)
+                    self.view?.presentScene(scene, transition: GameStyle.shared.sceneTransition)
                 }
             }
             else{
@@ -63,7 +63,7 @@ class EndGameScene: SKScene {
                 LevelsData.shared.currentLevel += 1
                 if let scene = SKScene(fileNamed: "Level1Scene") {
                     scene.scaleMode = .aspectFill
-                    view?.presentScene(scene)
+                    self.view?.presentScene(scene, transition: GameStyle.shared.sceneTransition)
                 }
 
             }
@@ -71,13 +71,13 @@ class EndGameScene: SKScene {
         else if levelSelectButton!.within(point: point){
             if let scene = SKScene(fileNamed: "LevelSelectScene") {
                 scene.scaleMode = .aspectFill
-                view?.presentScene(scene)
+                self.view?.presentScene(scene, transition: GameStyle.shared.sceneTransition)
             }
         }
         else if mainMenuButton!.within(point: point){
             if let scene = SKScene(fileNamed: "MenuScene") {
                 scene.scaleMode = .aspectFill
-                view?.presentScene(scene)
+                self.view?.presentScene(scene, transition: GameStyle.shared.sceneTransition)
             }
         }
     }

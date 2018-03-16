@@ -51,11 +51,10 @@ class GridTile: SKShapeNode{
         super.init()
 
     }
+    
     func reInit(){
         tile.fillColor = originColor
         tile.alpha = 1.0
-        tile.lineWidth = 1
-        tile.glowWidth = 1
         state = .unavailable
     }
 
@@ -71,6 +70,7 @@ class GridTile: SKShapeNode{
             return false
         }
     }
+    
     func updateFrameAlpha(){
         if strokeAlpha > 0.2 && !strokeAppearing {
             strokeAlpha -= alphaDecrement
@@ -84,6 +84,7 @@ class GridTile: SKShapeNode{
         let strokeColor = UIColor(displayP3Red: 0.40, green: 0.40, blue: 0.40, alpha: CGFloat(strokeAlpha) )
         tile.strokeColor = strokeColor
     }
+    
     func touched(){
         switch state {
         case .availableToTouch:
@@ -96,47 +97,29 @@ class GridTile: SKShapeNode{
             return
         case .unavailable:
             //jiggle the available tiles
-            return
+            if let parent = self.parentScene as? Level1Scene{
+                parent.giveHint()
+            }
         }
     }
+    
     func switchToWhite(){
         tile.fillColor = UIColor.white
         tile.alpha = 1.0
     }
+    
     func switchToBlack(){
         tile.fillColor = UIColor.black
         tile.alpha = 1.0
     }
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
-    func blowUp (){
-        tile.fillColor = UIColor.black
-        tile.zPosition += 5 // need a better number here
-        strokeAlpha = 1.0
-        let new_tile = tile as SKShapeNode
-        let embiggen = SKAction.scale(to: 20, duration: 2.0)
-        let rotate = SKAction.rotate(byAngle: 10, duration: 2.0)
-        let group = SKAction.group([embiggen,rotate])
-        
-        new_tile.run(group){
-            if let parent = self.parentScene as? Level1Scene{
-                parent.endGame(success: false)
-            }
-        }
+    func switchToGray(){
+        state = .availableToTouch
+        tile.fillColor = UIColor.gray
+        //self.switchToWhite()
+        //tile.alpha = 0.3
+    }
 
-    }
-    func updateTileState(){
-        switch state{
-        case .touched:
-            return
-        default:
-            state = .availableToTouch
-            self.switchToWhite()
-            tile.alpha = 0.3
-        }
-    }
     func resetState(){
         switch state{
         case .availableToTouch:
@@ -147,7 +130,39 @@ class GridTile: SKShapeNode{
             return
         }
     }
+    
+    func jiggle(){
+        switchToGray()
+        tile.zPosition += 5
+        let rotateSequence = [SKAction.rotate(byAngle: 0.2, duration: 0.3),
+                        SKAction.rotate(byAngle: -0.4, duration: 0.3),
+                        SKAction.rotate(byAngle: 0.2, duration: 0.3)]
+        
+        let graySequence =
+//            [SKAction.colorize(with: UIColor.gray, colorBlendFactor: 1.0, duration: 3.0),
+//            SKAction.colorize(with: UIColor.black, colorBlendFactor: 1.0, duration: 3.0)]
+        
+            [SKAction.run({
+                self.tile.alpha = 0;
+                self.tile.fillColor = UIColor.gray;
+            }),
+            //SKAction.fadeAlpha(by: 0.7, duration: 0.4),
+            //SKAction.fadeAlpha(by: -0.7, duration: 3.0),
+            SKAction.fadeIn(withDuration: 0.4),
+            SKAction.fadeOut(withDuration: 0.4)
+        ]
+        
+        tile.run(SKAction.sequence(graySequence)){
+            self.switchToBlack()
+            self.tile.zPosition -= 5
+        }
+    }
+    
     func firstTile(){
         self.state = .availableToTouch
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

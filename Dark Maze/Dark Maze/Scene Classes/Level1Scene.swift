@@ -189,7 +189,7 @@ class Level1Scene: SKScene {
     private func switchToEndGameScene(){
         if let scene = SKScene(fileNamed: "EndGameScene") {
             scene.scaleMode = .aspectFill
-            view?.presentScene(scene)
+            view?.presentScene(scene, transition: GameStyle.shared.sceneTransition)
         }
     }
 
@@ -220,7 +220,29 @@ class Level1Scene: SKScene {
     }
     
     func checkTile(x: Int, y: Int){
-        tile2DArray[y][x].updateTileState()
+        let tile = tile2DArray[y][x]
+        switch tile.state{
+        case .touched:
+            return
+        default:
+            tile.state = .availableToTouch
+            //tile.switchToGrey() //enable this line if we want to give them a preview
+        }
+    }
+    
+    func giveHint(){
+        print("made it here")
+        for row in tile2DArray{
+            for tile in row{
+                switch tile.state{
+                case .availableToTouch:
+                    print ("fuck")
+                    tile.jiggle()
+                default:
+                    break
+                }
+            }
+        }
     }
     
     //return true if game is over
@@ -241,12 +263,22 @@ class Level1Scene: SKScene {
             LevelsData.shared.currentLevelSuccess = false
             lastTouchedTile?.switchToBlack()
             lastTouchedTile?.strokeAppearing = false
+            lastTouchedTile?.tile.zPosition += 5
+            let rotateSequence = SKAction.sequence(
+                [SKAction.rotate(byAngle: 0.4, duration: 0.1),
+                 SKAction.rotate(byAngle: -0.8, duration: 0.1),
+                 SKAction.run {
+                    print("running")
+                    },
+                 SKAction.rotate(byAngle: 0.4, duration: 0.1)])
+            lastTouchedTile!.tile.run(SKAction.repeatForever(rotateSequence))
+            
             let scale = (SKAction.scale(by: 0.005, duration: 1))
             let move = (SKAction.move(to: (lastTouchedTile?.tile.position)!, duration: 1))
             cam?.run(SKAction.group([scale,move])){
                 self.endGame(success: false)
             }
-            return true
+            //return true
         }
         return false
     }

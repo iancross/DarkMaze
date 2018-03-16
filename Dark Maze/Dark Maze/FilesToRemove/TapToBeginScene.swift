@@ -28,7 +28,7 @@ class TapToBeginScene: SKScene {
         //if begin is touched
         if let scene = SKScene(fileNamed: "Level1Scene") {
             scene.scaleMode = .aspectFill
-            self.view?.presentScene(scene)
+            view?.presentScene(scene, transition: GameStyle.shared.sceneTransition)
         }
     }
 }

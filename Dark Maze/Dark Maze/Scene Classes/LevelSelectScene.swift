@@ -57,7 +57,7 @@ class LevelSelectScene: SKScene {
         if (menuButton?.within(point: touch!))!{
             if let scene = SKScene(fileNamed: "MenuScene") {
                 scene.scaleMode = .aspectFill
-                self.view?.presentScene(scene)
+                view?.presentScene(scene, transition: GameStyle.shared.sceneTransition)
             }
         }
 
@@ -77,7 +77,7 @@ class LevelSelectScene: SKScene {
                         LevelsData.shared.currentLevel = Int(button.text)!
                         if let scene = SKScene(fileNamed: "Level1Scene") {
                             scene.scaleMode = .aspectFill
-                            self.view?.presentScene(scene)
+                            self.view?.presentScene(scene, transition: GameStyle.shared.sceneTransition)
                         }
                     })
                     button.outline.run(SKAction.sequence([embiggen,loadScene]))
