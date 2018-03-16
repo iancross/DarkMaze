@@ -21,7 +21,7 @@ class EndGameScene: SKScene {
         self.isUserInteractionEnabled = true
         
         var successMessage : String
-        var success = LevelsData.shared.currentLevelSuccess
+        let success = LevelsData.shared.currentLevelSuccess
         var variableText: String
         
         
@@ -36,10 +36,10 @@ class EndGameScene: SKScene {
         successMessageNode = self.childNode(withName: "successMessage") as! SKLabelNode
         successMessageNode.text = successMessage
 
-        
-        repeatOrNextButton = TextBoxButton(x: frame.midX, y: frame.midY + frame.midY/4, text: variableText, parentScene: self)
-        levelSelectButton = TextBoxButton(x: frame.midX, y: frame.midY, text: "Level Select", parentScene: self)
-        mainMenuButton = TextBoxButton(x: frame.midX, y: frame.midY - frame.midY/4, text: "Main Menu", parentScene: self)
+        let font = GameStyle.shared.TextBoxFontSize
+        repeatOrNextButton = TextBoxButton(x: frame.midX, y: frame.midY + frame.midY/4, text: variableText,fontsize:font,  parentScene: self)
+        levelSelectButton = TextBoxButton(x: frame.midX, y: frame.midY, text: "Level Select", fontsize:font, parentScene: self)
+        mainMenuButton = TextBoxButton(x: frame.midX, y: frame.midY - frame.midY/4, text: "Main Menu", fontsize:font, parentScene: self)
         
     }
     

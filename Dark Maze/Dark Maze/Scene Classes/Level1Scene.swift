@@ -241,8 +241,8 @@ class Level1Scene: SKScene {
             LevelsData.shared.currentLevelSuccess = false
             lastTouchedTile?.switchToBlack()
             lastTouchedTile?.strokeAppearing = false
-            var scale = (SKAction.scale(by: 0.005, duration: 1))
-            var move = (SKAction.move(to: (lastTouchedTile?.tile.position)!, duration: 1))
+            let scale = (SKAction.scale(by: 0.005, duration: 1))
+            let move = (SKAction.move(to: (lastTouchedTile?.tile.position)!, duration: 1))
             cam?.run(SKAction.group([scale,move])){
                 self.endGame(success: false)
             }

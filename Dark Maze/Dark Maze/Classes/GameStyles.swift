@@ -13,7 +13,9 @@ class GameStyle {
     static let shared = GameStyle()
     
     var mainFontString = "My Scars"
-    var textBoxFontSize: CGFloat = 60
+    var SmallTextBoxFontSize: CGFloat = 40
+    var TextBoxFontSize: CGFloat = 80
+    let sceneTransition = SKTransition.fade(with: UIColor.black, duration: 1.2)
 
     private init() {
         

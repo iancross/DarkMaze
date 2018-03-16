@@ -17,9 +17,11 @@ class LevelSelectScene: SKScene {
     var numLevelsOnLine = 3
     let topRowHeight = 1150
     let verticalSpacing = 200
+    var menuButton: TextBoxButton?
     
 
     override func didMove(to view: SKView) {
+        menuButton = TextBoxButton(x: 215, y: 125, text: "Main Menu", fontsize: GameStyle.shared.SmallTextBoxFontSize, parentScene: self)
         initializePageButtons()
     }
     func initializePageButtons(){
@@ -29,10 +31,11 @@ class LevelSelectScene: SKScene {
             for j in 0...numLevelsOnLine-1{
                 let levelNumber = currentPage * numLevelsOnPage + i * numLevelsOnLine + j
                 if levelNumber <= LevelsData.shared.levels.count-1{
-                    var box = TextBoxButton(
+                    let box = TextBoxButton(
                         x: (frame.width/4.0 * CGFloat(j+1)),
                         y: CGFloat(topRowHeight - (i+1) * verticalSpacing),
                         text: String(99),
+                        fontsize: GameStyle.shared.TextBoxFontSize,
                         parentScene: self)
                     box.updateText(String(levelNumber + 1))
                     levels.append(box)
@@ -49,7 +52,15 @@ class LevelSelectScene: SKScene {
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let currLevel = LevelsData.shared.nextLevelToComplete
-        var touch = touches.first?.location(in: self)
+        let touch = touches.first?.location(in: self)
+        
+        if (menuButton?.within(point: touch!))!{
+            if let scene = SKScene(fileNamed: "MenuScene") {
+                scene.scaleMode = .aspectFill
+                self.view?.presentScene(scene)
+            }
+        }
+
         for button in levels{
             if button.within(point: touch!){
                 if Int(button.text)! > currLevel{
@@ -64,7 +75,7 @@ class LevelSelectScene: SKScene {
 
                     let loadScene = SKAction.run({
                         LevelsData.shared.currentLevel = Int(button.text)!
-                        if let scene = SKScene(fileNamed: "TapToBeginScene") {
+                        if let scene = SKScene(fileNamed: "Level1Scene") {
                             scene.scaleMode = .aspectFill
                             self.view?.presentScene(scene)
                         }

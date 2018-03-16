@@ -15,14 +15,18 @@ protocol TestDelegate {
 }
 
 class MenuScene: SKScene {
-    var floatingStartButton = SKLabelNode()
+    var darkMaze = SKLabelNode()
+    var tapToBegin = SKLabelNode()
+    
     var blockPoints = [CGPoint]()
     var tileLoop = 20
     var currentTile: GridTile?
     var blocksize: CGFloat = 100
     
     override func didMove(to view: SKView) {
-        floatingStartButton = self.childNode(withName: "FloatingStartGameButton") as! SKLabelNode
+        darkMaze = self.childNode(withName: "DarkMaze") as! SKLabelNode
+        tapToBegin = self.childNode(withName: "TapToBegin") as! SKLabelNode
+
 //        floatingStartButton.position = CGPoint(
 //            x: CGFloat(arc4random_uniform(UInt32(frame.width - floatingStartButton.frame.width))),
 //            y: CGFloat(arc4random_uniform(UInt32(frame.height - floatingStartButton.frame.height)))
@@ -33,7 +37,8 @@ class MenuScene: SKScene {
             SKAction.fadeOut(withDuration: 2.0),
             SKAction.run(moveLabel)]
         )
-        floatingStartButton.run(SKAction.repeatForever(actionList))
+        darkMaze.run(SKAction.repeatForever(actionList))
+        tapToBegin.run(SKAction.repeatForever(actionList))
         createNewStartPoint()
     }
     
@@ -72,7 +77,7 @@ class MenuScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let scene = SKScene(fileNamed: "LevelSelectScene") {
             scene.scaleMode = .aspectFill
-            view?.presentScene(scene)
+            view?.presentScene(scene, transition: GameStyle.shared.sceneTransition)
         }
     }
     func createNewStartPoint(){
@@ -106,25 +111,4 @@ class MenuScene: SKScene {
         return CGPoint(x: prevPoint.x + x, y: prevPoint.y + y)
     }
 }
-
-//func drawSolution(){
-//    self.isUserInteractionEnabled = false
-//    let l = LevelsData.shared.levels[LevelsData.shared.currentLevel-1]
-//
-//    for (index,coord) in l.solutionCoords.enumerated(){
-//        let tile = tile2DArray[coord.y][coord.x]
-//        let actionList = SKAction.sequence(
-//            [SKAction.wait(forDuration: l.delayTime * Double(index)),
-//             SKAction.run { tile.switchToWhite() },
-//             SKAction.fadeOut(withDuration: 2)
-//            ])
-//        tile.tile.run(actionList){
-//            if index == l.solutionCoords.count-1{
-//                self.drawGridLines()
-//                self.isUserInteractionEnabled = true
-//                //marking the first tile as available
-//                self.beginGame()
-//            }
-//        }
-//}
 

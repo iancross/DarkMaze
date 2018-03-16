@@ -14,7 +14,7 @@ class TapToBeginScene: SKScene {
         self.isUserInteractionEnabled = true
         let tapLabel = SKLabelNode(fontNamed: GameStyle.shared.mainFontString)
         tapLabel.text = "Tap to begin"
-        tapLabel.fontSize = GameStyle.shared.textBoxFontSize
+        tapLabel.fontSize = GameStyle.shared.TextBoxFontSize
         tapLabel.fontColor = SKColor.white
         tapLabel.position = CGPoint(x: frame.midX, y: frame.midY)
         addChild(tapLabel)

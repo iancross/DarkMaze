@@ -88,7 +88,6 @@
 				C3189E071FD7991E000A52A6 /* MenuScene.sks */,
 				C3189DFF1FD77CBF000A52A6 /* LevelSelectScene.sks */,
 				C3962A3A205888F3002C0AF9 /* Level1Scene.sks */,
-				C3962A34205750DF002C0AF9 /* TapToBeginScene.sks */,
 				C30DB1C72015678E00CE670C /* EndGameScene.sks */,
 			);
 			path = Scenes;
@@ -99,7 +98,6 @@
 			children = (
 				C3EF4A191FD7749000528247 /* MenuScene.swift */,
 				C3189E011FD77D0B000A52A6 /* LevelSelectScene.swift */,
-				C3962A322057508F002C0AF9 /* TapToBeginScene.swift */,
 				C364CEBF1FE74F98009140C7 /* Level1Scene.swift */,
 				C30DB1C92015684900CE670C /* EndGameScene.swift */,
 			);
@@ -113,6 +111,15 @@
 				C38464BE2055E41900239EE0 /* 006784-3d-transparent-glass-icon-arrows-double-arrowhead-right.png */,
 			);
 			path = Sprites;
+			sourceTree = "<group>";
+		};
+		C3962A3E205B4CF8002C0AF9 /* FilesToRemove */ = {
+			isa = PBXGroup;
+			children = (
+				C3962A34205750DF002C0AF9 /* TapToBeginScene.sks */,
+				C3962A322057508F002C0AF9 /* TapToBeginScene.swift */,
+			);
+			path = FilesToRemove;
 			sourceTree = "<group>";
 		};
 		C3EF4A071FD7748F00528247 = {
@@ -145,6 +152,7 @@
 				C3EF4A251FD7749000528247 /* Info.plist */,
 				C3EF4A131FD7749000528247 /* AppDelegate.swift */,
 				C3EF4A2D1FD7771900528247 /* Fonts */,
+				C3962A3E205B4CF8002C0AF9 /* FilesToRemove */,
 			);
 			path = "Dark Maze";
 			sourceTree = "<group>";
