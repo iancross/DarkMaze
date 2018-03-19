@@ -71,7 +71,7 @@ class LevelSelectScene: SKScene {
             categoryLabel.fontName = GameStyle.shared.mainFontString
             categoryLabel.fontSize = GameStyle.shared.SmallTextBoxFontSize
             categoryLabel.verticalAlignmentMode = .center
-            addChild(categoryLabel)
+            addToScene(node: categoryLabel)
             drawCategoryStyleLines(labelPosition: categoryLabel.position, labelWidth: categoryLabel.frame.width)
         }
     }
@@ -187,11 +187,12 @@ class LevelSelectScene: SKScene {
     func removeCategories(){
         while !categoryNodes.isEmpty{
             let first = categoryNodes.first
+            print(first)
             if let label = first as? SKLabelNode{
                 print ("label")
                 label.removeFromParent()
             }
-            else if let shape = first as? SKShapeNode{
+            if let shape = first as? SKShapeNode{
                 print ("shape")
                 shape.removeFromParent()
             }
