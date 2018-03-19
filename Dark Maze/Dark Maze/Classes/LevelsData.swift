@@ -21,7 +21,7 @@ class LevelsData{
         
         //this determines which level is either currently being worked on or the next level
         //it will always be incomplete in the level select
-        nextLevelToComplete = 4
+        nextLevelToComplete = 8
         
         //used by the gameplay if you play an earlier level
         currentLevel = 0
@@ -34,78 +34,90 @@ class LevelsData{
         //
         //levelCompleted: shows us what to color the level in level select
         
-        //level 1
+        
+        /*------------------------------- 4x4 -------------------------------*/
         levels.append (LevelData(
-            gridSizeX: 4,
-            gridSizeY: 4,
-            blockBuffer: 3,
-            delayTime: 0.5,
+            gridX: 4, gridY: 4, blockBuffer: 2, delayTime: 0.5,
             solutionCoords:
-                [(0,1),(0,2),(0,3),(1,3),(2,3),(3,3)],
-            levelCompleted: false
+            [(0,1),(0,2),(0,3),(1,3),(2,3),(3,3)],
+            levelCompleted: false, category: "4x4"
         ))
-        //level 2
         levels.append (LevelData(
-            gridSizeX: 4,
-            gridSizeY: 4,
-            blockBuffer: 3,
-            delayTime: 0.5,
+            gridX: 4, gridY: 4, blockBuffer: 2, delayTime: 0.5,
             solutionCoords:
-                [(0,2),(0,3),(1,3),(2,3),(2,2),(2,1),(2,0),(3,0)],
-            levelCompleted: false
+            [(0,2),(0,3),(1,3),(2,3),(2,2),(2,1),(2,0),(3,0)],
+            levelCompleted: false, category: nil
+        ))
+        levels.append (LevelData(
+            gridX: 4, gridY: 4, blockBuffer: 2, delayTime: 0.5,
+            solutionCoords:
+            [(0,0),(1,0),(1,1),(1,2),(2,2),(3,2),(3,1),(3,0)],
+            levelCompleted: false, category: nil
         ))
         
-        //level 3
+        /*------------------------------- 5x5 -------------------------------*/
         levels.append (LevelData(
-            gridSizeX: 4,
-            gridSizeY: 4,
-            blockBuffer: 3,
-            delayTime: 0.5,
-            solutionCoords:
-                [(0,0),(1,0),(1,1),(1,2),(2,2),(3,2),(3,1),(3,0)],
-            levelCompleted: false
-        ))
-        
-        //level 4
-        levels.append (LevelData(
-            gridSizeX: 5,
-            gridSizeY: 5,
-            blockBuffer: 3,
-            delayTime: 0.5,
+            gridX: 5, gridY: 5, blockBuffer: 2, delayTime: 0.5,
             solutionCoords:
             [(0,1),(0,0),(1,0),(2,0),(3,0),(3,1),(4,1),(4,2),(4,3)],
-            levelCompleted: false
+            levelCompleted: false, category: "5x5"
         ))
-        
-        //level 5
         levels.append (LevelData(
-            gridSizeX: 5,
-            gridSizeY: 5,
-            blockBuffer: 3,
-            delayTime: 0.5,
+            gridX: 5, gridY: 5, blockBuffer: 2, delayTime: 0.5,
             solutionCoords:
             [(0,1),(1,1),(1,2),(2,2),(3,2),(3,1),(3,0),(4,0)],
-            levelCompleted: false
+            levelCompleted: false, category: nil
         ))
-        
-        //level 6
         levels.append (LevelData(
-            gridSizeX: 5,
-            gridSizeY: 5,
-            blockBuffer: 3,
-            delayTime: 0.5,
+            gridX: 5, gridY: 5, blockBuffer: 2, delayTime: 0.5,
             solutionCoords:
             [(0,4),(1,4),(1,3),(2,3),(2,2),(3,2),(3,1),(3,0),(4,0)],
-            levelCompleted: false
+            levelCompleted: false, category: nil
+        ))
+        
+        levels.append (LevelData(
+            gridX: 5, gridY: 5, blockBuffer: 2, delayTime: 0.5,
+            solutionCoords:
+                [(0,4),(1,4),(1,3),(2,3),(2,2),(3,2),(3,1),(3,0),(4,0)],
+            levelCompleted: false, category: nil
+        ))
+        levels.append (LevelData(
+            gridX: 6, gridY: 10, blockBuffer: 2, delayTime: 0.5,
+            solutionCoords:
+                [(0,7),(1,7),(1,8),(1,9),(2,9),(3,9),(3,8),(4,8),(4,7),(4,6),(5,6),(5,5),(5,4),(4,4),(3,4),(2,4),(1,4),(1,3),(2,3),(2,2),(3,2),(4,2),(4,1),(5,1)],
+            levelCompleted: false, category: nil
+        ))
+        
+        levels.append (LevelData(
+            gridX: 5, gridY: 5, blockBuffer: 2, delayTime: 0.5,
+            solutionCoords:
+                [(0,4),(1,4),(1,3),(2,3),(2,2),(3,2),(3,1),(3,0),(4,0)],
+            levelCompleted: false, category: nil
+        ))
+        
+        levels.append (LevelData(
+            gridX: 5, gridY: 5, blockBuffer: 2, delayTime: 0.5,
+            solutionCoords:
+                [(0,4),(1,4),(1,3),(2,3),(2,2),(3,2),(3,1),(3,0),(4,0)],
+            levelCompleted: false, category: nil
+        ))
+        
+        levels.append (LevelData(
+            gridX: 5, gridY: 5, blockBuffer: 2, delayTime: 0.5,
+            solutionCoords:
+                [(0,4),(1,4),(1,3),(2,3),(2,2),(3,2),(3,1),(3,0),(4,0)],
+            levelCompleted: false, category: nil
         ))
     }
 }
+
 struct LevelData {
-    var gridSizeX: Int
-    var gridSizeY: Int
+    var gridX: Int
+    var gridY: Int
     var blockBuffer: Int
     var delayTime: Double
     var solutionCoords: [(x: Int,y: Int)]
     var levelCompleted: Bool
+    var category: String?
 }
 

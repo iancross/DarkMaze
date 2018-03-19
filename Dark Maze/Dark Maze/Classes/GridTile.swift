@@ -139,15 +139,10 @@ class GridTile: SKShapeNode{
                         SKAction.rotate(byAngle: 0.2, duration: 0.3)]
         
         let graySequence =
-//            [SKAction.colorize(with: UIColor.gray, colorBlendFactor: 1.0, duration: 3.0),
-//            SKAction.colorize(with: UIColor.black, colorBlendFactor: 1.0, duration: 3.0)]
-        
             [SKAction.run({
                 self.tile.alpha = 0;
                 self.tile.fillColor = UIColor.gray;
             }),
-            //SKAction.fadeAlpha(by: 0.7, duration: 0.4),
-            //SKAction.fadeAlpha(by: -0.7, duration: 3.0),
             SKAction.fadeIn(withDuration: 0.4),
             SKAction.fadeOut(withDuration: 0.4)
         ]

@@ -82,15 +82,15 @@ class Level1Scene: SKScene {
     
     private func initializeGrid(){
         let l = LevelsData.shared.levels[LevelsData.shared.currentLevel-1]
-        blocksize = max(self.frame.maxX / CGFloat(l.gridSizeX + l.blockBuffer),
-                            self.frame.maxX / CGFloat(l.gridSizeY + l.blockBuffer))
-        let botOfGridY = frame.midY - ((CGFloat(l.gridSizeY) / 2.0) * blocksize)
-        let leftOfGridX = frame.midX - ((CGFloat(l.gridSizeX) / 2.0) * blocksize) + blocksize/4
+        blocksize = max(self.frame.maxX / CGFloat(l.gridX + l.blockBuffer),
+                            self.frame.maxX / CGFloat(l.gridY + l.blockBuffer))
+        let botOfGridY = frame.midY - ((CGFloat(l.gridY) / 2.0) * blocksize)
+        let leftOfGridX = frame.midX - ((CGFloat(l.gridX) / 2.0) * blocksize) + blocksize/4
         
-        for row in 0...l.gridSizeY-1{
+        for row in 0...l.gridY-1{
             let offsetY = botOfGridY + blocksize * CGFloat(row) + blocksize/4
             tile2DArray.append([GridTile]())
-            for col in 0...l.gridSizeX-1{
+            for col in 0...l.gridX-1{
                 let offsetX = leftOfGridX + blocksize * CGFloat(col) + blocksize/4
                 let coord = (col,row)
                 let tile = GridTile(parentScene: self, center: CGPoint(x: offsetX, y: offsetY),
@@ -131,8 +131,12 @@ class Level1Scene: SKScene {
         
         right_arrow.position = CGPoint(x: tile.tile.frame.minX - (blocksize/2.0), y: tile.tile.frame.midY)
         addChild(right_arrow)
+        let sequence = SKAction.sequence(
+            [SKAction.move(by: CGVector(dx: -20.0,dy: 0), duration: 0.4),
+            SKAction.move(by: CGVector(dx: +20.0,dy: 0), duration: 0.4)])
         
         let end_arrow = right_arrow.copy() as! SKSpriteNode
+        right_arrow.run(SKAction.repeatForever(sequence))
         let end_tile = self.tile2DArray[(l.solutionCoords.last?.y)!][(l.solutionCoords.last?.x)!]
         end_arrow.position = CGPoint(x: end_tile.tile.frame.maxX + (blocksize/2.0), y: end_tile.tile.frame.midY)
         addChild(end_arrow)
@@ -162,6 +166,8 @@ class Level1Scene: SKScene {
         for row in tile2DArray{
             for tile in row{
                 if tile.isTouched(point: point){
+                    print(tile.gridCoord)
+                    right_arrow.removeAllActions()
                     //print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
                     //return //comment out to get grid coords for levels
                     lastTouchedTile = tile
@@ -213,7 +219,8 @@ class Level1Scene: SKScene {
             if coord.y - 1 >= 0{
                 checkTile(x: coord.x,y: coord.y-1)
             }
-            if coord.y + 1 < tile2DArray[0].count{
+            print (tile2DArray.count)
+            if coord.y + 1 < tile2DArray.count{
                 checkTile(x: coord.x, y: coord.y+1)
             }
         }
@@ -231,12 +238,12 @@ class Level1Scene: SKScene {
     }
     
     func giveHint(){
-        print("made it here")
+        
         for row in tile2DArray{
             for tile in row{
                 switch tile.state{
                 case .availableToTouch:
-                    print ("fuck")
+                    print ("hint on \(tile.gridCoord)")
                     tile.jiggle()
                 default:
                     break
@@ -260,6 +267,7 @@ class Level1Scene: SKScene {
             }
         }
         else{
+            self.isUserInteractionEnabled = false
             LevelsData.shared.currentLevelSuccess = false
             lastTouchedTile?.switchToBlack()
             lastTouchedTile?.strokeAppearing = false
@@ -278,7 +286,7 @@ class Level1Scene: SKScene {
             cam?.run(SKAction.group([scale,move])){
                 self.endGame(success: false)
             }
-            //return true
+            return true
         }
         return false
     }
