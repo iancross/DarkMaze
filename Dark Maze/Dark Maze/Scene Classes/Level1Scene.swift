@@ -19,7 +19,7 @@ class Level1Scene: SKScene {
     var blocksize: CGFloat = 0
     var cam: SKCameraNode?
     
-    let right_arrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
+    let endArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
 
     
     override func didMove(to view: SKView) {
@@ -81,7 +81,7 @@ class Level1Scene: SKScene {
     }
     
     private func initializeGrid(){
-        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel-1]
+        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel]
         blocksize = max(self.frame.maxX / CGFloat(l.gridX + l.blockBuffer),
                             self.frame.maxX / CGFloat(l.gridY + l.blockBuffer))
         let botOfGridY = frame.midY - ((CGFloat(l.gridY) / 2.0) * blocksize)
@@ -104,7 +104,7 @@ class Level1Scene: SKScene {
     //the game begins.
     func drawSolution(){
         self.isUserInteractionEnabled = false
-        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel-1]
+        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel]
 
         for (index,coord) in l.solutionCoords.enumerated(){
             let tile = tile2DArray[coord.y][coord.x]
@@ -125,22 +125,46 @@ class Level1Scene: SKScene {
     }
     
     func beginGame(){
-        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel-1]
+        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel]
         let tile = self.tile2DArray[(l.solutionCoords.first?.y)!][(l.solutionCoords.first?.x)!]
         tile.firstTile()
+        drawArrow(tile: tile)
+    }
+    
+    func drawArrow(tile: GridTile){
+        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel]
+        let startArrow = endArrow.copy() as! SKSpriteNode
         
-        right_arrow.position = CGPoint(x: tile.tile.frame.minX - (blocksize/2.0), y: tile.tile.frame.midY)
-        addChild(right_arrow)
+        //position and place start arrow
+        startArrow.position = CGPoint(x: tile.tile.frame.minX - (blocksize/2.0), y: tile.tile.frame.midY)
+        addChild(startArrow)
         let sequence = SKAction.sequence(
             [SKAction.move(by: CGVector(dx: -20.0,dy: 0), duration: 0.4),
-            SKAction.move(by: CGVector(dx: +20.0,dy: 0), duration: 0.4)])
-        
-        let end_arrow = right_arrow.copy() as! SKSpriteNode
-        right_arrow.run(SKAction.repeatForever(sequence))
+             SKAction.move(by: CGVector(dx: +20.0,dy: 0), duration: 0.4)])
+        startArrow.run(SKAction.repeatForever(sequence))
+
+        //position, place, and run the movement on the start arrow
         let end_tile = self.tile2DArray[(l.solutionCoords.last?.y)!][(l.solutionCoords.last?.x)!]
-        end_arrow.position = CGPoint(x: end_tile.tile.frame.maxX + (blocksize/2.0), y: end_tile.tile.frame.midY)
-        addChild(end_arrow)
+        if end_tile.gridCoord.x == tile2DArray.count - 1{
+            endArrow.position = CGPoint(x: end_tile.tile.frame.midX + blocksize, y: end_tile.tile.frame.midY)
+        }
+        //top of the grid and rotate 90 left
+        else if end_tile.gridCoord.y == 0{
+            endArrow.position = CGPoint(x: end_tile.tile.frame.midX, y: end_tile.tile.frame.midY - blocksize)
+            endArrow.zRotation -= CGFloat(.pi/2.0)
+        }
+        //bot of grid and rotate 90 right
+        else if end_tile.gridCoord.y == tile2DArray[0].count - 1{
+            endArrow.position = CGPoint(x: end_tile.tile.frame.midX, y: end_tile.tile.frame.midY + blocksize)
+            endArrow.zRotation += CGFloat(.pi/2.0)
+        }
+        addChild(endArrow)
     }
+    
+    func drawLastArrow(tile: GridTile){
+        
+    }
+    
     private func drawGridLines(){
         for row in tile2DArray{
             for tile in row{
@@ -157,17 +181,19 @@ class Level1Scene: SKScene {
             break //not sure if i need this
         }
     }
+    
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         let point = touches.first
         let positionInScene = point?.location(in: self)
         handleTouch(positionInScene!)
     }
+    
     private func handleTouch(_ point: CGPoint){
         for row in tile2DArray{
             for tile in row{
                 if tile.isTouched(point: point){
                     print(tile.gridCoord)
-                    right_arrow.removeAllActions()
+                    endArrow.removeAllActions()
                     //print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
                     //return //comment out to get grid coords for levels
                     lastTouchedTile = tile
@@ -254,7 +280,7 @@ class Level1Scene: SKScene {
     
     //return true if game is over
     func isGameOver()->Bool{
-        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel-1]
+        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel]
         if tupleContains(a: l.solutionCoords, v: (lastTouchedTile?.gridCoord)!){
             touchedTiles += 1
             if touchedTiles == l.solutionCoords.count {

@@ -21,7 +21,7 @@ class LevelsData{
         
         //this determines which level is either currently being worked on or the next level
         //it will always be incomplete in the level select
-        nextLevelToComplete = 8
+        nextLevelToComplete = 9 // the actual level is nextLevel + 1
         
         //used by the gameplay if you play an earlier level
         currentLevel = 0
@@ -59,13 +59,13 @@ class LevelsData{
         levels.append (LevelData(
             gridX: 5, gridY: 5, blockBuffer: 2, delayTime: 0.5,
             solutionCoords:
-            [(0,1),(0,0),(1,0),(2,0),(3,0),(3,1),(4,1),(4,2),(4,3)],
+            [(0,1),(1,1),(1,0)],
             levelCompleted: false, category: "5x5"
         ))
         levels.append (LevelData(
             gridX: 5, gridY: 5, blockBuffer: 2, delayTime: 0.5,
             solutionCoords:
-            [(0,1),(1,1),(1,2),(2,2),(3,2),(3,1),(3,0),(4,0)],
+            [(0,3),(1,3),(1,4)],
             levelCompleted: false, category: nil
         ))
         levels.append (LevelData(
