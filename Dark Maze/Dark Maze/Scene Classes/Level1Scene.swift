@@ -20,7 +20,8 @@ class Level1Scene: SKScene {
     var cam: SKCameraNode?
     var blockAlphaIncrement: CGFloat = 0
     var blockAlphaMin: CGFloat = 0.35
-    
+    let Level = LevelsData.shared.levels[LevelsData.shared.currentLevel]
+
     let endArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
 
     
@@ -30,7 +31,6 @@ class Level1Scene: SKScene {
         self.camera = cam
         self.addChild(cam!)
         cam?.position = CGPoint(x: frame.midX,y: frame.midY)
-
         countdown()
         //self.initializeGrid() //remove comment to skip countdown
         //self.drawSolution()  //remove comment to skip countdown
@@ -83,16 +83,15 @@ class Level1Scene: SKScene {
     }
     
     private func initializeGrid(){
-        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel]
-        blocksize = max(self.frame.maxX / CGFloat(l.gridX + l.blockBuffer),
-                            self.frame.maxX / CGFloat(l.gridY + l.blockBuffer))
-        let botOfGridY = frame.midY - ((CGFloat(l.gridY) / 2.0) * blocksize)
-        let leftOfGridX = frame.midX - ((CGFloat(l.gridX) / 2.0) * blocksize) + blocksize/4
+        blocksize = max(self.frame.maxX / CGFloat(Level.gridX + Level.blockBuffer),
+                            self.frame.maxX / CGFloat(Level.gridY + Level.blockBuffer))
+        let botOfGridY = frame.midY - ((CGFloat(Level.gridY) / 2.0) * blocksize)
+        let leftOfGridX = frame.midX - ((CGFloat(Level.gridX) / 2.0) * blocksize) + blocksize/4
         
-        for row in 0...l.gridY-1{
+        for row in 0...Level.gridY-1{
             let offsetY = botOfGridY + blocksize * CGFloat(row) + blocksize/4
             tile2DArray.append([GridTile]())
-            for col in 0...l.gridX-1{
+            for col in 0...Level.gridX-1{
                 let offsetX = leftOfGridX + blocksize * CGFloat(col) + blocksize/4
                 let coord = (col,row)
                 let tile = GridTile(parentScene: self, center: CGPoint(x: offsetX, y: offsetY),
@@ -106,17 +105,16 @@ class Level1Scene: SKScene {
     //the game begins.
     func drawSolution(){
         self.isUserInteractionEnabled = false
-        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel]
 
-        for (index,coord) in l.solutionCoords.enumerated(){
+        for (index,coord) in Level.solutionCoords.enumerated(){
             let tile = tile2DArray[coord.y][coord.x]
             let actionList = SKAction.sequence(
-                [SKAction.wait(forDuration: l.delayTime * Double(index)),
+                [SKAction.wait(forDuration: Level.delayTime * Double(index)),
                  SKAction.run { tile.switchToWhite() },
                  SKAction.fadeOut(withDuration: 2)
                 ])
             tile.tile.run(actionList){
-                if index == l.solutionCoords.count-1{
+                if index == self.Level.solutionCoords.count-1{
                     self.drawGridLines()
                     self.isUserInteractionEnabled = true
                     //marking the first tile as available
@@ -127,16 +125,14 @@ class Level1Scene: SKScene {
     }
     
     func beginGame(){
-        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel]
-        let tile = self.tile2DArray[(l.solutionCoords.first?.y)!][(l.solutionCoords.first?.x)!]
+        let tile = self.tile2DArray[(Level.solutionCoords.first?.y)!][(Level.solutionCoords.first?.x)!]
         tile.firstTile()
         drawArrow(tile: tile)
-        let numSolutionBlocks = l.solutionCoords.count
+        let numSolutionBlocks = Level.solutionCoords.count
         blockAlphaIncrement = (1.0 - blockAlphaMin) / CGFloat(numSolutionBlocks)
     }
     
     func drawArrow(tile: GridTile){
-        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel]
         let startArrow = endArrow.copy() as! SKSpriteNode
         
         //position and place start arrow
@@ -148,7 +144,7 @@ class Level1Scene: SKScene {
         startArrow.run(SKAction.repeatForever(sequence))
 
         //position, place, and run the movement on the start arrow
-        let end_tile = self.tile2DArray[(l.solutionCoords.last?.y)!][(l.solutionCoords.last?.x)!]
+        let end_tile = self.tile2DArray[(Level.solutionCoords.last?.y)!][(Level.solutionCoords.last?.x)!]
        
         if end_tile.gridCoord.x == tile2DArray[0].count - 1{
             endArrow.position = CGPoint(x: end_tile.tile.frame.midX + blocksize, y: end_tile.tile.frame.midY)
@@ -166,7 +162,6 @@ class Level1Scene: SKScene {
         addChild(endArrow)
     }
 
-    
     private func drawGridLines(){
         for row in tile2DArray{
             for tile in row{
@@ -208,9 +203,10 @@ class Level1Scene: SKScene {
     // failure) show the end game success (failure = false). Otherwise,
     // show the end game failure (failure = true)
     func endGame (success: Bool){
-        if LevelsData.shared.currentLevel == LevelsData.shared.nextLevelToComplete {
-            if LevelsData.shared.levels.count > LevelsData.shared.nextLevelToComplete && success{
-                LevelsData.shared.nextLevelToComplete += 1
+        let L = LevelsData.shared
+        if L.currentLevel == L.nextLevelToComplete {
+            if L.levels.count > L.nextLevelToComplete && success{
+                L.nextLevelToComplete += 1
             }
         }
         for child in self.children {
@@ -264,7 +260,6 @@ class Level1Scene: SKScene {
     }
     
     func giveHint(){
-        
         for row in tile2DArray{
             for tile in row{
                 switch tile.state{
@@ -279,10 +274,9 @@ class Level1Scene: SKScene {
     
     //return true if game is over
     func isGameOver()->Bool{
-        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel]
-        if tupleContains(a: l.solutionCoords, v: (lastTouchedTile?.gridCoord)!){
+        if tupleContains(a: Level.solutionCoords, v: (lastTouchedTile?.gridCoord)!){
             touchedTiles += 1
-            if touchedTiles == l.solutionCoords.count {
+            if touchedTiles == Level.solutionCoords.count {
                 LevelsData.shared.currentLevelSuccess = true
                 self.isUserInteractionEnabled = false
                 successHighlightPath()
@@ -312,15 +306,14 @@ class Level1Scene: SKScene {
     }
 
     func successHighlightPath(){
-        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel]
-        let numSolutionBlocks = Double(l.solutionCoords.count)
-        for (i,coord) in l.solutionCoords.enumerated(){
+        let numSolutionBlocks = Double(Level.solutionCoords.count)
+        for (i,coord) in Level.solutionCoords.enumerated(){
             let tile = tile2DArray[coord.y][coord.x]
             let sequence = SKAction.sequence(
                 [SKAction.wait(forDuration: Double(i) * 1.5/numSolutionBlocks),
                 SKAction.fadeAlpha(to: 1.0, duration: 0.2)
             ])
-            if i == l.solutionCoords.count - 1 {
+            if i == Level.solutionCoords.count - 1 {
                 tile.tile.run(sequence){
                     self.endGame(success: true)
                 }
