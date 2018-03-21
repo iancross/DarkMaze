@@ -79,7 +79,7 @@ class LevelsData{
             gridX: 5, gridY: 5, blockBuffer: 2, delayTime: 0.5,
             solutionCoords:
                 [(0,4),(1,4),(1,3),(2,3),(2,2),(3,2),(3,1),(3,0),(4,0)],
-            levelCompleted: false, category: nil
+            levelCompleted: false, category: "Big Boys"
         ))
         levels.append (LevelData(
             gridX: 6, gridY: 10, blockBuffer: 2, delayTime: 0.5,
@@ -89,9 +89,9 @@ class LevelsData{
         ))
         
         levels.append (LevelData(
-            gridX: 5, gridY: 5, blockBuffer: 2, delayTime: 0.5,
+            gridX: 6, gridY: 10, blockBuffer: 2, delayTime: 0.01,
             solutionCoords:
-                [(0,4),(1,4),(1,3),(2,3),(2,2),(3,2),(3,1),(3,0),(4,0)],
+            [(0,7),(1,7),(2,7),(3,7),(4,7),(4,6),(4,5),(4,4),(4,3),(4,2),(4,1),(4,0)],
             levelCompleted: false, category: nil
         ))
         

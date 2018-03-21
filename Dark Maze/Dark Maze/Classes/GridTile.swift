@@ -15,7 +15,8 @@ class GridTile: SKShapeNode{
     var originColor = UIColor.black
     let gridCoord: (x: Int,y: Int)
     private var strokeAlpha = 0.2
-    var strokeAppearing = true
+    var strokeActive = true
+    var strokeAppearing = true //used to have the grid fade in and out
     let alphaDecrement = 0.005
     let parentScene: SKScene
     var state = TileState.unavailable
@@ -72,24 +73,28 @@ class GridTile: SKShapeNode{
     }
     
     func updateFrameAlpha(){
-        if strokeAlpha > 0.2 && !strokeAppearing {
-            strokeAlpha -= alphaDecrement
+        if strokeActive{
+            if strokeAlpha > 0.2 && !strokeAppearing {
+                strokeAlpha -= alphaDecrement
+            }
+            else if strokeAlpha < 1.0 && strokeAppearing {
+                strokeAlpha += alphaDecrement
+            }
+            else{
+                strokeAppearing = !strokeAppearing
+            }
+            let strokeColor = UIColor(displayP3Red: 0.40, green: 0.40, blue: 0.40, alpha: CGFloat(strokeAlpha) )
+            tile.strokeColor = strokeColor
         }
-        else if strokeAlpha < 1.0 && strokeAppearing {
-            strokeAlpha += alphaDecrement
-        }
-        else{
-            strokeAppearing = !strokeAppearing
-        }
-        let strokeColor = UIColor(displayP3Red: 0.40, green: 0.40, blue: 0.40, alpha: CGFloat(strokeAlpha) )
-        tile.strokeColor = strokeColor
     }
     
-    func touched(){
+    func touched(alpha: CGFloat){
         switch state {
         case .availableToTouch:
             switchToWhite()
+            tile.alpha = alpha
             self.state = .touched
+            removeOutline() //remove this if the path should have grid lines
             if let parent = self.parentScene as? Level1Scene{
                 parent.updateGridState()
             }
@@ -101,6 +106,11 @@ class GridTile: SKShapeNode{
                 parent.giveHint()
             }
         }
+    }
+    
+    func removeOutline(){
+        strokeActive = false
+        tile.strokeColor = UIColor(displayP3Red: 0.40, green: 0.40, blue: 0.40, alpha: 0 )
     }
     
     func switchToWhite(){

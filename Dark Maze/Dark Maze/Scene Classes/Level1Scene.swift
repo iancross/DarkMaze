@@ -18,6 +18,8 @@ class Level1Scene: SKScene {
     var lastTouchedTile: GridTile?
     var blocksize: CGFloat = 0
     var cam: SKCameraNode?
+    var blockAlphaIncrement: CGFloat = 0
+    var blockAlphaMin: CGFloat = 0.35
     
     let endArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
 
@@ -129,6 +131,8 @@ class Level1Scene: SKScene {
         let tile = self.tile2DArray[(l.solutionCoords.first?.y)!][(l.solutionCoords.first?.x)!]
         tile.firstTile()
         drawArrow(tile: tile)
+        let numSolutionBlocks = l.solutionCoords.count
+        blockAlphaIncrement = (1.0 - blockAlphaMin) / CGFloat(numSolutionBlocks)
     }
     
     func drawArrow(tile: GridTile){
@@ -145,7 +149,8 @@ class Level1Scene: SKScene {
 
         //position, place, and run the movement on the start arrow
         let end_tile = self.tile2DArray[(l.solutionCoords.last?.y)!][(l.solutionCoords.last?.x)!]
-        if end_tile.gridCoord.x == tile2DArray.count - 1{
+       
+        if end_tile.gridCoord.x == tile2DArray[0].count - 1{
             endArrow.position = CGPoint(x: end_tile.tile.frame.midX + blocksize, y: end_tile.tile.frame.midY)
         }
         //top of the grid and rotate 90 left
@@ -154,16 +159,13 @@ class Level1Scene: SKScene {
             endArrow.zRotation -= CGFloat(.pi/2.0)
         }
         //bot of grid and rotate 90 right
-        else if end_tile.gridCoord.y == tile2DArray[0].count - 1{
+        else if end_tile.gridCoord.y == tile2DArray.count - 1{
             endArrow.position = CGPoint(x: end_tile.tile.frame.midX, y: end_tile.tile.frame.midY + blocksize)
             endArrow.zRotation += CGFloat(.pi/2.0)
         }
         addChild(endArrow)
     }
-    
-    func drawLastArrow(tile: GridTile){
-        
-    }
+
     
     private func drawGridLines(){
         for row in tile2DArray{
@@ -192,12 +194,11 @@ class Level1Scene: SKScene {
         for row in tile2DArray{
             for tile in row{
                 if tile.isTouched(point: point){
-                    print(tile.gridCoord)
                     endArrow.removeAllActions()
-                    //print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
-                    //return //comment out to get grid coords for levels
+//                    print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
+//                    return //comment out to get grid coords for levels
                     lastTouchedTile = tile
-                    tile.touched()
+                    tile.touched(alpha: blockAlphaMin + CGFloat(touchedTiles + 1) * blockAlphaIncrement)
                 }
             }
         }
@@ -245,7 +246,6 @@ class Level1Scene: SKScene {
             if coord.y - 1 >= 0{
                 checkTile(x: coord.x,y: coord.y-1)
             }
-            print (tile2DArray.count)
             if coord.y + 1 < tile2DArray.count{
                 checkTile(x: coord.x, y: coord.y+1)
             }
@@ -269,7 +269,6 @@ class Level1Scene: SKScene {
             for tile in row{
                 switch tile.state{
                 case .availableToTouch:
-                    print ("hint on \(tile.gridCoord)")
                     tile.jiggle()
                 default:
                     break
@@ -286,9 +285,7 @@ class Level1Scene: SKScene {
             if touchedTiles == l.solutionCoords.count {
                 LevelsData.shared.currentLevelSuccess = true
                 self.isUserInteractionEnabled = false
-                lastTouchedTile?.tile.run(SKAction.wait(forDuration: 1.0)){
-                    self.endGame(success: true)
-                }
+                successHighlightPath()
                 return true
             }
         }
@@ -301,9 +298,6 @@ class Level1Scene: SKScene {
             let rotateSequence = SKAction.sequence(
                 [SKAction.rotate(byAngle: 0.4, duration: 0.1),
                  SKAction.rotate(byAngle: -0.8, duration: 0.1),
-                 SKAction.run {
-                    print("running")
-                    },
                  SKAction.rotate(byAngle: 0.4, duration: 0.1)])
             lastTouchedTile!.tile.run(SKAction.repeatForever(rotateSequence))
             
@@ -316,7 +310,26 @@ class Level1Scene: SKScene {
         }
         return false
     }
-    
+
+    func successHighlightPath(){
+        let l = LevelsData.shared.levels[LevelsData.shared.currentLevel]
+        let numSolutionBlocks = Double(l.solutionCoords.count)
+        for (i,coord) in l.solutionCoords.enumerated(){
+            let tile = tile2DArray[coord.y][coord.x]
+            let sequence = SKAction.sequence(
+                [SKAction.wait(forDuration: Double(i) * 1.5/numSolutionBlocks),
+                SKAction.fadeAlpha(to: 1.0, duration: 0.2)
+            ])
+            if i == l.solutionCoords.count - 1 {
+                tile.tile.run(sequence){
+                    self.endGame(success: true)
+                }
+            }
+            else{
+                tile.tile.run(sequence)
+            }
+        }
+    }
     func reInitGame (){
         removeAllChildren()
         tile2DArray.removeAll()
