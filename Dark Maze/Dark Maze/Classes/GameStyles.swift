@@ -14,7 +14,8 @@ class GameStyle {
     
     var mainFontString = "My Scars"
     var SmallTextBoxFontSize: CGFloat = 40
-    var TextBoxFontSize: CGFloat = 80
+    var TextBoxFontSize: CGFloat = 90
+    var LargeTextBoxFontSize: CGFloat = 120
     let sceneTransition = SKTransition.fade(with: UIColor.black, duration: 0.8)
 
     private init() {

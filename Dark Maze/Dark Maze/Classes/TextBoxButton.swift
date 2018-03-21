@@ -15,16 +15,16 @@ class TextBoxButton: SKNode{
     var outline: SKShapeNode
     var buffer: CGFloat = 40
     
-    init(x: CGFloat, y: CGFloat, text: String, fontsize: CGFloat, parentScene: SKScene) {
+    init(x: CGFloat, y: CGFloat, text: String, fontsize: CGFloat, buffers: (x: CGFloat, y: CGFloat), parentScene: SKScene) {
         self.text = text
         labelNode = SKLabelNode(fontNamed: GameStyle.shared.mainFontString)
         labelNode.text = text
         labelNode.fontSize = fontsize
-        labelNode.fontColor = SKColor.white
+        labelNode.fontColor = .white
         labelNode.verticalAlignmentMode = .center
         
         
-        outline = SKShapeNode(rectOf: CGSize(width: labelNode.frame.width + buffer/2, height: labelNode.frame.height + buffer))
+        outline = SKShapeNode(rectOf: CGSize(width: labelNode.frame.width + buffers.x, height: labelNode.frame.height + buffers.y))
         outline.lineWidth = 2.0
         outline.position = CGPoint(x: x, y: y)
         labelNode.position = CGPoint(x: x, y: y)
@@ -52,12 +52,21 @@ class TextBoxButton: SKNode{
         outline.alpha = alpha
     }
     func markAsCompletedLevel(){
-        labelNode.fontColor = UIColor.black
-        outline.fillColor = UIColor.white
+        labelNode.fontColor = .black
+        outline.fillColor = .white
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func hide(){
+        outline.isHidden = true
+        labelNode.isHidden = true
+    }
+    func unhide(){
+        outline.isHidden = false
+        labelNode.isHidden = false
     }
     
     deinit {

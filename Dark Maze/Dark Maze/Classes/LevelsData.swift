@@ -36,31 +36,52 @@ class LevelsData{
         
         
         /*------------------------------- 4x4 -------------------------------*/
+        
+        //Description:
+        //Easiest level to show how to play the game. Probably going to do all sorts of
+        //directions to show the maze functionality
         levels.append (LevelData(
             gridX: 4, gridY: 4, blockBuffer: 2, delayTime: 0.5,
             solutionCoords:
             [(0,1),(0,2),(0,3),(1,3),(2,3),(3,3)],
-            levelCompleted: false, category: "4x4"
+            levelCompleted: false, category: "4x4 Easy "
         ))
         levels.append (LevelData(
             gridX: 4, gridY: 4, blockBuffer: 2, delayTime: 0.5,
             solutionCoords:
-            [(0,2),(0,3),(1,3),(2,3),(2,2),(2,1),(2,0),(3,0)],
+            [(2,3),(2,2),(1,2),(1,1),(1,0),(2,0)],
             levelCompleted: false, category: nil
         ))
         levels.append (LevelData(
             gridX: 4, gridY: 4, blockBuffer: 2, delayTime: 0.5,
             solutionCoords:
-            [(0,0),(1,0),(1,1),(1,2),(2,2),(3,2),(3,1),(3,0)],
+            [(0,3),(1,3),(1,2),(2,2),(2,1),(3,1),(3,0)],
+            levelCompleted: false, category: nil
+        ))
+        levels.append (LevelData(
+            gridX: 4, gridY: 4, blockBuffer: 2, delayTime: 0.5,
+            solutionCoords:
+            [(3,3),(3,2),(2,2),(2,1),(2,0),(1,0),(0,0),(0,1),(0,2)],
             levelCompleted: false, category: nil
         ))
         
-        /*------------------------------- 5x5 -------------------------------*/
+        levels.append (LevelData(
+            gridX: 4, gridY: 4, blockBuffer: 2, delayTime: 0.5,
+            solutionCoords:
+            [(0,3),(1,3),(1,2),(1,1),(1,0)],
+            levelCompleted: false, category: nil
+        ))
+        levels.append (LevelData(
+            gridX: 4, gridY: 4, blockBuffer: 2, delayTime: 0.5,
+            solutionCoords:
+            [(0,2),(1,2),(1,3)],
+            levelCompleted: false, category: nil
+        ))
         levels.append (LevelData(
             gridX: 5, gridY: 5, blockBuffer: 2, delayTime: 0.5,
             solutionCoords:
             [(0,1),(1,1),(1,0)],
-            levelCompleted: false, category: "5x5"
+            levelCompleted: false, category: nil
         ))
         levels.append (LevelData(
             gridX: 5, gridY: 5, blockBuffer: 2, delayTime: 0.5,
@@ -79,7 +100,7 @@ class LevelsData{
             gridX: 5, gridY: 5, blockBuffer: 2, delayTime: 0.5,
             solutionCoords:
                 [(0,4),(1,4),(1,3),(2,3),(2,2),(3,2),(3,1),(3,0),(4,0)],
-            levelCompleted: false, category: "Big Boys"
+            levelCompleted: false, category: nil
         ))
         levels.append (LevelData(
             gridX: 6, gridY: 10, blockBuffer: 2, delayTime: 0.5,

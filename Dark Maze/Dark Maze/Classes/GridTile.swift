@@ -114,18 +114,18 @@ class GridTile: SKShapeNode{
     }
     
     func switchToWhite(){
-        tile.fillColor = UIColor.white
+        tile.fillColor = .white
         tile.alpha = 1.0
     }
     
     func switchToBlack(){
-        tile.fillColor = UIColor.black
+        tile.fillColor = .black
         tile.alpha = 1.0
     }
     
     func switchToGray(){
         state = .availableToTouch
-        tile.fillColor = UIColor.gray
+        tile.fillColor = .gray
         //self.switchToWhite()
         //tile.alpha = 0.3
     }
@@ -151,7 +151,7 @@ class GridTile: SKShapeNode{
         let graySequence =
             [SKAction.run({
                 self.tile.alpha = 0;
-                self.tile.fillColor = UIColor.gray;
+                self.tile.fillColor = .gray;
             }),
             SKAction.fadeIn(withDuration: 0.4),
             SKAction.fadeOut(withDuration: 0.4)

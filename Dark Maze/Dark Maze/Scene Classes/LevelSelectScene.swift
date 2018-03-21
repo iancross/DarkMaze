@@ -15,16 +15,17 @@ class LevelSelectScene: SKScene {
     var currentPage = 0
     var numLevelsOnPage = 9
     var numLevelsOnLine = 3
-    let topRowHeight: CGFloat = 1100.0
-    let verticalSpacing: CGFloat = 220.0
+    let topRowHeight: CGFloat = 1150.0
+    let verticalSpacing: CGFloat = 255.0
     var menuButton: TextBoxButton?
     let endArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
     var left_arrow = SKSpriteNode()
     var categoryNodes = [Any]()
     let labelBuffer: CGFloat = 20.0
+    let menuBuffers: (x: CGFloat,y: CGFloat) = (20.0,20.0)
 
     override func didMove(to view: SKView) {
-        menuButton = TextBoxButton(x: 215, y: 125, text: "Main Menu", fontsize: GameStyle.shared.SmallTextBoxFontSize, parentScene: self)
+        menuButton = TextBoxButton(x: 215, y: 125, text: "Main Menu", fontsize: GameStyle.shared.SmallTextBoxFontSize, buffers: menuBuffers, parentScene: self)
         currentPage = (LevelsData.shared.nextLevelToComplete)/numLevelsOnPage
 
         initializePageButtons()
@@ -46,10 +47,12 @@ class LevelSelectScene: SKScene {
                 let levelNumber = currentPage * numLevelsOnPage + i * numLevelsOnLine + j
                 let y = topRowHeight - CGFloat(i+1) * verticalSpacing
                 if levelNumber <= LevelsData.shared.levels.count-1{
-                    addCategoryLabel(levelNumber, frame.midX, y + verticalSpacing/3)
+                    addCategoryLabel(levelNumber, frame.midX, y + verticalSpacing*2/5)
+                    let buffers: (CGFloat,CGFloat) = (30.0,40.0)
                     let box = TextBoxButton(
                         x: (frame.width/4.0 * CGFloat(j+1)), y: y, text: String(99),
                         fontsize: GameStyle.shared.TextBoxFontSize,
+                        buffers: buffers,
                         parentScene: self)
                     box.updateText(String(levelNumber + 1))
                     levels.append(box)
@@ -155,7 +158,7 @@ class LevelSelectScene: SKScene {
                     button.outline.run(SKAction.sequence(sequence))
                 }
                 else if Int(button.text)!-1 <= currLevel{
-                    let embiggen = SKAction.scale(to: 1.5, duration: 0.4)
+                    let embiggen = SKAction.scale(to: 1.3, duration: 0.4)
                     
                     let loadScene = SKAction.run({
                         LevelsData.shared.currentLevel = Int(button.text)! - 1
