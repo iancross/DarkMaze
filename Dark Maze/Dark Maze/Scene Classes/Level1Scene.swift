@@ -141,14 +141,24 @@ class Level1Scene: SKScene {
         let endTile = self.tile2DArray[(Level.solutionCoords.last?.y)!][(Level.solutionCoords.last?.x)!]
         placeArrow(tile: firstTile, arrow: startArrow, orient: -1)
         placeArrow(tile: endTile, arrow: endArrow, orient: 1)
-        let sequence = SKAction.sequence(
-            [SKAction.move(by: CGVector(dx: -20.0,dy: 0), duration: 0.4),
-             SKAction.move(by: CGVector(dx: +20.0,dy: 0), duration: 0.4)])
-        startArrow.run(SKAction.repeatForever(sequence))
-        print (startArrow.zRotation)
-        print (endArrow.zRotation)
+        print(startArrow.zPosition)
+        print (endArrow.zPosition)
+        startArrowSequence(tile: firstTile)
     }
     
+    func startArrowSequence(tile: GridTile){
+        var vector = CGVector()
+        if tile.gridCoord.x == 0 || tile.gridCoord.x == tile2DArray[0].count - 1{
+            vector = CGVector(dx: -20.0,dy: 0)
+        }
+        else{
+            vector = CGVector(dx: 0, dy: -20)
+        }
+        let sequence = SKAction.sequence(
+            [SKAction.move(by: vector, duration: 0.4),
+             SKAction.move(by: CGVector(dx: -vector.dx,dy: -vector.dy), duration: 0.4)])
+        startArrow.run(SKAction.repeatForever(sequence))
+    }
     //orientation is either 1 or -1
     //1 means that it's the end arrow
     //-1 means it's the begin arrow so the arro
@@ -159,7 +169,6 @@ class Level1Scene: SKScene {
         if tile.gridCoord.x == tile2DArray[0].count - 1{
             point = CGPoint(x: tile.tile.frame.midX + blocksize, y: tile.tile.frame.midY)
             rotation = CGFloat(.pi/2.0) - (orient * .pi/2.0)
-
         }
         //ends on the left. rotate 180
         else if tile.gridCoord.x == 0{
@@ -173,11 +182,13 @@ class Level1Scene: SKScene {
         }
         //ends bot of grid and rotate 90 right
         else if tile.gridCoord.y == tile2DArray.count - 1{
+            print("here")
             point = CGPoint(x: tile.tile.frame.midX, y: tile.tile.frame.midY + blocksize)
-            rotation = -1 * (orient * .pi/2.0)
+            rotation = (orient * .pi/2.0)
         }
         arrow.position = point
-        arrow.zRotation += (rotation * orient)
+        arrow.zRotation += rotation
+        print(arrow.zRotation)
         addChild(arrow)
     }
     private func drawGridLines(){
@@ -217,11 +228,11 @@ class Level1Scene: SKScene {
         skipButton?.hide()
         }
     }
-//    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        let point = touches.first
-//        let positionInScene = point?.location(in: self)
-//        handleTouch(positionInScene!)
-//    }
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let point = touches.first
+        let positionInScene = point?.location(in: self)
+        handleTouch(positionInScene!)
+    }
     
     private func handleTouch(_ point: CGPoint){
         for row in tile2DArray{
