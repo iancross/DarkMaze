@@ -77,7 +77,7 @@ class MenuScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let scene = SKScene(fileNamed: "LevelSelectScene") {
             scene.scaleMode = .aspectFill
-            view?.presentScene(scene, transition: GameStyle.shared.sceneTransition)
+            view?.presentScene(scene, transition: SKTransition.crossFade(withDuration: 5.0))
         }
     }
     func createNewStartPoint(){

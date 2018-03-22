@@ -13,10 +13,10 @@ import GameplayKit
 class LevelSelectScene: SKScene {
     var levels = [TextBoxButton]()
     var currentPage = 0
-    var numLevelsOnPage = 9
+    var numLevelsOnPage = 12
     var numLevelsOnLine = 3
     let topRowHeight: CGFloat = 1150.0
-    let verticalSpacing: CGFloat = 255.0
+    var verticalSpacing: CGFloat = 255.0
     var menuButton: TextBoxButton?
     let endArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
     var left_arrow = SKSpriteNode()
@@ -25,6 +25,7 @@ class LevelSelectScene: SKScene {
     let menuBuffers: (x: CGFloat,y: CGFloat) = (20.0,20.0)
 
     override func didMove(to view: SKView) {
+        verticalSpacing = frame.height/CGFloat(numLevelsOnPage/numLevelsOnLine + 3)
         menuButton = TextBoxButton(x: 215, y: 125, text: "Main Menu", fontsize: GameStyle.shared.SmallTextBoxFontSize, buffers: menuBuffers, parentScene: self)
         currentPage = (LevelsData.shared.nextLevelToComplete)/numLevelsOnPage
 
@@ -48,9 +49,9 @@ class LevelSelectScene: SKScene {
                 let y = topRowHeight - CGFloat(i+1) * verticalSpacing
                 if levelNumber <= LevelsData.shared.levels.count-1{
                     addCategoryLabel(levelNumber, frame.midX, y + verticalSpacing*2/5)
-                    let buffers: (CGFloat,CGFloat) = (30.0,40.0)
+                    let buffers: (CGFloat,CGFloat) = (20.0,30.0)
                     let box = TextBoxButton(
-                        x: (frame.width/4.0 * CGFloat(j+1)), y: y, text: String(99),
+                        x: (frame.width/(CGFloat(numLevelsOnLine) + 1) * CGFloat(j+1)), y: y, text: String(99),
                         fontsize: GameStyle.shared.TextBoxFontSize,
                         buffers: buffers,
                         parentScene: self)
