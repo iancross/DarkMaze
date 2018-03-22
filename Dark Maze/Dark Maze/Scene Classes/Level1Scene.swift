@@ -13,7 +13,7 @@ class Level1Scene: SKScene {
     var currentLevel = 0
     var gameActive = false
     var skipButton: TextBoxButton?
-    //var tapToBegin: SKLabelNode?
+    let blockBuffer: CGFloat = 2
     var countdownTime = 3
     var gridViewable = false
     var touchedTiles = 0
@@ -86,8 +86,8 @@ class Level1Scene: SKScene {
     }
     
     private func initializeGrid(){
-        blocksize = max(self.frame.maxX / CGFloat(Level.gridX + Level.blockBuffer),
-                            self.frame.maxX / CGFloat(Level.gridY + Level.blockBuffer))
+        blocksize = max(self.frame.maxX / CGFloat(Level.gridX + blockBuffer),
+                            self.frame.maxX / CGFloat(Level.gridY + blockBuffer))
         let botOfGridY = frame.midY - ((CGFloat(Level.gridY) / 2.0) * blocksize)
         let leftOfGridX = frame.midX - ((CGFloat(Level.gridX) / 2.0) * blocksize) + blocksize/4
         

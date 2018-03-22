@@ -27,28 +27,15 @@ class MenuScene: SKScene {
         darkMaze = self.childNode(withName: "DarkMaze") as! SKLabelNode
         tapToBegin = self.childNode(withName: "TapToBegin") as! SKLabelNode
 
-//        floatingStartButton.position = CGPoint(
-//            x: CGFloat(arc4random_uniform(UInt32(frame.width - floatingStartButton.frame.width))),
-//            y: CGFloat(arc4random_uniform(UInt32(frame.height - floatingStartButton.frame.height)))
-//        )
-        //floatingStartButton.position = CGPoint(x: frame.midX, y: frame.midY)
         let actionList = SKAction.sequence(
             [SKAction.fadeIn(withDuration: 2.0),
-            SKAction.fadeOut(withDuration: 2.0),
-            SKAction.run(moveLabel)]
+            SKAction.fadeOut(withDuration: 2.0)]
         )
         darkMaze.run(SKAction.repeatForever(actionList))
         tapToBegin.run(SKAction.repeatForever(actionList))
         createNewStartPoint()
     }
     
-    func moveLabel(){
-//        let newX = arc4random_uniform(UInt32(self.frame.width - self.floatingStartButton.frame.size.width))
-//        let newY = arc4random_uniform(UInt32(self.frame.height - self.floatingStartButton.frame.size.height)) + UInt32(self.floatingStartButton.frame.size.height)
-//        let newPoint = CGPoint(x: CGFloat(newX), y: CGFloat(newY))
-//        self.floatingStartButton.position = newPoint
-        
-    }
     override func update(_ currentTime: TimeInterval) {
         if tileLoop < 30{
             tileLoop += 1
@@ -77,7 +64,7 @@ class MenuScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let scene = SKScene(fileNamed: "LevelSelectScene") {
             scene.scaleMode = .aspectFill
-            view?.presentScene(scene, transition: SKTransition.crossFade(withDuration: 5.0))
+            view?.presentScene(scene, transition: GameStyle.shared.sceneTransition)
         }
     }
     func createNewStartPoint(){
