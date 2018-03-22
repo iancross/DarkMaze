@@ -18,8 +18,8 @@ class LevelSelectScene: SKScene {
     let topRowHeight: CGFloat = 1150.0
     var verticalSpacing: CGFloat = 255.0
     var menuButton: TextBoxButton?
-    let endArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
-    var left_arrow = SKSpriteNode()
+    let rightArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
+    var leftArrow = SKSpriteNode()
     var categoryNodes = [Any]()
     let labelBuffer: CGFloat = 20.0
     let menuBuffers: (x: CGFloat,y: CGFloat) = (20.0,20.0)
@@ -27,8 +27,7 @@ class LevelSelectScene: SKScene {
     override func didMove(to view: SKView) {
         verticalSpacing = frame.height/CGFloat(numLevelsOnPage/numLevelsOnLine + 3)
         menuButton = TextBoxButton(x: 215, y: 125, text: "Main Menu", fontsize: GameStyle.shared.SmallTextBoxFontSize, buffers: menuBuffers, parentScene: self)
-        currentPage = (LevelsData.shared.nextLevelToComplete)/numLevelsOnPage
-
+        currentPage = LevelsData.shared.currentPage
         initializePageButtons()
         initPageArrows()
         
@@ -42,25 +41,28 @@ class LevelSelectScene: SKScene {
     }
     
     func initializePageButtons(){
-        let currLevel = LevelsData.shared.nextLevelToComplete
+        let group = LevelsData.shared.levelGroup[currentPage]
+        let nextLevelToComplete = nextLevel(page: group)
+        addCategoryLabel(group.category, frame.midX, topRowHeight - verticalSpacing*2/5)
         for i in 0...numLevelsOnPage/numLevelsOnLine-1{
             for j in 0...numLevelsOnLine-1{
-                let levelNumber = currentPage * numLevelsOnPage + i * numLevelsOnLine + j
+                let levelNumber = i * (numLevelsOnLine) + j
                 let y = topRowHeight - CGFloat(i+1) * verticalSpacing
-                if levelNumber <= LevelsData.shared.levels.count-1{
-                    addCategoryLabel(levelNumber, frame.midX, y + verticalSpacing*2/5)
-                    let buffers: (CGFloat,CGFloat) = (20.0,30.0)
+                if levelNumber <= group.levels.count - 1 {
                     let box = TextBoxButton(
                         x: (frame.width/(CGFloat(numLevelsOnLine) + 1) * CGFloat(j+1)), y: y, text: String(99),
                         fontsize: GameStyle.shared.TextBoxFontSize,
-                        buffers: buffers,
+                        buffers: (20.0,30.0),
                         parentScene: self)
                     box.updateText(String(levelNumber + 1))
                     levels.append(box)
-                    if levelNumber < currLevel{
+                    if group.levels[levelNumber].levelCompleted{
                         box.markAsCompletedLevel()
                     }
-                    else if levelNumber > currLevel {
+                    else if levelNumber == nextLevelToComplete{
+                        //do nothing
+                    }
+                    else {
                         box.setAlpha(0.3)
                     }
                 }
@@ -68,16 +70,22 @@ class LevelSelectScene: SKScene {
         }
     }
 
-    func addCategoryLabel(_ levelNumber: Int, _ x: CGFloat, _ y: CGFloat){
-        if let category = LevelsData.shared.levels[levelNumber].category{
-            let categoryLabel = SKLabelNode(text: category)
-            categoryLabel.position = CGPoint(x: frame.midX, y: y)
-            categoryLabel.fontName = GameStyle.shared.mainFontString
-            categoryLabel.fontSize = GameStyle.shared.SmallTextBoxFontSize
-            categoryLabel.verticalAlignmentMode = .center
-            addToScene(node: categoryLabel)
-            drawCategoryStyleLines(labelPosition: categoryLabel.position, labelWidth: categoryLabel.frame.width)
+    func nextLevel(page: (category: String, levels: [LevelData])) -> Int{
+        for (i,level) in page.levels.enumerated(){
+            if !level.levelCompleted{
+                return i
+            }
         }
+        return 0
+    }
+    func addCategoryLabel(_ category: String, _ x: CGFloat, _ y: CGFloat){
+        let categoryLabel = SKLabelNode(text: category)
+        categoryLabel.position = CGPoint(x: frame.midX, y: y)
+        categoryLabel.fontName = GameStyle.shared.mainFontString
+        categoryLabel.fontSize = GameStyle.shared.SmallTextBoxFontSize
+        categoryLabel.verticalAlignmentMode = .center
+        addToScene(node: categoryLabel)
+        drawCategoryStyleLines(labelPosition: categoryLabel.position, labelWidth: categoryLabel.frame.width)
     }
     
     func drawCategoryStyleLines(labelPosition: CGPoint, labelWidth: CGFloat){
@@ -110,24 +118,24 @@ class LevelSelectScene: SKScene {
         let levelOffset = CGFloat(numLevelsOnPage/numLevelsOnLine + 1)
         let levelsMiddle = topRowHeight - levelOffset * verticalSpacing / 2.0
         //right arrow init
-        endArrow.name = "right"
-        endArrow.position = CGPoint(x:frame.width - buffer, y: levelsMiddle)
-        endArrow.yScale *= 2.5
-        endArrow.alpha = 0.6
-        left_arrow = endArrow.copy() as! SKSpriteNode
-        left_arrow.name = "left"
-        left_arrow.position = CGPoint(x: buffer, y: levelsMiddle)
-        left_arrow.xScale = -left_arrow.xScale
-        addChild(left_arrow)
+        rightArrow.name = "right"
+        rightArrow.position = CGPoint(x:frame.width - buffer, y: levelsMiddle)
+        rightArrow.yScale *= 2.5
+        rightArrow.alpha = 0.6
+        leftArrow = rightArrow.copy() as! SKSpriteNode
+        leftArrow.name = "left"
+        leftArrow.position = CGPoint(x: buffer, y: levelsMiddle)
+        leftArrow.xScale = -leftArrow.xScale
+        addChild(leftArrow)
         let left_sequence = SKAction.sequence(
             [SKAction.move(by: CGVector(dx: -20.0,dy: 0), duration: 0.6),
              SKAction.move(by: CGVector(dx: +20.0,dy: 0), duration: 0.6)])
-        left_arrow.run(SKAction.repeatForever(left_sequence))
-        addChild(endArrow)
+        leftArrow.run(SKAction.repeatForever(left_sequence))
+        addChild(rightArrow)
         let right_sequence = SKAction.sequence(
             [SKAction.move(by: CGVector(dx: +20.0,dy: 0), duration: 0.6),
              SKAction.move(by: CGVector(dx: -20.0,dy: 0), duration: 0.6)])
-        endArrow.run(SKAction.repeatForever(right_sequence))
+        rightArrow.run(SKAction.repeatForever(right_sequence))
         removeOrKeepArrows()
     }
     
@@ -149,7 +157,7 @@ class LevelSelectScene: SKScene {
     }
     
     func isLevelTouched(touch: CGPoint){
-        let currLevel = LevelsData.shared.nextLevelToComplete
+        let currLevel = LevelsData.shared.selectedLevel.level
         for button in levels{
             if button.within(point: touch){
                 if Int(button.text)!-1 > currLevel{
@@ -162,7 +170,7 @@ class LevelSelectScene: SKScene {
                     let embiggen = SKAction.scale(to: 1.3, duration: 0.4)
                     
                     let loadScene = SKAction.run({
-                        LevelsData.shared.currentLevel = Int(button.text)! - 1
+                        LevelsData.shared.selectedLevel = (page: self.currentPage, level: Int(button.text)! - 1)
                         if let scene = SKScene(fileNamed: "Level1Scene") {
                             for gesture in (self.view?.gestureRecognizers!)!{
                                 if let recognizer = gesture as? UISwipeGestureRecognizer {
@@ -180,10 +188,10 @@ class LevelSelectScene: SKScene {
     }
     
     func isAnArrowTouched(touch: CGPoint){
-        if endArrow.contains(touch){
+        if rightArrow.contains(touch){
             pageFlip(pageModifier: 1)
         }
-        else if left_arrow.contains(touch){
+        else if leftArrow.contains(touch){
             pageFlip(pageModifier: -1)
         }
     }
@@ -196,9 +204,11 @@ class LevelSelectScene: SKScene {
     }
     
     func pageFlip(pageModifier: Int){
+        print (currentPage)
         let t = currentPage + pageModifier
-        if t <= levels.count/numLevelsOnPage && t >= 0{
+        if t < LevelsData.shared.levelGroup.count && t >= 0{
             currentPage += pageModifier
+            print(currentPage)
             removeLevelButtons()
             removeOrKeepArrows()
             removeCategories()
@@ -231,17 +241,17 @@ class LevelSelectScene: SKScene {
     
     func removeOrKeepArrows(){
         if currentPage > 0{
-           left_arrow.isHidden = false
+           leftArrow.isHidden = false
         }
         else{
-            left_arrow.isHidden = true
+            leftArrow.isHidden = true
         }
         
-        if currentPage < LevelsData.shared.levels.count/numLevelsOnPage {
-            endArrow.isHidden = false
+        if currentPage < LevelsData.shared.levelGroup.count - 1 {
+            rightArrow.isHidden = false
         }
         else{
-            endArrow.isHidden = true
+            rightArrow.isHidden = true
         }
     }
 }

@@ -10,7 +10,6 @@ import SpriteKit
 
 class Level1Scene: SKScene {
     var tile2DArray = [[GridTile]]()
-    var currentLevel = 0
     var gameActive = false
     var skipButton: TextBoxButton?
     let blockBuffer: CGFloat = 2
@@ -22,7 +21,9 @@ class Level1Scene: SKScene {
     var cam: SKCameraNode?
     var blockAlphaIncrement: CGFloat = 0
     var blockAlphaMin: CGFloat = 0.35
-    let Level = LevelsData.shared.levels[LevelsData.shared.currentLevel]
+    let Level = LevelsData.shared.levelGroup[LevelsData.shared.selectedLevel.page].levels[LevelsData.shared.selectedLevel.level]
+    var currentLevel = LevelsData.shared.selectedLevel.level
+
 
     let endArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
     let startArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
@@ -86,9 +87,9 @@ class Level1Scene: SKScene {
     }
     
     private func initializeGrid(){
-        blocksize = max(self.frame.maxX / CGFloat(Level.gridX + blockBuffer),
-                            self.frame.maxX / CGFloat(Level.gridY + blockBuffer))
-        let botOfGridY = frame.midY - ((CGFloat(Level.gridY) / 2.0) * blocksize)
+        blocksize = max(self.frame.maxX / (CGFloat(Level.gridX) + blockBuffer),
+                            self.frame.maxX / (CGFloat(Level.gridY) + blockBuffer))
+        let botOfGridY = frame.midY - CGFloat(Level.gridY) / 2.0 * blocksize
         let leftOfGridX = frame.midX - ((CGFloat(Level.gridX) / 2.0) * blocksize) + blocksize/4
         
         for row in 0...Level.gridY-1{
@@ -252,12 +253,11 @@ class Level1Scene: SKScene {
     // failure) show the end game success (failure = false). Otherwise,
     // show the end game failure (failure = true)
     func endGame (success: Bool){
-        let L = LevelsData.shared
-        if L.currentLevel == L.nextLevelToComplete {
-            if L.levels.count > L.nextLevelToComplete && success{
-                L.nextLevelToComplete += 1
-            }
+        _ = LevelsData.shared
+        if success{
+        LevelsData.shared.levelGroup[LevelsData.shared.selectedLevel.page].levels[LevelsData.shared.selectedLevel.level].levelCompleted = true
         }
+        
         for child in self.children {
             child.removeFromParent()
         }
@@ -323,7 +323,7 @@ class Level1Scene: SKScene {
     
     //return true if game is over
     func isGameOver()->Bool{
-        if tupleContains(a: Level.solutionCoords, v: (lastTouchedTile?.gridCoord)!){
+        if tupleContains(a: Level.solutionCoords[touchedTiles], v: (lastTouchedTile?.gridCoord)!){
             touchedTiles += 1
             if touchedTiles == Level.solutionCoords.count {
                 LevelsData.shared.currentLevelSuccess = true
@@ -390,9 +390,10 @@ class Level1Scene: SKScene {
     /*checks an array of tuples for one in particular
      https://stackoverflow.com/questions/29736244/how-do-i-check-if-an-array-of-tuples-contains-a-particular-one-in-swift
      */
-    func tupleContains(a:[(Int, Int)], v:(Int,Int)) -> Bool {
+    func tupleContains(a:(Int, Int), v:(Int,Int)) -> Bool {
         let (c1, c2) = v
-        for (v1, v2) in a { if v1 == c1 && v2 == c2 { return true } }
+        let (v1, v2) = a
+        if v1 == c1 && v2 == c2 { return true } 
         return false
     }
 }

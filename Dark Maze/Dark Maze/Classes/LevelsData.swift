@@ -12,25 +12,37 @@ class LevelsData{
     static let shared = LevelsData()
     
     var currentLevelSuccess: Bool
-    var currentLevel: Int  //level that was selected in levelselect or by hitting next level
-    var levels: [(String,[LevelData])]
-    var nextLevelToComplete: Int  //the highest level that has been completed
+    var currentPage: Int  //page that contains the next level to be completed
+    var selectedLevel: (page: Int, level: Int)
+    var levelGroup = [(category: String, levels: [LevelData])]()
     init(){
         
         currentLevelSuccess = false
         
-        //this determines which level is either currently being worked on or the next level
-        //it will always be incomplete in the level select
-        nextLevelToComplete = 2 // the actual level is nextLevel + 1
-        
         //used by the gameplay if you play an earlier level
-        currentLevel = 0
+        selectedLevel = (page: 0, level: 0)
+        currentPage = 0
         
-        levels = [(category: String,[LevelData])]()
+        //levelGroup = [(category: String, levels: [LevelData])]()
         _4x4()
         _5x5()
     }
     
+    func nextLevel(){
+        currentPage = selectedLevel.page
+        if selectedLevel.level < levelGroup[currentPage].levels.count - 1{
+            selectedLevel.level += 1
+        }
+        else if currentPage < levelGroup.count - 1 {
+            currentPage += 1
+            selectedLevel.level = 0
+            selectedLevel.page = currentPage
+        }
+        else{
+            // do nothing
+        }
+        print ("after \(selectedLevel)")
+    }
     /*------------------------------- 4x4 -------------------------------*/
     //Description:
     //Easiest level to show how to play the game. Probably going to do all sorts of
@@ -73,7 +85,7 @@ class LevelsData{
             [(3,3),(3,2),(2,2),(2,1),(2,0),(1,0),(0,0),(0,1),(0,2)],
             levelCompleted: false
         )]
-        levels.append ((category: "4x4", array))
+        levelGroup.append ((category: "4x4", array))
     }
     func _5x5(){
         var array = [LevelData(
@@ -102,6 +114,7 @@ class LevelsData{
             [(4,4),(3,4),(2,4),(1,4),(0,4),(0,3),(0,2),(0,1),(0,0),(1,0),(2,0),(3,0),(4,0)],
             levelCompleted: false
         )]
+        levelGroup.append((category:"5x5",levels: array))
     }
 }
 
