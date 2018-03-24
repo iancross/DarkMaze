@@ -23,6 +23,7 @@ class Level1Scene: SKScene {
     var blockAlphaMin: CGFloat = 0.35
     let Level = LevelsData.shared.levelGroup[LevelsData.shared.selectedLevel.page].levels[LevelsData.shared.selectedLevel.level]
     var currentLevel = LevelsData.shared.selectedLevel.level
+    var gridNode =  SKNode()
 
 
     let endArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
@@ -93,16 +94,26 @@ class Level1Scene: SKScene {
         let leftOfGridX = frame.midX - ((CGFloat(Level.gridX) / 2.0) * blocksize) + blocksize/4
         
         for row in 0...Level.gridY-1{
-            let offsetY = botOfGridY + blocksize * CGFloat(row) + blocksize/4
+            let offsetY = blocksize * CGFloat(row) + blocksize/4
             tile2DArray.append([GridTile]())
             for col in 0...Level.gridX-1{
-                let offsetX = leftOfGridX + blocksize * CGFloat(col) + blocksize/4
+                let offsetX = blocksize * CGFloat(col) + blocksize/4
                 let coord = (col,row)
                 let tile = GridTile(parentScene: self, center: CGPoint(x: offsetX, y: offsetY),
                                     coord: coord, width: blocksize, height: blocksize)
+                tile.position = CGPoint(x: 0, y: 0)
+                gridNode.addChild(tile)
                 tile2DArray[row].append(tile)
             }
         }
+        gridNode.position = CGPoint(x: frame.midX, y: frame.midY)
+        self.addChild(gridNode)
+        //gridNode.zRotation -= 0.1
+        var Circle = SKShapeNode(circleOfRadius: 10 ) // Size of Circle
+        Circle.position = gridNode.position  //Middle of Screen
+        Circle.fillColor = SKColor.blue
+        self.addChild(Circle)
+
     }
     
     //Once the solution is finished drawing and the grid appears,
@@ -168,29 +179,27 @@ class Level1Scene: SKScene {
         var point = CGPoint(x: 0, y: 0)
         var rotation: CGFloat = 0
         if tile.gridCoord.x == tile2DArray[0].count - 1{
-            point = CGPoint(x: tile.tile.frame.midX + blocksize, y: tile.tile.frame.midY)
+            point = CGPoint(x: tile.frame.midX + blocksize, y: tile.frame.midY)
             rotation = CGFloat(.pi/2.0) - (orient * .pi/2.0)
         }
         //ends on the left. rotate 180
         else if tile.gridCoord.x == 0{
-            point = CGPoint(x: tile.tile.frame.midX - blocksize, y: tile.tile.frame.midY)
+            point = CGPoint(x: tile.frame.midX - blocksize, y: tile.frame.midY)
             rotation = CGFloat(.pi/2.0) + (orient * .pi/2.0)
         }
         //ends on top of the grid and rotate 90 left
         else if tile.gridCoord.y == 0{
-            point = CGPoint(x: tile.tile.frame.midX, y: tile.tile.frame.midY - blocksize)
+            point = CGPoint(x: tile.frame.midX, y: tile.frame.midY - blocksize)
             rotation = -1 * (orient * .pi/2.0)
         }
         //ends bot of grid and rotate 90 right
         else if tile.gridCoord.y == tile2DArray.count - 1{
-            print("here")
-            point = CGPoint(x: tile.tile.frame.midX, y: tile.tile.frame.midY + blocksize)
+            point = CGPoint(x: tile.frame.midX, y: tile.frame.midY + blocksize)
             rotation = (orient * .pi/2.0)
         }
         arrow.position = point
         arrow.zRotation += rotation
-        print(arrow.zRotation)
-        addChild(arrow)
+        gridNode.addChild(arrow)
     }
     private func drawGridLines(){
         for row in tile2DArray{
@@ -205,7 +214,7 @@ class Level1Scene: SKScene {
         //can we handle just first touch here?
         for t in touches {
             if gameActive {
-                handleTouch(t.location(in: self))
+                handleTouch(t.location(in: gridNode))
                 break //not sure if i need this
             }
             else{
@@ -240,7 +249,7 @@ class Level1Scene: SKScene {
             for tile in row{
                 if tile.isTouched(point: point){
                     startArrow.removeAllActions()
-//                    print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
+                    print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
 //                    return //comment out to get grid coords for levels
                     lastTouchedTile = tile
                     tile.touched(alpha: blockAlphaMin + CGFloat(touchedTiles + 1) * blockAlphaIncrement)
@@ -377,6 +386,7 @@ class Level1Scene: SKScene {
             }
         }
     }
+    
     func reInitGame (){
         removeAllChildren()
         tile2DArray.removeAll()

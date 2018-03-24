@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import SpriteKit
 
-class GridTile: SKShapeNode{
+class GridTile: SKNode{
     var tile: SKShapeNode
     var originColor = UIColor.black
     let gridCoord: (x: Int,y: Int)
@@ -39,18 +39,22 @@ class GridTile: SKShapeNode{
         //SUCCESS! don't use the point array, not sure why i was making it that way. Just use rectOf
 
         tile = SKShapeNode(rectOf: CGSize(width: width, height: height))
-        tile.position = center
         tile.lineWidth = 1
         tile.glowWidth = 1
         tile.fillColor = UIColor.black
         tile.name = "Grid Tile"
         tile.strokeColor = UIColor(displayP3Red: 0.40, green: 0.40, blue: 0.40, alpha: 0.0 )
         
+        var Circle = SKShapeNode(circleOfRadius: 10 ) // Size of Circle
+        Circle.position = tile.position  //Middle of Screen
+        Circle.fillColor = SKColor.orange
+
+        
         //add the tile to the parent scene
         self.parentScene = parentScene
-        parentScene.addChild(tile)
         super.init()
-
+        self.addChild(tile)
+        self.addChild(Circle)
     }
     
     func reInit(){
@@ -64,7 +68,9 @@ class GridTile: SKShapeNode{
     }
     
     func isTouched(point: CGPoint) -> Bool{
+        print(point)
         if tile.contains(point) {
+            print ("weee")
             return true
         }
         else {
