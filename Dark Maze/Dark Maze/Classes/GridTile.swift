@@ -32,7 +32,7 @@ class GridTile: SKNode{
         Top
         Left (repeated)
     */
-    init (parentScene: SKScene, center: CGPoint, coord: (Int, Int), width: CGFloat, height: CGFloat) {
+    init (parentScene: SKScene, coord: (Int, Int), width: CGFloat, height: CGFloat) {
         gridCoord = coord
         
         //new plan, just create a tile with generic widths then move it to the right position?
@@ -68,8 +68,7 @@ class GridTile: SKNode{
     }
     
     func isTouched(point: CGPoint) -> Bool{
-        print(point)
-        if tile.contains(point) {
+        if self.contains(point) {
             print ("weee")
             return true
         }

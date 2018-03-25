@@ -41,6 +41,7 @@ class MenuScene: SKScene {
             tileLoop += 1
         }
         else{
+            print(blockPoints)
             let prevBlock = blockPoints.first
             blockPoints.remove(at: 0)
             var newPoint = blockRandomPoint(prevPoint: blockPoints.first!)
@@ -48,9 +49,9 @@ class MenuScene: SKScene {
                 newPoint = blockRandomPoint(prevPoint: blockPoints.first!)
             }
             blockPoints.append(newPoint)
-            self.currentTile?.removeFromParent()
-            currentTile = GridTile(parentScene: self, center: newPoint, coord: (0,0), width: blocksize, height: blocksize)
-                        
+            currentTile = GridTile(parentScene: self, coord: (0,0), width: blocksize, height: blocksize)
+            currentTile?.position = newPoint
+            addChild(currentTile!)
             let actionList = SKAction.sequence(
                 [SKAction.run { self.currentTile?.switchToWhite() },
                  SKAction.fadeOut(withDuration: 1.7),
@@ -71,7 +72,8 @@ class MenuScene: SKScene {
         let newX = arc4random_uniform(UInt32(self.frame.width))
         let newY = arc4random_uniform(UInt32(self.frame.height))
         let startingPoint = CGPoint(x: CGFloat(newX), y: CGFloat(newY))
-        currentTile = GridTile(parentScene: self, center: startingPoint, coord: (0,0), width: 50.0, height: 50.0)
+        currentTile = GridTile(parentScene: self, coord: (0,0), width: 50.0, height: 50.0)
+        currentTile?.position = startingPoint
         blockPoints.append(CGPoint(x: (currentTile?.tile.frame.midX)!, y: (currentTile?.tile.frame.midY)!)) //first is the prev
         blockPoints.append(CGPoint(x: (currentTile?.tile.frame.midX)!, y: (currentTile?.tile.frame.midY)!)) //second is the current
     }

@@ -90,18 +90,18 @@ class Level1Scene: SKScene {
     private func initializeGrid(){
         blocksize = max(self.frame.maxX / (CGFloat(Level.gridX) + blockBuffer),
                             self.frame.maxX / (CGFloat(Level.gridY) + blockBuffer))
-        let botOfGridY = frame.midY - CGFloat(Level.gridY) / 2.0 * blocksize
-        let leftOfGridX = frame.midX - ((CGFloat(Level.gridX) / 2.0) * blocksize) + blocksize/4
+        let botOfGridY =  -CGFloat(Level.gridY) / 2.0 * blocksize
+        let leftOfGridX = -((CGFloat(Level.gridX) / 2.0) * blocksize)
         
         for row in 0...Level.gridY-1{
-            let offsetY = blocksize * CGFloat(row) + blocksize/4
+            let offsetY = blocksize * CGFloat(row) + blocksize/2
             tile2DArray.append([GridTile]())
             for col in 0...Level.gridX-1{
-                let offsetX = blocksize * CGFloat(col) + blocksize/4
+                let offsetX = blocksize * CGFloat(col) + blocksize/2
                 let coord = (col,row)
-                let tile = GridTile(parentScene: self, center: CGPoint(x: offsetX, y: offsetY),
+                let tile = GridTile(parentScene: self,
                                     coord: coord, width: blocksize, height: blocksize)
-                tile.position = CGPoint(x: 0, y: 0)
+                tile.position = CGPoint(x: botOfGridY + offsetX, y: leftOfGridX + offsetY)
                 gridNode.addChild(tile)
                 tile2DArray[row].append(tile)
             }
@@ -249,10 +249,11 @@ class Level1Scene: SKScene {
             for tile in row{
                 if tile.isTouched(point: point){
                     startArrow.removeAllActions()
-                    print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
+//                    print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
 //                    return //comment out to get grid coords for levels
                     lastTouchedTile = tile
                     tile.touched(alpha: blockAlphaMin + CGFloat(touchedTiles + 1) * blockAlphaIncrement)
+                    return
                 }
             }
         }
@@ -346,15 +347,23 @@ class Level1Scene: SKScene {
             LevelsData.shared.currentLevelSuccess = false
             lastTouchedTile?.switchToBlack()
             lastTouchedTile?.strokeAppearing = false
-            lastTouchedTile?.tile.zPosition += 5
+            lastTouchedTile?.zPosition += 5
             let rotateSequence = SKAction.sequence(
                 [SKAction.rotate(byAngle: 0.4, duration: 0.1),
                  SKAction.rotate(byAngle: -0.8, duration: 0.1),
                  SKAction.rotate(byAngle: 0.4, duration: 0.1)])
             lastTouchedTile!.tile.run(SKAction.repeatForever(rotateSequence))
-            
+            print(lastTouchedTile?.scene?.convert((lastTouchedTile?.position)!, to: scene!))
+            print(lastTouchedTile?.scene?.convert((lastTouchedTile?.position)!, to: (lastTouchedTile?.parent)!))
+            let positionInScene = lastTouchedTile?.scene?.convert((lastTouchedTile?.position)!, from: (lastTouchedTile?.parent)!)
+            print (positionInScene)
+            var Circle = SKShapeNode(circleOfRadius: 10 ) // Size of Circle
+            Circle.position = positionInScene!  //Middle of Screen
+            Circle.fillColor = SKColor.blue
+            self.addChild(Circle)
+
             let scale = (SKAction.scale(by: 0.005, duration: 1))
-            let move = (SKAction.move(to: (lastTouchedTile?.tile.position)!, duration: 1))
+            let move = (SKAction.move(to: positionInScene!, duration: 1))
             cam?.run(SKAction.group([scale,move])){
                 self.endGame(success: false)
             }
