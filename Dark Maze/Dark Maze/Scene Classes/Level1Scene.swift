@@ -130,7 +130,7 @@ class Level1Scene: SKScene {
                     self.drawGridLines()
                     //marking the first tile as available
                     self.beginGame()
-                    self.gameActive = true
+//                    self.gameActive = true
                     self.skipButton?.hide()
                 }
             }
@@ -143,6 +143,7 @@ class Level1Scene: SKScene {
         firstTile.firstTile()
         let numSolutionBlocks = Level.solutionCoords.count
         blockAlphaIncrement = (1.0 - blockAlphaMin) / CGFloat(numSolutionBlocks)
+        flipGrid()
     }
     
     func drawArrows(firstTile: GridTile){
@@ -197,6 +198,17 @@ class Level1Scene: SKScene {
         arrow.zRotation += rotation
         gridNode.addChild(arrow)
     }
+    
+    func flipGrid(){
+        let sequence = SKAction.sequence(
+            [SKAction.run { self.gameActive = false },
+            SKAction.wait(forDuration: 0.2),
+            SKAction.scaleX(to: -1.0, duration: 1.0),
+            SKAction.wait(forDuration: 0.3)])
+        gridNode.run(sequence){
+            self.gameActive = true
+        }
+    }
     private func drawGridLines(){
         for row in tile2DArray{
             for tile in row{
@@ -214,30 +226,35 @@ class Level1Scene: SKScene {
                 break //not sure if i need this
             }
             else{
-                isMenuTouched(touch: t.location(in: self))
+                skip(touch: t.location(in: self))
             }
         }
     }
     
-    func isMenuTouched(touch: CGPoint){
-        if (skipButton?.within(point: touch))!{
-            for col in tile2DArray {
-                for tile in col {
-                    tile.tile.removeAllActions()
-                    tile.reInit()
+    func skip(touch: CGPoint){
+        if let within = skipButton?.within(point: touch){
+            if within{
+                for col in tile2DArray {
+                    for tile in col {
+                        tile.tile.removeAllActions()
+                        tile.reInit()
+                    }
                 }
+            self.drawGridLines()
+            //marking the first tile as available
+            self.beginGame()
+            self.gameActive = true
+            skipButton?.hide()
             }
-        self.drawGridLines()
-        //marking the first tile as available
-        self.beginGame()
-        self.gameActive = true
-        skipButton?.hide()
         }
     }
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print ("touches moved")
         let point = touches.first
-        let positionInScene = point?.location(in: self)
-        handleTouch(positionInScene!)
+        let positionInScene = point?.location(in: gridNode)
+        if gameActive {
+            handleTouch(positionInScene!)
+        }
     }
     
     private func handleTouch(_ point: CGPoint){
@@ -261,9 +278,8 @@ class Level1Scene: SKScene {
     func endGame (success: Bool){
         _ = LevelsData.shared
         if success{
-        LevelsData.shared.levelGroup[LevelsData.shared.selectedLevel.page].levels[LevelsData.shared.selectedLevel.level].levelCompleted = true
+            LevelsData.shared.levelGroup[LevelsData.shared.selectedLevel.page].levels[LevelsData.shared.selectedLevel.level].levelCompleted = true
         }
-        
         for child in self.children {
             child.removeFromParent()
         }

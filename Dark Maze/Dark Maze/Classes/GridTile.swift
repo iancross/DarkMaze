@@ -45,16 +45,10 @@ class GridTile: SKNode{
         tile.name = "Grid Tile"
         tile.strokeColor = UIColor(displayP3Red: 0.40, green: 0.40, blue: 0.40, alpha: 0.0 )
         
-        var Circle = SKShapeNode(circleOfRadius: 10 ) // Size of Circle
-        Circle.position = tile.position  //Middle of Screen
-        Circle.fillColor = SKColor.orange
-
-        
         //add the tile to the parent scene
         self.parentScene = parentScene
         super.init()
         self.addChild(tile)
-        self.addChild(Circle)
     }
     
     func reInit(){
