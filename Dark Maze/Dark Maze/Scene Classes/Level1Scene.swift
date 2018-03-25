@@ -109,10 +109,6 @@ class Level1Scene: SKScene {
         gridNode.position = CGPoint(x: frame.midX, y: frame.midY)
         self.addChild(gridNode)
         //gridNode.zRotation -= 0.1
-        var Circle = SKShapeNode(circleOfRadius: 10 ) // Size of Circle
-        Circle.position = gridNode.position  //Middle of Screen
-        Circle.fillColor = SKColor.blue
-        self.addChild(Circle)
 
     }
     
@@ -353,14 +349,8 @@ class Level1Scene: SKScene {
                  SKAction.rotate(byAngle: -0.8, duration: 0.1),
                  SKAction.rotate(byAngle: 0.4, duration: 0.1)])
             lastTouchedTile!.tile.run(SKAction.repeatForever(rotateSequence))
-            print(lastTouchedTile?.scene?.convert((lastTouchedTile?.position)!, to: scene!))
-            print(lastTouchedTile?.scene?.convert((lastTouchedTile?.position)!, to: (lastTouchedTile?.parent)!))
+
             let positionInScene = lastTouchedTile?.scene?.convert((lastTouchedTile?.position)!, from: (lastTouchedTile?.parent)!)
-            print (positionInScene)
-            var Circle = SKShapeNode(circleOfRadius: 10 ) // Size of Circle
-            Circle.position = positionInScene!  //Middle of Screen
-            Circle.fillColor = SKColor.blue
-            self.addChild(Circle)
 
             let scale = (SKAction.scale(by: 0.005, duration: 1))
             let move = (SKAction.move(to: positionInScene!, duration: 1))

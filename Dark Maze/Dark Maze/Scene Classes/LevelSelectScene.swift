@@ -27,7 +27,7 @@ class LevelSelectScene: SKScene {
     override func didMove(to view: SKView) {
         verticalSpacing = frame.height/CGFloat(numLevelsOnPage/numLevelsOnLine + 3)
         menuButton = TextBoxButton(x: 215, y: 125, text: "Main Menu", fontsize: GameStyle.shared.SmallTextBoxFontSize, buffers: menuBuffers, parentScene: self)
-        currentPage = LevelsData.shared.currentPage
+        currentPage = LevelsData.shared.selectedLevel.page
         initializePageButtons()
         initPageArrows()
         
@@ -157,16 +157,18 @@ class LevelSelectScene: SKScene {
     }
     
     func isLevelTouched(touch: CGPoint){
-        let currLevel = LevelsData.shared.selectedLevel.level
+        let group = LevelsData.shared.levelGroup[currentPage]
+        let nextLevelToComplete = nextLevel(page: group)
+        //let currLevel = LevelsData.shared.selectedLevel.level
         for button in levels{
             if button.within(point: touch){
-                if Int(button.text)!-1 > currLevel{
+                if Int(button.text)!-1 > nextLevelToComplete{
                     let sequence = [SKAction.rotate(byAngle: 0.1, duration: 0.3),
                                     SKAction.rotate(byAngle: -0.2, duration: 0.3),
                                     SKAction.rotate(byAngle: 0.1, duration: 0.3)]
                     button.outline.run(SKAction.sequence(sequence))
                 }
-                else if Int(button.text)!-1 <= currLevel{
+                else if Int(button.text)!-1 <= nextLevelToComplete{
                     let embiggen = SKAction.scale(to: 1.3, duration: 0.4)
                     
                     let loadScene = SKAction.run({
