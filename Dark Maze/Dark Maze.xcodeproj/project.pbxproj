@@ -147,11 +147,11 @@
 		C3EF4A121FD7749000528247 /* Dark Maze */ = {
 			isa = PBXGroup;
 			children = (
+				C3EF4A1D1FD7749000528247 /* Main.storyboard */,
 				C3EF4A1B1FD7749000528247 /* GameViewController.swift */,
 				C364CEC21FE74FD6009140C7 /* Scene Classes */,
 				C364CEC11FE74FB4009140C7 /* Scenes */,
 				C364CEBE1FE6CD0D009140C7 /* Classes */,
-				C3EF4A1D1FD7749000528247 /* Main.storyboard */,
 				C38464C02055E48C00239EE0 /* Sprites */,
 				C3EF4A201FD7749000528247 /* Assets.xcassets */,
 				C3EF4A221FD7749000528247 /* LaunchScreen.storyboard */,
