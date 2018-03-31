@@ -172,4 +172,11 @@ class GridTile: SKNode{
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    deinit{
+        print ("print being removed")
+        tile.removeFromParent()
+        self.removeAllChildren()
+        self.removeFromParent()
+    }
 }

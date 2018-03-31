@@ -41,7 +41,7 @@ class MenuScene: SKScene {
             tileLoop += 1
         }
         else{
-            print(blockPoints)
+            print (self.children,"\n" )
             let prevBlock = blockPoints.first
             blockPoints.remove(at: 0)
             var newPoint = blockRandomPoint(prevPoint: blockPoints.first!)
@@ -56,9 +56,9 @@ class MenuScene: SKScene {
                 [SKAction.run { self.currentTile?.switchToWhite() },
                  SKAction.fadeOut(withDuration: 1.7),
                  SKAction.removeFromParent()
-                ])
-            currentTile?.tile.run(actionList){
-            }
+                ]
+            )
+            currentTile?.run(actionList)
             tileLoop = 0
         }
     }
