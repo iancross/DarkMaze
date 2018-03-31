@@ -23,6 +23,7 @@ class Level1Scene: SKScene {
     var blockAlphaMin: CGFloat = 0.35
     let Level = LevelsData.shared.levelGroup[LevelsData.shared.selectedLevel.page].levels[LevelsData.shared.selectedLevel.level]
     var currentLevel = LevelsData.shared.selectedLevel.level
+    let currentPage = LevelsData.shared.selectedLevel.page
     var gridNode =  SKNode()
     private var crack = SKSpriteNode()
     private var crackingFrames: [SKTexture] = []
@@ -141,12 +142,24 @@ class Level1Scene: SKScene {
     }
     
     func beginGame(){
+        insertLevelTitle()
         let firstTile = self.tile2DArray[(Level.solutionCoords.first?.y)!][(Level.solutionCoords.first?.x)!]
         drawArrows(firstTile: firstTile)
         firstTile.firstTile()
         let numSolutionBlocks = Level.solutionCoords.count
         blockAlphaIncrement = (1.0 - blockAlphaMin) / CGFloat(numSolutionBlocks)
         modifyGrid()
+    }
+    
+    func insertLevelTitle(){
+        let progress = LevelsData.shared.selectedLevel.level + 1
+        let outOfTotal = LevelsData.shared.levelGroup[currentPage].levels.count
+        let category = LevelsData.shared.levelGroup[currentPage].category
+        let title = "\(category) \(progress)/\(outOfTotal)"
+        
+        let categoryNode = CategoryHeader(string: title)
+        categoryNode.position = CGPoint(x: frame.midX, y: frame.maxY - 100)
+        addChild(categoryNode)
     }
     
     func drawArrows(firstTile: GridTile){

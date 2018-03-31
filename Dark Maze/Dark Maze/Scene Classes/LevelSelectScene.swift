@@ -15,12 +15,12 @@ class LevelSelectScene: SKScene {
     var currentPage = 0
     var numLevelsOnPage = 12
     var numLevelsOnLine = 3
-    let topRowHeight: CGFloat = 1150.0
+    let topRowHeight: CGFloat = 1140.0
     var verticalSpacing: CGFloat = 255.0
     var menuButton: TextBoxButton?
     let rightArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
     var leftArrow = SKSpriteNode()
-    var categoryNodes = [Any]()
+    var categoryHeader: CategoryHeader?
     let labelBuffer: CGFloat = 20.0
     let menuBuffers: (x: CGFloat,y: CGFloat) = (20.0,20.0)
 
@@ -79,39 +79,11 @@ class LevelSelectScene: SKScene {
         return 0
     }
     func addCategoryLabel(_ category: String, _ x: CGFloat, _ y: CGFloat){
-        let categoryLabel = SKLabelNode(text: category)
-        categoryLabel.position = CGPoint(x: frame.midX, y: y)
-        categoryLabel.fontName = GameStyle.shared.mainFontString
-        categoryLabel.fontSize = GameStyle.shared.SmallTextBoxFontSize
-        categoryLabel.verticalAlignmentMode = .center
-        addToScene(node: categoryLabel)
-        drawCategoryStyleLines(labelPosition: categoryLabel.position, labelWidth: categoryLabel.frame.width)
-    }
-    
-    func drawCategoryStyleLines(labelPosition: CGPoint, labelWidth: CGFloat){
-        var rightPoints = [CGPoint(x: labelPosition.x + labelWidth/2 + labelBuffer, y: labelPosition.y),
-                      CGPoint(x: frame.width/4.0*3.0, y: labelPosition.y)]
-        let rightLine = SKShapeNode(points: &rightPoints,
-                                          count: rightPoints.count)
-        var leftPoints = [CGPoint(x: labelPosition.x - labelWidth/2 - labelBuffer, y: labelPosition.y),
-                      CGPoint(x: frame.width/4.0, y: labelPosition.y)]
-        let leftLine = SKShapeNode(points: &leftPoints,
-                                    count: leftPoints.count)
-        addToScene(node: leftLine)
-        addToScene(node: rightLine)
-    }
-    
-    func addToScene(node: Any){
-        if let label = node as? SKLabelNode{
-            addChild(label)
-            categoryNodes.append(label)
-        }
-        else if let label = node as? SKShapeNode{
-            addChild(label)
-            categoryNodes.append(label)
+        categoryHeader = CategoryHeader(string: category)
+        if ((categoryHeader?.position = CGPoint(x: x, y: y)) != nil){
+            addChild(categoryHeader!)
         }
     }
-    
     
     func initPageArrows(){
         let buffer: CGFloat = 60.0
@@ -159,7 +131,6 @@ class LevelSelectScene: SKScene {
     func isLevelTouched(touch: CGPoint){
         let group = LevelsData.shared.levelGroup[currentPage]
         let nextLevelToComplete = nextLevel(page: group)
-        //let currLevel = LevelsData.shared.selectedLevel.level
         for button in levels{
             if button.within(point: touch){
                 if Int(button.text)!-1 > nextLevelToComplete{
@@ -219,18 +190,7 @@ class LevelSelectScene: SKScene {
     }
     
     func removeCategories(){
-        while !categoryNodes.isEmpty{
-            let first = categoryNodes.first
-            if let label = first as? SKLabelNode{
-                print ("label")
-                label.removeFromParent()
-            }
-            if let shape = first as? SKShapeNode{
-                print ("shape")
-                shape.removeFromParent()
-            }
-            categoryNodes.removeFirst()
-        }
+        categoryHeader?.removeFromParent()
     }
     
     func removeLevelButtons(){

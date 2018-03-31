@@ -8,6 +8,24 @@
 
 import Foundation
 
+//levels info
+//gridsize - self explanatory
+//delayTime - time between tiles showing up (0 means they all show up at the same time)
+//levelCompleted: shows us what to color the level in level select
+
+struct LevelData {
+    var gridX: Int
+    var gridY: Int
+    var delayTime: Double
+    var solutionCoords: [(x: Int,y: Int)]
+    var levelCompleted: Bool
+    var modifications: [GridModification]?
+}
+
+enum GridModification {
+    case flip
+}
+
 class LevelsData{
     static let shared = LevelsData()
     
@@ -53,7 +71,7 @@ class LevelsData{
     //Easiest level to show how to play the game. Probably going to do all sorts of
     //directions to show the maze functionality
     func _4x4(){
-        var array = [
+        let array = [
         LevelData(
             gridX: 4, gridY: 4, delayTime: 0.5,
             solutionCoords:
@@ -93,7 +111,7 @@ class LevelsData{
         levelGroup.append ((category: "4x4", array))
     }
     func _5x5(){
-        var array = [LevelData(
+        let array = [LevelData(
             gridX: 5, gridY: 5, delayTime: 0.5,
             solutionCoords:
             [(0,4),(1,4),(1,3),(2,3),(2,2),(3,2),(3,1),(3,0),(4,0)],
@@ -122,7 +140,7 @@ class LevelsData{
         levelGroup.append((category:"5x5",levels: array))
     }
     func _6x10Flip(){
-        var array = [LevelData(
+        let array = [LevelData(
             gridX: 6, gridY: 10, delayTime: 0.3,
             solutionCoords:
             [(0,7),(1,7),(1,8),(1,9),(2,9),(3,9),(3,8),(4,8),(4,7),(4,6),(5,6),(5,5),(5,4),(4,4),(3,4),(2,4),(1,4),(1,3),(2,3),(2,2),(3,2),(4,2),(4,1),(5,1)],
@@ -130,24 +148,6 @@ class LevelsData{
         )]
         levelGroup.append ((category: "fucking hard", array))
     }
-}
-
-//levels info
-//gridsize - self explanatory
-//delayTime - time between tiles showing up (0 means they all show up at the same time)
-//levelCompleted: shows us what to color the level in level select
-
-struct LevelData {
-    var gridX: Int
-    var gridY: Int
-    var delayTime: Double
-    var solutionCoords: [(x: Int,y: Int)]
-    var levelCompleted: Bool
-    var modifications: [GridModification]?
-}
-
-enum GridModification {
-    case flip
 }
 
 
