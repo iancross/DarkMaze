@@ -69,6 +69,15 @@ class TextBoxButton: SKNode{
         labelNode.isHidden = false
     }
     
+    override func run(_ action: SKAction) {
+        outline.run(action)
+        labelNode.run(action)
+    }
+    func runWithBlock(_ action: SKAction, block: @escaping () -> Void) {
+        outline.run(action, completion: block)
+        labelNode.run(action)
+    }
+    
     deinit {
         outline.removeFromParent()
         labelNode.removeFromParent()

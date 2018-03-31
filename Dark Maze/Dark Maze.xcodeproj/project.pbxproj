@@ -23,6 +23,7 @@
 		C3962A332057508F002C0AF9 /* TapToBeginScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3962A322057508F002C0AF9 /* TapToBeginScene.swift */; };
 		C3962A35205750DF002C0AF9 /* TapToBeginScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C3962A34205750DF002C0AF9 /* TapToBeginScene.sks */; };
 		C3962A3B205888F3002C0AF9 /* Level1Scene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C3962A3A205888F3002C0AF9 /* Level1Scene.sks */; };
+		C3BA45C52069A69500D72A3F /* cracking.atlas in Resources */ = {isa = PBXBuildFile; fileRef = C3BA45C42069A69500D72A3F /* cracking.atlas */; };
 		C3EF4A141FD7749000528247 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3EF4A131FD7749000528247 /* AppDelegate.swift */; };
 		C3EF4A1A1FD7749000528247 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3EF4A191FD7749000528247 /* MenuScene.swift */; };
 		C3EF4A1C1FD7749000528247 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3EF4A1B1FD7749000528247 /* GameViewController.swift */; };
@@ -47,6 +48,7 @@
 		C3962A322057508F002C0AF9 /* TapToBeginScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapToBeginScene.swift; sourceTree = "<group>"; };
 		C3962A34205750DF002C0AF9 /* TapToBeginScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = TapToBeginScene.sks; sourceTree = "<group>"; };
 		C3962A3A205888F3002C0AF9 /* Level1Scene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Level1Scene.sks; sourceTree = "<group>"; };
+		C3BA45C42069A69500D72A3F /* cracking.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = cracking.atlas; sourceTree = "<group>"; };
 		C3EF4A101FD7749000528247 /* Dark Maze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dark Maze.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3EF4A131FD7749000528247 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C3EF4A191FD7749000528247 /* MenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 		C38464C02055E48C00239EE0 /* Sprites */ = {
 			isa = PBXGroup;
 			children = (
+				C3BA45C42069A69500D72A3F /* cracking.atlas */,
 				C38464C12055EC4700239EE0 /* nextArrow.png */,
 				C38464BE2055E41900239EE0 /* 006784-3d-transparent-glass-icon-arrows-double-arrowhead-right.png */,
 			);
@@ -226,6 +229,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C3189DFD1FD77988000A52A6 /* MYBLS___.TTF in Resources */,
+				C3BA45C52069A69500D72A3F /* cracking.atlas in Resources */,
 				C3962A35205750DF002C0AF9 /* TapToBeginScene.sks in Resources */,
 				C38464C22055EC4700239EE0 /* nextArrow.png in Resources */,
 				C30DB1C82015678E00CE670C /* EndGameScene.sks in Resources */,

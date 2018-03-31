@@ -14,7 +14,7 @@ class GridTile: SKNode{
     var tile: SKShapeNode
     var originColor = UIColor.black
     let gridCoord: (x: Int,y: Int)
-    private var strokeAlpha = 0.2
+    var strokeAlpha = 0.2
     var strokeActive = true
     var strokeAppearing = true //used to have the grid fade in and out
     let alphaDecrement = 0.005
@@ -106,7 +106,10 @@ class GridTile: SKNode{
             }
         }
     }
-    
+    func restoreOutline(){
+        strokeActive = true
+        tile.strokeColor = UIColor(displayP3Red: 0.40, green: 0.40, blue: 0.40, alpha: 0 )
+    }
     func removeOutline(){
         strokeActive = false
         tile.strokeColor = UIColor(displayP3Red: 0.40, green: 0.40, blue: 0.40, alpha: 0 )
@@ -143,10 +146,6 @@ class GridTile: SKNode{
     func jiggle(){
         switchToGray()
         tile.zPosition += 5
-        let rotateSequence = [SKAction.rotate(byAngle: 0.2, duration: 0.3),
-                        SKAction.rotate(byAngle: -0.4, duration: 0.3),
-                        SKAction.rotate(byAngle: 0.2, duration: 0.3)]
-        
         let graySequence =
             [SKAction.run({
                 self.tile.alpha = 0;
@@ -164,6 +163,10 @@ class GridTile: SKNode{
     
     func firstTile(){
         self.state = .availableToTouch
+    }
+    
+    override func removeAllActions() {
+        tile.removeAllActions()
     }
     
     required init(coder aDecoder: NSCoder) {

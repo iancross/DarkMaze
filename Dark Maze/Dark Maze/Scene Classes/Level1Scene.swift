@@ -24,6 +24,8 @@ class Level1Scene: SKScene {
     let Level = LevelsData.shared.levelGroup[LevelsData.shared.selectedLevel.page].levels[LevelsData.shared.selectedLevel.level]
     var currentLevel = LevelsData.shared.selectedLevel.level
     var gridNode =  SKNode()
+    private var crack = SKSpriteNode()
+    private var crackingFrames: [SKTexture] = []
 
 
     let endArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
@@ -31,6 +33,7 @@ class Level1Scene: SKScene {
 
     
     override func didMove(to view: SKView) {
+        
         super.didMove(to: view)
         cam = SKCameraNode()
         self.camera = cam
@@ -101,7 +104,7 @@ class Level1Scene: SKScene {
                 let coord = (col,row)
                 let tile = GridTile(parentScene: self,
                                     coord: coord, width: blocksize, height: blocksize)
-                tile.position = CGPoint(x: botOfGridY + offsetX, y: leftOfGridX + offsetY)
+                tile.position = CGPoint(x: leftOfGridX + offsetX, y: botOfGridY + offsetY)
                 gridNode.addChild(tile)
                 tile2DArray[row].append(tile)
             }
@@ -130,7 +133,7 @@ class Level1Scene: SKScene {
                     self.drawGridLines()
                     //marking the first tile as available
                     self.beginGame()
-//                    self.gameActive = true
+                    self.gameActive = true
                     self.skipButton?.hide()
                 }
             }
@@ -143,7 +146,7 @@ class Level1Scene: SKScene {
         firstTile.firstTile()
         let numSolutionBlocks = Level.solutionCoords.count
         blockAlphaIncrement = (1.0 - blockAlphaMin) / CGFloat(numSolutionBlocks)
-        flipGrid()
+        modifyGrid()
     }
     
     func drawArrows(firstTile: GridTile){
@@ -198,7 +201,16 @@ class Level1Scene: SKScene {
         arrow.zRotation += rotation
         gridNode.addChild(arrow)
     }
-    
+    func modifyGrid(){
+        if let mods = Level.modifications{
+            for modification in mods{
+                switch modification {
+                case .flip:
+                    flipGrid()
+                }
+            }
+        }
+    }
     func flipGrid(){
         let sequence = SKAction.sequence(
             [SKAction.run { self.gameActive = false },
@@ -261,6 +273,7 @@ class Level1Scene: SKScene {
         for row in tile2DArray{
             for tile in row{
                 if tile.isTouched(point: point){
+                    tile.removeAllActions()
                     startArrow.removeAllActions()
 //                    print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
 //                    return //comment out to get grid coords for levels
@@ -357,22 +370,16 @@ class Level1Scene: SKScene {
         else{
             self.gameActive = false
             LevelsData.shared.currentLevelSuccess = false
-            lastTouchedTile?.switchToBlack()
-            lastTouchedTile?.strokeAppearing = false
-            lastTouchedTile?.zPosition += 5
-            let rotateSequence = SKAction.sequence(
-                [SKAction.rotate(byAngle: 0.4, duration: 0.1),
-                 SKAction.rotate(byAngle: -0.8, duration: 0.1),
-                 SKAction.rotate(byAngle: 0.4, duration: 0.1)])
-            lastTouchedTile!.tile.run(SKAction.repeatForever(rotateSequence))
-
+            //lastTouchedTile?.switchToBlack()
+            lastTouchedTile?.restoreOutline()
             let positionInScene = lastTouchedTile?.scene?.convert((lastTouchedTile?.position)!, from: (lastTouchedTile?.parent)!)
+            crackAnimation(point: positionInScene!)
 
-            let scale = (SKAction.scale(by: 0.005, duration: 1))
-            let move = (SKAction.move(to: positionInScene!, duration: 1))
-            cam?.run(SKAction.group([scale,move])){
-                self.endGame(success: false)
-            }
+//            let scale = (SKAction.scale(by: 0.5, duration: 1))
+//            let move = (SKAction.move(to: positionInScene!, duration: 1))
+//            cam?.run(SKAction.group([scale,move])){
+//                self.endGame(success: false)
+//            }
             return true
         }
         return false
@@ -402,6 +409,39 @@ class Level1Scene: SKScene {
         }
     }
     
+    func crackAnimation(point: CGPoint){
+        let crackingAtlas = SKTextureAtlas(named: "cracking")
+        var frames: [SKTexture] = []
+        
+        let numImages = crackingAtlas.textureNames.count-1
+        for i in 0...numImages{
+            let crackingTextureName = "sprite_\(i)"
+            frames.append(crackingAtlas.textureNamed(crackingTextureName))
+        }
+        crackingFrames = frames
+        let firstFrameTexture = crackingFrames[0]
+        crack = SKSpriteNode(texture: firstFrameTexture)
+        addChild(crack)
+        crack.position = point
+        crack.scale(to: CGSize(width: blocksize, height: blocksize))
+        crack.run(
+            SKAction.sequence(
+                [SKAction.animate(with: crackingFrames, timePerFrame: 2/Double(numImages), resize: false, restore: false),
+                 SKAction.wait(forDuration: 0.2),
+                 SKAction.run({
+                    self.gridNode.isHidden = false })
+                ]
+            )){
+                self.disappearGrid()
+            }
+    }
+    
+    func disappearGrid(){
+        gridNode.run(SKAction.fadeOut(withDuration: 0.7)){
+            self.endGame(success: false)
+        }
+    }
+    
     func reInitGame (){
         removeAllChildren()
         tile2DArray.removeAll()
@@ -410,6 +450,19 @@ class Level1Scene: SKScene {
         touchedTiles = 0
         initializeGrid()
         drawSolution()
+    }
+    
+    func crackAllTiles(){
+        for coord in Level.solutionCoords.reversed(){
+            let tile = tile2DArray[coord.y][coord.x]
+            switch tile.state {
+            case .touched:
+                let center = tile.scene?.convert((tile.position), from: tile.parent!)
+                crackAnimation(point: center!)
+            default:
+                break
+            }
+        }
     }
     
     /*checks an array of tuples for one in particular
