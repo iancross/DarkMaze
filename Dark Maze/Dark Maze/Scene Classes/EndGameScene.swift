@@ -53,33 +53,17 @@ class EndGameScene: SKScene {
     
     func handleTouchForEndGameMenu(_ point: CGPoint){
         if repeatOrNextButton!.within(point: point){
-            if repeatOrNextButton?.text == "Try Again"{
-                if let scene = SKScene(fileNamed: "Level1Scene") {
-                    scene.scaleMode = .aspectFill
-                    self.view?.presentScene(scene, transition: GameStyle.shared.sceneTransition)
-                }
-            }
-            else{
-                //here's where we would load the next level
+            if repeatOrNextButton?.text == "Next Level"{
                 LevelsData.shared.nextLevel()
-                if let scene = SKScene(fileNamed: "Level1Scene") {
-                    scene.scaleMode = .aspectFill
-                    self.view?.presentScene(scene, transition: GameStyle.shared.sceneTransition)
-                }
-
             }
+            Helper.switchScene(sceneName: "Level1Scene", gameDelegate: self.delegate as? GameDelegate, view: self.view!)
         }
         else if levelSelectButton!.within(point: point){
-            if let scene = SKScene(fileNamed: "LevelSelectScene") {
-                scene.scaleMode = .aspectFill
-                self.view?.presentScene(scene, transition: GameStyle.shared.sceneTransition)
-            }
+            Helper.switchScene(sceneName: "LevelSelectScene", gameDelegate: self.delegate as? GameDelegate, view: self.view!)
+
         }
         else if mainMenuButton!.within(point: point){
-            if let scene = SKScene(fileNamed: "MenuScene") {
-                scene.scaleMode = .aspectFill
-                self.view?.presentScene(scene, transition: GameStyle.shared.sceneTransition)
-            }
+            Helper.switchScene(sceneName: "MainMenuScene", gameDelegate: self.delegate as? GameDelegate, view: self.view!)
         }
     }
 }

@@ -64,7 +64,6 @@ class LevelsData{
         else{
             // do nothing
         }
-        print ("after \(selectedLevel)")
     }
     /*------------------------------- 4x4 -------------------------------*/
     //Description:

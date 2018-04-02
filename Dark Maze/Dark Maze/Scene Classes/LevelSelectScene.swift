@@ -25,6 +25,7 @@ class LevelSelectScene: SKScene {
     let menuBuffers: (x: CGFloat,y: CGFloat) = (20.0,20.0)
 
     override func didMove(to view: SKView) {
+        (self.delegate as? GameDelegate)?.gameOver()
         verticalSpacing = frame.height/CGFloat(numLevelsOnPage/numLevelsOnLine + 3)
         menuButton = TextBoxButton(x: 215, y: 125, text: "Main Menu", fontsize: GameStyle.shared.SmallTextBoxFontSize, buffers: menuBuffers, parentScene: self)
         currentPage = LevelsData.shared.selectedLevel.page
@@ -121,10 +122,7 @@ class LevelSelectScene: SKScene {
     
     func isMenuTouched(touch: CGPoint){
         if (menuButton?.within(point: touch))!{
-            if let scene = SKScene(fileNamed: "MenuScene") {
-                scene.scaleMode = .aspectFill
-                view?.presentScene(scene, transition: GameStyle.shared.sceneTransition)
-            }
+            Helper.switchScene(sceneName: "MenuScene", gameDelegate: self.delegate as? GameDelegate, view: view!)
         }
     }
     
@@ -144,15 +142,7 @@ class LevelSelectScene: SKScene {
                     
                     let loadScene = SKAction.run({
                         LevelsData.shared.selectedLevel = (page: self.currentPage, level: Int(button.text)! - 1)
-                        if let scene = SKScene(fileNamed: "Level1Scene") {
-                            for gesture in (self.view?.gestureRecognizers!)!{
-                                if let recognizer = gesture as? UISwipeGestureRecognizer {
-                                    self.view?.removeGestureRecognizer(recognizer)
-                                }
-                            }
-                            scene.scaleMode = .aspectFill
-                            self.view?.presentScene(scene, transition: GameStyle.shared.sceneTransition)
-                        }
+                        Helper.switchScene(sceneName: "Level1Scene", gameDelegate: self.delegate as? GameDelegate, view: self.view!)
                     })
                     button.outline.run(SKAction.sequence([embiggen,loadScene]))
                 }
@@ -177,11 +167,9 @@ class LevelSelectScene: SKScene {
     }
     
     func pageFlip(pageModifier: Int){
-        print (currentPage)
         let t = currentPage + pageModifier
         if t < LevelsData.shared.levelGroup.count && t >= 0{
             currentPage += pageModifier
-            print(currentPage)
             removeLevelButtons()
             removeOrKeepArrows()
             removeCategories()

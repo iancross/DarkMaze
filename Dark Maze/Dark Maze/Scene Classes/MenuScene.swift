@@ -9,14 +9,10 @@
 import SpriteKit
 import GameplayKit
 
-protocol TestDelegate {
-    func gameOver()
-    func levelSelect()
-}
 
 class MenuScene: SKScene {
-    var darkMaze = SKLabelNode()
-    var tapToBegin = SKLabelNode()
+    var darkMaze: SKLabelNode?
+    var tapToBegin: SKLabelNode?
     
     var blockPoints = [CGPoint]()
     var tileLoop = 20
@@ -24,16 +20,28 @@ class MenuScene: SKScene {
     var blocksize: CGFloat = 100
     
     override func didMove(to view: SKView) {
-        darkMaze = self.childNode(withName: "DarkMaze") as! SKLabelNode
-        tapToBegin = self.childNode(withName: "TapToBegin") as! SKLabelNode
-
+        initDarkMazeLabel()
         let actionList = SKAction.sequence(
             [SKAction.fadeIn(withDuration: 2.0),
             SKAction.fadeOut(withDuration: 2.0)]
         )
-        darkMaze.run(SKAction.repeatForever(actionList))
-        tapToBegin.run(SKAction.repeatForever(actionList))
+        darkMaze?.run(SKAction.repeatForever(actionList))
+        tapToBegin?.run(SKAction.repeatForever(actionList))
         createNewStartPoint()
+    }
+    
+    func initDarkMazeLabel(){
+        darkMaze = SKLabelNode(text: "Dark Maze")
+        darkMaze!.position = CGPoint(x: frame.midX, y: frame.midY)
+        darkMaze!.fontName = GameStyle.shared.mainFontString
+        darkMaze!.fontSize = GameStyle.shared.TextBoxFontSize
+        addChild(darkMaze!)
+        
+        tapToBegin = SKLabelNode(text: "Tap to begin")
+        tapToBegin!.position = CGPoint(x: frame.midX, y: frame.midY - 100)
+        tapToBegin!.fontName = GameStyle.shared.mainFontString
+        tapToBegin!.fontSize = GameStyle.shared.SmallTextBoxFontSize
+        addChild(tapToBegin!)
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -41,7 +49,6 @@ class MenuScene: SKScene {
             tileLoop += 1
         }
         else{
-            print (self.children,"\n" )
             let prevBlock = blockPoints.first
             blockPoints.remove(at: 0)
             var newPoint = blockRandomPoint(prevPoint: blockPoints.first!)
@@ -63,10 +70,8 @@ class MenuScene: SKScene {
         }
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let scene = SKScene(fileNamed: "LevelSelectScene") {
-            scene.scaleMode = .aspectFill
-            view?.presentScene(scene, transition: GameStyle.shared.sceneTransition)
-        }
+        Helper.switchScene(sceneName: "LevelSelectScene", gameDelegate: self.delegate as? GameDelegate, view: self.view!)
+
     }
     func createNewStartPoint(){
         let newX = arc4random_uniform(UInt32(self.frame.width))
@@ -74,8 +79,8 @@ class MenuScene: SKScene {
         let startingPoint = CGPoint(x: CGFloat(newX), y: CGFloat(newY))
         currentTile = GridTile(parentScene: self, coord: (0,0), width: 50.0, height: 50.0)
         currentTile?.position = startingPoint
-        blockPoints.append(CGPoint(x: (currentTile?.tile.frame.midX)!, y: (currentTile?.tile.frame.midY)!)) //first is the prev
-        blockPoints.append(CGPoint(x: (currentTile?.tile.frame.midX)!, y: (currentTile?.tile.frame.midY)!)) //second is the current
+        blockPoints.append(CGPoint(x: (currentTile?.frame.midX)!, y: (currentTile?.frame.midY)!)) //first is the prev
+        blockPoints.append(CGPoint(x: (currentTile?.frame.midX)!, y: (currentTile?.frame.midY)!)) //second is the current
     }
     
     func blockRandomPoint(prevPoint: CGPoint) -> (CGPoint){

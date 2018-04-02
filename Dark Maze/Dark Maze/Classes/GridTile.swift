@@ -63,7 +63,6 @@ class GridTile: SKNode{
     
     func isTouched(point: CGPoint) -> Bool{
         if self.contains(point) {
-            print ("weee")
             return true
         }
         else {
@@ -174,7 +173,6 @@ class GridTile: SKNode{
     }
     
     deinit{
-        print ("print being removed")
         tile.removeFromParent()
         self.removeAllChildren()
         self.removeFromParent()

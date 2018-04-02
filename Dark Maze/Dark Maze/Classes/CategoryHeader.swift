@@ -53,7 +53,6 @@ class CategoryHeader: SKNode{
     }
     
     deinit{
-        print ("deinit")
         removeAllChildren()
     }
 }

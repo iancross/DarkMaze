@@ -27,14 +27,10 @@ class Level1Scene: SKScene {
     var gridNode =  SKNode()
     private var crack = SKSpriteNode()
     private var crackingFrames: [SKTexture] = []
-
-
     let endArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
     let startArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
-
     
     override func didMove(to view: SKView) {
-        
         super.didMove(to: view)
         cam = SKCameraNode()
         self.camera = cam
@@ -136,6 +132,7 @@ class Level1Scene: SKScene {
                     self.beginGame()
                     self.gameActive = true
                     self.skipButton?.hide()
+                    (self.delegate as? GameDelegate)?.gameOver()
                 }
             }
         }
@@ -166,8 +163,6 @@ class Level1Scene: SKScene {
         let endTile = self.tile2DArray[(Level.solutionCoords.last?.y)!][(Level.solutionCoords.last?.x)!]
         placeArrow(tile: firstTile, arrow: startArrow, orient: -1)
         placeArrow(tile: endTile, arrow: endArrow, orient: 1)
-        print(startArrow.zPosition)
-        print (endArrow.zPosition)
         startArrowSequence(tile: firstTile)
     }
     
@@ -274,7 +269,6 @@ class Level1Scene: SKScene {
         }
     }
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print ("touches moved")
         let point = touches.first
         let positionInScene = point?.location(in: gridNode)
         if gameActive {
@@ -313,10 +307,7 @@ class Level1Scene: SKScene {
     }
     
     private func switchToEndGameScene(){
-        if let scene = SKScene(fileNamed: "EndGameScene") {
-            scene.scaleMode = .aspectFill
-            view?.presentScene(scene, transition: GameStyle.shared.sceneTransition)
-        }
+        Helper.switchScene(sceneName: "EndGameScene", gameDelegate: self.delegate as? GameDelegate, view: self.view!)
     }
 
     
@@ -387,12 +378,6 @@ class Level1Scene: SKScene {
             lastTouchedTile?.restoreOutline()
             let positionInScene = lastTouchedTile?.scene?.convert((lastTouchedTile?.position)!, from: (lastTouchedTile?.parent)!)
             crackAnimation(point: positionInScene!)
-
-//            let scale = (SKAction.scale(by: 0.5, duration: 1))
-//            let move = (SKAction.move(to: positionInScene!, duration: 1))
-//            cam?.run(SKAction.group([scale,move])){
-//                self.endGame(success: false)
-//            }
             return true
         }
         return false
@@ -425,7 +410,6 @@ class Level1Scene: SKScene {
     func crackAnimation(point: CGPoint){
         let crackingAtlas = SKTextureAtlas(named: "cracking")
         var frames: [SKTexture] = []
-        
         let numImages = crackingAtlas.textureNames.count-1
         for i in 0...numImages{
             let crackingTextureName = "sprite_\(i)"
