@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2417D41420746C7C001A478D /* CategorySelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2417D41320746C7C001A478D /* CategorySelectViewController.swift */; };
 		C30DB1C82015678E00CE670C /* EndGameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C30DB1C72015678E00CE670C /* EndGameScene.sks */; };
 		C30DB1CA2015684900CE670C /* EndGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30DB1C92015684900CE670C /* EndGameScene.swift */; };
 		C30DB1CC20156C0300CE670C /* GameStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30DB1CB20156C0300CE670C /* GameStyles.swift */; };
@@ -37,6 +38,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2417D41320746C7C001A478D /* CategorySelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySelectViewController.swift; sourceTree = "<group>"; };
 		C30DB1C72015678E00CE670C /* EndGameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = EndGameScene.sks; sourceTree = "<group>"; };
 		C30DB1C92015684900CE670C /* EndGameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndGameScene.swift; sourceTree = "<group>"; };
 		C30DB1CB20156C0300CE670C /* GameStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStyles.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 			children = (
 				C3EF4A1D1FD7749000528247 /* Main.storyboard */,
 				C3EF4A1B1FD7749000528247 /* GameViewController.swift */,
+				2417D41320746C7C001A478D /* CategorySelectViewController.swift */,
 				C34AA0C8207044F600DB2229 /* Protocols */,
 				C364CEC21FE74FD6009140C7 /* Scene Classes */,
 				C364CEC11FE74FB4009140C7 /* Scenes */,
@@ -272,6 +275,7 @@
 				C37B707E1FE9D94D00F71B73 /* GridTile.swift in Sources */,
 				C3EF4A1A1FD7749000528247 /* MenuScene.swift in Sources */,
 				C3EF4A1C1FD7749000528247 /* GameViewController.swift in Sources */,
+				2417D41420746C7C001A478D /* CategorySelectViewController.swift in Sources */,
 				C3EF4A141FD7749000528247 /* AppDelegate.swift in Sources */,
 				C3962A332057508F002C0AF9 /* TapToBeginScene.swift in Sources */,
 				C364CEC01FE74F98009140C7 /* Level1Scene.swift in Sources */,

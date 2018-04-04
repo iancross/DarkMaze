@@ -25,13 +25,11 @@ class GameViewController: UIViewController, GameDelegate {
                 scene.delegate = self as GameDelegate
                 view.presentScene(scene)
             }
-            
 
             view.ignoresSiblingOrder = true
             view.showsFPS = true
             view.showsNodeCount = true
         }
-
     }
 
     override var shouldAutorotate: Bool {
