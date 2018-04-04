@@ -11,9 +11,11 @@ import SpriteKit
 
 class Helper{
     static func switchScene(sceneName: String, gameDelegate: GameDelegate?, view: SKView){
-        for gesture in view.gestureRecognizers!{
-            if let recognizer = gesture as? UISwipeGestureRecognizer {
-                view.removeGestureRecognizer(recognizer)
+        if let gestures = view.gestureRecognizers{
+            for gesture in gestures{
+                if let recognizer = gesture as? UISwipeGestureRecognizer {
+                    view.removeGestureRecognizer(recognizer)
+                }
             }
         }
         if let scene = SKScene(fileNamed: sceneName) {

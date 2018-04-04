@@ -3,7 +3,8 @@
 //  Dark Maze
 //
 //  Created by crossibc on 12/5/17.
-//  Copyright © 2017 crossibc. All rights reserved.
+//  Copyright © 2017 crossibc. All rights reserved
+//testing git
 //
 
 import UIKit
@@ -24,13 +25,11 @@ class GameViewController: UIViewController, GameDelegate {
                 scene.delegate = self as GameDelegate
                 view.presentScene(scene)
             }
-            
 
             view.ignoresSiblingOrder = true
             view.showsFPS = true
             view.showsNodeCount = true
         }
-
     }
 
     override var shouldAutorotate: Bool {
