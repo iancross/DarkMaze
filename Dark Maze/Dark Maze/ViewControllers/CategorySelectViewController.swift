@@ -60,13 +60,22 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Load the SKScene from 'GameScene.sks'
-        self.performSegue(withIdentifier: "backToGame", sender: nil)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if (segue.identifier == "backToGame") {
-            let receiver = segue.destination as? GameViewController
-            receiver?.sceneString = "Level1Scene"
+        //self.performSegue(withIdentifier: "backToGame", sender: nil)
+        var storyboard = UIStoryboard(name: "Main", bundle: nil)
+        var ivc = storyboard.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
+        ivc.sceneString = "Level1Scene"
+        
+        UIView.animate(withDuration: 0.7, animations: {self.view.alpha = 0}){
+            (completed) in
+            ivc.modalTransitionStyle = .crossDissolve
+            self.present(ivc, animated: false, completion: nil)
         }
     }
+    
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if (segue.identifier == "backToGame") {
+//            let receiver = segue.destination as? GameViewController
+//            receiver?.sceneString = "Level1Scene"
+//        }
+//    }
 }

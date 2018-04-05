@@ -66,10 +66,10 @@ class GameViewController: UIViewController, GameDelegate {
         }
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 //        if (segue.identifier == "goToLevelSelect") {
 //            _ = segue.destination as? CategorySelectViewController
 //        }
-    }
+//    }
 
 }

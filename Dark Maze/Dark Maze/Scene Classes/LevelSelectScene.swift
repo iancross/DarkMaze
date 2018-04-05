@@ -25,7 +25,6 @@ class LevelSelectScene: SKScene {
     let menuBuffers: (x: CGFloat,y: CGFloat) = (20.0,20.0)
 
     override func didMove(to view: SKView) {
-        (self.delegate as? GameDelegate)?.gameOver()
         verticalSpacing = frame.height/CGFloat(numLevelsOnPage/numLevelsOnLine + 3)
         menuButton = TextBoxButton(x: 215, y: 125, text: "Main Menu", fontsize: GameStyle.shared.SmallTextBoxFontSize, buffers: menuBuffers, parentScene: self)
         currentPage = LevelsData.shared.selectedLevel.page

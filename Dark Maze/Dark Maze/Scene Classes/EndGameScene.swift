@@ -59,8 +59,8 @@ class EndGameScene: SKScene {
             Helper.switchScene(sceneName: "Level1Scene", gameDelegate: self.delegate as? GameDelegate, view: self.view!)
         }
         else if levelSelectButton!.within(point: point){
-            Helper.switchScene(sceneName: "LevelSelectScene", gameDelegate: self.delegate as? GameDelegate, view: self.view!)
-
+            //Helper.switchScene(sceneName: "LevelSelectScene", gameDelegate: self.delegate as? GameDelegate, view: self.view!)
+            (self.delegate as? GameDelegate)?.switchToViewController()
         }
         else if mainMenuButton!.within(point: point){
             Helper.switchScene(sceneName: "MenuScene", gameDelegate: self.delegate as? GameDelegate, view: self.view!)
