@@ -17,6 +17,7 @@ class EndGameScene: SKScene {
     //first open the option modal
     //then direct the user based on selection
     //Main menu, level select, or next level?
+    
     override func sceneDidLoad() {
         self.isUserInteractionEnabled = true
         
@@ -41,7 +42,6 @@ class EndGameScene: SKScene {
         repeatOrNextButton = TextBoxButton(x: frame.midX, y: frame.midY + frame.midY/4, text: variableText,fontsize:font, buffers: buffers, parentScene: self)
         levelSelectButton = TextBoxButton(x: frame.midX, y: frame.midY, text: "Level Select", fontsize:font, buffers: buffers, parentScene: self)
         mainMenuButton = TextBoxButton(x: frame.midX, y: frame.midY - frame.midY/4, text: "Main Menu", fontsize:font, buffers: buffers, parentScene: self)
-        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -63,7 +63,7 @@ class EndGameScene: SKScene {
 
         }
         else if mainMenuButton!.within(point: point){
-            Helper.switchScene(sceneName: "MainMenuScene", gameDelegate: self.delegate as? GameDelegate, view: self.view!)
+            Helper.switchScene(sceneName: "MenuScene", gameDelegate: self.delegate as? GameDelegate, view: self.view!)
         }
     }
 }

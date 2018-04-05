@@ -42,7 +42,7 @@ class LevelSelectScene: SKScene {
     }
     
     func initializePageButtons(){
-        let group = LevelsData.shared.levelGroup[currentPage]
+        let group = LevelsData.shared.levelGroups[currentPage]
         let nextLevelToComplete = nextLevel(page: group)
         addCategoryLabel(group.category, frame.midX, topRowHeight - verticalSpacing*2/5)
         for i in 0...numLevelsOnPage/numLevelsOnLine-1{
@@ -127,7 +127,7 @@ class LevelSelectScene: SKScene {
     }
     
     func isLevelTouched(touch: CGPoint){
-        let group = LevelsData.shared.levelGroup[currentPage]
+        let group = LevelsData.shared.levelGroups[currentPage]
         let nextLevelToComplete = nextLevel(page: group)
         for button in levels{
             if button.within(point: touch){
@@ -168,7 +168,7 @@ class LevelSelectScene: SKScene {
     
     func pageFlip(pageModifier: Int){
         let t = currentPage + pageModifier
-        if t < LevelsData.shared.levelGroup.count && t >= 0{
+        if t < LevelsData.shared.levelGroups.count && t >= 0{
             currentPage += pageModifier
             removeLevelButtons()
             removeOrKeepArrows()
@@ -197,7 +197,7 @@ class LevelSelectScene: SKScene {
             leftArrow.isHidden = true
         }
         
-        if currentPage < LevelsData.shared.levelGroup.count - 1 {
+        if currentPage < LevelsData.shared.levelGroups.count - 1 {
             rightArrow.isHidden = false
         }
         else{

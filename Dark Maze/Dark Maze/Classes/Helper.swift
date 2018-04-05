@@ -20,8 +20,28 @@ class Helper{
         }
         if let scene = SKScene(fileNamed: sceneName) {
             scene.scaleMode = .aspectFill
-            scene.delegate = gameDelegate as? SKSceneDelegate
-            view.presentScene(scene, transition: GameStyle.shared.sceneTransition)
+            scene.delegate = gameDelegate!
+            view.presentScene(scene)//, transition: GameStyle.shared.sceneTransition)
         }
     }
+    
+    //creates a label with the normal font, color, alignment
+    //must pass in the fontsize and the actual text to be displayed
+    static func createGenericLabel(_ label: String, fontsize: CGFloat) -> SKLabelNode{
+        let labelNode = SKLabelNode(fontNamed: GameStyle.shared.mainFontString)
+        labelNode.fontSize = fontsize
+        labelNode.text = label
+        labelNode.fontColor = .white
+        labelNode.verticalAlignmentMode = .center
+        
+        return labelNode
+    }
 }
+
+/* use to draw a circle at a location
+ 
+ var Circle = SKShapeNode(circleOfRadius: 10 )
+ Circle.fillColor = SKColor.orange
+ scene.addChild(Circle)
+ 
+ */

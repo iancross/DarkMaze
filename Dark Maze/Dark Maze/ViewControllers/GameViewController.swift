@@ -12,19 +12,15 @@ import SpriteKit
 import GameplayKit
 
 class GameViewController: UIViewController, GameDelegate {
+    var sceneString = "MenuScene"
 
     override func viewDidLoad() {
+        self.view.backgroundColor = UIColor.black
         super.viewDidLoad()
+        //let scene = SKScene(size: (view?.frame.size)!)
         if let view = self.view as! SKView? {
-            // Load the SKScene from 'GameScene.sks'
-            if let scene = SKScene(fileNamed: "MenuScene") {
-                // Set the scale mode to scale to fit the window
-                scene.scaleMode = .aspectFill
-                // Present the scene
-                scene.delegate = self
-                view.presentScene(scene)
-            }
-        
+            //view.presentScene(scene)
+            Helper.switchScene(sceneName: sceneString, gameDelegate: self, view: view)
 
             view.ignoresSiblingOrder = true
             view.showsFPS = true
@@ -56,18 +52,24 @@ class GameViewController: UIViewController, GameDelegate {
     //GameDelegate requirements
     func gameOver() {
         print ("DELEGATION WOOO")
+        Helper.switchScene(sceneName: "EndGameScene", gameDelegate: self, view: view as! SKView)
     }
     
     func switchToViewController(){
-        self.performSegue(withIdentifier: "goToLevelSelect", sender: nil)
+        //self.performSegue(withIdentifier: "goToLevelSelect", sender: nil)
+        var storyboard = UIStoryboard(name: "Main", bundle: nil)
+        var ivc = storyboard.instantiateViewController(withIdentifier: "CategorySelectView")
+        UIView.animate(withDuration: 0.7, animations: {self.view.alpha = 0}){
+            (completed) in
+            ivc.modalTransitionStyle = .crossDissolve
+            self.present(ivc, animated: false, completion: nil)
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if (segue.identifier == "goToLevelSelect") {
-            _ = segue.destination as? CategorySelectViewController
-//            let duration = sender as? Double
-//            secondViewController?.testReceivedVar = duration
-        }
+//        if (segue.identifier == "goToLevelSelect") {
+//            _ = segue.destination as? CategorySelectViewController
+//        }
     }
 
 }

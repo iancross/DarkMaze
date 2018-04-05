@@ -20,6 +20,6 @@ class GameStyle {
     let sceneTransition = SKTransition.fade(with: UIColor.black, duration: 0.8)
 
     private init() {
-        
+        sceneTransition.pausesOutgoingScene = true
     }
 }

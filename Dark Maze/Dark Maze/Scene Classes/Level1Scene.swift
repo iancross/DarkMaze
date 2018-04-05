@@ -21,7 +21,7 @@ class Level1Scene: SKScene {
     var cam: SKCameraNode?
     var blockAlphaIncrement: CGFloat = 0
     var blockAlphaMin: CGFloat = 0.35
-    let Level = LevelsData.shared.levelGroup[LevelsData.shared.selectedLevel.page].levels[LevelsData.shared.selectedLevel.level]
+    let Level = LevelsData.shared.levelGroups[LevelsData.shared.selectedLevel.page].levels[LevelsData.shared.selectedLevel.level]
     var currentLevel = LevelsData.shared.selectedLevel.level
     let currentPage = LevelsData.shared.selectedLevel.page
     var gridNode =  SKNode()
@@ -132,7 +132,6 @@ class Level1Scene: SKScene {
                     self.beginGame()
                     self.gameActive = true
                     self.skipButton?.hide()
-                    (self.delegate as? GameDelegate)?.gameOver()
                 }
             }
         }
@@ -150,8 +149,8 @@ class Level1Scene: SKScene {
     
     func insertLevelTitle(){
         let progress = LevelsData.shared.selectedLevel.level + 1
-        let outOfTotal = LevelsData.shared.levelGroup[currentPage].levels.count
-        let category = LevelsData.shared.levelGroup[currentPage].category
+        let outOfTotal = LevelsData.shared.levelGroups[currentPage].levels.count
+        let category = LevelsData.shared.levelGroups[currentPage].category
         let title = "\(category) \(progress)/\(outOfTotal)"
         
         let categoryNode = CategoryHeader(string: title)
@@ -298,7 +297,7 @@ class Level1Scene: SKScene {
     func endGame (success: Bool){
         _ = LevelsData.shared
         if success{
-            LevelsData.shared.levelGroup[LevelsData.shared.selectedLevel.page].levels[LevelsData.shared.selectedLevel.level].levelCompleted = true
+            LevelsData.shared.levelGroups[LevelsData.shared.selectedLevel.page].levels[LevelsData.shared.selectedLevel.level].levelCompleted = true
         }
         for child in self.children {
             child.removeFromParent()
@@ -307,7 +306,8 @@ class Level1Scene: SKScene {
     }
     
     private func switchToEndGameScene(){
-        Helper.switchScene(sceneName: "EndGameScene", gameDelegate: self.delegate as? GameDelegate, view: self.view!)
+        Helper.switchScene(sceneName: "EndGameScene", gameDelegate: self.delegate as? GameDelegate, view: self.view! as SKView)
+        //(self.delegate as? GameDelegate)?.gameOver()
     }
 
     
@@ -398,6 +398,7 @@ class Level1Scene: SKScene {
             ])
             if i == Level.solutionCoords.count - 1 {
                 tile.tile.run(SKAction.sequence([sequence,SKAction.wait(forDuration: 1.0)])){
+                    print ("fuck")
                     self.endGame(success: true)
                 }
             }

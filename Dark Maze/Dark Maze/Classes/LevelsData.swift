@@ -32,7 +32,7 @@ class LevelsData{
     var currentLevelSuccess: Bool
     var currentPage: Int  //page that contains the next level to be completed
     var selectedLevel: (page: Int, level: Int)
-    var levelGroup = [(category: String, levels: [LevelData])]()
+    var levelGroups = [(category: String, levels: [LevelData])]()
     init(){
         
         currentLevelSuccess = false
@@ -41,7 +41,7 @@ class LevelsData{
         selectedLevel = (page: 0, level: 0)
         currentPage = 0
         
-        //levelGroup = [(category: String, levels: [LevelData])]()
+        //levelGroups = [(category: String, levels: [LevelData])]()
         _4x4()
         _5x5()
         _6x10Flip()
@@ -53,10 +53,10 @@ class LevelsData{
     
     func nextLevel(){
         currentPage = selectedLevel.page
-        if selectedLevel.level < levelGroup[currentPage].levels.count - 1{
+        if selectedLevel.level < levelGroups[currentPage].levels.count - 1{
             selectedLevel.level += 1
         }
-        else if currentPage < levelGroup.count - 1 {
+        else if currentPage < levelGroups.count - 1 {
             currentPage += 1
             selectedLevel.level = 0
             selectedLevel.page = currentPage
@@ -107,7 +107,7 @@ class LevelsData{
             [(3,3),(3,2),(2,2),(2,1),(2,0),(1,0),(0,0),(0,1),(0,2)],
             levelCompleted: false, modifications: nil
         )]
-        levelGroup.append ((category: "4x4", array))
+        levelGroups.append ((category: "4x4", array))
     }
     func _5x5(){
         let array = [LevelData(
@@ -136,7 +136,7 @@ class LevelsData{
             [(4,4),(3,4),(2,4),(1,4),(0,4),(0,3),(0,2),(0,1),(0,0),(1,0),(2,0),(3,0),(4,0)],
             levelCompleted: false, modifications: nil
         )]
-        levelGroup.append((category:"5x5",levels: array))
+        levelGroups.append((category:"5x5",levels: array))
     }
     func _6x10Flip(){
         let array = [LevelData(
@@ -145,7 +145,7 @@ class LevelsData{
             [(0,7),(1,7),(1,8),(1,9),(2,9),(3,9),(3,8),(4,8),(4,7),(4,6),(5,6),(5,5),(5,4),(4,4),(3,4),(2,4),(1,4),(1,3),(2,3),(2,2),(3,2),(4,2),(4,1),(5,1)],
             levelCompleted: false, modifications: [.flip]
         )]
-        levelGroup.append ((category: "fucking hard", array))
+        levelGroups.append ((category: "fucking hard", array))
     }
 }
 

@@ -71,8 +71,8 @@ class MenuScene: SKScene {
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         //Helper.switchScene(sceneName: "LevelSelectScene", gameDelegate: self.delegate as? GameDelegate, view: self.view!)
-        print("touched")
         (self.delegate as? GameDelegate)?.switchToViewController()
+        //view?.presentScene(nil)
     }
     func createNewStartPoint(){
         let newX = arc4random_uniform(UInt32(self.frame.width))

@@ -20,6 +20,3 @@ protocol GameDelegate: SKSceneDelegate {
     func switchToViewController()
 }
 
-protocol CategorySelectDelegate {
-    func testPrint()
-}
