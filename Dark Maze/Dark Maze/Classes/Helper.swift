@@ -20,7 +20,7 @@ class Helper{
         }
         if let scene = SKScene(fileNamed: sceneName) {
             scene.scaleMode = .aspectFill
-            scene.delegate = gameDelegate
+            scene.delegate = gameDelegate as? SKSceneDelegate
             view.presentScene(scene, transition: GameStyle.shared.sceneTransition)
         }
     }

@@ -17,4 +17,9 @@ import Foundation
 
 protocol GameDelegate: SKSceneDelegate {
     func gameOver()
+    func switchToViewController()
+}
+
+protocol CategorySelectDelegate {
+    func testPrint()
 }

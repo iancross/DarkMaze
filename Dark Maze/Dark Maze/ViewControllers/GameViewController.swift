@@ -15,16 +15,16 @@ class GameViewController: UIViewController, GameDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         if let view = self.view as! SKView? {
             // Load the SKScene from 'GameScene.sks'
             if let scene = SKScene(fileNamed: "MenuScene") {
                 // Set the scale mode to scale to fit the window
                 scene.scaleMode = .aspectFill
                 // Present the scene
-                scene.delegate = self as GameDelegate
+                scene.delegate = self
                 view.presentScene(scene)
             }
+        
 
             view.ignoresSiblingOrder = true
             view.showsFPS = true
@@ -57,4 +57,17 @@ class GameViewController: UIViewController, GameDelegate {
     func gameOver() {
         print ("DELEGATION WOOO")
     }
+    
+    func switchToViewController(){
+        self.performSegue(withIdentifier: "goToLevelSelect", sender: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "goToLevelSelect") {
+            _ = segue.destination as? CategorySelectViewController
+//            let duration = sender as? Double
+//            secondViewController?.testReceivedVar = duration
+        }
+    }
+
 }
