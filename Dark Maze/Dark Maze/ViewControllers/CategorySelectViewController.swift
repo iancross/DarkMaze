@@ -40,24 +40,21 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as! CustomTableViewCell
         //cell.backgroundColor = colors[indexPath.row]
         cell.backgroundColor = UIColor.black
+        tableView.deselectRow(at: indexPath, animated: true)
         return cell
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         customTableView.customizeCell(cell: cell)
         (cell as! CustomTableViewCell).initializeView()
+        
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Load the SKScene from 'GameScene.sks'
         /*self.performSegue(withIdentifier: "backToGame", sender: "MainMenu")*/
-        
-        let scene = (tableView.cellForRow(at: indexPath) as! CustomTableViewCell).drawing.scene!
-        print (scene.isHidden)
-        for child in scene.children{
-            print (child.position)
-            print (child.frame.minX)
-            print (child.isHidden)
-        }
+
+        tableView.deselectRow(at: indexPath, animated: true)
+
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

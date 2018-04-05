@@ -25,11 +25,11 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     func initializeView(){
-        drawing.backgroundColor = UIColor.purple
         let scene = SKScene(size: drawing.frame.size)
         var Circle = SKShapeNode(circleOfRadius: 10 )
         Circle.fillColor = SKColor.orange
         scene.addChild(Circle)
+        scene.backgroundColor = UIColor.black
         drawing.presentScene(scene)
     }
 
