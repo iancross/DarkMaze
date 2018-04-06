@@ -8,10 +8,13 @@
 
 import UIKit
 import SpriteKit
-class CategorySelectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class CategorySelectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate {
     var testReceivedVar: Double?
     let levelGroups = LevelsData.shared.levelGroups
     let defaultHeight = 50.0 as CGFloat
+    var selectedRowIndex: Int = -1
+    var indexToNotAnimate = -1
+
     //MARK: Variables
     
     //MARK: Outlets
@@ -20,7 +23,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     
     override func viewDidLoad() {
         self.customTableView.rowHeight = defaultHeight;
-        //addTopBorderLine()
+        addTopBorderLine()
         super.viewDidLoad()
     }
     private func addTopBorderLine(){
@@ -40,29 +43,62 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         return 1
     }
     
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        print(indexPath.row)
+        (cell as! CustomTableViewCell).willAnimate = true
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row == selectedRowIndex {
+            return 140
+        }
+        return 44
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return levelGroups.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as! CustomTableViewCell
-        cell.backgroundColor = UIColor.black
         return cell
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        //tableView.beginUpdates()
         if let cell = cell as? CustomTableViewCell{
-            cell.customizeCell()
             let cellCategory = levelGroups[indexPath.row].category
             cell.initializeView(category: cellCategory)
+            if indexPath.row != indexToNotAnimate{
+                cell.customizeCell()
+            }
+            else{
+                indexToNotAnimate = -1
+            }
         }
     }
     
+//    func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
+//        print("deselected")
+//        //indexToNotAnimate = -1
+//    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // Load the SKScene from 'GameScene.sks'
-        //self.performSegue(withIdentifier: "backToGame", sender: nil)
-        var storyboard = UIStoryboard(name: "Main", bundle: nil)
-        var ivc = storyboard.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
+        if selectedRowIndex == indexPath.row {
+            selectedRowIndex = -1
+            tableView.cellForRow(at: indexPath)?.isSelected = false
+        } else {
+            selectedRowIndex = indexPath.row
+            tableView.cellForRow(at: indexPath)?.isSelected = true
+        }
+        indexToNotAnimate = indexPath.row
+        tableView.reloadRows(at: [indexPath], with: .none)
+        (tableView.cellForRow(at: indexPath) as! CustomTableViewCell).willAnimate = false
+    }
+    
+    private func switchToGame(){
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let ivc = storyboard.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
         ivc.sceneString = "Level1Scene"
         
         UIView.animate(withDuration: 0.7, animations: {self.view.alpha = 0}){
@@ -71,11 +107,6 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             self.present(ivc, animated: false, completion: nil)
         }
     }
+
     
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if (segue.identifier == "backToGame") {
-//            let receiver = segue.destination as? GameViewController
-//            receiver?.sceneString = "Level1Scene"
-//        }
-//    }
 }

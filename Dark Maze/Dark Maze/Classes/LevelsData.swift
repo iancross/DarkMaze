@@ -45,6 +45,9 @@ class LevelsData{
         _4x4()
         _5x5()
         _6x10Flip()
+        for i in 1...20{
+           _5x5()
+        }
     }
     
 //    init (modifications: [GridModification]?){

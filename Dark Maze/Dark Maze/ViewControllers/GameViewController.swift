@@ -57,8 +57,8 @@ class GameViewController: UIViewController, GameDelegate {
     
     func switchToViewController(){
         //self.performSegue(withIdentifier: "goToLevelSelect", sender: nil)
-        var storyboard = UIStoryboard(name: "Main", bundle: nil)
-        var ivc = storyboard.instantiateViewController(withIdentifier: "CategorySelectView")
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let ivc = storyboard.instantiateViewController(withIdentifier: "CategorySelectView")
         UIView.animate(withDuration: 0.7, animations: {self.view.alpha = 0}){
             (completed) in
             ivc.modalTransitionStyle = .crossDissolve

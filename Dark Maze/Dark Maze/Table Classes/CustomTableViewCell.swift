@@ -14,8 +14,10 @@ protocol test{
 }
 class CustomTableViewCell: UITableViewCell {
     let boarderBuffer: CGFloat = 10.0
-
+    var willAnimate = true
     var drawing: SKView?
+    var button: UIButton?
+
     override func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -28,13 +30,32 @@ class CustomTableViewCell: UITableViewCell {
     func initializeView(category: String){
         setupScene()
         addCategoryLabel(category: category)
-     }
+        button = UIButton(frame: CGRect(origin: CGPoint(x:0,y:0), size: frame.size))
+        button?.backgroundColor = UIColor.clear
+        button?.setTitle("", for: .normal)
+        button?.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+        self.addSubview(button!)
+        button?.bringSubview(toFront: self)
+    }
+    
+    @objc func buttonAction(sender: AnyObject, event: UIEvent) {
+        let buttonView = sender as! UIView;
+        
+        // get any touch on the buttonView
+        if let touch = event.touches(for: buttonView)?.first as? UITouch {
+            // print the touch location on the button
+            print(touch.location(in: buttonView))
+        }
+        
+//        print("Button tapped")
+//        button?.isEnabled = false
+    }
     
     private func setupScene(){
         drawing = SKView(frame: CGRect(origin: CGPoint(x:0,y:0), size: frame.size))
         self.addSubview(drawing!)
         let scene = SKScene(size: (drawing?.frame.size)!)
-        scene.backgroundColor = UIColor.black
+        scene.backgroundColor = UIColor.blue
         drawing?.presentScene(scene)
     }
     
@@ -47,9 +68,12 @@ class CustomTableViewCell: UITableViewCell {
             label.position = CGPoint(x: boarderBuffer, y: scene.frame.maxY - boarderBuffer)
         }
     }
+    
+    func expand(){
+    }
+    
     public func customizeCell() {
         let cell = self
-        cell.backgroundColor = UIColor.black
         
         var rotate: CATransform3D
         let value = CGFloat((90.0 * Double.pi) / 180.0)
@@ -71,7 +95,9 @@ class CustomTableViewCell: UITableViewCell {
         UIView.setAnimationDuration(0.8)
         cell.layer.transform = CATransform3DIdentity
         cell.alpha = 1
-        cell.layer.shadowOffset = CGSize(width:0,height: 0)
+        cell.layer.shadowOffset =  CGSize(width:0,height: 0)
         UIView.commitAnimations()
     }
+    
+    
 }
