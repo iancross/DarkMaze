@@ -69,6 +69,7 @@ class LevelsData{
         }
     }
     
+    //returns the highest completed level
     func getCategoryProgress(groupIndex: Int) -> Int{
         var count = 0
         for l in levelGroups[groupIndex].levels {
@@ -77,6 +78,17 @@ class LevelsData{
             }
         }
         return count
+    }
+    
+    //returns the next level to complete within a page
+    func nextLevelToComplete(groupIndex: Int) -> Int{
+        let pageLevels = levelGroups[groupIndex].levels
+        for (i,level) in pageLevels.enumerated(){
+            if !level.levelCompleted{
+                return i
+            }
+        }
+        return 0
     }
     /*------------------------------- 4x4 -------------------------------*/
     //Description:

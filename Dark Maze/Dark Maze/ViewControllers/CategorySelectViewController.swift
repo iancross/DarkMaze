@@ -86,7 +86,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             }
             if selectedRowIndex?.row == indexPath.row{
                 tableView.reloadRows(at: [indexPath], with: .none)
-                cell.addButton()
+                cell.cellExpanded()
             }
         }
     }
@@ -98,13 +98,16 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         //on selected row index and add button after it reloads
         if selectedRowIndex?.row != indexPath.row {
             if selectedRowIndex != nil && indexToNotAnimate != nil{
+                //tableView.beginUpdates()
                 closeFrame(indexPath: selectedRowIndex!)
+                //tableView.reloadRows(at: [selectedRowIndex!], with: .none)
+                //tableView.endUpdates()
+
             }
-            
             selectedRowIndex = indexPath
             indexToNotAnimate = indexPath
             tableView.reloadRows(at: [indexPath], with: .none)
-            (customTableView.cellForRow(at: indexPath) as? CustomTableViewCell)?.addButton()
+            (customTableView.cellForRow(at: indexPath) as? CustomTableViewCell)?.cellExpanded()
         }
         else{
             //button handles the closing
@@ -125,7 +128,9 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     //MARK Protocol adapting
     func closeFrame(indexPath: IndexPath) {
         print("about to close frame")
+        (customTableView.cellForRow(at: indexPath) as? CustomTableViewCell)?.cleanCell()
         selectedRowIndex = nil
+        //customTableView.reloadData()
         customTableView?.reloadRows(at: [indexPath], with: .none)
         indexToNotAnimate = nil
     }
