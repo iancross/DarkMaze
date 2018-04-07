@@ -17,6 +17,9 @@ class CustomTableViewCell: UITableViewCell {
     var willAnimate = true
     var drawing: SKView?
     var button: UIButton?
+    var indexPath = IndexPath()
+    var cellDelegate: CellDelegate?
+    var defaultHeight: CGFloat = 0
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -25,37 +28,47 @@ class CustomTableViewCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         // Configure the view for the selected state
+
     }
     
-    func initializeView(category: String){
+    func initializeView(category: String, path: IndexPath, origHeight: CGFloat){
+        defaultHeight = origHeight
+        indexPath = path
         setupScene()
         addCategoryLabel(category: category)
+    }
+    func addButton(){
+        print("button about to be called")
         button = UIButton(frame: CGRect(origin: CGPoint(x:0,y:0), size: frame.size))
         button?.backgroundColor = UIColor.clear
         button?.setTitle("", for: .normal)
         button?.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-        self.addSubview(button!)
         button?.bringSubview(toFront: self)
+        if let butt = button{
+            print("adding button")
+            self.addSubview(butt)
+        }
     }
-    
+    func removeButton(){
+        print("button being removed")
+        button?.removeFromSuperview()
+    }
     @objc func buttonAction(sender: AnyObject, event: UIEvent) {
         let buttonView = sender as! UIView;
         
         // get any touch on the buttonView
         if let touch = event.touches(for: buttonView)?.first as? UITouch {
             // print the touch location on the button
-            print(touch.location(in: buttonView))
+            cellDelegate?.closeFrame(indexPath: indexPath)
         }
-        
-//        print("Button tapped")
-//        button?.isEnabled = false
     }
     
     private func setupScene(){
+        //let size = CGSize(width: frame.width, height: frame.height - defaultHeight)
         drawing = SKView(frame: CGRect(origin: CGPoint(x:0,y:0), size: frame.size))
         self.addSubview(drawing!)
         let scene = SKScene(size: (drawing?.frame.size)!)
-        scene.backgroundColor = UIColor.blue
+        scene.backgroundColor = UIColor.black
         drawing?.presentScene(scene)
     }
     

@@ -8,12 +8,17 @@
 
 import UIKit
 import SpriteKit
-class CategorySelectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate {
+class CategorySelectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CellDelegate {
+    
+    
     var testReceivedVar: Double?
     let levelGroups = LevelsData.shared.levelGroups
     let defaultHeight = 50.0 as CGFloat
-    var selectedRowIndex: Int = -1
-    var indexToNotAnimate = -1
+    
+    //set when we initially click a row. reinit when that row is finally closed
+    var selectedRowIndex: IndexPath? = nil
+    
+    var indexToNotAnimate: IndexPath? = nil
 
     //MARK: Variables
     
@@ -25,6 +30,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         self.customTableView.rowHeight = defaultHeight;
         addTopBorderLine()
         super.viewDidLoad()
+        
     }
     private func addTopBorderLine(){
         let px = 1 / UIScreen.main.scale
@@ -43,16 +49,15 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         return 1
     }
     
-    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        print(indexPath.row)
-        (cell as! CustomTableViewCell).willAnimate = true
-    }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == selectedRowIndex {
+        if indexPath.row == selectedRowIndex?.row {
             return 140
         }
         return 44
+    }
+    
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        //print((customTableView.cellForRow(at: indexPath) as? CustomTableViewCell)?.button!)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -65,35 +70,42 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        //tableView.beginUpdates()
         if let cell = cell as? CustomTableViewCell{
+            print("willdisplay \(indexPath.row)")
+
+            cell.cellDelegate = self
             let cellCategory = levelGroups[indexPath.row].category
-            cell.initializeView(category: cellCategory)
-            if indexPath.row != indexToNotAnimate{
+            cell.initializeView(category: cellCategory, path: indexPath, origHeight: defaultHeight)
+            
+            //should we animate it? only if it isn't the selected one
+            if indexPath.row != indexToNotAnimate?.row{
                 cell.customizeCell()
             }
-            else{
-                indexToNotAnimate = -1
+            if selectedRowIndex?.row == indexPath.row{
+                tableView.reloadRows(at: [indexPath], with: .none)
+                cell.addButton()
             }
         }
     }
-    
-//    func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
-//        print("deselected")
-//        //indexToNotAnimate = -1
-//    }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if selectedRowIndex == indexPath.row {
-            selectedRowIndex = -1
-            tableView.cellForRow(at: indexPath)?.isSelected = false
-        } else {
-            selectedRowIndex = indexPath.row
-            tableView.cellForRow(at: indexPath)?.isSelected = true
+        print("did select Row \(indexPath.row)")
+        
+        //close the old row
+        //on selected row index and add button after it reloads
+        if selectedRowIndex?.row != indexPath.row {
+            if selectedRowIndex != nil && indexToNotAnimate != nil{
+                closeFrame(indexPath: selectedRowIndex!)
+            }
+            
+            selectedRowIndex = indexPath
+            indexToNotAnimate = indexPath
+            tableView.reloadRows(at: [indexPath], with: .none)
+            (customTableView.cellForRow(at: indexPath) as? CustomTableViewCell)?.addButton()
         }
-        indexToNotAnimate = indexPath.row
-        tableView.reloadRows(at: [indexPath], with: .none)
-        (tableView.cellForRow(at: indexPath) as! CustomTableViewCell).willAnimate = false
+        else{
+            //button handles the closing
+        }
     }
     
     private func switchToGame(){
@@ -107,6 +119,11 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             self.present(ivc, animated: false, completion: nil)
         }
     }
-
-    
+    //MARK Protocol adapting
+    func closeFrame(indexPath: IndexPath) {
+        print("about to close frame")
+        selectedRowIndex = nil
+        customTableView?.reloadRows(at: [indexPath], with: .none)
+        indexToNotAnimate = nil
+    }
 }
