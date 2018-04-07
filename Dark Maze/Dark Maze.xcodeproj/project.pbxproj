@@ -30,6 +30,7 @@
 		C3962A35205750DF002C0AF9 /* TapToBeginScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C3962A34205750DF002C0AF9 /* TapToBeginScene.sks */; };
 		C3962A3B205888F3002C0AF9 /* Level1Scene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C3962A3A205888F3002C0AF9 /* Level1Scene.sks */; };
 		C3B46D8A207840D400C1EAC6 /* CellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B46D89207840D400C1EAC6 /* CellDelegate.swift */; };
+		C3B46D8C2078FB2500C1EAC6 /* SKTextureGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B46D8B2078FB2500C1EAC6 /* SKTextureGradient.swift */; };
 		C3BA45C52069A69500D72A3F /* cracking.atlas in Resources */ = {isa = PBXBuildFile; fileRef = C3BA45C42069A69500D72A3F /* cracking.atlas */; };
 		C3EF4A141FD7749000528247 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3EF4A131FD7749000528247 /* AppDelegate.swift */; };
 		C3EF4A1A1FD7749000528247 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3EF4A191FD7749000528247 /* MenuScene.swift */; };
@@ -62,6 +63,7 @@
 		C3962A34205750DF002C0AF9 /* TapToBeginScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = TapToBeginScene.sks; sourceTree = "<group>"; };
 		C3962A3A205888F3002C0AF9 /* Level1Scene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Level1Scene.sks; sourceTree = "<group>"; };
 		C3B46D89207840D400C1EAC6 /* CellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellDelegate.swift; sourceTree = "<group>"; };
+		C3B46D8B2078FB2500C1EAC6 /* SKTextureGradient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKTextureGradient.swift; sourceTree = "<group>"; };
 		C3BA45C42069A69500D72A3F /* cracking.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = cracking.atlas; sourceTree = "<group>"; };
 		C3EF4A101FD7749000528247 /* Dark Maze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dark Maze.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3EF4A131FD7749000528247 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -121,7 +123,6 @@
 				C3FD8ACA20141ADF006ED708 /* TextBoxButton.swift */,
 				C30DB1CB20156C0300CE670C /* GameStyles.swift */,
 				C34AA0C6206F27F800DB2229 /* CategoryHeader.swift */,
-				C34AA0EF2071927100DB2229 /* Helper.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -168,6 +169,15 @@
 			path = FilesToRemove;
 			sourceTree = "<group>";
 		};
+		C3B46D8D2079021B00C1EAC6 /* Utility Classes */ = {
+			isa = PBXGroup;
+			children = (
+				C34AA0EF2071927100DB2229 /* Helper.swift */,
+				C3B46D8B2078FB2500C1EAC6 /* SKTextureGradient.swift */,
+			);
+			path = "Utility Classes";
+			sourceTree = "<group>";
+		};
 		C3EF4A071FD7748F00528247 = {
 			isa = PBXGroup;
 			children = (
@@ -193,6 +203,7 @@
 				C352CF3B2075945B00FCD5D0 /* Table Classes */,
 				C364CEC21FE74FD6009140C7 /* Scene Classes */,
 				C364CEBE1FE6CD0D009140C7 /* Classes */,
+				C3B46D8D2079021B00C1EAC6 /* Utility Classes */,
 				C364CEC11FE74FB4009140C7 /* Scenes */,
 				C38464C02055E48C00239EE0 /* Sprites */,
 				C3EF4A201FD7749000528247 /* Assets.xcassets */,
@@ -307,6 +318,7 @@
 				C3189E021FD77D0B000A52A6 /* LevelSelectScene.swift in Sources */,
 				C352CF39207570C300FCD5D0 /* CustomTableViewCell.swift in Sources */,
 				C30DB1CA2015684900CE670C /* EndGameScene.swift in Sources */,
+				C3B46D8C2078FB2500C1EAC6 /* SKTextureGradient.swift in Sources */,
 				C32DB4731FF02A6800040BA3 /* LevelsData.swift in Sources */,
 				C34AA0F02071927100DB2229 /* Helper.swift in Sources */,
 				C34AA0C7206F27F800DB2229 /* CategoryHeader.swift in Sources */,

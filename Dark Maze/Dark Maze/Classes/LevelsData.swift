@@ -68,6 +68,16 @@ class LevelsData{
             // do nothing
         }
     }
+    
+    func getCategoryProgress(groupIndex: Int) -> Int{
+        var count = 0
+        for l in levelGroups[groupIndex].levels {
+            if l.levelCompleted {
+                count += 1
+            }
+        }
+        return count
+    }
     /*------------------------------- 4x4 -------------------------------*/
     //Description:
     //Easiest level to show how to play the game. Probably going to do all sorts of

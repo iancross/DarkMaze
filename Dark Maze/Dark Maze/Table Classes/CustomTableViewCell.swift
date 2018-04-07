@@ -13,7 +13,7 @@ protocol test{
     func test()
 }
 class CustomTableViewCell: UITableViewCell {
-    let boarderBuffer: CGFloat = 10.0
+    let boarderBuffer: CGFloat = 15.0
     var willAnimate = true
     var drawing: SKView?
     var button: UIButton?
@@ -31,11 +31,11 @@ class CustomTableViewCell: UITableViewCell {
 
     }
     
-    func initializeView(category: String, path: IndexPath, origHeight: CGFloat){
+    func initializeView(category: String, progress: String, path: IndexPath, origHeight: CGFloat){
         defaultHeight = origHeight
         indexPath = path
         setupScene()
-        addCategoryLabel(category: category)
+        addCategoryLabel(category: category, progress: progress)
     }
     func addButton(){
         print("button about to be called")
@@ -47,8 +47,22 @@ class CustomTableViewCell: UITableViewCell {
         if let butt = button{
             print("adding button")
             self.addSubview(butt)
+            addGradient()
         }
     }
+    
+    func addGradient(){
+        //anchor is center for this gradient texture
+        let topColor = CIColor(color: UIColor(red: 0.2196, green: 0.2196, blue: 0.2196, alpha: 1.0))
+        let bottomColor = CIColor(color: UIColor.black)
+        let texture = SKTexture(size: frame.size, color1: topColor, color2: bottomColor, direction: GradientDirection.up)
+        texture.filteringMode = .nearest
+        let sprite = SKSpriteNode(texture: texture)
+        sprite.position = CGPoint(x: frame.midX ,y:0)
+        sprite.size = (drawing?.frame.size)!
+        drawing?.scene?.addChild(sprite)
+    }
+    
     func removeButton(){
         print("button being removed")
         button?.removeFromSuperview()
@@ -57,13 +71,14 @@ class CustomTableViewCell: UITableViewCell {
         let buttonView = sender as! UIView;
         
         // get any touch on the buttonView
-        if let touch = event.touches(for: buttonView)?.first as? UITouch {
+        if (event.touches(for: buttonView)?.first) != nil {
             // print the touch location on the button
             cellDelegate?.closeFrame(indexPath: indexPath)
         }
     }
     
     private func setupScene(){
+        //drawing?.removeFromSuperview()
         //let size = CGSize(width: frame.width, height: frame.height - defaultHeight)
         drawing = SKView(frame: CGRect(origin: CGPoint(x:0,y:0), size: frame.size))
         self.addSubview(drawing!)
@@ -72,14 +87,23 @@ class CustomTableViewCell: UITableViewCell {
         drawing?.presentScene(scene)
     }
     
-    private func addCategoryLabel(category: String){
-        let label = Helper.createGenericLabel(category, fontsize: frame.width/15)
+    private func addCategoryLabel(category: String, progress: String){
+        let fontsize = frame.width/13
+        let label = Helper.createGenericLabel(category, fontsize: fontsize)
         label.horizontalAlignmentMode = .left
         label.verticalAlignmentMode = .top
         if let scene = drawing?.scene{
             scene.addChild(label)
             label.position = CGPoint(x: boarderBuffer, y: scene.frame.maxY - boarderBuffer)
         }
+        let completion = Helper.createGenericLabel(progress, fontsize: fontsize)
+        completion.horizontalAlignmentMode = .right
+        completion.verticalAlignmentMode = .top
+        if let scene = drawing?.scene{
+            scene.addChild(completion)
+            completion.position = CGPoint(x: scene.frame.width - boarderBuffer, y: scene.frame.maxY - boarderBuffer)
+        }
+
     }
     
     func expand(){

@@ -28,8 +28,9 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     
     override func viewDidLoad() {
         self.customTableView.rowHeight = defaultHeight;
-        addTopBorderLine()
+        //addTopBorderLine()
         super.viewDidLoad()
+        
         
     }
     private func addTopBorderLine(){
@@ -75,7 +76,9 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
 
             cell.cellDelegate = self
             let cellCategory = levelGroups[indexPath.row].category
-            cell.initializeView(category: cellCategory, path: indexPath, origHeight: defaultHeight)
+            let progress = LevelsData.shared.getCategoryProgress(groupIndex: indexPath.row)
+            let outOfTotal = LevelsData.shared.levelGroups[indexPath.row].levels.count
+            cell.initializeView(category: cellCategory,progress: "\(progress)/\(outOfTotal)", path: indexPath, origHeight: defaultHeight)
             
             //should we animate it? only if it isn't the selected one
             if indexPath.row != indexToNotAnimate?.row{
