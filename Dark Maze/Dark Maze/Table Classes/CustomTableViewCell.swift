@@ -33,11 +33,26 @@ class CustomTableViewCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         // Configure the view for the selected state
-
+        if selected {
+            print ("this is seleced")
+        }
     }
     
+    func initializeNormalView(){
+    
+    }
+    
+
+    func initExpandedView(){
+        
+    }
+    
+    
+    
+    
+    
+    
     func initializeView(category: String, progress: String, path: IndexPath, origHeight: CGFloat){
-        self.backgroundColor = UIColor.black
         mainFontSize = frame.width/13
         defaultHeight = origHeight
         verticalSpacing = origHeight
@@ -49,8 +64,6 @@ class CustomTableViewCell: UITableViewCell {
         addCategoryLabel(category: category, progress: progress)
     }
     func cellExpanded(){
-//        cleanCell()
-//        setupScene()
         print("button about to be called")
         addGradient()
         addLevels()
@@ -134,6 +147,8 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     private func setupScene(){
+        //drawing?.removeFromSuperview()
+        //let size = CGSize(width: frame.width, height: frame.height - defaultHeight)
         drawing = SKView(frame: CGRect(origin: CGPoint(x:0,y:0), size: frame.size))
         self.addSubview(drawing!)
         let scene = SKScene(size: (drawing?.frame.size)!)
@@ -159,12 +174,15 @@ class CustomTableViewCell: UITableViewCell {
 
     }
     
-    
-    
     func cleanCell(){
-        drawing?.scene?.removeAllChildren()
-        drawing?.scene?.removeFromParent()
-        drawing?.removeFromSuperview()
+        for i in levels{
+            i.removeFromParent()
+        }
+//        drawing?.scene?.removeFromParent()
+//        drawing?.removeFromSuperview()
+    }
+    
+    func expand(){
     }
     
     public func customizeCell() {

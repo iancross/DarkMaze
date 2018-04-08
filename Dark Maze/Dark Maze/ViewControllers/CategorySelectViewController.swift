@@ -84,10 +84,6 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             if indexPath.row != indexToNotAnimate?.row{
                 cell.customizeCell()
             }
-            if selectedRowIndex?.row == indexPath.row{
-                tableView.reloadRows(at: [indexPath], with: .none)
-                cell.cellExpanded()
-            }
         }
     }
 
@@ -98,22 +94,27 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         //on selected row index and add button after it reloads
         if selectedRowIndex?.row != indexPath.row {
             if selectedRowIndex != nil && indexToNotAnimate != nil{
-                //tableView.beginUpdates()
                 closeFrame(indexPath: selectedRowIndex!)
-                //tableView.reloadRows(at: [selectedRowIndex!], with: .none)
-                //tableView.endUpdates()
-
             }
             selectedRowIndex = indexPath
             indexToNotAnimate = indexPath
-            tableView.reloadRows(at: [indexPath], with: .none)
+            customTableView.beginUpdates()
+            customTableView.endUpdates()
+            let cellCategory = levelGroups[indexPath.row].category
+            let progress = LevelsData.shared.getCategoryProgress(groupIndex: indexPath.row)
+            let outOfTotal = LevelsData.shared.levelGroups[indexPath.row].levels.count
+            (customTableView.cellForRow(at: indexPath) as? CustomTableViewCell)?.initializeView(category: cellCategory,progress: "\(progress)/\(outOfTotal)", path: indexPath, origHeight: defaultHeight)
             (customTableView.cellForRow(at: indexPath) as? CustomTableViewCell)?.cellExpanded()
+            
         }
         else{
             //button handles the closing
         }
     }
     
+    
+    //MARK Protocol ----------------------------------------------------
+
     private func switchToGame(){
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let ivc = storyboard.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
@@ -125,13 +126,13 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             self.present(ivc, animated: false, completion: nil)
         }
     }
-    //MARK Protocol adapting
     func closeFrame(indexPath: IndexPath) {
         print("about to close frame")
-        (customTableView.cellForRow(at: indexPath) as? CustomTableViewCell)?.cleanCell()
+        (customTableView.cellForRow(at: indexPath) as? CustomTableViewCell)?.removeButton()
         selectedRowIndex = nil
-        //customTableView.reloadData()
-        customTableView?.reloadRows(at: [indexPath], with: .none)
+        customTableView.deselectRow(at: indexPath, animated: true)
+        customTableView.beginUpdates()
+        customTableView.endUpdates()
         indexToNotAnimate = nil
     }
 }
