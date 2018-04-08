@@ -25,20 +25,9 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     //MARK: Outlets
     @IBOutlet weak var customTableView: UITableView!
     
-    
     override func viewDidLoad() {
         self.customTableView.rowHeight = defaultHeight;
-        //addTopBorderLine()
         super.viewDidLoad()
-        
-        
-    }
-    private func addTopBorderLine(){
-        let px = 1 / UIScreen.main.scale
-        let headerFrame = CGRect(x: 0, y: 0, width: self.customTableView.frame.size.width, height: px)
-        let line = UIView(frame: headerFrame)
-        self.customTableView.tableHeaderView = line
-        line.backgroundColor = self.customTableView.separatorColor
     }
     
     override func didReceiveMemoryWarning() {
@@ -78,20 +67,20 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             let cellCategory = levelGroups[indexPath.row].category
             let progress = LevelsData.shared.getCategoryProgress(groupIndex: indexPath.row)
             let outOfTotal = LevelsData.shared.levelGroups[indexPath.row].levels.count
-            cell.initializeView(category: cellCategory,progress: "\(progress)/\(outOfTotal)", path: indexPath, origHeight: defaultHeight)
+            cell.initCellData(category: cellCategory, progress: "\(progress)/\(outOfTotal)", path: indexPath, origHeight: defaultHeight)
+            cell.initNormalView()
             
             //should we animate it? only if it isn't the selected one
             if indexPath.row != indexToNotAnimate?.row{
-                cell.customizeCell()
+                cell.animateCell()
             }
         }
     }
 
+    //if the indexpath isn't the selected row, close the current row
+    //and expand the new row
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("did select Row \(indexPath.row)")
-        
-        //close the old row
-        //on selected row index and add button after it reloads
+        let cell = customTableView.cellForRow(at: indexPath) as? CustomTableViewCell
         if selectedRowIndex?.row != indexPath.row {
             if selectedRowIndex != nil && indexToNotAnimate != nil{
                 closeFrame(indexPath: selectedRowIndex!)
@@ -100,18 +89,20 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             indexToNotAnimate = indexPath
             customTableView.beginUpdates()
             customTableView.endUpdates()
-            let cellCategory = levelGroups[indexPath.row].category
-            let progress = LevelsData.shared.getCategoryProgress(groupIndex: indexPath.row)
-            let outOfTotal = LevelsData.shared.levelGroups[indexPath.row].levels.count
-            (customTableView.cellForRow(at: indexPath) as? CustomTableViewCell)?.initializeView(category: cellCategory,progress: "\(progress)/\(outOfTotal)", path: indexPath, origHeight: defaultHeight)
-            (customTableView.cellForRow(at: indexPath) as? CustomTableViewCell)?.cellExpanded()
-            
-        }
-        else{
-            //button handles the closing
+            cell?.initNormalView()
+            cell?.initExpandedView()
         }
     }
     
+    func closeFrame(indexPath: IndexPath) {
+        print("about to close frame")
+        (customTableView.cellForRow(at: indexPath) as? CustomTableViewCell)?.revertToOrigState()
+        selectedRowIndex = nil
+        customTableView.deselectRow(at: indexPath, animated: true)
+        customTableView.beginUpdates()
+        customTableView.endUpdates()
+        indexToNotAnimate = nil
+    }
     
     //MARK Protocol ----------------------------------------------------
 
@@ -126,13 +117,15 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             self.present(ivc, animated: false, completion: nil)
         }
     }
-    func closeFrame(indexPath: IndexPath) {
-        print("about to close frame")
-        (customTableView.cellForRow(at: indexPath) as? CustomTableViewCell)?.removeButton()
-        selectedRowIndex = nil
-        customTableView.deselectRow(at: indexPath, animated: true)
-        customTableView.beginUpdates()
-        customTableView.endUpdates()
-        indexToNotAnimate = nil
-    }
 }
+
+
+
+/*    private func addTopBorderLine(){
+let px = 1 / UIScreen.main.scale
+let headerFrame = CGRect(x: 0, y: 0, width: self.customTableView.frame.size.width, height: px)
+let line = UIView(frame: headerFrame)
+self.customTableView.tableHeaderView = line
+line.backgroundColor = self.customTableView.separatorColor
+}
+*/

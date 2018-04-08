@@ -24,6 +24,8 @@ class CustomTableViewCell: UITableViewCell {
     var verticalSpacing: CGFloat = 10
     var levels = [TextBoxButton]()
     var mainFontSize: CGFloat = 0
+    var categoryString = String()
+    var progressString = String()
 
     
     override func awakeFromNib() {
@@ -38,42 +40,47 @@ class CustomTableViewCell: UITableViewCell {
         }
     }
     
-    func initializeNormalView(){
     
-    }
-    
-
-    func initExpandedView(){
+    func initCellData(category: String, progress: String, path: IndexPath, origHeight: CGFloat){
+        categoryString = category
+        progressString = progress
         
-    }
-    
-    
-    
-    
-    
-    
-    func initializeView(category: String, progress: String, path: IndexPath, origHeight: CGFloat){
         mainFontSize = frame.width/13
         defaultHeight = origHeight
         verticalSpacing = origHeight
         indexPath = path
-        setupScene()
-//        drawing?.ignoresSiblingOrder = true
-//        drawing?.showsFPS = true
-//        drawing?.showsNodeCount = true
-        addCategoryLabel(category: category, progress: progress)
     }
-    func cellExpanded(){
-        print("button about to be called")
+    
+    func initNormalView(){
+        setupScene()
+        addCategoryLabel()
+        //        drawing?.ignoresSiblingOrder = true
+        //        drawing?.showsFPS = true
+        //        drawing?.showsNodeCount = true
+        addCategoryLabel()
+        //maybe add gradient
+    }
+    
+
+    func initExpandedView(){
         addGradient()
         addLevels()
+        resizeView()
+    }
+    
+    func revertToOrigState(){
+        removeButton()
+    }
+    
+    private func resizeView(){
+        drawing?.sizeThatFits(frame.size)
         drawing?.scene?.alpha = 0
         drawing?.scene?.run(SKAction.fadeIn(withDuration: 0.3)){
             self.addButton()
         }
     }
     
-    func addButton(){
+    private func addButton(){
         button = UIButton(frame: CGRect(origin: CGPoint(x:0,y:0), size: frame.size))
         button?.backgroundColor = UIColor.clear
         button?.setTitle("", for: .normal)
@@ -85,7 +92,7 @@ class CustomTableViewCell: UITableViewCell {
         }
     }
     
-    func addLevels(){
+    private func addLevels(){
         let group = LevelsData.shared.levelGroups[indexPath.row]
         let nextLevelToComplete = LevelsData.shared.nextLevelToComplete(groupIndex: indexPath.row)
         let levelCount = group.levels.count
@@ -118,7 +125,7 @@ class CustomTableViewCell: UITableViewCell {
         }
     }
     
-    func addGradient(){
+    private func addGradient(){
         //anchor is center for this gradient texture
         let topColor = CIColor(color: UIColor(red: 0.2196, green: 0.2196, blue: 0.2196, alpha: 1.0))
         let bottomColor = CIColor(color: UIColor.black)
@@ -131,14 +138,13 @@ class CustomTableViewCell: UITableViewCell {
         drawing?.scene?.addChild(sprite)
     }
     
-    func removeButton(){
+    private func removeButton(){
         print("button being removed")
         button?.removeFromSuperview()
     }
     
     @objc func buttonAction(sender: AnyObject, event: UIEvent) {
         let buttonView = sender as! UIView;
-        
         // get any touch on the buttonView
         if (event.touches(for: buttonView)?.first) != nil {
             // print the touch location on the button
@@ -147,8 +153,6 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     private func setupScene(){
-        //drawing?.removeFromSuperview()
-        //let size = CGSize(width: frame.width, height: frame.height - defaultHeight)
         drawing = SKView(frame: CGRect(origin: CGPoint(x:0,y:0), size: frame.size))
         self.addSubview(drawing!)
         let scene = SKScene(size: (drawing?.frame.size)!)
@@ -156,15 +160,15 @@ class CustomTableViewCell: UITableViewCell {
         drawing?.presentScene(scene)
     }
     
-    private func addCategoryLabel(category: String, progress: String){
-        let label = Helper.createGenericLabel(category, fontsize: mainFontSize)
+    private func addCategoryLabel(){
+        let label = Helper.createGenericLabel(categoryString, fontsize: mainFontSize)
         label.horizontalAlignmentMode = .left
         label.verticalAlignmentMode = .top
         if let scene = drawing?.scene{
             scene.addChild(label)
             label.position = CGPoint(x: boarderBuffer, y: scene.frame.maxY - boarderBuffer)
         }
-        let completion = Helper.createGenericLabel(progress, fontsize: mainFontSize)
+        let completion = Helper.createGenericLabel(progressString, fontsize: mainFontSize)
         completion.horizontalAlignmentMode = .right
         completion.verticalAlignmentMode = .top
         if let scene = drawing?.scene{
@@ -174,18 +178,13 @@ class CustomTableViewCell: UITableViewCell {
 
     }
     
-    func cleanCell(){
+    private func cleanCell(){
         for i in levels{
             i.removeFromParent()
         }
-//        drawing?.scene?.removeFromParent()
-//        drawing?.removeFromSuperview()
     }
     
-    func expand(){
-    }
-    
-    public func customizeCell() {
+    public func animateCell() {
         let cell = self
         
         var rotate: CATransform3D
@@ -211,6 +210,4 @@ class CustomTableViewCell: UITableViewCell {
         cell.layer.shadowOffset =  CGSize(width:0,height: 0)
         UIView.commitAnimations()
     }
-    
-    
 }
