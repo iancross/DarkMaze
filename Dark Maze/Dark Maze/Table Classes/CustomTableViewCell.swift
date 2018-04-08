@@ -26,6 +26,7 @@ class CustomTableViewCell: UITableViewCell {
     var mainFontSize: CGFloat = 0
     var categoryString = String()
     var progressString = String()
+    var expanded = false
 
     
     override func awakeFromNib() {
@@ -51,33 +52,38 @@ class CustomTableViewCell: UITableViewCell {
         indexPath = path
     }
     
+    func reverseState(){
+        expanded = !expanded
+    }
+    
+    func initView(){
+        if expanded{
+            print ("expanded view woo!")
+            initExpandedView()
+        }
+        else{
+            initNormalView()
+        }
+    }
+    
     func initNormalView(){
+        //clean()
         setupScene()
         addCategoryLabel()
-        //        drawing?.ignoresSiblingOrder = true
-        //        drawing?.showsFPS = true
-        //        drawing?.showsNodeCount = true
-        addCategoryLabel()
-        //maybe add gradient
     }
     
 
     func initExpandedView(){
+        //clean()
+        setupScene()
+        addCategoryLabel()
         addGradient()
+        addButton()
         addLevels()
-        resizeView()
     }
     
     func revertToOrigState(){
         removeButton()
-    }
-    
-    private func resizeView(){
-        drawing?.sizeThatFits(frame.size)
-        drawing?.scene?.alpha = 0
-        drawing?.scene?.run(SKAction.fadeIn(withDuration: 0.3)){
-            self.addButton()
-        }
     }
     
     private func addButton(){
@@ -178,10 +184,13 @@ class CustomTableViewCell: UITableViewCell {
 
     }
     
-    private func cleanCell(){
+    func clean(){
         for i in levels{
             i.removeFromParent()
         }
+        drawing?.scene?.removeAllChildren()
+        drawing?.scene?.removeFromParent()
+        drawing?.removeFromSuperview()
     }
     
     public func animateCell() {

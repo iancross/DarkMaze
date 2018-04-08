@@ -48,6 +48,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         //print((customTableView.cellForRow(at: indexPath) as? CustomTableViewCell)?.button!)
+        //(customTableView.cellForRow(at: indexPath) as? CustomTableViewCell)?.clean()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -68,7 +69,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             let progress = LevelsData.shared.getCategoryProgress(groupIndex: indexPath.row)
             let outOfTotal = LevelsData.shared.levelGroups[indexPath.row].levels.count
             cell.initCellData(category: cellCategory, progress: "\(progress)/\(outOfTotal)", path: indexPath, origHeight: defaultHeight)
-            cell.initNormalView()
+            cell.initView()
             
             //should we animate it? only if it isn't the selected one
             if indexPath.row != indexToNotAnimate?.row{
@@ -89,15 +90,20 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             indexToNotAnimate = indexPath
             customTableView.beginUpdates()
             customTableView.endUpdates()
-            cell?.initNormalView()
-            cell?.initExpandedView()
+            
+            cell?.reverseState()
+            cell?.initView()
         }
     }
     
     func closeFrame(indexPath: IndexPath) {
         print("about to close frame")
-        (customTableView.cellForRow(at: indexPath) as? CustomTableViewCell)?.revertToOrigState()
+        let cell = customTableView.cellForRow(at: indexPath) as? CustomTableViewCell
+        cell?.revertToOrigState()
+        cell?.reverseState()
+        
         selectedRowIndex = nil
+        print("deselecting row from 'close frame'")
         customTableView.deselectRow(at: indexPath, animated: true)
         customTableView.beginUpdates()
         customTableView.endUpdates()
