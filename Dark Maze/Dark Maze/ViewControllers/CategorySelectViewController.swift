@@ -13,7 +13,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     
     var testReceivedVar: Double?
     let levelGroups = LevelsData.shared.levelGroups
-    let defaultHeight = 50.0 as CGFloat
+    let defaultHeight = 45 as CGFloat
     
     //set when we initially click a row. reinit when that row is finally closed
     var selectedRowIndex: IndexPath? = nil
@@ -28,6 +28,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     override func viewDidLoad() {
         self.customTableView.rowHeight = defaultHeight;
         super.viewDidLoad()
+        view.backgroundColor = UIColor.black
     }
     
     override func didReceiveMemoryWarning() {
@@ -38,12 +39,11 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == selectedRowIndex?.row {
-            return 140
+            return 130
         }
-        return 44
+        return defaultHeight
     }
     
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -81,15 +81,15 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     //if the indexpath isn't the selected row, close the current row
     //and expand the new row
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = customTableView.cellForRow(at: indexPath) as? CustomTableViewCell
+        let cell = tableView.cellForRow(at: indexPath) as? CustomTableViewCell
         if selectedRowIndex?.row != indexPath.row {
             if selectedRowIndex != nil && indexToNotAnimate != nil{
                 closeFrame(indexPath: selectedRowIndex!)
             }
             selectedRowIndex = indexPath
             indexToNotAnimate = indexPath
-            customTableView.beginUpdates()
-            customTableView.endUpdates()
+            tableView.beginUpdates()
+            tableView.endUpdates()
             
             cell?.reverseState()
             cell?.initView()
@@ -101,10 +101,9 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         let cell = customTableView.cellForRow(at: indexPath) as? CustomTableViewCell
         cell?.revertToOrigState()
         cell?.reverseState()
+        cell?.initView()
         
         selectedRowIndex = nil
-        print("deselecting row from 'close frame'")
-        customTableView.deselectRow(at: indexPath, animated: true)
         customTableView.beginUpdates()
         customTableView.endUpdates()
         indexToNotAnimate = nil

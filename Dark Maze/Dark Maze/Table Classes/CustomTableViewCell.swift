@@ -31,6 +31,7 @@ class CustomTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        backgroundColor = UIColor.black
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -45,10 +46,9 @@ class CustomTableViewCell: UITableViewCell {
     func initCellData(category: String, progress: String, path: IndexPath, origHeight: CGFloat){
         categoryString = category
         progressString = progress
-        
         mainFontSize = frame.width/13
         defaultHeight = origHeight
-        verticalSpacing = origHeight
+        verticalSpacing = 45
         indexPath = path
     }
     
@@ -58,7 +58,6 @@ class CustomTableViewCell: UITableViewCell {
     
     func initView(){
         if expanded{
-            print ("expanded view woo!")
             initExpandedView()
         }
         else{
@@ -67,14 +66,14 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     func initNormalView(){
-        //clean()
+        clean()
         setupScene()
         addCategoryLabel()
     }
     
 
     func initExpandedView(){
-        //clean()
+        clean()
         setupScene()
         addCategoryLabel()
         addGradient()
@@ -87,18 +86,19 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     private func addButton(){
+        //removeButton()
         button = UIButton(frame: CGRect(origin: CGPoint(x:0,y:0), size: frame.size))
         button?.backgroundColor = UIColor.clear
         button?.setTitle("", for: .normal)
         button?.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
         button?.bringSubview(toFront: self)
         if let butt = button{
-            print("adding button")
             self.addSubview(butt)
         }
     }
     
     private func addLevels(){
+        //removeLevels()
         let group = LevelsData.shared.levelGroups[indexPath.row]
         let nextLevelToComplete = LevelsData.shared.nextLevelToComplete(groupIndex: indexPath.row)
         let levelCount = group.levels.count
@@ -106,6 +106,7 @@ class CustomTableViewCell: UITableViewCell {
         for i in 0...levelCount/numLevelsOnLine{
             for j in 0...numLevelsOnLine-1{
                 let levelNumber = i * (numLevelsOnLine) + j
+                
                 let y = (drawing?.frame.maxY)! - defaultHeight - CGFloat(i) * verticalSpacing - verticalSpacing/3.0
                 if levelNumber <= group.levels.count - 1 {
                     let box = TextBoxButton(
@@ -144,16 +145,11 @@ class CustomTableViewCell: UITableViewCell {
         drawing?.scene?.addChild(sprite)
     }
     
-    private func removeButton(){
-        print("button being removed")
-        button?.removeFromSuperview()
-    }
     
     @objc func buttonAction(sender: AnyObject, event: UIEvent) {
         let buttonView = sender as! UIView;
         // get any touch on the buttonView
         if (event.touches(for: buttonView)?.first) != nil {
-            // print the touch location on the button
             cellDelegate?.closeFrame(indexPath: indexPath)
         }
     }
@@ -181,16 +177,31 @@ class CustomTableViewCell: UITableViewCell {
             scene.addChild(completion)
             completion.position = CGPoint(x: scene.frame.width - boarderBuffer, y: scene.frame.maxY - boarderBuffer)
         }
-
     }
     
     func clean(){
+        //drawing?.scene?.run(SKAction.fadeOut(withDuration: 0.4)){
+            self.removeLevels()
+            self.removeButton()
+            self.drawing?.scene?.removeAllChildren()
+            self.drawing?.scene?.removeFromParent()
+            self.drawing?.removeFromSuperview()
+        //}
+    }
+    func removeLevels(){
         for i in levels{
             i.removeFromParent()
         }
-        drawing?.scene?.removeAllChildren()
-        drawing?.scene?.removeFromParent()
-        drawing?.removeFromSuperview()
+        levels.removeAll()
+    }
+    
+    private func removeButton(){
+        print("button being removed")
+        button?.removeFromSuperview()
+    }
+    
+    override func prepareForReuse() {
+        clean()
     }
     
     public func animateCell() {
