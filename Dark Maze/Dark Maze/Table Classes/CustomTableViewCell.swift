@@ -53,7 +53,10 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     func reverseState(){
+        print("expanded before \(expanded)")
         expanded = !expanded
+        print("expanded after \(expanded)")
+        initView()
     }
     
     func initView(){
@@ -66,6 +69,7 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     func initNormalView(){
+        removeButton()
         clean()
         setupScene()
         addCategoryLabel()
@@ -86,7 +90,7 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     private func addButton(){
-        //removeButton()
+        removeButton()
         button = UIButton(frame: CGRect(origin: CGPoint(x:0,y:0), size: frame.size))
         button?.backgroundColor = UIColor.clear
         button?.setTitle("", for: .normal)

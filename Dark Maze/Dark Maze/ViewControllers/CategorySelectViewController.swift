@@ -11,14 +11,12 @@ import SpriteKit
 class CategorySelectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CellDelegate {
     
     
-    var testReceivedVar: Double?
     let levelGroups = LevelsData.shared.levelGroups
-    let defaultHeight = 45 as CGFloat
+    let defaultHeight = 80 as CGFloat
     
     //set when we initially click a row. reinit when that row is finally closed
     var selectedRowIndex: IndexPath? = nil
     
-    var indexToNotAnimate: IndexPath? = nil
 
     //MARK: Variables
     
@@ -68,13 +66,12 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             let cellCategory = levelGroups[indexPath.row].category
             let progress = LevelsData.shared.getCategoryProgress(groupIndex: indexPath.row)
             let outOfTotal = LevelsData.shared.levelGroups[indexPath.row].levels.count
+
             cell.initCellData(category: cellCategory, progress: "\(progress)/\(outOfTotal)", path: indexPath, origHeight: defaultHeight)
             cell.initView()
             
             //should we animate it? only if it isn't the selected one
-            if indexPath.row != indexToNotAnimate?.row{
-                cell.animateCell()
-            }
+            cell.animateCell()
         }
     }
 
@@ -83,30 +80,25 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as? CustomTableViewCell
         if selectedRowIndex?.row != indexPath.row {
-            if selectedRowIndex != nil && indexToNotAnimate != nil{
+            if selectedRowIndex != nil{
                 closeFrame(indexPath: selectedRowIndex!)
             }
             selectedRowIndex = indexPath
-            indexToNotAnimate = indexPath
             tableView.beginUpdates()
             tableView.endUpdates()
             
             cell?.reverseState()
-            cell?.initView()
         }
     }
     
     func closeFrame(indexPath: IndexPath) {
         print("about to close frame")
         let cell = customTableView.cellForRow(at: indexPath) as? CustomTableViewCell
-        cell?.revertToOrigState()
         cell?.reverseState()
-        cell?.initView()
         
         selectedRowIndex = nil
         customTableView.beginUpdates()
         customTableView.endUpdates()
-        indexToNotAnimate = nil
     }
     
     //MARK Protocol ----------------------------------------------------
