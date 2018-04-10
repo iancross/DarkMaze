@@ -32,13 +32,13 @@ class CustomTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         backgroundColor = UIColor.black
+        expanded = false
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         // Configure the view for the selected state
         if selected {
-            print ("this is seleced")
         }
     }
     
@@ -50,16 +50,18 @@ class CustomTableViewCell: UITableViewCell {
         defaultHeight = origHeight
         verticalSpacing = 45
         indexPath = path
+        //expanded = false
+        print("beginning state is \(expanded)")
     }
     
     func reverseState(){
-        print("expanded before \(expanded)")
+        print ("state switched")
         expanded = !expanded
-        print("expanded after \(expanded)")
         initView()
     }
     
     func initView(){
+        print ("the view expansion is \(expanded) for indexpath \(indexPath)")
         if expanded{
             initExpandedView()
         }
@@ -85,9 +87,6 @@ class CustomTableViewCell: UITableViewCell {
         addLevels()
     }
     
-    func revertToOrigState(){
-        removeButton()
-    }
     
     private func addButton(){
         removeButton()
@@ -200,12 +199,12 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     private func removeButton(){
-        print("button being removed")
         button?.removeFromSuperview()
     }
     
     override func prepareForReuse() {
         clean()
+        expanded = false
     }
     
     public func animateCell() {

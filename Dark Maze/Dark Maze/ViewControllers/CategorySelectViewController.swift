@@ -12,7 +12,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     
     
     let levelGroups = LevelsData.shared.levelGroups
-    let defaultHeight = 80 as CGFloat
+    let defaultHeight = 45 as CGFloat
     
     //set when we initially click a row. reinit when that row is finally closed
     var selectedRowIndex: IndexPath? = nil
@@ -38,7 +38,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         return 1
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == selectedRowIndex?.row {
+        if selectedRowIndex == indexPath{
             return 130
         }
         return defaultHeight
@@ -54,21 +54,28 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as! CustomTableViewCell
+        //let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as! CustomTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! CustomTableViewCell
         return cell
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let cell = cell as? CustomTableViewCell{
-            print("willdisplay \(indexPath.row)")
-
             cell.cellDelegate = self
             let cellCategory = levelGroups[indexPath.row].category
             let progress = LevelsData.shared.getCategoryProgress(groupIndex: indexPath.row)
             let outOfTotal = LevelsData.shared.levelGroups[indexPath.row].levels.count
-
-            cell.initCellData(category: cellCategory, progress: "\(progress)/\(outOfTotal)", path: indexPath, origHeight: defaultHeight)
-            cell.initView()
+            
+            cell.initCellData(category: cellCategory, progress: "\(progress)/\(outOfTotal) and indexpath: \(indexPath)", path: indexPath, origHeight: defaultHeight)
+            
+            if indexPath == selectedRowIndex{
+                cell.initExpandedView()
+                cell.expanded = true
+            }
+            else{
+                cell.initNormalView()
+                cell.expanded = false
+            }
             
             //should we animate it? only if it isn't the selected one
             cell.animateCell()
@@ -79,15 +86,23 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     //and expand the new row
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as? CustomTableViewCell
+        
+        //if selected row doesn't equal the current indexPath row
         if selectedRowIndex?.row != indexPath.row {
+            
+            //and as long as the index path isn't nil
+            //close the previously selected row
             if selectedRowIndex != nil{
                 closeFrame(indexPath: selectedRowIndex!)
             }
+            
             selectedRowIndex = indexPath
             tableView.beginUpdates()
             tableView.endUpdates()
             
             cell?.reverseState()
+//            tableView.beginUpdates()
+//            tableView.endUpdates()
         }
     }
     
@@ -95,7 +110,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         print("about to close frame")
         let cell = customTableView.cellForRow(at: indexPath) as? CustomTableViewCell
         cell?.reverseState()
-        
+        //cell?.initNormalView()
         selectedRowIndex = nil
         customTableView.beginUpdates()
         customTableView.endUpdates()
