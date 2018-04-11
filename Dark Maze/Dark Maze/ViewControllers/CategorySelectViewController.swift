@@ -66,7 +66,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             let progress = LevelsData.shared.getCategoryProgress(groupIndex: indexPath.row)
             let outOfTotal = LevelsData.shared.levelGroups[indexPath.row].levels.count
             
-            cell.initCellData(category: cellCategory, progress: "\(progress)/\(outOfTotal) and indexpath: \(indexPath)", path: indexPath, origHeight: defaultHeight)
+            cell.initCellData(category: cellCategory, progress: "\(progress)/\(outOfTotal)", path: indexPath, origHeight: defaultHeight)
             
             if indexPath == selectedRowIndex{
                 cell.initExpandedView()
@@ -101,24 +101,21 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             tableView.endUpdates()
             
             cell?.reverseState()
-//            tableView.beginUpdates()
-//            tableView.endUpdates()
         }
     }
+    
+    //MARK Protocol ----------------------------------------------------
     
     func closeFrame(indexPath: IndexPath) {
         print("about to close frame")
         let cell = customTableView.cellForRow(at: indexPath) as? CustomTableViewCell
         cell?.reverseState()
-        //cell?.initNormalView()
         selectedRowIndex = nil
         customTableView.beginUpdates()
         customTableView.endUpdates()
     }
     
-    //MARK Protocol ----------------------------------------------------
-
-    private func switchToGame(){
+    func switchToGame(){
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let ivc = storyboard.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
         ivc.sceneString = "Level1Scene"

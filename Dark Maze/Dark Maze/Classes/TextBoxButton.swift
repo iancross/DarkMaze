@@ -28,9 +28,8 @@ class TextBoxButton: SKNode{
         outline.lineWidth = 2.0
         outline.position = CGPoint(x: x, y: y)
         labelNode.position = CGPoint(x: x, y: y)
-
-        parentScene.addChild(labelNode)
         parentScene.addChild(outline)
+        parentScene.addChild(labelNode)
         super.init()
     }
     

@@ -120,7 +120,6 @@ class CustomTableViewCell: UITableViewCell {
                         buffers: (5.0,10.0),
                         parentScene: (drawing?.scene)!)
                     box.updateText(String(levelNumber + 1))
-                    levels.append(box)
                     if group.levels[levelNumber].levelCompleted{
                         box.markAsCompletedLevel()
                     }
@@ -130,6 +129,7 @@ class CustomTableViewCell: UITableViewCell {
                     else {
                         box.setAlpha(0.3)
                     }
+                    levels.append(box)
                 }
             }
         }
@@ -152,9 +152,47 @@ class CustomTableViewCell: UITableViewCell {
     @objc func buttonAction(sender: AnyObject, event: UIEvent) {
         let buttonView = sender as! UIView;
         // get any touch on the buttonView
-        if (event.touches(for: buttonView)?.first) != nil {
-            cellDelegate?.closeFrame(indexPath: indexPath)
+        if let touch = event.touches(for: buttonView)?.first{
+            touchedLevel(point: touch.location(in: (drawing?.scene)!))
+//            if touchedLevel(point: touch.location(in: drawing!)){
+////               print(LevelsData.shared.selectedLevel)
+//                cellDelegate?.switchToGame()
+//            }
+//            else{
+//                cellDelegate?.closeFrame(indexPath: indexPath)
+//            }
         }
+    }
+    
+    private func touchedLevel(point: CGPoint){
+        let nextLevelToComplete = LevelsData.shared.nextLevelToComplete(groupIndex: indexPath.row)
+        for button in levels{
+            print ("button text \(button.text)")
+            if button.within(point: point){
+                if Int(button.text)!-1 > nextLevelToComplete{
+                    let sequence = [SKAction.rotate(byAngle: 0.1, duration: 0.1),
+                                    SKAction.rotate(byAngle: -0.2, duration: 0.1),
+                                    SKAction.rotate(byAngle: 0.1, duration: 0.1)]
+                    button.outline.run(SKAction.sequence(sequence))
+                    print(button.text)
+                    return
+                }
+                else if Int(button.text)!-1 <= nextLevelToComplete{
+                    let embiggen = SKAction.scale(to: 1.3, duration: 0.4)
+                    let loadScene = SKAction.run({
+                        LevelsData.shared.selectedLevel = (page: self.indexPath.row, level: Int(button.text)! - 1)
+                    })
+                    button.outline.run(SKAction.sequence([embiggen,loadScene])){
+                        self.cellDelegate?.switchToGame()
+                    }
+                    return
+                }
+                else{
+                    print (Int(button.text)!-1)
+                }
+            }
+        }
+        cellDelegate?.closeFrame(indexPath: indexPath)
     }
     
     private func setupScene(){
@@ -183,13 +221,11 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     func clean(){
-        //drawing?.scene?.run(SKAction.fadeOut(withDuration: 0.4)){
-            self.removeLevels()
-            self.removeButton()
-            self.drawing?.scene?.removeAllChildren()
-            self.drawing?.scene?.removeFromParent()
-            self.drawing?.removeFromSuperview()
-        //}
+        self.removeLevels()
+        self.removeButton()
+        self.drawing?.scene?.removeAllChildren()
+        self.drawing?.scene?.removeFromParent()
+        self.drawing?.removeFromSuperview()
     }
     func removeLevels(){
         for i in levels{
