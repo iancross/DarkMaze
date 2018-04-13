@@ -50,18 +50,14 @@ class CustomTableViewCell: UITableViewCell {
         defaultHeight = origHeight
         verticalSpacing = 45
         indexPath = path
-        //expanded = false
-        print("beginning state is \(expanded)")
     }
     
     func reverseState(){
-        print ("state switched")
         expanded = !expanded
         initView()
     }
     
     func initView(){
-        print ("the view expansion is \(expanded) for indexpath \(indexPath)")
         if expanded{
             initExpandedView()
         }
@@ -154,27 +150,18 @@ class CustomTableViewCell: UITableViewCell {
         // get any touch on the buttonView
         if let touch = event.touches(for: buttonView)?.first{
             touchedLevel(point: touch.location(in: (drawing?.scene)!))
-//            if touchedLevel(point: touch.location(in: drawing!)){
-////               print(LevelsData.shared.selectedLevel)
-//                cellDelegate?.switchToGame()
-//            }
-//            else{
-//                cellDelegate?.closeFrame(indexPath: indexPath)
-//            }
         }
     }
     
     private func touchedLevel(point: CGPoint){
         let nextLevelToComplete = LevelsData.shared.nextLevelToComplete(groupIndex: indexPath.row)
         for button in levels{
-            print ("button text \(button.text)")
             if button.within(point: point){
                 if Int(button.text)!-1 > nextLevelToComplete{
                     let sequence = [SKAction.rotate(byAngle: 0.1, duration: 0.1),
                                     SKAction.rotate(byAngle: -0.2, duration: 0.1),
                                     SKAction.rotate(byAngle: 0.1, duration: 0.1)]
                     button.outline.run(SKAction.sequence(sequence))
-                    print(button.text)
                     return
                 }
                 else if Int(button.text)!-1 <= nextLevelToComplete{
@@ -188,7 +175,6 @@ class CustomTableViewCell: UITableViewCell {
                     return
                 }
                 else{
-                    print (Int(button.text)!-1)
                 }
             }
         }

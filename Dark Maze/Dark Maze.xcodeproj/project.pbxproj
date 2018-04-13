@@ -8,27 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		2417D41420746C7C001A478D /* CategorySelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2417D41320746C7C001A478D /* CategorySelectViewController.swift */; };
-		C30DB1C82015678E00CE670C /* EndGameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C30DB1C72015678E00CE670C /* EndGameScene.sks */; };
 		C30DB1CA2015684900CE670C /* EndGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30DB1C92015684900CE670C /* EndGameScene.swift */; };
 		C30DB1CC20156C0300CE670C /* GameStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30DB1CB20156C0300CE670C /* GameStyles.swift */; };
 		C3189DFD1FD77988000A52A6 /* MYBLS___.TTF in Resources */ = {isa = PBXBuildFile; fileRef = C3EF4A2B1FD7770600528247 /* MYBLS___.TTF */; };
 		C3189DFE1FD7798F000A52A6 /* MYSCARS_.TTF in Resources */ = {isa = PBXBuildFile; fileRef = C3EF4A2C1FD7771100528247 /* MYSCARS_.TTF */; };
-		C3189E001FD77CBF000A52A6 /* LevelSelectScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C3189DFF1FD77CBF000A52A6 /* LevelSelectScene.sks */; };
 		C3189E021FD77D0B000A52A6 /* LevelSelectScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3189E011FD77D0B000A52A6 /* LevelSelectScene.swift */; };
-		C3189E081FD7991E000A52A6 /* MenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C3189E071FD7991E000A52A6 /* MenuScene.sks */; };
 		C32DB4731FF02A6800040BA3 /* LevelsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32DB4721FF02A6800040BA3 /* LevelsData.swift */; };
 		C34AA0C7206F27F800DB2229 /* CategoryHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34AA0C6206F27F800DB2229 /* CategoryHeader.swift */; };
 		C34AA0F02071927100DB2229 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34AA0EF2071927100DB2229 /* Helper.swift */; };
 		C34AA0F2207199E000DB2229 /* GameDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34AA0F1207199E000DB2229 /* GameDelegates.swift */; };
-		C352CF37207570BC00FCD5D0 /* BMCustomTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C352CF36207570BC00FCD5D0 /* BMCustomTableView.swift */; };
 		C352CF39207570C300FCD5D0 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C352CF38207570C300FCD5D0 /* CustomTableViewCell.swift */; };
 		C364CEC01FE74F98009140C7 /* Level1Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C364CEBF1FE74F98009140C7 /* Level1Scene.swift */; };
 		C37B707E1FE9D94D00F71B73 /* GridTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37B707D1FE9D94D00F71B73 /* GridTile.swift */; };
 		C38464BF2055E41900239EE0 /* 006784-3d-transparent-glass-icon-arrows-double-arrowhead-right.png in Resources */ = {isa = PBXBuildFile; fileRef = C38464BE2055E41900239EE0 /* 006784-3d-transparent-glass-icon-arrows-double-arrowhead-right.png */; };
 		C38464C22055EC4700239EE0 /* nextArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = C38464C12055EC4700239EE0 /* nextArrow.png */; };
-		C3962A332057508F002C0AF9 /* TapToBeginScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3962A322057508F002C0AF9 /* TapToBeginScene.swift */; };
-		C3962A35205750DF002C0AF9 /* TapToBeginScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C3962A34205750DF002C0AF9 /* TapToBeginScene.sks */; };
-		C3962A3B205888F3002C0AF9 /* Level1Scene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C3962A3A205888F3002C0AF9 /* Level1Scene.sks */; };
+		C39E37F5208139C100A53519 /* DarkMazeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39E37F4208139C100A53519 /* DarkMazeUITests.swift */; };
 		C3B46D8A207840D400C1EAC6 /* CellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B46D89207840D400C1EAC6 /* CellDelegate.swift */; };
 		C3B46D8C2078FB2500C1EAC6 /* SKTextureGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B46D8B2078FB2500C1EAC6 /* SKTextureGradient.swift */; };
 		C3BA45C52069A69500D72A3F /* cracking.atlas in Resources */ = {isa = PBXBuildFile; fileRef = C3BA45C42069A69500D72A3F /* cracking.atlas */; };
@@ -41,27 +35,33 @@
 		C3FD8ACB20141ADF006ED708 /* TextBoxButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3FD8ACA20141ADF006ED708 /* TextBoxButton.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		C39E37F7208139C100A53519 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C3EF4A081FD7748F00528247 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C3EF4A0F1FD7748F00528247;
+			remoteInfo = "Dark Maze";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		2417D41320746C7C001A478D /* CategorySelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySelectViewController.swift; sourceTree = "<group>"; };
-		C30DB1C72015678E00CE670C /* EndGameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = EndGameScene.sks; sourceTree = "<group>"; };
 		C30DB1C92015684900CE670C /* EndGameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndGameScene.swift; sourceTree = "<group>"; };
 		C30DB1CB20156C0300CE670C /* GameStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStyles.swift; sourceTree = "<group>"; };
-		C3189DFF1FD77CBF000A52A6 /* LevelSelectScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = LevelSelectScene.sks; sourceTree = "<group>"; };
 		C3189E011FD77D0B000A52A6 /* LevelSelectScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelSelectScene.swift; sourceTree = "<group>"; };
-		C3189E071FD7991E000A52A6 /* MenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MenuScene.sks; sourceTree = "<group>"; };
 		C32DB4721FF02A6800040BA3 /* LevelsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelsData.swift; sourceTree = "<group>"; };
 		C34AA0C6206F27F800DB2229 /* CategoryHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryHeader.swift; sourceTree = "<group>"; };
 		C34AA0EF2071927100DB2229 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		C34AA0F1207199E000DB2229 /* GameDelegates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDelegates.swift; sourceTree = "<group>"; };
-		C352CF36207570BC00FCD5D0 /* BMCustomTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BMCustomTableView.swift; sourceTree = "<group>"; };
 		C352CF38207570C300FCD5D0 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 		C364CEBF1FE74F98009140C7 /* Level1Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level1Scene.swift; sourceTree = "<group>"; };
 		C37B707D1FE9D94D00F71B73 /* GridTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridTile.swift; sourceTree = "<group>"; };
 		C38464BE2055E41900239EE0 /* 006784-3d-transparent-glass-icon-arrows-double-arrowhead-right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "006784-3d-transparent-glass-icon-arrows-double-arrowhead-right.png"; sourceTree = "<group>"; };
 		C38464C12055EC4700239EE0 /* nextArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nextArrow.png; sourceTree = "<group>"; };
-		C3962A322057508F002C0AF9 /* TapToBeginScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapToBeginScene.swift; sourceTree = "<group>"; };
-		C3962A34205750DF002C0AF9 /* TapToBeginScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = TapToBeginScene.sks; sourceTree = "<group>"; };
-		C3962A3A205888F3002C0AF9 /* Level1Scene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Level1Scene.sks; sourceTree = "<group>"; };
+		C39E37F2208139C100A53519 /* DarkMazeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DarkMazeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C39E37F4208139C100A53519 /* DarkMazeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkMazeUITests.swift; sourceTree = "<group>"; };
+		C39E37F6208139C100A53519 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C3B46D89207840D400C1EAC6 /* CellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellDelegate.swift; sourceTree = "<group>"; };
 		C3B46D8B2078FB2500C1EAC6 /* SKTextureGradient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKTextureGradient.swift; sourceTree = "<group>"; };
 		C3BA45C42069A69500D72A3F /* cracking.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = cracking.atlas; sourceTree = "<group>"; };
@@ -79,6 +79,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		C39E37EF208139C100A53519 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C3EF4A0D1FD7748F00528247 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -127,22 +134,10 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
-		C364CEC11FE74FB4009140C7 /* Scenes */ = {
-			isa = PBXGroup;
-			children = (
-				C3189E071FD7991E000A52A6 /* MenuScene.sks */,
-				C3189DFF1FD77CBF000A52A6 /* LevelSelectScene.sks */,
-				C3962A3A205888F3002C0AF9 /* Level1Scene.sks */,
-				C30DB1C72015678E00CE670C /* EndGameScene.sks */,
-			);
-			path = Scenes;
-			sourceTree = "<group>";
-		};
 		C364CEC21FE74FD6009140C7 /* Scene Classes */ = {
 			isa = PBXGroup;
 			children = (
 				C3EF4A191FD7749000528247 /* MenuScene.swift */,
-				C3189E011FD77D0B000A52A6 /* LevelSelectScene.swift */,
 				C364CEBF1FE74F98009140C7 /* Level1Scene.swift */,
 				C30DB1C92015684900CE670C /* EndGameScene.swift */,
 			);
@@ -162,11 +157,25 @@
 		C3962A3E205B4CF8002C0AF9 /* FilesToRemove */ = {
 			isa = PBXGroup;
 			children = (
-				C352CF36207570BC00FCD5D0 /* BMCustomTableView.swift */,
-				C3962A34205750DF002C0AF9 /* TapToBeginScene.sks */,
-				C3962A322057508F002C0AF9 /* TapToBeginScene.swift */,
+				C3189E011FD77D0B000A52A6 /* LevelSelectScene.swift */,
 			);
 			path = FilesToRemove;
+			sourceTree = "<group>";
+		};
+		C39E37EB20812E9400A53519 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C39E37F3208139C100A53519 /* DarkMazeUITests */ = {
+			isa = PBXGroup;
+			children = (
+				C39E37F4208139C100A53519 /* DarkMazeUITests.swift */,
+				C39E37F6208139C100A53519 /* Info.plist */,
+			);
+			path = DarkMazeUITests;
 			sourceTree = "<group>";
 		};
 		C3B46D8D2079021B00C1EAC6 /* Utility Classes */ = {
@@ -182,6 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				C3EF4A121FD7749000528247 /* Dark Maze */,
+				C39E37F3208139C100A53519 /* DarkMazeUITests */,
 				C3EF4A111FD7749000528247 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -190,6 +200,7 @@
 			isa = PBXGroup;
 			children = (
 				C3EF4A101FD7749000528247 /* Dark Maze.app */,
+				C39E37F2208139C100A53519 /* DarkMazeUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -197,20 +208,20 @@
 		C3EF4A121FD7749000528247 /* Dark Maze */ = {
 			isa = PBXGroup;
 			children = (
-				C3EF4A1D1FD7749000528247 /* Main.storyboard */,
+				C39E37EB20812E9400A53519 /* Supporting Files */,
 				C352CF3A2075940D00FCD5D0 /* ViewControllers */,
 				C34AA0C8207044F600DB2229 /* Protocols */,
 				C352CF3B2075945B00FCD5D0 /* Table Classes */,
 				C364CEC21FE74FD6009140C7 /* Scene Classes */,
 				C364CEBE1FE6CD0D009140C7 /* Classes */,
 				C3B46D8D2079021B00C1EAC6 /* Utility Classes */,
-				C364CEC11FE74FB4009140C7 /* Scenes */,
 				C38464C02055E48C00239EE0 /* Sprites */,
+				C3EF4A2D1FD7771900528247 /* Fonts */,
+				C3EF4A1D1FD7749000528247 /* Main.storyboard */,
 				C3EF4A201FD7749000528247 /* Assets.xcassets */,
 				C3EF4A221FD7749000528247 /* LaunchScreen.storyboard */,
 				C3EF4A251FD7749000528247 /* Info.plist */,
 				C3EF4A131FD7749000528247 /* AppDelegate.swift */,
-				C3EF4A2D1FD7771900528247 /* Fonts */,
 				C3962A3E205B4CF8002C0AF9 /* FilesToRemove */,
 			);
 			path = "Dark Maze";
@@ -228,6 +239,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		C39E37F1208139C100A53519 /* DarkMazeUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C39E37F9208139C100A53519 /* Build configuration list for PBXNativeTarget "DarkMazeUITests" */;
+			buildPhases = (
+				C39E37EE208139C100A53519 /* Sources */,
+				C39E37EF208139C100A53519 /* Frameworks */,
+				C39E37F0208139C100A53519 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C39E37F8208139C100A53519 /* PBXTargetDependency */,
+			);
+			name = DarkMazeUITests;
+			productName = DarkMazeUITests;
+			productReference = C39E37F2208139C100A53519 /* DarkMazeUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		C3EF4A0F1FD7748F00528247 /* Dark Maze */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C3EF4A281FD7749000528247 /* Build configuration list for PBXNativeTarget "Dark Maze" */;
@@ -251,10 +280,15 @@
 		C3EF4A081FD7748F00528247 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0910;
+				LastSwiftUpdateCheck = 0920;
 				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = crossibc;
 				TargetAttributes = {
+					C39E37F1208139C100A53519 = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+						TestTargetID = C3EF4A0F1FD7748F00528247;
+					};
 					C3EF4A0F1FD7748F00528247 = {
 						CreatedOnToolsVersion = 9.1;
 						ProvisioningStyle = Automatic;
@@ -275,26 +309,29 @@
 			projectRoot = "";
 			targets = (
 				C3EF4A0F1FD7748F00528247 /* Dark Maze */,
+				C39E37F1208139C100A53519 /* DarkMazeUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		C39E37F0208139C100A53519 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C3EF4A0E1FD7748F00528247 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				C3189DFD1FD77988000A52A6 /* MYBLS___.TTF in Resources */,
 				C3BA45C52069A69500D72A3F /* cracking.atlas in Resources */,
-				C3962A35205750DF002C0AF9 /* TapToBeginScene.sks in Resources */,
 				C38464C22055EC4700239EE0 /* nextArrow.png in Resources */,
-				C30DB1C82015678E00CE670C /* EndGameScene.sks in Resources */,
 				C3189DFE1FD7798F000A52A6 /* MYSCARS_.TTF in Resources */,
-				C3189E001FD77CBF000A52A6 /* LevelSelectScene.sks in Resources */,
 				C38464BF2055E41900239EE0 /* 006784-3d-transparent-glass-icon-arrows-double-arrowhead-right.png in Resources */,
 				C3EF4A1F1FD7749000528247 /* Main.storyboard in Resources */,
-				C3962A3B205888F3002C0AF9 /* Level1Scene.sks in Resources */,
-				C3189E081FD7991E000A52A6 /* MenuScene.sks in Resources */,
 				C3EF4A211FD7749000528247 /* Assets.xcassets in Resources */,
 				C3EF4A241FD7749000528247 /* LaunchScreen.storyboard in Resources */,
 			);
@@ -303,6 +340,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		C39E37EE208139C100A53519 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C39E37F5208139C100A53519 /* DarkMazeUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C3EF4A0C1FD7748F00528247 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -313,7 +358,6 @@
 				C3EF4A1C1FD7749000528247 /* GameViewController.swift in Sources */,
 				2417D41420746C7C001A478D /* CategorySelectViewController.swift in Sources */,
 				C3EF4A141FD7749000528247 /* AppDelegate.swift in Sources */,
-				C3962A332057508F002C0AF9 /* TapToBeginScene.swift in Sources */,
 				C364CEC01FE74F98009140C7 /* Level1Scene.swift in Sources */,
 				C3189E021FD77D0B000A52A6 /* LevelSelectScene.swift in Sources */,
 				C352CF39207570C300FCD5D0 /* CustomTableViewCell.swift in Sources */,
@@ -325,11 +369,18 @@
 				C3B46D8A207840D400C1EAC6 /* CellDelegate.swift in Sources */,
 				C34AA0F2207199E000DB2229 /* GameDelegates.swift in Sources */,
 				C30DB1CC20156C0300CE670C /* GameStyles.swift in Sources */,
-				C352CF37207570BC00FCD5D0 /* BMCustomTableView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C39E37F8208139C100A53519 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C3EF4A0F1FD7748F00528247 /* Dark Maze */;
+			targetProxy = C39E37F7208139C100A53519 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		C3EF4A1D1FD7749000528247 /* Main.storyboard */ = {
@@ -351,6 +402,38 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		C39E37FA208139C100A53519 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8S2E38T6C8;
+				INFOPLIST_FILE = DarkMazeUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.crossibc.DarkMazeUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Dark Maze";
+			};
+			name = Debug;
+		};
+		C39E37FB208139C100A53519 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8S2E38T6C8;
+				INFOPLIST_FILE = DarkMazeUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.crossibc.DarkMazeUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Dark Maze";
+			};
+			name = Release;
+		};
 		C3EF4A261FD7749000528247 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -492,6 +575,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		C39E37F9208139C100A53519 /* Build configuration list for PBXNativeTarget "DarkMazeUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C39E37FA208139C100A53519 /* Debug */,
+				C39E37FB208139C100A53519 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		C3EF4A0B1FD7748F00528247 /* Build configuration list for PBXProject "Dark Maze" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -11,7 +11,16 @@ import UIKit
 import SpriteKit
 import GameplayKit
 
+
+enum scenes {
+    case menu
+    case levelSelect
+    case game
+    case endGame
+}
+
 class GameViewController: UIViewController, GameDelegate {
+    
     var sceneString = "MenuScene"
 
     override func viewDidLoad() {
@@ -19,8 +28,9 @@ class GameViewController: UIViewController, GameDelegate {
         super.viewDidLoad()
         //let scene = SKScene(size: (view?.frame.size)!)
         if let view = self.view as! SKView? {
-            //view.presentScene(scene)
-            Helper.switchScene(sceneName: sceneString, gameDelegate: self, view: view)
+            
+            view.preferredFramesPerSecond = 30
+            mainMenu()
 
             view.ignoresSiblingOrder = true
             view.showsFPS = true
@@ -28,29 +38,8 @@ class GameViewController: UIViewController, GameDelegate {
         }
     }
 
-    override var shouldAutorotate: Bool {
-        return true
-    }
-
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            return .portrait
-        } else {
-            return .all
-        }
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Release any cached data, images, etc that aren't in use.
-    }
-    
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
     func cleanUp(){
         if let v = self.view as? SKView{
-            print ("cleaning up")
             v.scene?.removeAllChildren()
             v.scene?.removeFromParent()
             v.presentScene(nil)
@@ -59,43 +48,36 @@ class GameViewController: UIViewController, GameDelegate {
     
     //GameDelegate requirements
     func gameOver() {
-        print ("DELEGATION WOOO")
-        Helper.switchScene(sceneName: "EndGameScene", gameDelegate: self, view: view as! SKView)
+        switchScene(scene: EndGameScene(size: GameStyle.shared.defaultSceneSize))
     }
     
-    func switchToViewController(){
+    func playGame() {
+        switchScene(scene: Level1Scene(size: GameStyle.shared.defaultSceneSize))
+    }
+    
+    func mainMenu() {
+        switchScene(scene: MenuScene(size: GameStyle.shared.defaultSceneSize))
+    }
+    
+    func levelSelect(){
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let ivc = storyboard.instantiateViewController(withIdentifier: "CategorySelectView")
         let appDelegate: AppDelegate = (UIApplication.shared.delegate as? AppDelegate)!
 
-        //ivc.sceneString = "LevelSelectScene"
         UIView.animate(withDuration: 0.7, animations: {self.view.alpha = 0}){
             (completed) in
             self.cleanUp()
             appDelegate.window?.set(rootViewController: ivc)
         }
     }
-    
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let ivc = storyboard.instantiateViewController(withIdentifier: "CategorySelectView")
-//        UIView.animate(withDuration: 0.7, animations: {self.view.alpha = 0}){[weak self]
-//            (completed) in
-//            ivc.modalTransitionStyle = .crossDissolve
-//            //self?.cleanUp()
-//            self?.present(ivc, animated: false){
-////                self?.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
-////                let appDelegate: AppDelegate = (UIApplication.shared.delegate as? AppDelegate)!
-////                appDelegate.window?.rootViewController = ivc
-//            }
-//        }
-//    }
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if (segue.identifier == "goToLevelSelect") {
-//            _ = segue.destination as? CategorySelectViewController
-//        }
-//    }
-
+    private func switchScene(scene: SKScene){
+        
+        scene.scaleMode = .aspectFill
+        scene.delegate = self
+        if let v = (view as? SKView){
+            v.presentScene(scene)
+        }
+    }
 }
 
 extension UIWindow {

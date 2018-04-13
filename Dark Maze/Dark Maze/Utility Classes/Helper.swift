@@ -10,20 +10,6 @@ import Foundation
 import SpriteKit
 
 class Helper{
-    static func switchScene(sceneName: String, gameDelegate: GameDelegate?, view: SKView){
-        if let gestures = view.gestureRecognizers{
-            for gesture in gestures{
-                if let recognizer = gesture as? UISwipeGestureRecognizer {
-                    view.removeGestureRecognizer(recognizer)
-                }
-            }
-        }
-        if let scene = SKScene(fileNamed: sceneName) {
-            scene.scaleMode = .aspectFill
-            scene.delegate = gameDelegate!
-            view.presentScene(scene)//, transition: GameStyle.shared.sceneTransition)
-        }
-    }
     
     //creates a label with the normal font, color, alignment
     //must pass in the fontsize and the actual text to be displayed

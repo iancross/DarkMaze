@@ -44,11 +44,6 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         return defaultHeight
     }
     
-    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        //print((customTableView.cellForRow(at: indexPath) as? CustomTableViewCell)?.button!)
-        //(customTableView.cellForRow(at: indexPath) as? CustomTableViewCell)?.clean()
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return levelGroups.count
     }
@@ -107,7 +102,6 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     //MARK Protocol ----------------------------------------------------
     
     func closeFrame(indexPath: IndexPath) {
-        print("about to close frame")
         let cell = customTableView.cellForRow(at: indexPath) as? CustomTableViewCell
         cell?.reverseState()
         selectedRowIndex = nil
@@ -124,32 +118,9 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         UIView.animate(withDuration: 0.7, animations: {self.view.alpha = 0}){
             (completed) in
             appDelegate.window?.set(rootViewController: ivc!)
+            ivc?.playGame()
         }
     }
-//        UIView.animate(withDuration: 0.7, animations: {self.view.alpha = 0}){
-//            (completed) in
-//            self.performSegue(withIdentifier: "switchToGame", sender: self)
-//        }
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let ivc = storyboard.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
-//        ivc.sceneString = "Level1Scene"
-//
-//        UIView.animate(withDuration: 0.7, animations: {self.view.alpha = 0}){ [weak self]
-//            (completed) in
-//            ivc.modalTransitionStyle = .crossDissolve
-//            self?.present(ivc, animated: false){ }
-//
-//            //get rid of the previous view controller. syntax is bizarre here
-////            let appDelegate: AppDelegate = (UIApplication.shared.delegate as? AppDelegate)!
-////            appDelegate.window?.rootViewController?.dismiss(animated: true, completion: nil)
-//        }
-//    }
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if (segue.identifier == "goToLevelSelect") {
-//            _ = segue.destination as? CategorySelectViewController
-//        }
-//    }
 }
 
 

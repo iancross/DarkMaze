@@ -30,6 +30,16 @@ class Level1Scene: SKScene {
     let endArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
     let startArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
     
+    override init(size: CGSize) {
+        super.init(size: size)
+        backgroundColor = UIColor.black
+        anchorPoint = CGPoint(x: 0, y:0)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         cam = SKCameraNode()
@@ -306,8 +316,8 @@ class Level1Scene: SKScene {
     }
     
     private func switchToEndGameScene(){
-        Helper.switchScene(sceneName: "EndGameScene", gameDelegate: self.delegate as? GameDelegate, view: self.view! as SKView)
-        //(self.delegate as? GameDelegate)?.gameOver()
+        //Helper.switchScene(sceneName: "EndGameScene", gameDelegate: self.delegate as? GameDelegate, view: self.view! as SKView)
+        (self.delegate as? GameDelegate)?.gameOver()
     }
 
     
@@ -398,7 +408,6 @@ class Level1Scene: SKScene {
             ])
             if i == Level.solutionCoords.count - 1 {
                 tile.tile.run(SKAction.sequence([sequence,SKAction.wait(forDuration: 1.0)])){
-                    print ("fuck")
                     self.endGame(success: true)
                 }
             }

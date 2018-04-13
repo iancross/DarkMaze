@@ -17,6 +17,8 @@ import Foundation
 
 protocol GameDelegate: SKSceneDelegate {
     func gameOver()
-    func switchToViewController()
+    func levelSelect()
+    func playGame()
+    func mainMenu()
 }
 

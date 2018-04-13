@@ -18,6 +18,16 @@ class EndGameScene: SKScene {
     //then direct the user based on selection
     //Main menu, level select, or next level?
     
+    override init(size: CGSize) {
+        super.init(size: size)
+        backgroundColor = UIColor.black
+        anchorPoint = CGPoint(x: 0, y:0)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func sceneDidLoad() {
         self.isUserInteractionEnabled = true
         
@@ -34,8 +44,11 @@ class EndGameScene: SKScene {
             variableText = "Try Again"
             successMessage = "Failed"
         }
-        successMessageNode = self.childNode(withName: "successMessage") as! SKLabelNode
+//        successMessageNode = self.childNode(withName: "successMessage") as! SKLabelNode
+        successMessageNode = Helper.createGenericLabel(successMessage, fontsize: GameStyle.shared.LargeTextBoxFontSize)
+        successMessageNode.position = CGPoint(x: frame.midX, y: 1130)
         successMessageNode.text = successMessage
+        self.addChild(successMessageNode)
 
         let font = GameStyle.shared.TextBoxFontSize
         let buffers: (CGFloat,CGFloat) = (20.0,20.0)
@@ -56,14 +69,16 @@ class EndGameScene: SKScene {
             if repeatOrNextButton?.text == "Next Level"{
                 LevelsData.shared.nextLevel()
             }
-            Helper.switchScene(sceneName: "Level1Scene", gameDelegate: self.delegate as? GameDelegate, view: self.view!)
+            //Helper.switchScene(sceneName: "Level1Scene", gameDelegate: self.delegate as? GameDelegate, view: self.view!)
+            (self.delegate as? GameDelegate)?.playGame()
         }
         else if levelSelectButton!.within(point: point){
             //Helper.switchScene(sceneName: "LevelSelectScene", gameDelegate: self.delegate as? GameDelegate, view: self.view!)
-            (self.delegate as? GameDelegate)?.switchToViewController()
+            (self.delegate as? GameDelegate)?.levelSelect()
         }
         else if mainMenuButton!.within(point: point){
-            Helper.switchScene(sceneName: "MenuScene", gameDelegate: self.delegate as? GameDelegate, view: self.view!)
+            //Helper.switchScene(sceneName: "MenuScene", gameDelegate: self.delegate as? GameDelegate, view: self.view!)
+            (self.delegate as? GameDelegate)?.mainMenu()
         }
     }
 }

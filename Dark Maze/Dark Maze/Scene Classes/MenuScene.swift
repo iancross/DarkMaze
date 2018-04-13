@@ -11,16 +11,25 @@ import GameplayKit
 
 
 class MenuScene: SKScene {
-    var darkMaze: SKLabelNode?
-    var tapToBegin: SKLabelNode?
+    var darkMaze: SKLabelNode? = nil
+    var tapToBegin: SKLabelNode? = nil
     
     var blockPoints = [CGPoint]()
     var tileLoop = 20
     var currentTile: GridTile?
     var blocksize: CGFloat = 100
     
+    override init(size: CGSize) {
+        super.init(size: size)
+        backgroundColor = UIColor.black
+        anchorPoint = CGPoint(x: 0, y:0)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func didMove(to view: SKView) {
-        scene?.physicsWorld
         initDarkMazeLabel()
         let actionList = SKAction.sequence(
             [SKAction.fadeIn(withDuration: 2.0),
@@ -72,7 +81,9 @@ class MenuScene: SKScene {
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         //Helper.switchScene(sceneName: "LevelSelectScene", gameDelegate: self.delegate as? GameDelegate, view: self.view!)
-        (self.delegate as? GameDelegate)?.switchToViewController()
+        (self.delegate as? GameDelegate)?.levelSelect()
+
+//        (self.delegate as? GameDelegate)?.switchToViewController()
         //view?.presentScene(nil)
     }
     func createNewStartPoint(){
