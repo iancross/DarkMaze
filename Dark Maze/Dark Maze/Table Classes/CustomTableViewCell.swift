@@ -182,8 +182,8 @@ class CustomTableViewCell: UITableViewCell {
                     let loadScene = SKAction.run({
                         LevelsData.shared.selectedLevel = (page: self.indexPath.row, level: Int(button.text)! - 1)
                     })
-                    button.outline.run(SKAction.sequence([embiggen,loadScene])){
-                        self.cellDelegate?.switchToGame()
+                    button.outline.run(SKAction.sequence([embiggen,loadScene])){ [weak self] in
+                        self?.cellDelegate?.switchToGame()
                     }
                     return
                 }

@@ -25,10 +25,13 @@
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="4qk-I5-YsI"/>
                     </view>
+                    <connections>
+                        <segue destination="eqf-KL-g7y" kind="showDetail" identifier="switchToLevelSelect" id="NxJ-uZ-heG"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="268" y="108"/>
+            <point key="canvasLocation" x="367" y="108"/>
         </scene>
         <!--Category Select View Controller-->
         <scene sceneID="YxY-z3-RwG">
@@ -81,6 +84,7 @@
                     </view>
                     <connections>
                         <outlet property="customTableView" destination="zMh-GX-bI9" id="jUk-nf-ihV"/>
+                        <segue destination="BV1-FR-VrT" kind="showDetail" identifier="switchToGame" action="showViewController:sender:" id="PNA-du-H6f"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uG4-Ln-kOz" userLabel="First Responder" sceneMemberID="firstResponder"/>

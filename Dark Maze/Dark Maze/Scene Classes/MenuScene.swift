@@ -20,6 +20,7 @@ class MenuScene: SKScene {
     var blocksize: CGFloat = 100
     
     override func didMove(to view: SKView) {
+        scene?.physicsWorld
         initDarkMazeLabel()
         let actionList = SKAction.sequence(
             [SKAction.fadeIn(withDuration: 2.0),
@@ -60,7 +61,7 @@ class MenuScene: SKScene {
             currentTile?.position = newPoint
             addChild(currentTile!)
             let actionList = SKAction.sequence(
-                [SKAction.run { self.currentTile?.switchToWhite() },
+                [SKAction.run { [weak self] in self?.currentTile?.switchToWhite() },
                  SKAction.fadeOut(withDuration: 1.7),
                  SKAction.removeFromParent()
                 ]

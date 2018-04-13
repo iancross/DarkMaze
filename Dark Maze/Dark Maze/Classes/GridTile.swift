@@ -146,17 +146,17 @@ class GridTile: SKNode{
         switchToGray()
         tile.zPosition += 5
         let graySequence =
-            [SKAction.run({
-                self.tile.alpha = 0;
-                self.tile.fillColor = .gray;
+            [SKAction.run({ [weak self] in
+                self?.tile.alpha = 0;
+                self?.tile.fillColor = .gray;
             }),
             SKAction.fadeIn(withDuration: 0.4),
             SKAction.fadeOut(withDuration: 0.4)
         ]
         
-        tile.run(SKAction.sequence(graySequence)){
-            self.switchToBlack()
-            self.tile.zPosition -= 5
+        tile.run(SKAction.sequence(graySequence)){ [weak self] in
+            self?.switchToBlack()
+            self?.tile.zPosition -= 5
         }
     }
     

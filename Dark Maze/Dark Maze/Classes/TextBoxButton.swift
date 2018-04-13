@@ -80,6 +80,7 @@ class TextBoxButton: SKNode{
     deinit {
         outline.removeFromParent()
         labelNode.removeFromParent()
+        self.removeFromParent()
     }
 }
 

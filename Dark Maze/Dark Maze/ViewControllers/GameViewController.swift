@@ -48,6 +48,14 @@ class GameViewController: UIViewController, GameDelegate {
     override var prefersStatusBarHidden: Bool {
         return true
     }
+    func cleanUp(){
+        if let v = self.view as? SKView{
+            print ("cleaning up")
+            v.scene?.removeAllChildren()
+            v.scene?.removeFromParent()
+            v.presentScene(nil)
+        }
+    }
     
     //GameDelegate requirements
     func gameOver() {
@@ -56,15 +64,31 @@ class GameViewController: UIViewController, GameDelegate {
     }
     
     func switchToViewController(){
-        //self.performSegue(withIdentifier: "goToLevelSelect", sender: nil)
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let ivc = storyboard.instantiateViewController(withIdentifier: "CategorySelectView")
+        let appDelegate: AppDelegate = (UIApplication.shared.delegate as? AppDelegate)!
+
+        //ivc.sceneString = "LevelSelectScene"
         UIView.animate(withDuration: 0.7, animations: {self.view.alpha = 0}){
             (completed) in
-            ivc.modalTransitionStyle = .crossDissolve
-            self.present(ivc, animated: false, completion: nil)
+            self.cleanUp()
+            appDelegate.window?.set(rootViewController: ivc)
         }
     }
+    
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let ivc = storyboard.instantiateViewController(withIdentifier: "CategorySelectView")
+//        UIView.animate(withDuration: 0.7, animations: {self.view.alpha = 0}){[weak self]
+//            (completed) in
+//            ivc.modalTransitionStyle = .crossDissolve
+//            //self?.cleanUp()
+//            self?.present(ivc, animated: false){
+////                self?.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
+////                let appDelegate: AppDelegate = (UIApplication.shared.delegate as? AppDelegate)!
+////                appDelegate.window?.rootViewController = ivc
+//            }
+//        }
+//    }
     
 //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 //        if (segue.identifier == "goToLevelSelect") {
@@ -72,4 +96,42 @@ class GameViewController: UIViewController, GameDelegate {
 //        }
 //    }
 
+}
+
+extension UIWindow {
+    /// Fix for http://stackoverflow.com/a/27153956/849645
+    func set(rootViewController newRootViewController: UIViewController, withTransition transition: CATransition? = nil) {
+        
+        let previousViewController = rootViewController
+        
+//        if let transition = transition {
+//            // Add the transition
+//            layer.add(transition, forKey: kCATransition)
+//        }
+        
+        rootViewController = newRootViewController
+        
+//        // Update status bar appearance using the new view controllers appearance - animate if needed
+//        if UIView.areAnimationsEnabled {
+//            UIView.animate(withDuration: CATransaction.animationDuration()) {
+//                newRootViewController.setNeedsStatusBarAppearanceUpdate()
+//            }
+//        } else {
+//            newRootViewController.setNeedsStatusBarAppearanceUpdate()
+//        }
+        
+        // The presenting view controllers view doesn't get removed from the window as its currently transistioning and presenting a view controller
+        if let transitionViewClass = NSClassFromString("UITransitionView") {
+            for subview in subviews where subview.isKind(of: transitionViewClass) {
+                subview.removeFromSuperview()
+            }
+        }
+        if let previousViewController = previousViewController {
+            // Allow the view controller to be deallocated
+            previousViewController.dismiss(animated: false) {
+                // Remove the root view in case its still showing
+                previousViewController.view.removeFromSuperview()
+            }
+        }
+    }
 }

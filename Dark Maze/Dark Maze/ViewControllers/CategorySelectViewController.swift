@@ -16,7 +16,6 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     
     //set when we initially click a row. reinit when that row is finally closed
     var selectedRowIndex: IndexPath? = nil
-    
 
     //MARK: Variables
     
@@ -27,6 +26,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         self.customTableView.rowHeight = defaultHeight;
         super.viewDidLoad()
         view.backgroundColor = UIColor.black
+        //presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
     override func didReceiveMemoryWarning() {
@@ -117,15 +117,39 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     
     func switchToGame(){
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let ivc = storyboard.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
-        ivc.sceneString = "Level1Scene"
+        let ivc = storyboard.instantiateViewController(withIdentifier: "GameViewController") as? GameViewController
+        ivc?.sceneString = "Level1Scene"
+        let appDelegate: AppDelegate = (UIApplication.shared.delegate as? AppDelegate)!
         
         UIView.animate(withDuration: 0.7, animations: {self.view.alpha = 0}){
             (completed) in
-            ivc.modalTransitionStyle = .crossDissolve
-            self.present(ivc, animated: false, completion: nil)
+            appDelegate.window?.set(rootViewController: ivc!)
         }
     }
+//        UIView.animate(withDuration: 0.7, animations: {self.view.alpha = 0}){
+//            (completed) in
+//            self.performSegue(withIdentifier: "switchToGame", sender: self)
+//        }
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let ivc = storyboard.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
+//        ivc.sceneString = "Level1Scene"
+//
+//        UIView.animate(withDuration: 0.7, animations: {self.view.alpha = 0}){ [weak self]
+//            (completed) in
+//            ivc.modalTransitionStyle = .crossDissolve
+//            self?.present(ivc, animated: false){ }
+//
+//            //get rid of the previous view controller. syntax is bizarre here
+////            let appDelegate: AppDelegate = (UIApplication.shared.delegate as? AppDelegate)!
+////            appDelegate.window?.rootViewController?.dismiss(animated: true, completion: nil)
+//        }
+//    }
+    
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if (segue.identifier == "goToLevelSelect") {
+//            _ = segue.destination as? CategorySelectViewController
+//        }
+//    }
 }
 
 
