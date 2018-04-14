@@ -27,6 +27,8 @@ class CustomTableViewCell: UITableViewCell {
     var categoryString = String()
     var progressString = String()
     var expanded = false
+    var accessibleElements: [UIAccessibilityElement] = []
+
 
     
     override func awakeFromNib() {
@@ -44,6 +46,7 @@ class CustomTableViewCell: UITableViewCell {
     
     
     func initCellData(category: String, progress: String, path: IndexPath, origHeight: CGFloat){
+        accessibilityIdentifier = "Cell \(path.row)"
         categoryString = category
         progressString = progress
         mainFontSize = frame.width/13
@@ -87,6 +90,7 @@ class CustomTableViewCell: UITableViewCell {
     private func addButton(){
         removeButton()
         button = UIButton(frame: CGRect(origin: CGPoint(x:0,y:0), size: frame.size))
+        button?.accessibilityIdentifier = "skview button"
         button?.backgroundColor = UIColor.clear
         button?.setTitle("", for: .normal)
         button?.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
@@ -115,6 +119,7 @@ class CustomTableViewCell: UITableViewCell {
                         fontsize: mainFontSize,
                         buffers: (5.0,10.0),
                         parentScene: (drawing?.scene)!)
+                    box.isAccessibilityElement = true
                     box.updateText(String(levelNumber + 1))
                     if group.levels[levelNumber].levelCompleted{
                         box.markAsCompletedLevel()
@@ -187,6 +192,8 @@ class CustomTableViewCell: UITableViewCell {
         let scene = SKScene(size: (drawing?.frame.size)!)
         scene.backgroundColor = UIColor.black
         drawing?.presentScene(scene)
+        drawing?.isAccessibilityElement = true
+        drawing?.accessibilityIdentifier = "drawing"
     }
     
     private func addCategoryLabel(){
@@ -207,6 +214,7 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     func clean(){
+        accessibleElements.removeAll()
         self.removeLevels()
         self.removeButton()
         self.drawing?.scene?.removeAllChildren()
@@ -254,5 +262,68 @@ class CustomTableViewCell: UITableViewCell {
         cell.alpha = 1
         cell.layer.shadowOffset =  CGSize(width:0,height: 0)
         UIView.commitAnimations()
+    }
+    
+    override func accessibilityElementCount() -> Int {
+        initAccessibility()
+        return accessibleElements.count
+    }
+    
+    override func accessibilityElement(at index: Int) -> Any? {
+        
+        initAccessibility()
+        if (index < accessibleElements.count) {
+            return accessibleElements[index]
+        } else {
+            return nil
+        }
+    }
+    
+    override func index(ofAccessibilityElement element: Any) -> Int {
+        initAccessibility()
+        return accessibleElements.index(of: element as! UIAccessibilityElement)!
+    }
+    
+    func initAccessibility() {
+        if accessibleElements.count == 0 {
+            accessibleElements.append(UIAccessibilityElement(accessibilityContainer: drawing!))
+            for (i,level) in levels.enumerated(){
+                // 1.
+                let elementForTapMe   = UIAccessibilityElement(accessibilityContainer: level)
+                
+                // 2.
+                var frameForTapMe = level.frame
+                
+                // From Scene to View
+                //frameForTapMe.origin = (drawing?.convert(frameForTapMe.origin, from: self))!
+                
+                // Don't forget origins are different for SpriteKit and UIKit:
+                // - SpriteKit is bottom/left
+                // - UIKit is top/left
+                //              y
+                //  ┌────┐       ▲
+                //  │    │       │   x
+                //  ◉────┘       └──▶
+                //
+                //                   x
+                //  ◉────┐       ┌──▶
+                //  │    │       │
+                //  └────┘     y ▼
+                //
+                // Thus before the following conversion, origin value indicate the bottom/left edge of the frame.
+                // We then need to move it to top/left by retrieving the height of the frame.
+                //
+                
+                //frameForTapMe.origin.y = frameForTapMe.origin.y - frameForTapMe.size.height
+                
+                // 3.
+                elementForTapMe.accessibilityLabel   = "Level \(i)"
+                elementForTapMe.accessibilityFrame   = frameForTapMe
+                elementForTapMe.accessibilityTraits  = UIAccessibilityTraitButton
+                
+                // 4.
+                accessibleElements.append(elementForTapMe)
+            }
+        }
     }
 }
