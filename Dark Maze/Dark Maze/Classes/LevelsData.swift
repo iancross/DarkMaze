@@ -44,6 +44,7 @@ class LevelsData{
         //levelGroups = [(category: String, levels: [LevelData])]()
         _4x4()
         _5x5()
+        _5x6Jump()
         _6x10Flip()
         for i in 1...20{
            _5x5()
@@ -163,6 +164,21 @@ class LevelsData{
         )]
         levelGroups.append((category:"5x5",levels: array))
     }
+    func _5x6Jump(){
+        let array = [
+        LevelData(
+            gridX: 5, gridY: 6, delayTime: 0.5,
+            solutionCoords: [(0,1),(0,0),(1,0),(2,0),(2,3),(2,4),(1,4),(1,5),(2,5),(3,5),(4,5)],
+            levelCompleted: true, modifications: nil
+        ),
+        LevelData(
+            gridX: 5, gridY: 6, delayTime: 0.5,
+            solutionCoords: [(0,1),(0,2),(0,3),(1,3),(2,3),(3,3),(4,3),(4,2),(4,1),(3,1),(2,1),(2,2),(2,3),(2,4),(2,5)],
+            levelCompleted: false, modifications: nil
+        )]
+        levelGroups.append ((category: "5x6 Jump", array))
+    }
+    
     func _6x10Flip(){
         let array = [LevelData(
             gridX: 6, gridY: 10, delayTime: 0.3,

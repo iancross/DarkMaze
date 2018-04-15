@@ -29,6 +29,7 @@ class Level1Scene: SKScene {
     private var crackingFrames: [SKTexture] = []
     let endArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
     let startArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
+    var categoryNode: CategoryHeader?
     
     override init(size: CGSize) {
         super.init(size: size)
@@ -118,7 +119,6 @@ class Level1Scene: SKScene {
         }
         gridNode.position = CGPoint(x: frame.midX, y: frame.midY)
         self.addChild(gridNode)
-        //gridNode.zRotation -= 0.1
 
     }
     
@@ -163,61 +163,13 @@ class Level1Scene: SKScene {
         let category = LevelsData.shared.levelGroups[currentPage].category
         let title = "\(category) \(progress)/\(outOfTotal)"
         
-        let categoryNode = CategoryHeader(string: title)
-        categoryNode.position = CGPoint(x: frame.midX, y: frame.maxY - 100)
-        addChild(categoryNode)
+        categoryNode = CategoryHeader(string: title)
+        categoryNode?.position = CGPoint(x: frame.midX, y: frame.maxY - 100)
+        addChild(categoryNode!)
     }
     
-    func drawArrows(firstTile: GridTile){
-        let endTile = self.tile2DArray[(Level.solutionCoords.last?.y)!][(Level.solutionCoords.last?.x)!]
-        placeArrow(tile: firstTile, arrow: startArrow, orient: -1)
-        placeArrow(tile: endTile, arrow: endArrow, orient: 1)
-        startArrowSequence(tile: firstTile)
-    }
-    
-    func startArrowSequence(tile: GridTile){
-        var vector = CGVector()
-        if tile.gridCoord.x == 0 || tile.gridCoord.x == tile2DArray[0].count - 1{
-            vector = CGVector(dx: -20.0,dy: 0)
-        }
-        else{
-            vector = CGVector(dx: 0, dy: -20)
-        }
-        let sequence = SKAction.sequence(
-            [SKAction.move(by: vector, duration: 0.4),
-             SKAction.move(by: CGVector(dx: -vector.dx,dy: -vector.dy), duration: 0.4)])
-        startArrow.run(SKAction.repeatForever(sequence))
-    }
-    //orientation is either 1 or -1
-    //1 means that it's the end arrow
-    //-1 means it's the begin arrow so the arro
-    func placeArrow(tile: GridTile, arrow: SKSpriteNode, orient: CGFloat){
-        //ends on the right. default arrow orientation
-        var point = CGPoint(x: 0, y: 0)
-        var rotation: CGFloat = 0
-        if tile.gridCoord.x == tile2DArray[0].count - 1{
-            point = CGPoint(x: tile.frame.midX + blocksize, y: tile.frame.midY)
-            rotation = CGFloat(.pi/2.0) - (orient * .pi/2.0)
-        }
-        //ends on the left. rotate 180
-        else if tile.gridCoord.x == 0{
-            point = CGPoint(x: tile.frame.midX - blocksize, y: tile.frame.midY)
-            rotation = CGFloat(.pi/2.0) + (orient * .pi/2.0)
-        }
-        //ends on top of the grid and rotate 90 left
-        else if tile.gridCoord.y == 0{
-            point = CGPoint(x: tile.frame.midX, y: tile.frame.midY - blocksize)
-            rotation = -1 * (orient * .pi/2.0)
-        }
-        //ends bot of grid and rotate 90 right
-        else if tile.gridCoord.y == tile2DArray.count - 1{
-            point = CGPoint(x: tile.frame.midX, y: tile.frame.midY + blocksize)
-            rotation = (orient * .pi/2.0)
-        }
-        arrow.position = point
-        arrow.zRotation += rotation
-        gridNode.addChild(arrow)
-    }
+/*---------------------------------------------------------------*/
+/*---------------------- Grid Modification ----------------------*/
     func modifyGrid(){
         if let mods = Level.modifications{
             for modification in mods{
@@ -238,6 +190,9 @@ class Level1Scene: SKScene {
             self.gameActive = true
         }
     }
+/*---------------------- End Grid Modification ----------------------*/
+
+    
     private func drawGridLines(){
         for row in tile2DArray{
             for tile in row{
@@ -247,6 +202,10 @@ class Level1Scene: SKScene {
         gridViewable = true
     }
     
+    
+/*----------------------------------------------------*/
+/*---------------------- Touches ----------------------*/
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         //can we handle just first touch here?
         for t in touches {
@@ -257,6 +216,13 @@ class Level1Scene: SKScene {
             else{
                 skip(touch: t.location(in: self))
             }
+        }
+    }
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let point = touches.first
+        let positionInScene = point?.location(in: gridNode)
+        if gameActive {
+            handleTouch(positionInScene!)
         }
     }
     
@@ -277,29 +243,67 @@ class Level1Scene: SKScene {
             }
         }
     }
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let point = touches.first
-        let positionInScene = point?.location(in: gridNode)
-        if gameActive {
-            handleTouch(positionInScene!)
-        }
-    }
     
     private func handleTouch(_ point: CGPoint){
         for row in tile2DArray{
             for tile in row{
-                if tile.isTouched(point: point){
+                if tile.pointIsWithin(point){
                     tile.removeAllActions()
                     startArrow.removeAllActions()
 //                    print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
 //                    return //comment out to get grid coords for levels
                     lastTouchedTile = tile
-                    tile.touched(alpha: blockAlphaMin + CGFloat(touchedTiles + 1) * blockAlphaIncrement)
+                    updateGridForJump()
+                    touchTile(tile: lastTouchedTile!, alpha: blockAlphaMin + CGFloat(touchedTiles + 1) * blockAlphaIncrement)
                     return
                 }
             }
         }
     }
+    func updateGridForJump(){
+        if touchedTiles > 1{ //} && touchedTiles < (Level.solutionCoords.count - 1) {
+            let currCoord = Level.solutionCoords[touchedTiles-1]
+            let nextCoord = Level.solutionCoords[touchedTiles]
+            print ("touched \(touchedTiles)")
+            print ("tile coord: \(currCoord)")
+            print ("next coord \(nextCoord)")
+            let xDiff = abs(nextCoord.x - currCoord.x)
+            let yDiff = abs(nextCoord.y - currCoord.y)
+            
+            if xDiff > 1 || yDiff > 1 {
+                print("here")
+                for row in tile2DArray{
+                    for tile in row{
+                        switch tile.state{
+                        case .touched:
+                            break
+                        default:
+                            tile.state = .availableToTouch
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func touchTile(tile: GridTile, alpha: CGFloat){
+        if let successfulTouch = tile.touched(alpha: alpha){
+            print("successful touch")
+            if successfulTouch{
+                print ("about to update grid")
+                if isGameOver(){
+                    return
+                }
+                updateGridState()
+            }
+            else{
+                giveHint()
+            }
+        }
+    }
+/*---------------------- End Touches ----------------------*/
+    
+    
     
     // If all the solutions coords are filled (and there wasn't a
     // failure) show the end game success (failure = false). Otherwise,
@@ -307,7 +311,7 @@ class Level1Scene: SKScene {
     func endGame (success: Bool){
         _ = LevelsData.shared
         if success{
-            LevelsData.shared.levelGroups[LevelsData.shared.selectedLevel.page].levels[LevelsData.shared.selectedLevel.level].levelCompleted = true
+        LevelsData.shared.levelGroups[LevelsData.shared.selectedLevel.page].levels[LevelsData.shared.selectedLevel.level].levelCompleted = true
         }
         for child in self.children {
             child.removeFromParent()
@@ -316,10 +320,9 @@ class Level1Scene: SKScene {
     }
     
     private func switchToEndGameScene(){
-        //Helper.switchScene(sceneName: "EndGameScene", gameDelegate: self.delegate as? GameDelegate, view: self.view! as SKView)
         (self.delegate as? GameDelegate)?.gameOver()
     }
-
+    
     
     func updateGridState(){
         if let coord = (lastTouchedTile?.gridCoord){
@@ -327,9 +330,6 @@ class Level1Scene: SKScene {
                 for tile in row{
                     tile.resetState()
                 }
-            }
-            if isGameOver(){
-                return
             }
             if coord.x - 1 >= 0{
                 checkTile(x: coord.x-1,y: coord.y)
@@ -343,6 +343,7 @@ class Level1Scene: SKScene {
             if coord.y + 1 < tile2DArray.count{
                 checkTile(x: coord.x, y: coord.y+1)
             }
+            
         }
     }
     
@@ -384,7 +385,6 @@ class Level1Scene: SKScene {
         else{
             self.gameActive = false
             LevelsData.shared.currentLevelSuccess = false
-            //lastTouchedTile?.switchToBlack()
             lastTouchedTile?.restoreOutline()
             let positionInScene = lastTouchedTile?.scene?.convert((lastTouchedTile?.position)!, from: (lastTouchedTile?.parent)!)
             crackAnimation(point: positionInScene!)
@@ -434,17 +434,18 @@ class Level1Scene: SKScene {
         crack.run(
             SKAction.sequence(
                 [SKAction.animate(with: crackingFrames, timePerFrame: 2/Double(numImages), resize: false, restore: false),
-                 SKAction.wait(forDuration: 0.2),
-                 SKAction.run({
-                    self.gridNode.isHidden = false })
-                ]
-            )){
+                     SKAction.run({ [weak self] in
+                        self?.gridNode.isHidden = true
+                        self?.categoryNode?.isHidden = true
+                     })
+                ])
+            ){
                 self.disappearGrid()
             }
     }
     
     func disappearGrid(){
-        gridNode.run(SKAction.fadeOut(withDuration: 0.7)){
+        gridNode.run(SKAction.fadeOut(withDuration: 0.6)){
             self.endGame(success: false)
         }
     }
@@ -471,6 +472,63 @@ class Level1Scene: SKScene {
             }
         }
     }
+    
+    
+/*----------------------------------------------------------*/
+/*------------------------- Arrows -------------------------*/
+    func drawArrows(firstTile: GridTile){
+        let endTile = self.tile2DArray[(Level.solutionCoords.last?.y)!][(Level.solutionCoords.last?.x)!]
+        placeArrow(tile: firstTile, arrow: startArrow, orient: -1)
+        placeArrow(tile: endTile, arrow: endArrow, orient: 1)
+        startArrowSequence(tile: firstTile)
+    }
+    
+    func startArrowSequence(tile: GridTile){
+        var vector = CGVector()
+        if tile.gridCoord.x == 0 || tile.gridCoord.x == tile2DArray[0].count - 1{
+            vector = CGVector(dx: -20.0,dy: 0)
+        }
+        else{
+            vector = CGVector(dx: 0, dy: -20)
+        }
+        let sequence = SKAction.sequence(
+            [SKAction.move(by: vector, duration: 0.4),
+             SKAction.move(by: CGVector(dx: -vector.dx,dy: -vector.dy), duration: 0.4)])
+        startArrow.run(SKAction.repeatForever(sequence))
+    }
+    //orientation is either 1 or -1
+    //1 means that it's the end arrow
+    //-1 means it's the begin arrow so the arro
+    func placeArrow(tile: GridTile, arrow: SKSpriteNode, orient: CGFloat){
+        //ends on the right. default arrow orientation
+        var point = CGPoint(x: 0, y: 0)
+        var rotation: CGFloat = 0
+        if tile.gridCoord.x == tile2DArray[0].count - 1{
+            point = CGPoint(x: tile.frame.midX + blocksize, y: tile.frame.midY)
+            rotation = CGFloat(.pi/2.0) - (orient * .pi/2.0)
+        }
+            //ends on the left. rotate 180
+        else if tile.gridCoord.x == 0{
+            point = CGPoint(x: tile.frame.midX - blocksize, y: tile.frame.midY)
+            rotation = CGFloat(.pi/2.0) + (orient * .pi/2.0)
+        }
+            //ends on top of the grid and rotate 90 left
+        else if tile.gridCoord.y == 0{
+            point = CGPoint(x: tile.frame.midX, y: tile.frame.midY - blocksize)
+            rotation = -1 * (orient * .pi/2.0)
+        }
+            //ends bot of grid and rotate 90 right
+        else if tile.gridCoord.y == tile2DArray.count - 1{
+            point = CGPoint(x: tile.frame.midX, y: tile.frame.midY + blocksize)
+            rotation = (orient * .pi/2.0)
+        }
+        arrow.position = point
+        arrow.zRotation += rotation
+        gridNode.addChild(arrow)
+    }
+/*---------------------- End Arrows ----------------------*/
+    
+
     
     /*checks an array of tuples for one in particular
      https://stackoverflow.com/questions/29736244/how-do-i-check-if-an-array-of-tuples-contains-a-particular-one-in-swift

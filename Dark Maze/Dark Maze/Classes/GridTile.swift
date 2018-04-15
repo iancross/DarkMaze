@@ -18,7 +18,6 @@ class GridTile: SKNode{
     var strokeActive = true
     var strokeAppearing = true //used to have the grid fade in and out
     let alphaDecrement = 0.005
-    let parentScene: SKScene
     var state = TileState.unavailable
     
     enum TileState {
@@ -46,7 +45,6 @@ class GridTile: SKNode{
         tile.strokeColor = UIColor(displayP3Red: 0.40, green: 0.40, blue: 0.40, alpha: 0.0 )
         
         //add the tile to the parent scene
-        self.parentScene = parentScene
         super.init()
         self.addChild(tile)
     }
@@ -61,7 +59,7 @@ class GridTile: SKNode{
         tile.fillColor = color
     }
     
-    func isTouched(point: CGPoint) -> Bool{
+     func pointIsWithin(_ point: CGPoint) -> Bool{
         if self.contains(point) {
             return true
         }
@@ -86,23 +84,18 @@ class GridTile: SKNode{
         }
     }
     
-    func touched(alpha: CGFloat){
+    func touched(alpha: CGFloat) -> Bool?{
         switch state {
         case .availableToTouch:
             switchToWhite()
             tile.alpha = alpha
             self.state = .touched
             removeOutline() //remove this if the path should have grid lines
-            if let parent = self.parentScene as? Level1Scene{
-                parent.updateGridState()
-            }
+            return true
         case .touched:
-            return
+            return nil
         case .unavailable:
-            //jiggle the available tiles
-            if let parent = self.parentScene as? Level1Scene{
-                parent.giveHint()
-            }
+            return false
         }
     }
     func restoreOutline(){
@@ -127,8 +120,6 @@ class GridTile: SKNode{
     func switchToGray(){
         state = .availableToTouch
         tile.fillColor = .gray
-        //self.switchToWhite()
-        //tile.alpha = 0.3
     }
 
     func resetState(){
