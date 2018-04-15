@@ -160,6 +160,7 @@ class CustomTableViewCell: UITableViewCell {
     
     private func touchedLevel(point: CGPoint){
         let nextLevelToComplete = LevelsData.shared.nextLevelToComplete(groupIndex: indexPath.row)
+        print (nextLevelToComplete)
         for button in levels{
             if button.within(point: point){
                 if Int(button.text)!-1 > nextLevelToComplete{

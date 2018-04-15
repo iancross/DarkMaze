@@ -89,7 +89,7 @@ class LevelsData{
                 return i
             }
         }
-        return 0
+        return pageLevels.count - 1
     }
     /*------------------------------- 4x4 -------------------------------*/
     //Description:
