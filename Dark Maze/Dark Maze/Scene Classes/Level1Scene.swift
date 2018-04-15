@@ -261,7 +261,7 @@ class Level1Scene: SKScene {
         }
     }
     func updateGridForJump(){
-        if touchedTiles > 1{ //} && touchedTiles < (Level.solutionCoords.count - 1) {
+        if touchedTiles > 1{
             let currCoord = Level.solutionCoords[touchedTiles-1]
             let nextCoord = Level.solutionCoords[touchedTiles]
             print ("touched \(touchedTiles)")
@@ -298,6 +298,19 @@ class Level1Scene: SKScene {
             }
             else{
                 giveHint()
+            }
+        }
+            
+        //if nil was returned
+        else{
+            if tupleContains(a: tile.gridCoord,
+                             v: Level.solutionCoords[touchedTiles]){
+                tile.switchToWhite()
+                tile.alpha = alpha
+                if isGameOver(){
+                    return
+                }
+                updateGridState()
             }
         }
     }
