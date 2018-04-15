@@ -264,14 +264,10 @@ class Level1Scene: SKScene {
         if touchedTiles > 1{
             let currCoord = Level.solutionCoords[touchedTiles-1]
             let nextCoord = Level.solutionCoords[touchedTiles]
-            print ("touched \(touchedTiles)")
-            print ("tile coord: \(currCoord)")
-            print ("next coord \(nextCoord)")
             let xDiff = abs(nextCoord.x - currCoord.x)
             let yDiff = abs(nextCoord.y - currCoord.y)
             
             if xDiff > 1 || yDiff > 1 {
-                print("here")
                 for row in tile2DArray{
                     for tile in row{
                         switch tile.state{
@@ -288,9 +284,7 @@ class Level1Scene: SKScene {
     
     func touchTile(tile: GridTile, alpha: CGFloat){
         if let successfulTouch = tile.touched(alpha: alpha){
-            print("successful touch")
             if successfulTouch{
-                print ("about to update grid")
                 if isGameOver(){
                     return
                 }
@@ -306,7 +300,8 @@ class Level1Scene: SKScene {
             if tupleContains(a: tile.gridCoord,
                              v: Level.solutionCoords[touchedTiles]){
                 tile.switchToWhite()
-                tile.alpha = alpha
+                //tile.alpha = alpha
+                tile.setAlpha(alpha: alpha)
                 if isGameOver(){
                     return
                 }
@@ -409,7 +404,10 @@ class Level1Scene: SKScene {
     func successHighlightPath(){
         let numSolutionBlocks = Double(Level.solutionCoords.count)
         for (i,coord) in Level.solutionCoords.enumerated(){
+            print (coord)
             let tile = tile2DArray[coord.y][coord.x]
+            print (tile.alpha)
+            tile.tile.removeAllActions()
             let sequence = SKAction.sequence(
                 [SKAction.wait(forDuration: Double(i) * 1.5/numSolutionBlocks),
                 SKAction.fadeAlpha(to: 1.0, duration: 0.2),

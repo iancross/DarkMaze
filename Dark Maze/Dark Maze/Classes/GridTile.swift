@@ -121,6 +121,10 @@ class GridTile: SKNode{
         state = .availableToTouch
         tile.fillColor = .gray
     }
+    
+    func setAlpha(alpha: CGFloat){
+        tile.alpha = alpha
+    }
 
     func resetState(){
         switch state{
