@@ -19,7 +19,7 @@ class GameStyle {
     var TextBoxFontSize: CGFloat = 90
     var LargeTextBoxFontSize: CGFloat = 130
     let sceneTransition = SKTransition.fade(with: UIColor.black, duration: 0.8)
-
+    let numLevelsOnLine = 4
     private init() {
         sceneTransition.pausesOutgoingScene = true
     }

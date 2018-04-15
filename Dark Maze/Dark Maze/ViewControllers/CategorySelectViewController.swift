@@ -39,7 +39,10 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if selectedRowIndex == indexPath{
-            return 130
+            let count = Double(levelGroups[indexPath.row].levels.count)
+            let lines = ceil(count/Double(GameStyle.shared.numLevelsOnLine))
+            
+            return CGFloat(Double(defaultHeight) + lines * 60.0)
         }
         return defaultHeight
     }
