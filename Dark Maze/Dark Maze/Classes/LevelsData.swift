@@ -132,6 +132,36 @@ class LevelsData{
             solutionCoords:
             [(3,3),(3,2),(2,2),(2,1),(2,0),(1,0),(0,0),(0,1),(0,2)],
             levelCompleted: false, modifications: nil
+        ),
+        LevelData(
+            gridX: 4, gridY: 4, delayTime: 0.5,
+            solutionCoords:
+            [(0,2),(1,2),(1,3)],
+            levelCompleted: false, modifications: nil
+        ),
+        LevelData(
+        gridX: 4, gridY: 4, delayTime: 0.5,
+        solutionCoords:
+        [(0,3),(1,3),(1,2),(1,1),(1,0)],
+        levelCompleted: false, modifications: nil
+        ),
+        LevelData(
+        gridX: 4, gridY: 4, delayTime: 0.5,
+        solutionCoords:
+        [(2,3),(2,2),(1,2),(1,1),(1,0),(2,0)],
+        levelCompleted: false, modifications: nil
+        ),
+        LevelData(
+        gridX: 4, gridY: 4, delayTime: 0.5,
+        solutionCoords:
+        [(0,3),(1,3),(1,2),(2,2),(2,1),(3,1),(3,0)],
+        levelCompleted: false, modifications: nil
+        ),
+        LevelData(
+        gridX: 4, gridY: 4, delayTime: 0.5,
+        solutionCoords:
+        [(3,3),(3,2),(2,2),(2,1),(2,0),(1,0),(0,0),(0,1),(0,2)],
+        levelCompleted: false, modifications: nil
         )]
         levelGroups.append ((category: "4x4", array))
     }

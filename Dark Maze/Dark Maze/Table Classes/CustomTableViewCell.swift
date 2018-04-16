@@ -27,6 +27,7 @@ class CustomTableViewCell: UITableViewCell {
     var progressString = String()
     var expanded = false
     var accessibleElements: [UIAccessibilityElement] = []
+    var levelBuffer = 5
 
 
     
@@ -106,10 +107,18 @@ class CustomTableViewCell: UITableViewCell {
         let levelCount = group.levels.count
         let n = GameStyle.shared.numLevelsOnLine
         for i in 0...levelCount/n{
+            
+            let top = (drawing?.frame.maxY)! - defaultHeight
+            let lines = CGFloat(ceil(Double(levelCount)/Double(n)))
+            let offset = top / lines
+            let y = top + (offset / 2.0) - (offset * CGFloat(i + 1)) + CGFloat(levelBuffer)
+            
             for j in 0...n-1{
                 let levelNumber = i * (n) + j
                 
-                let y = (drawing?.frame.maxY)! - defaultHeight - CGFloat(i) * verticalSpacing - verticalSpacing/3.0
+                
+                
+                //let y = (drawing?.frame.maxY)! - defaultHeight - CGFloat(i) * verticalSpacing - verticalSpacing/3.0
                 if levelNumber <= group.levels.count - 1 {
                     let box = TextBoxButton(
                         x: (frame.width/(CGFloat(n) + 1) * CGFloat(j+1)),

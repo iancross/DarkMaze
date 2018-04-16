@@ -42,7 +42,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             let count = Double(levelGroups[indexPath.row].levels.count)
             let lines = ceil(count/Double(GameStyle.shared.numLevelsOnLine))
             
-            return CGFloat(Double(defaultHeight) + lines * 60.0)
+            return CGFloat(Double(defaultHeight) + lines * 55.0)
         }
         return defaultHeight
     }
