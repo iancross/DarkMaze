@@ -25,6 +25,8 @@ class CustomTableViewCell: UITableViewCell {
     var mainFontSize: CGFloat = 0
     var categoryString = String()
     var progressString = String()
+    var progress: Int?
+    var numLevels: Int?
     var expanded = false
     var accessibleElements: [UIAccessibilityElement] = []
     var levelBuffer = 5
@@ -45,10 +47,12 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     
-    func initCellData(category: String, progress: String, path: IndexPath, origHeight: CGFloat){
+    func initCellData(category: String, progress: Int, outOfTotal: Int, path: IndexPath, origHeight: CGFloat){
         accessibilityIdentifier = "Cell \(path.row)"
         categoryString = category
-        progressString = progress
+        progressString = "\(progress)/\(outOfTotal)"
+        self.progress = progress
+        numLevels = outOfTotal
         mainFontSize = frame.width/13
         defaultHeight = origHeight
         verticalSpacing = 45
@@ -89,7 +93,7 @@ class CustomTableViewCell: UITableViewCell {
     
     private func addButton(){
         removeButton()
-        button = UIButton(frame: CGRect(origin: CGPoint(x:0,y:0), size: frame.size))
+        button = UIButton(frame: CGRect(origin: CGPoint.zero, size: frame.size))
         button?.accessibilityIdentifier = "skview button"
         button?.backgroundColor = UIColor.clear
         button?.setTitle("", for: .normal)
@@ -196,13 +200,43 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     private func setupScene(){
-        drawing = SKView(frame: CGRect(origin: CGPoint(x:0,y:0), size: frame.size))
+        drawing = SKView(frame: CGRect(origin: CGPoint.zero, size: frame.size))
         self.addSubview(drawing!)
         let scene = SKScene(size: (drawing?.frame.size)!)
         scene.backgroundColor = UIColor.black
         drawing?.presentScene(scene)
         drawing?.isAccessibilityElement = true
         drawing?.accessibilityIdentifier = "drawing"
+        drawProgressLine()
+    }
+    
+    func drawProgressLine(){
+        let yBuffer: CGFloat = 4
+        let xBuffer: CGFloat = 4
+        
+        // Define start & end point for line
+        let startPoint = CGPoint(x: 0, y: yBuffer)
+        let fraction = CGFloat(Double(progress!)/Double(numLevels!))
+        let endPoint = CGPoint(x: (drawing?.frame.maxX)! * fraction - xBuffer, y: yBuffer)
+        
+        // Create line with SKShapeNode
+        let line = SKShapeNode()
+        let path = UIBezierPath()
+        path.move(to: startPoint)
+        path.addLine(to: endPoint)
+        line.path = path.cgPath
+        line.strokeColor = UIColor.white
+        line.lineWidth = 1 * fraction
+        line.glowWidth = 3 * fraction
+        line.alpha = 1.0 * fraction
+        drawing?.scene?.addChild(line)
+        
+        if endPoint.x > 0{
+            var Circle = SKShapeNode(circleOfRadius: 3 ) // Size of Circle
+            Circle.position = endPoint
+            Circle.fillColor = SKColor.white
+            drawing?.scene?.addChild(Circle)
+        }
     }
     
     private func addCategoryLabel(){
@@ -301,7 +335,7 @@ class CustomTableViewCell: UITableViewCell {
                 let elementForTapMe   = UIAccessibilityElement(accessibilityContainer: level)
                 
                 // 2.
-                var frameForTapMe = level.frame
+                let frameForTapMe = level.frame
                 
                 // From Scene to View
                 //frameForTapMe.origin = (drawing?.convert(frameForTapMe.origin, from: self))!

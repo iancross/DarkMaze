@@ -101,31 +101,31 @@ class LevelsData{
             gridX: 4, gridY: 4, delayTime: 0.5,
             solutionCoords:
             [(0,1),(0,2),(0,3),(1,3),(2,3),(3,3)],
-            levelCompleted: false, modifications: nil
+            levelCompleted: true, modifications: nil
         ),
         LevelData(
             gridX: 4, gridY: 4, delayTime: 0.5,
             solutionCoords:
             [(0,2),(1,2),(1,3)],
-            levelCompleted: false, modifications: nil
+            levelCompleted: true, modifications: nil
         ),
         LevelData(
             gridX: 4, gridY: 4, delayTime: 0.5,
             solutionCoords:
             [(0,3),(1,3),(1,2),(1,1),(1,0)],
-            levelCompleted: false, modifications: nil
+            levelCompleted: true, modifications: nil
         ),
         LevelData(
             gridX: 4, gridY: 4, delayTime: 0.5,
             solutionCoords:
             [(2,3),(2,2),(1,2),(1,1),(1,0),(2,0)],
-            levelCompleted: false, modifications: nil
+            levelCompleted: true, modifications: nil
         ),
         LevelData(
             gridX: 4, gridY: 4, delayTime: 0.5,
             solutionCoords:
             [(0,3),(1,3),(1,2),(2,2),(2,1),(3,1),(3,0)],
-            levelCompleted: false, modifications: nil
+            levelCompleted: true, modifications: nil
         ),
         LevelData(
             gridX: 4, gridY: 4, delayTime: 0.5,

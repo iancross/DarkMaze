@@ -64,7 +64,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             let progress = LevelsData.shared.getCategoryProgress(groupIndex: indexPath.row)
             let outOfTotal = LevelsData.shared.levelGroups[indexPath.row].levels.count
             
-            cell.initCellData(category: cellCategory, progress: "\(progress)/\(outOfTotal)", path: indexPath, origHeight: defaultHeight)
+            cell.initCellData(category: cellCategory, progress: progress, outOfTotal: outOfTotal, path: indexPath, origHeight: defaultHeight)
             
             if indexPath == selectedRowIndex{
                 cell.initExpandedView()
