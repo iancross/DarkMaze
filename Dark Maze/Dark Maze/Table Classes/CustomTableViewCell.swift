@@ -207,7 +207,8 @@ class CustomTableViewCell: UITableViewCell {
     
     func drawProgressLine(){
         let yBuffer: CGFloat = 4
-        
+        let Circle = SKShapeNode(circleOfRadius: 3 ) // Size of Circle
+
         // Define start & end point for line
         let startPoint = CGPoint(x: (drawing?.frame.maxX)! * 3.0/4.0 - progressLabelBuffer, y: yBuffer)
         let fraction = CGFloat(Double(progress!)/Double(numLevels!))
@@ -249,14 +250,10 @@ class CustomTableViewCell: UITableViewCell {
         line2.alpha = 0
         line2.run(SKAction.fadeIn(withDuration: 0.3))
 
-        
-        let Circle = SKShapeNode(circleOfRadius: 3 ) // Size of Circle
         Circle.position = circlePoint
         Circle.fillColor = SKColor.white
         drawing?.scene?.addChild(Circle)
-        Circle.alpha = 0
-        Circle.run(SKAction.fadeIn(withDuration: 0.3))
-
+//        Circle.run(SKAction.fadeIn(withDuration: 0.3))
     }
     
     private func addCategoryLabel(){
