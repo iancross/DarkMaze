@@ -106,10 +106,10 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     
     func closeFrame(indexPath: IndexPath) {
         let cell = customTableView.cellForRow(at: indexPath) as? CustomTableViewCell
-        cell?.reverseState()
         selectedRowIndex = nil
         customTableView.beginUpdates()
         customTableView.endUpdates()
+        cell?.reverseState()
     }
     
     func switchToGame(){

@@ -30,6 +30,7 @@ class CustomTableViewCell: UITableViewCell {
     var expanded = false
     var accessibleElements: [UIAccessibilityElement] = []
     var levelBuffer = 5
+    let progressLabelBuffer: CGFloat = 5
 
 
     
@@ -77,9 +78,9 @@ class CustomTableViewCell: UITableViewCell {
         removeButton()
         clean()
         setupScene()
+        drawProgressLine()
         addCategoryLabel()
     }
-    
 
     func initExpandedView(){
         clean()
@@ -105,7 +106,6 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     private func addLevels(){
-        //removeLevels()
         let group = LevelsData.shared.levelGroups[indexPath.row]
         let nextLevelToComplete = LevelsData.shared.nextLevelToComplete(groupIndex: indexPath.row)
         let levelCount = group.levels.count
@@ -119,10 +119,6 @@ class CustomTableViewCell: UITableViewCell {
             
             for j in 0...n-1{
                 let levelNumber = i * (n) + j
-                
-                
-                
-                //let y = (drawing?.frame.maxY)! - defaultHeight - CGFloat(i) * verticalSpacing - verticalSpacing/3.0
                 if levelNumber <= group.levels.count - 1 {
                     let box = TextBoxButton(
                         x: (frame.width/(CGFloat(n) + 1) * CGFloat(j+1)),
@@ -207,52 +203,76 @@ class CustomTableViewCell: UITableViewCell {
         drawing?.presentScene(scene)
         drawing?.isAccessibilityElement = true
         drawing?.accessibilityIdentifier = "drawing"
-        drawProgressLine()
     }
     
     func drawProgressLine(){
         let yBuffer: CGFloat = 4
-        let xBuffer: CGFloat = 4
         
         // Define start & end point for line
-        let startPoint = CGPoint(x: 0, y: yBuffer)
+        let startPoint = CGPoint(x: (drawing?.frame.maxX)! * 3.0/4.0 - progressLabelBuffer, y: yBuffer)
         let fraction = CGFloat(Double(progress!)/Double(numLevels!))
-        let endPoint = CGPoint(x: (drawing?.frame.maxX)! * fraction - xBuffer, y: yBuffer)
         
+        var circlePoint = CGPoint()
+        if fraction == 0{
+            circlePoint = CGPoint(x: startPoint.x + (drawing?.frame.maxX)! * 1.0/4.0 * fraction + progressLabelBuffer, y: yBuffer)
+        }
+        else if fraction == 1{
+            circlePoint = CGPoint(x: startPoint.x + (drawing?.frame.maxX)! * 1.0/4.0 * fraction - progressLabelBuffer/2.0, y: yBuffer)
+        }
+        else{
+            circlePoint = CGPoint(x: startPoint.x + (drawing?.frame.maxX)! * 1.0/4.0 * fraction, y: yBuffer)
+        }
+        let endPoint = CGPoint(x: (drawing?.frame.maxX)! - progressLabelBuffer, y: yBuffer)
+
         // Create line with SKShapeNode
         let line = SKShapeNode()
         let path = UIBezierPath()
         path.move(to: startPoint)
-        path.addLine(to: endPoint)
+        path.addLine(to: circlePoint)
         line.path = path.cgPath
         line.strokeColor = UIColor.white
-        line.lineWidth = 1 * fraction
-        line.glowWidth = 3 * fraction
-        line.alpha = 1.0 * fraction
+        line.lineWidth = 1
+        line.glowWidth = 3
         drawing?.scene?.addChild(line)
+        line.alpha = 0
+        line.run(SKAction.fadeIn(withDuration: 0.3))
+
+        let line2 = SKShapeNode()
+        let path2 = UIBezierPath()
+        path2.move(to: circlePoint)
+        path2.addLine(to: endPoint)
+        line2.path = path2.cgPath
+        line2.strokeColor = UIColor.white
+        line2.lineWidth = 1
+        line2.alpha = 0.5
+        drawing?.scene?.addChild(line2)
+        line2.alpha = 0
+        line2.run(SKAction.fadeIn(withDuration: 0.3))
+
         
-        if endPoint.x > 0{
-            var Circle = SKShapeNode(circleOfRadius: 3 ) // Size of Circle
-            Circle.position = endPoint
-            Circle.fillColor = SKColor.white
-            drawing?.scene?.addChild(Circle)
-        }
+        let Circle = SKShapeNode(circleOfRadius: 3 ) // Size of Circle
+        Circle.position = circlePoint
+        Circle.fillColor = SKColor.white
+        drawing?.scene?.addChild(Circle)
+        Circle.alpha = 0
+        Circle.run(SKAction.fadeIn(withDuration: 0.3))
+
     }
     
     private func addCategoryLabel(){
         let label = Helper.createGenericLabel(categoryString, fontsize: mainFontSize)
         label.horizontalAlignmentMode = .left
-        label.verticalAlignmentMode = .top
+        label.verticalAlignmentMode = .center
         if let scene = drawing?.scene{
             scene.addChild(label)
-            label.position = CGPoint(x: boarderBuffer, y: scene.frame.maxY - boarderBuffer)
+            label.position = CGPoint(x: boarderBuffer, y: scene.frame.maxY - defaultHeight/2)
         }
         let completion = Helper.createGenericLabel(progressString, fontsize: mainFontSize)
-        completion.horizontalAlignmentMode = .right
-        completion.verticalAlignmentMode = .top
+        completion.horizontalAlignmentMode = .center
+        completion.verticalAlignmentMode = .center
         if let scene = drawing?.scene{
             scene.addChild(completion)
-            completion.position = CGPoint(x: scene.frame.width - boarderBuffer, y: scene.frame.maxY - boarderBuffer)
+            completion.position = CGPoint(x: scene.frame.width * 7.0/8.0, y: scene.frame.maxY - defaultHeight/2 - progressLabelBuffer)
         }
     }
     
@@ -280,25 +300,34 @@ class CustomTableViewCell: UITableViewCell {
         expanded = false
     }
     
+//    public func animateCell() {
+//        let rotationTransform = CATransform3DTranslate(CATransform3DIdentity, -500, 0, 1)
+//        self.layer.transform = rotationTransform
+//
+//        UIView.animate(withDuration: 1.0, animations: { [weak self] in
+//            self?.layer.transform = CATransform3DIdentity
+//        })
+//    }
+    
     public func animateCell() {
         let cell = self
-        
+
         var rotate: CATransform3D
         let value = CGFloat((90.0 * Double.pi) / 180.0)
-        
+
         rotate = CATransform3DMakeRotation(value, 0.0, 0.7, 0.4)
         rotate.m34 = 1.0 / -600
-        
+
         cell.layer.shadowColor = UIColor.black.cgColor
         cell.layer.shadowOffset = CGSize(width: 10,height: 10)
         cell.alpha = 0
         cell.layer.transform = rotate
         cell.layer.anchorPoint = CGPoint(x: 0,y: 0.5)
-        
+
         if(cell.layer.position.x != 0){
             cell.layer.position = CGPoint(x: 0,y: cell.layer.position.y);
         }
-        
+
         UIView.beginAnimations("rotate", context: nil)
         UIView.setAnimationDuration(0.8)
         cell.layer.transform = CATransform3DIdentity
