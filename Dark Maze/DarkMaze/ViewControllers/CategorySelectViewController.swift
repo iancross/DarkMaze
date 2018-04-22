@@ -95,7 +95,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             default:
                 print ("no scrolling")
                 cell.alpha = 0.0
-                UIView.animate(withDuration: 2.0, delay: 0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
+                UIView.animate(withDuration: 1.0, delay: 0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
                     cell.alpha = 1.0
                 },
                 completion: nil)
@@ -192,14 +192,3 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         }
     }
 }
-
-
-
-/*    private func addTopBorderLine(){
-let px = 1 / UIScreen.main.scale
-let headerFrame = CGRect(x: 0, y: 0, width: self.customTableView.frame.size.width, height: px)
-let line = UIView(frame: headerFrame)
-self.customTableView.tableHeaderView = line
-line.backgroundColor = self.customTableView.separatorColor
-}
-*/

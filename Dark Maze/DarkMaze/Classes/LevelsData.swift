@@ -34,7 +34,6 @@ class LevelsData{
     var selectedLevel: (page: Int, level: Int)
     var levelGroups = [(category: String, levels: [LevelData])]()
     init(){
-        
         currentLevelSuccess = false
         
         //used by the gameplay if you play an earlier level
@@ -46,14 +45,8 @@ class LevelsData{
         _5x5()
         _5x6Jump()
         _6x10Flip()
-        for i in 1...20{
-           _5x5()
-        }
+        //_BrokenTest()
     }
-    
-//    init (modifications: [GridModification]?){
-//        
-//    }
     
     func nextLevel(){
         currentPage = selectedLevel.page
@@ -90,6 +83,10 @@ class LevelsData{
             }
         }
         return pageLevels.count - 1
+    }
+    
+    func getSolutionCoords(group: Int, level: Int) -> [(x: Int,y: Int)]{
+        return levelGroups[group].levels[level].solutionCoords
     }
     /*------------------------------- 4x4 -------------------------------*/
     //Description:
@@ -138,30 +135,6 @@ class LevelsData{
             solutionCoords:
             [(0,2),(1,2),(1,3)],
             levelCompleted: false, modifications: nil
-        ),
-        LevelData(
-        gridX: 4, gridY: 4, delayTime: 0.5,
-        solutionCoords:
-        [(0,3),(1,3),(1,2),(1,1),(1,0)],
-        levelCompleted: false, modifications: nil
-        ),
-        LevelData(
-        gridX: 4, gridY: 4, delayTime: 0.5,
-        solutionCoords:
-        [(2,3),(2,2),(1,2),(1,1),(1,0),(2,0)],
-        levelCompleted: false, modifications: nil
-        ),
-        LevelData(
-        gridX: 4, gridY: 4, delayTime: 0.5,
-        solutionCoords:
-        [(0,3),(1,3),(1,2),(2,2),(2,1),(3,1),(3,0)],
-        levelCompleted: false, modifications: nil
-        ),
-        LevelData(
-        gridX: 4, gridY: 4, delayTime: 0.5,
-        solutionCoords:
-        [(3,3),(3,2),(2,2),(2,1),(2,0),(1,0),(0,0),(0,1),(0,2)],
-        levelCompleted: false, modifications: nil
         )]
         levelGroups.append ((category: "4x4", array))
     }
@@ -217,6 +190,16 @@ class LevelsData{
             levelCompleted: false, modifications: [.flip]
         )]
         levelGroups.append ((category: "fucking hard", array))
+    }
+    
+    func _BrokenTest(){
+        let array = [LevelData(
+            gridX: 6, gridY: 10, delayTime: 0.3,
+            solutionCoords:
+            [(1,7),(1,8),(1,9),(2,9),(3,9),(3,8),(4,8),(4,7),(4,6),(5,6),(5,5),(5,4),(4,4),(3,4),(2,4),(1,4),(1,3),(2,3),(2,2),(3,2),(4,2),(4,1),(4,2)],
+            levelCompleted: false, modifications: [.flip]
+            )]
+        levelGroups.append ((category: "broken", array))
     }
 }
 

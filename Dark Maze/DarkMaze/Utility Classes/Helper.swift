@@ -22,6 +22,13 @@ class Helper{
         
         return labelNode
     }
+    
+    static func intTupleIsEqual(_ rhs: (x: Int, y: Int), _ lhs: (x: Int,y: Int)) -> Bool{
+        if (lhs.x == rhs.x) && (lhs.y == rhs.y){
+            return true
+        }
+        return false
+    }
 }
 
 /* use to draw a circle at a location

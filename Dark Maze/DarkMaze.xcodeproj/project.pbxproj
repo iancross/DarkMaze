@@ -23,7 +23,6 @@
 		C37B707E1FE9D94D00F71B73 /* GridTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37B707D1FE9D94D00F71B73 /* GridTile.swift */; };
 		C38464BF2055E41900239EE0 /* 006784-3d-transparent-glass-icon-arrows-double-arrowhead-right.png in Resources */ = {isa = PBXBuildFile; fileRef = C38464BE2055E41900239EE0 /* 006784-3d-transparent-glass-icon-arrows-double-arrowhead-right.png */; };
 		C38464C22055EC4700239EE0 /* nextArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = C38464C12055EC4700239EE0 /* nextArrow.png */; };
-		C39E37F5208139C100A53519 /* DarkMazeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39E37F4208139C100A53519 /* DarkMazeUITests.swift */; };
 		C3B46D8A207840D400C1EAC6 /* CellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B46D89207840D400C1EAC6 /* CellDelegate.swift */; };
 		C3B46D8C2078FB2500C1EAC6 /* SKTextureGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B46D8B2078FB2500C1EAC6 /* SKTextureGradient.swift */; };
 		C3BA45C52069A69500D72A3F /* cracking.atlas in Resources */ = {isa = PBXBuildFile; fileRef = C3BA45C42069A69500D72A3F /* cracking.atlas */; };
@@ -38,13 +37,6 @@
 
 /* Begin PBXContainerItemProxy section */
 		C31C5C6020857CD700A44505 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C3EF4A081FD7748F00528247 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C3EF4A0F1FD7748F00528247;
-			remoteInfo = "Dark Maze";
-		};
-		C39E37F7208139C100A53519 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C3EF4A081FD7748F00528247 /* Project object */;
 			proxyType = 1;
@@ -70,7 +62,6 @@
 		C37B707D1FE9D94D00F71B73 /* GridTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridTile.swift; sourceTree = "<group>"; };
 		C38464BE2055E41900239EE0 /* 006784-3d-transparent-glass-icon-arrows-double-arrowhead-right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "006784-3d-transparent-glass-icon-arrows-double-arrowhead-right.png"; sourceTree = "<group>"; };
 		C38464C12055EC4700239EE0 /* nextArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nextArrow.png; sourceTree = "<group>"; };
-		C39E37F2208139C100A53519 /* DarkMazeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DarkMazeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C39E37F4208139C100A53519 /* DarkMazeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkMazeUITests.swift; sourceTree = "<group>"; };
 		C39E37F6208139C100A53519 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C3B46D89207840D400C1EAC6 /* CellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellDelegate.swift; sourceTree = "<group>"; };
@@ -91,13 +82,6 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		C31C5C5820857CD700A44505 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C39E37EF208139C100A53519 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -228,7 +212,6 @@
 			isa = PBXGroup;
 			children = (
 				C3EF4A101FD7749000528247 /* DarkMaze.app */,
-				C39E37F2208139C100A53519 /* DarkMazeUITests.xctest */,
 				C31C5C5B20857CD700A44505 /* DarkMazeUnitTests.xctest */,
 			);
 			name = Products;
@@ -286,24 +269,6 @@
 			productReference = C31C5C5B20857CD700A44505 /* DarkMazeUnitTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		C39E37F1208139C100A53519 /* DarkMazeUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = C39E37F9208139C100A53519 /* Build configuration list for PBXNativeTarget "DarkMazeUITests" */;
-			buildPhases = (
-				C39E37EE208139C100A53519 /* Sources */,
-				C39E37EF208139C100A53519 /* Frameworks */,
-				C39E37F0208139C100A53519 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				C39E37F8208139C100A53519 /* PBXTargetDependency */,
-			);
-			name = DarkMazeUITests;
-			productName = DarkMazeUITests;
-			productReference = C39E37F2208139C100A53519 /* DarkMazeUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 		C3EF4A0F1FD7748F00528247 /* DarkMaze */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C3EF4A281FD7749000528247 /* Build configuration list for PBXNativeTarget "DarkMaze" */;
@@ -336,11 +301,6 @@
 						ProvisioningStyle = Automatic;
 						TestTargetID = C3EF4A0F1FD7748F00528247;
 					};
-					C39E37F1208139C100A53519 = {
-						CreatedOnToolsVersion = 9.2;
-						ProvisioningStyle = Automatic;
-						TestTargetID = C3EF4A0F1FD7748F00528247;
-					};
 					C3EF4A0F1FD7748F00528247 = {
 						CreatedOnToolsVersion = 9.1;
 						ProvisioningStyle = Automatic;
@@ -361,7 +321,6 @@
 			projectRoot = "";
 			targets = (
 				C3EF4A0F1FD7748F00528247 /* DarkMaze */,
-				C39E37F1208139C100A53519 /* DarkMazeUITests */,
 				C31C5C5A20857CD700A44505 /* DarkMazeUnitTests */,
 			);
 		};
@@ -369,13 +328,6 @@
 
 /* Begin PBXResourcesBuildPhase section */
 		C31C5C5920857CD700A44505 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C39E37F0208139C100A53519 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -405,14 +357,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C31C5C5E20857CD700A44505 /* DarkMazeUnitTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C39E37EE208139C100A53519 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C39E37F5208139C100A53519 /* DarkMazeUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -447,11 +391,6 @@
 			isa = PBXTargetDependency;
 			target = C3EF4A0F1FD7748F00528247 /* DarkMaze */;
 			targetProxy = C31C5C6020857CD700A44505 /* PBXContainerItemProxy */;
-		};
-		C39E37F8208139C100A53519 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C3EF4A0F1FD7748F00528247 /* DarkMaze */;
-			targetProxy = C39E37F7208139C100A53519 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -512,38 +451,6 @@
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DarkMaze.app/DarkMaze";
-			};
-			name = Release;
-		};
-		C39E37FA208139C100A53519 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8S2E38T6C8;
-				INFOPLIST_FILE = DarkMazeUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.crossibc.DarkMazeUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "Dark Maze";
-			};
-			name = Debug;
-		};
-		C39E37FB208139C100A53519 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8S2E38T6C8;
-				INFOPLIST_FILE = DarkMazeUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.crossibc.DarkMazeUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "Dark Maze";
 			};
 			name = Release;
 		};
@@ -693,15 +600,6 @@
 			buildConfigurations = (
 				C31C5C6320857CD700A44505 /* Debug */,
 				C31C5C6420857CD700A44505 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		C39E37F9208139C100A53519 /* Build configuration list for PBXNativeTarget "DarkMazeUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				C39E37FA208139C100A53519 /* Debug */,
-				C39E37FB208139C100A53519 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
