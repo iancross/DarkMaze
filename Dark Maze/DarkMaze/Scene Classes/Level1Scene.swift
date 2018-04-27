@@ -285,6 +285,12 @@ class Level1Scene: SKScene {
     func touchTile(tile: GridTile, alpha: CGFloat){
         if let successfulTouch = tile.touched(alpha: alpha){
             if successfulTouch{
+                let originalPoint = tile.position
+                tile.position = CGPoint(x: 100, y: 100)
+                tile.run(SKAction.move(to: originalPoint, duration: 3.0)){
+                    tile.switchToWhite()
+                    tile.setAlpha(alpha: alpha)
+                }
                 if isGameOver(){
                     return
                 }
