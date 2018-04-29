@@ -68,6 +68,13 @@ class GridTile: SKNode{
             return false
         }
     }
+    func setLineWidth(w: CGFloat){
+        tile.lineWidth = w
+    }
+    
+    func reInitLineWidth(){
+        tile.lineWidth = 1
+    }
     
     func updateFrameAlpha(){
         if strokeActive{

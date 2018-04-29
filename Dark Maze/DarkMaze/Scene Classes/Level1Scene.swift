@@ -234,11 +234,10 @@ class Level1Scene: SKScene {
                         tile.reInit()
                     }
                 }
-            self.drawGridLines()
-            //marking the first tile as available
-            self.beginGame()
-            self.gameActive = true
-            skipButton?.hide()
+                self.drawGridLines()
+                self.beginGame()
+                self.gameActive = true
+                skipButton?.hide()
             }
         }
     }
@@ -286,18 +285,19 @@ class Level1Scene: SKScene {
             if successfulTouch{
                 if let gameOver = gameOverSuccessOrFailure(){
                     if gameOver{
-                        zoomTileIn(tile: tile, a: alpha)
+                        flipTile(tile: tile, a: alpha)
                     }
                     return
                 }
-                zoomTileIn(tile: tile, a: alpha)
+                flipTile(tile: tile, a: alpha)
                 updateGridState()
             }
             else{
                 giveHint()
             }
         }
-        //if nil was returned
+        //if nil was returned, it means we've already
+        //highlighted this tile
         else{
             if tupleContains(a: tile.gridCoord,
                              v: Level.solutionCoords[touchedTiles]){
@@ -313,21 +313,38 @@ class Level1Scene: SKScene {
     
 /*---------------------- End Touches ----------------------*/
     
-    func zoomTileIn(tile: GridTile, a: CGFloat){
-//        var tile2 = tile.copy() as! GridTile
-//        gridNode.addChild(tile2)
-//        tile2.restoreOutline()
-//        tile2.position = tile.position
-        
-        let originalPoint = tile.position
-        tile.zPosition = 2
-        print(gridNode.frame.maxY)
-        tile.position = CGPoint(x: 0, y: gridNode.calculateAccumulatedFrame().height/2 + 100 )
-        tile.run(SKAction.move(to: originalPoint, duration: 0.3)){
+    
+    func flipTile(tile: GridTile, a: CGFloat){
+        tile.setColor(color: UIColor.black)
+        tile.restoreOutline()
+        tile.setLineWidth(w: 7.0)
+        var flip = SKAction()
+        let duration = 0.16
+        if touchedTiles > 1 {
+            let currCoord = Level.solutionCoords[touchedTiles - 1]
+            let prevCoord = Level.solutionCoords[touchedTiles - 2]
+            let xDiff = abs(prevCoord.x - currCoord.x)
+            let yDiff = abs(prevCoord.y - currCoord.y)
+            if xDiff > 0{
+                flip = SKAction.scaleX(to: 0, y: 1, duration: duration)
+            }
+            else if yDiff > 0{
+                flip = SKAction.scaleX(to: 1, y: 0, duration: duration)
+            }
+        }
+        else{
+            if lastTouchedTile?.gridCoord.x == 0{
+                flip = SKAction.scaleX(to: 0, y: 1, duration: duration)
+            }
+            else {
+                flip = SKAction.scaleX(to: 1, y: 0, duration: duration)
+            }
+        }
+        tile.run(flip) {
+            tile.removeOutline()
             tile.switchToWhite()
             tile.setAlpha(alpha: a)
-            tile.zPosition = 0
-//            tile2.removeFromParent()
+            tile.run(SKAction.scaleX(to: 1, y: 1, duration: duration))
         }
     }
     
