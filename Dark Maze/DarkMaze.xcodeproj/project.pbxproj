@@ -173,13 +173,6 @@
 			path = FilesToRemove;
 			sourceTree = "<group>";
 		};
-		C39E37EB20812E9400A53519 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		C39E37F3208139C100A53519 /* DarkMazeUITests */ = {
 			isa = PBXGroup;
 			children = (
@@ -220,7 +213,6 @@
 		C3EF4A121FD7749000528247 /* DarkMaze */ = {
 			isa = PBXGroup;
 			children = (
-				C39E37EB20812E9400A53519 /* Supporting Files */,
 				C352CF3A2075940D00FCD5D0 /* ViewControllers */,
 				C34AA0C8207044F600DB2229 /* Protocols */,
 				C352CF3B2075945B00FCD5D0 /* Table Classes */,

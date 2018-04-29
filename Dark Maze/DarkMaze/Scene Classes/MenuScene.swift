@@ -66,7 +66,7 @@ class MenuScene: SKScene {
                 newPoint = blockRandomPoint(prevPoint: blockPoints.first!)
             }
             blockPoints.append(newPoint)
-            currentTile = GridTile(parentScene: self, coord: (0,0), width: blocksize, height: blocksize)
+            currentTile = GridTile(coord: (0,0), width: blocksize, height: blocksize)
             currentTile?.position = newPoint
             addChild(currentTile!)
             let actionList = SKAction.sequence(
@@ -90,7 +90,7 @@ class MenuScene: SKScene {
         let newX = arc4random_uniform(UInt32(self.frame.width))
         let newY = arc4random_uniform(UInt32(self.frame.height))
         let startingPoint = CGPoint(x: CGFloat(newX), y: CGFloat(newY))
-        currentTile = GridTile(parentScene: self, coord: (0,0), width: 50.0, height: 50.0)
+        currentTile = GridTile(coord: (0,0), width: 50.0, height: 50.0)
         currentTile?.position = startingPoint
         blockPoints.append(CGPoint(x: (currentTile?.frame.midX)!, y: (currentTile?.frame.midY)!)) //first is the prev
         blockPoints.append(CGPoint(x: (currentTile?.frame.midX)!, y: (currentTile?.frame.midY)!)) //second is the current

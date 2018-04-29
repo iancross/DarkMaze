@@ -31,7 +31,8 @@ class GridTile: SKNode{
         Top
         Left (repeated)
     */
-    init (parentScene: SKScene, coord: (Int, Int), width: CGFloat, height: CGFloat) {
+    
+    init (coord: (Int, Int), width: CGFloat, height: CGFloat) {
         gridCoord = coord
         
         //new plan, just create a tile with generic widths then move it to the right position?
@@ -84,6 +85,9 @@ class GridTile: SKNode{
         }
     }
     
+    //returns true if available
+    //returns false if it's unavailable
+    //returns nil if it was already touched
     func touched(alpha: CGFloat) -> Bool?{
         switch state {
         case .availableToTouch:
@@ -161,6 +165,11 @@ class GridTile: SKNode{
     
     override func removeAllActions() {
         tile.removeAllActions()
+    }
+    
+    override func copy() -> Any {
+        print("fuckin got here")
+        return GridTile(coord: gridCoord, width: tile.frame.width, height: tile.frame.height)
     }
     
     required init(coder aDecoder: NSCoder) {

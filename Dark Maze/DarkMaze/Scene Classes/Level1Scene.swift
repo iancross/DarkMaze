@@ -110,8 +110,7 @@ class Level1Scene: SKScene {
             for col in 0...Level.gridX-1{
                 let offsetX = blocksize * CGFloat(col) + blocksize/2
                 let coord = (col,row)
-                let tile = GridTile(parentScene: self,
-                                    coord: coord, width: blocksize, height: blocksize)
+                let tile = GridTile(coord: coord, width: blocksize, height: blocksize)
                 tile.position = CGPoint(x: leftOfGridX + offsetX, y: botOfGridY + offsetY)
                 gridNode.addChild(tile)
                 tile2DArray[row].append(tile)
@@ -285,39 +284,52 @@ class Level1Scene: SKScene {
     func touchTile(tile: GridTile, alpha: CGFloat){
         if let successfulTouch = tile.touched(alpha: alpha){
             if successfulTouch{
-                let originalPoint = tile.position
-                tile.position = CGPoint(x: 100, y: 100)
-                tile.run(SKAction.move(to: originalPoint, duration: 3.0)){
-                    tile.switchToWhite()
-                    tile.setAlpha(alpha: alpha)
-                }
-                if isGameOver(){
+                if let gameOver = gameOverSuccessOrFailure(){
+                    if gameOver{
+                        zoomTileIn(tile: tile, a: alpha)
+                    }
                     return
                 }
+                zoomTileIn(tile: tile, a: alpha)
                 updateGridState()
             }
             else{
                 giveHint()
             }
         }
-            
         //if nil was returned
         else{
             if tupleContains(a: tile.gridCoord,
                              v: Level.solutionCoords[touchedTiles]){
                 tile.switchToWhite()
-                //tile.alpha = alpha
                 tile.setAlpha(alpha: alpha)
-                if isGameOver(){
+                if gameOverSuccessOrFailure() != nil{
                     return
                 }
                 updateGridState()
             }
         }
     }
+    
 /*---------------------- End Touches ----------------------*/
     
-    
+    func zoomTileIn(tile: GridTile, a: CGFloat){
+//        var tile2 = tile.copy() as! GridTile
+//        gridNode.addChild(tile2)
+//        tile2.restoreOutline()
+//        tile2.position = tile.position
+        
+        let originalPoint = tile.position
+        tile.zPosition = 2
+        print(gridNode.frame.maxY)
+        tile.position = CGPoint(x: 0, y: gridNode.calculateAccumulatedFrame().height/2 + 100 )
+        tile.run(SKAction.move(to: originalPoint, duration: 0.3)){
+            tile.switchToWhite()
+            tile.setAlpha(alpha: a)
+            tile.zPosition = 0
+//            tile2.removeFromParent()
+        }
+    }
     
     // If all the solutions coords are filled (and there wasn't a
     // failure) show the end game success (failure = false). Otherwise,
@@ -385,8 +397,10 @@ class Level1Scene: SKScene {
         }
     }
     
-    //return true if game is over
-    func isGameOver()->Bool{
+    //return true if game over as a success
+    //return false if game over as a failure
+    //return nil if game not over
+    func gameOverSuccessOrFailure()->Bool?{
         if tupleContains(a: Level.solutionCoords[touchedTiles], v: (lastTouchedTile?.gridCoord)!){
             touchedTiles += 1
             if touchedTiles == Level.solutionCoords.count {
@@ -402,9 +416,9 @@ class Level1Scene: SKScene {
             lastTouchedTile?.restoreOutline()
             let positionInScene = lastTouchedTile?.scene?.convert((lastTouchedTile?.position)!, from: (lastTouchedTile?.parent)!)
             crackAnimation(point: positionInScene!)
-            return true
+            return false
         }
-        return false
+        return nil
     }
 
     func successHighlightPath(){
@@ -524,17 +538,17 @@ class Level1Scene: SKScene {
             point = CGPoint(x: tile.frame.midX + blocksize, y: tile.frame.midY)
             rotation = CGFloat(.pi/2.0) - (orient * .pi/2.0)
         }
-            //ends on the left. rotate 180
+        //ends on the left. rotate 180
         else if tile.gridCoord.x == 0{
             point = CGPoint(x: tile.frame.midX - blocksize, y: tile.frame.midY)
             rotation = CGFloat(.pi/2.0) + (orient * .pi/2.0)
         }
-            //ends on top of the grid and rotate 90 left
+        //ends on top of the grid and rotate 90 left
         else if tile.gridCoord.y == 0{
             point = CGPoint(x: tile.frame.midX, y: tile.frame.midY - blocksize)
             rotation = -1 * (orient * .pi/2.0)
         }
-            //ends bot of grid and rotate 90 right
+        //ends bot of grid and rotate 90 right
         else if tile.gridCoord.y == tile2DArray.count - 1{
             point = CGPoint(x: tile.frame.midX, y: tile.frame.midY + blocksize)
             rotation = (orient * .pi/2.0)
