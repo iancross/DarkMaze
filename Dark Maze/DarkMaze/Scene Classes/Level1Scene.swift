@@ -8,6 +8,13 @@
 
 import SpriteKit
 
+enum Jumps {
+    case diamond
+    case circle
+    case square
+    case plus
+}
+
 class Level1Scene: SKScene {
     var tile2DArray = [[GridTile]]()
     var gameActive = false
@@ -30,6 +37,8 @@ class Level1Scene: SKScene {
     let endArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
     let startArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
     var categoryNode: CategoryHeader?
+    var jumpsTypes: [Jumps] = [.diamond, .circle, .square, .plus]
+    var jumpTiles = [(Jumps,[(x: Int, y: Int)])]()
     
     override init(size: CGSize) {
         super.init(size: size)
@@ -258,37 +267,18 @@ class Level1Scene: SKScene {
             }
         }
     }
-    func updateGridForJump(){
-        if touchedTiles > 1{
-            let currCoord = Level.solutionCoords[touchedTiles-1]
-            let nextCoord = Level.solutionCoords[touchedTiles]
-            let xDiff = abs(nextCoord.x - currCoord.x)
-            let yDiff = abs(nextCoord.y - currCoord.y)
-            
-            if xDiff > 1 || yDiff > 1 {
-                for row in tile2DArray{
-                    for tile in row{
-                        switch tile.state{
-                        case .touched:
-                            break
-                        default:
-                            tile.state = .availableToTouch
-                        }
-                    }
-                }
-            }
-        }
-    }
     
     func touchTile(tile: GridTile, alpha: CGFloat){
         if let successfulTouch = tile.touched(alpha: alpha){
             if successfulTouch{
                 if let gameOver = gameOverSuccessOrFailure(){
                     if gameOver{
+                        addJumpIndication(t: tile)
                         flipTile(tile: tile, a: alpha)
                     }
                     return
                 }
+                addJumpIndication(t: tile)
                 flipTile(tile: tile, a: alpha)
                 updateGridState()
             }
@@ -312,7 +302,68 @@ class Level1Scene: SKScene {
     }
     
 /*---------------------- End Touches ----------------------*/
+    func updateGridForJump(){
+        if touchedTiles > 1 && lastTouchedTile?.state != .touched{
+            let curr = Level.solutionCoords[touchedTiles]
+            let prev = Level.solutionCoords[touchedTiles-1]
+            
+            
+            let x = abs(prev.x - curr.x)
+            let y = abs(prev.y - curr.y)
+            
+            //record the tiles for the jump locations
+            if x > 1 || y > 1 {
+                let coords = [prev, curr]
+                print(jumpsTypes)
+                jumpTiles.append((jumpsTypes.removeFirst(), coords))
+                print(jumpsTypes)
+                lastTouchedTile?.tile.fillColor = UIColor.orange //LEFT OFF HERE
+            }
+            
+            
+            
+            
+            let currCoord = Level.solutionCoords[touchedTiles-1]
+            let nextCoord = Level.solutionCoords[touchedTiles]
+            let xDiff = abs(nextCoord.x - currCoord.x)
+            let yDiff = abs(nextCoord.y - currCoord.y)
+            
+            //we have a jump
+            if xDiff > 1 || yDiff > 1 {
+                for row in tile2DArray{
+                    for tile in row{
+                        switch tile.state{
+                        case .touched:
+                            break
+                        default:
+                            tile.state = .availableToTouch
+                        }
+                    }
+                }
+            }
+        }
+    }
     
+    func addJumpIndication(t: GridTile){
+        print ("addJumpIndication") // LEFT OFF HERE
+        for (jumpType, coords) in jumpTiles{
+            for coord in coords{
+                //we have a match, use the jumptype to update it
+                if tupleContains(a: coord, v: t.gridCoord){
+                    addSymbol(t: t, j: jumpType)
+                }
+            }
+        }
+    }
+    
+    func addSymbol(t: GridTile, j: Jumps){
+        switch j{
+        default:
+            let circle = SKShapeNode(circleOfRadius: t.frame.height/4)
+            circle.fillColor = UIColor.black
+            t.addChild(circle)
+        }
+    }
     
     func flipTile(tile: GridTile, a: CGFloat){
         tile.setColor(color: UIColor.black)
