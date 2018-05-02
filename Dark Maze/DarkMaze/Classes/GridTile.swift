@@ -175,7 +175,6 @@ class GridTile: SKNode{
     }
     
     override func copy() -> Any {
-        print("fuckin got here")
         return GridTile(coord: gridCoord, width: tile.frame.width, height: tile.frame.height)
     }
     

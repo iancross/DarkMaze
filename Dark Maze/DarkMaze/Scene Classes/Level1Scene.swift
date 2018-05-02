@@ -38,7 +38,8 @@ class Level1Scene: SKScene {
     let startArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
     var categoryNode: CategoryHeader?
     var jumpsTypes: [Jumps] = [.diamond, .circle, .square, .plus]
-    var jumpTiles = [(Jumps,[(x: Int, y: Int)])]()
+    //var jumpTiles = [(Jumps,[(x: Int, y: Int)])]()
+    var jumpsToDraw = [Jumps]()
     
     override init(size: CGSize) {
         super.init(size: size)
@@ -260,7 +261,7 @@ class Level1Scene: SKScene {
 //                    print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
 //                    return //comment out to get grid coords for levels
                     lastTouchedTile = tile
-                    updateGridForJump()
+                    //updateGridForPotentialJump()
                     touchTile(tile: lastTouchedTile!, alpha: blockAlphaMin + CGFloat(touchedTiles + 1) * blockAlphaIncrement)
                     return
                 }
@@ -273,12 +274,10 @@ class Level1Scene: SKScene {
             if successfulTouch{
                 if let gameOver = gameOverSuccessOrFailure(){
                     if gameOver{
-                        addJumpIndication(t: tile)
                         flipTile(tile: tile, a: alpha)
                     }
                     return
                 }
-                addJumpIndication(t: tile)
                 flipTile(tile: tile, a: alpha)
                 updateGridState()
             }
@@ -302,34 +301,21 @@ class Level1Scene: SKScene {
     }
     
 /*---------------------- End Touches ----------------------*/
-    func updateGridForJump(){
-        if touchedTiles > 1 && lastTouchedTile?.state != .touched{
-            let curr = Level.solutionCoords[touchedTiles]
-            let prev = Level.solutionCoords[touchedTiles-1]
-            
-            
-            let x = abs(prev.x - curr.x)
-            let y = abs(prev.y - curr.y)
-            
-            //record the tiles for the jump locations
-            if x > 1 || y > 1 {
-                let coords = [prev, curr]
-                print(jumpsTypes)
-                jumpTiles.append((jumpsTypes.removeFirst(), coords))
-                print(jumpsTypes)
-                lastTouchedTile?.tile.fillColor = UIColor.orange //LEFT OFF HERE
-            }
-            
-            
-            
-            
+    func updateGridForPotentialJump(){
+        if touchedTiles < Level.solutionCoords.count - 1 && lastTouchedTile?.state == .touched{
             let currCoord = Level.solutionCoords[touchedTiles-1]
             let nextCoord = Level.solutionCoords[touchedTiles]
             let xDiff = abs(nextCoord.x - currCoord.x)
             let yDiff = abs(nextCoord.y - currCoord.y)
             
-            //we have a jump
+            //we have an upcoming jump
             if xDiff > 1 || yDiff > 1 {
+                print ("----- we have liftoff ----")
+                let coords = [currCoord, nextCoord]
+                let j = jumpsTypes.removeFirst()
+                jumpsToDraw.append(contentsOf: [j,j])
+                //addJumpIndication(t: lastTouchedTile!)
+
                 for row in tile2DArray{
                     for tile in row{
                         switch tile.state{
@@ -345,23 +331,22 @@ class Level1Scene: SKScene {
     }
     
     func addJumpIndication(t: GridTile){
-        print ("addJumpIndication") // LEFT OFF HERE
-        for (jumpType, coords) in jumpTiles{
-            for coord in coords{
-                //we have a match, use the jumptype to update it
-                if tupleContains(a: coord, v: t.gridCoord){
-                    addSymbol(t: t, j: jumpType)
-                }
-            }
+        if !jumpsToDraw.isEmpty{
+            let jumpType = jumpsToDraw.removeFirst()
+            addSymbol(t: t, j: jumpType)
         }
     }
     
     func addSymbol(t: GridTile, j: Jumps){
         switch j{
         default:
-            let circle = SKShapeNode(circleOfRadius: t.frame.height/4)
+            print ("adding circle")
+            let circle = SKShapeNode(circleOfRadius: 10)
             circle.fillColor = UIColor.black
+            
             t.addChild(circle)
+            circle.position = CGPoint.zero
+            circle.zPosition = 5
         }
     }
     
@@ -395,6 +380,7 @@ class Level1Scene: SKScene {
             tile.removeOutline()
             tile.switchToWhite()
             tile.setAlpha(alpha: a)
+            self.addJumpIndication(t: tile)
             tile.run(SKAction.scaleX(to: 1, y: 1, duration: duration))
         }
     }
@@ -437,7 +423,7 @@ class Level1Scene: SKScene {
             if coord.y + 1 < tile2DArray.count{
                 checkTile(x: coord.x, y: coord.y+1)
             }
-            
+            updateGridForPotentialJump()
         }
     }
     
