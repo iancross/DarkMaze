@@ -18,9 +18,10 @@ enum Scrolling {
 class CategorySelectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, CellDelegate {
     
     let levelGroups = LevelsData.shared.levelGroups
-    let defaultHeight = 45 as CGFloat
+    let defaultHeight = 42 as CGFloat
     var scrollDirection: Scrolling = .none
     var lastContentOffset: CGPoint = CGPoint()
+    var cellSizeBuffer: CGFloat = 30
     
     //set when we initially click a row. reinit when that row is finally closed
     var selectedRowIndex: IndexPath? = nil
@@ -87,9 +88,6 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
                 cell.initNormalView()
                 cell.expanded = false
             }
-            
-            //should we animate it? only if it isn't the selected one
-            //cell.animateCell()
 
             switch scrollDirection{
             default:
@@ -99,40 +97,6 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
                     cell.alpha = 1.0
                 },
                 completion: nil)
-                
-//            case .none:
-//                print ("no scrolling")
-//                cell.alpha = 0.0
-//                UIView.animate(withDuration: 2.0, animations: {
-//                    cell.alpha = 1.0
-//                })
-//            case .down:
-//                print ("scrolling down")
-//                cell.transform = CGAffineTransform(translationX: -cell.frame.maxX/2.0, y: 0)
-//                cell.layer.shadowColor = UIColor.black.cgColor
-//                cell.layer.shadowOffset = CGSize(width: 10, height: 10)
-//                cell.alpha = 0
-//
-//                UIView.beginAnimations("rotation", context: nil)
-//                UIView.setAnimationDuration(0.5)
-//                cell.transform = CGAffineTransform(translationX: 0, y: 0)
-//                cell.alpha = 1
-//                cell.layer.shadowOffset = CGSize(width: 0, height: 0)
-//                UIView.commitAnimations()
-//
-//            case .up:
-//                print ("scrolling up")
-//                cell.transform = CGAffineTransform(translationX: cell.frame.maxX/2.0, y: 0)
-//                cell.layer.shadowColor = UIColor.black.cgColor
-//                cell.layer.shadowOffset = CGSize(width: 10, height: 10)
-//                cell.alpha = 0
-//
-//                UIView.beginAnimations("rotation", context: nil)
-//                UIView.setAnimationDuration(0.5)
-//                cell.transform = CGAffineTransform(translationX: 0, y: 0)
-//                cell.alpha = 1
-//                cell.layer.shadowOffset = CGSize(width: 0, height: 0)
-//                UIView.commitAnimations()
             }
         }
     }

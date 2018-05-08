@@ -10,16 +10,18 @@ import Foundation
 import SpriteKit
 
 class CategoryHeader: SKNode{
-    //var container = SKNode()
+    var container = SKNode()
     let labelBuffer: CGFloat = 20.0
+    var parentFrameWidth: CGFloat = 0.0
 
-    init(string: String){
+    init(string: String, fontSize: CGFloat, frameWidth: CGFloat){
         super.init()
 
         let categoryLabel = SKLabelNode(text: string)
         categoryLabel.position = CGPoint(x: 0, y: 0)
         categoryLabel.fontName = GameStyle.shared.mainFontString
-        categoryLabel.fontSize = GameStyle.shared.SmallTextBoxFontSize
+        categoryLabel.fontSize = fontSize
+        parentFrameWidth = frameWidth
         categoryLabel.verticalAlignmentMode = .center
         addToScene(node: categoryLabel)
         drawCategoryStyleLines(labelWidth: categoryLabel.frame.width)
@@ -31,12 +33,13 @@ class CategoryHeader: SKNode{
     
     
     func drawCategoryStyleLines(labelWidth: CGFloat){
+        
         var rightPoints = [CGPoint(x: labelWidth/2 + labelBuffer, y: 0),
-                           CGPoint(x: labelWidth/2 + labelBuffer+200, y: 0)]
+                           CGPoint(x: parentFrameWidth/2 - labelBuffer, y: 0)]
         let rightLine = SKShapeNode(points: &rightPoints,
                                     count: rightPoints.count)
         var leftPoints = [CGPoint(x: -labelWidth/2 - labelBuffer, y: 0),
-                          CGPoint(x: -labelWidth/2 - labelBuffer - 200, y: 0)]
+                          CGPoint(x: -parentFrameWidth/2 + labelBuffer, y: 0)]
         let leftLine = SKShapeNode(points: &leftPoints,
                                    count: leftPoints.count)
         addToScene(node: leftLine)

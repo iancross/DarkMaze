@@ -31,7 +31,7 @@ class CustomTableViewCell: UITableViewCell {
     var accessibleElements: [UIAccessibilityElement] = []
     var levelBuffer = 5
     let progressLabelBuffer: CGFloat = 5
-
+    let NonBonusLevels = 8
 
     
     override func awakeFromNib() {
@@ -75,7 +75,6 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     func initNormalView(){
-        print("init normal view for \(indexPath.row)")
         removeButton()
         clean()
         setupScene()
@@ -84,7 +83,6 @@ class CustomTableViewCell: UITableViewCell {
     }
 
     func initExpandedView(){
-        print("init normal view for \(indexPath.row)")
         clean()
         setupScene()
         addCategoryLabel()
@@ -114,20 +112,29 @@ class CustomTableViewCell: UITableViewCell {
         let n = GameStyle.shared.numLevelsOnLine
         for i in 0...levelCount/n{
             
-            let top = (drawing?.frame.maxY)! - defaultHeight
+            let top = (drawing?.frame.maxY)! - defaultHeight + 7
             let lines = CGFloat(ceil(Double(levelCount)/Double(n)))
-            let offset = top / lines
+            let offset = (top / lines) - 1.0
             let y = top + (offset / 2.0) - (offset * CGFloat(i + 1)) + CGFloat(levelBuffer)
             
             for j in 0...n-1{
                 let levelNumber = i * (n) + j
                 if levelNumber <= group.levels.count - 1 {
+                    var yPrime = y
+                    if levelNumber == NonBonusLevels - 1{
+                        let bonus = CategoryHeader(string: "Bonus Levels", fontSize: mainFontSize*4/5, frameWidth: (drawing?.scene?.frame.width)!)
+                        bonus.position = CGPoint(x: frame.width/2.0, y: y - offset*4/6)
+                        drawing?.scene?.addChild(bonus)
+                    }
+                    if levelNumber > NonBonusLevels - 1{
+                        yPrime -= offset*1/4
+                    }
                     let box = TextBoxButton(
                         x: (frame.width/(CGFloat(n) + 1) * CGFloat(j+1)),
-                        y: y,
+                        y: yPrime,
                         text: String(99),
                         fontsize: mainFontSize,
-                        buffers: (5.0,10.0),
+                        buffers: (7.0,12.0),
                         parentScene: (drawing?.scene)!)
                     box.isAccessibilityElement = true
                     box.updateText(String(levelNumber + 1))
@@ -170,7 +177,6 @@ class CustomTableViewCell: UITableViewCell {
     
     private func touchedLevel(point: CGPoint){
         let nextLevelToComplete = LevelsData.shared.nextLevelToComplete(groupIndex: indexPath.row)
-        print (nextLevelToComplete)
         for button in levels{
             if button.within(point: point){
                 if Int(button.text)!-1 > nextLevelToComplete{

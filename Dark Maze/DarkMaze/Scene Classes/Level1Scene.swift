@@ -172,7 +172,7 @@ class Level1Scene: SKScene {
         let category = LevelsData.shared.levelGroups[currentPage].category
         let title = "\(category) \(progress)/\(outOfTotal)"
         
-        categoryNode = CategoryHeader(string: title)
+        categoryNode = CategoryHeader(string: title, fontSize: GameStyle.shared.SmallTextBoxFontSize, frameWidth: frame.width)
         categoryNode?.position = CGPoint(x: frame.midX, y: frame.maxY - 100)
         addChild(categoryNode!)
     }
@@ -259,9 +259,9 @@ class Level1Scene: SKScene {
                     tile.removeAllActions()
                     startArrow.removeAllActions()
 //                    print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
+//                    tile.tile.fillColor = UIColor.green
 //                    return //comment out to get grid coords for levels
                     lastTouchedTile = tile
-                    //updateGridForPotentialJump()
                     touchTile(tile: lastTouchedTile!, alpha: blockAlphaMin + CGFloat(touchedTiles + 1) * blockAlphaIncrement)
                     return
                 }
@@ -310,7 +310,6 @@ class Level1Scene: SKScene {
             
             //we have an upcoming jump
             if xDiff > 1 || yDiff > 1 {
-                print ("----- we have liftoff ----")
                 let coords = [currCoord, nextCoord]
                 let j = jumpsTypes.removeFirst()
                 jumpsToDraw.append(contentsOf: [j,j])
@@ -340,7 +339,6 @@ class Level1Scene: SKScene {
     func addSymbol(t: GridTile, j: Jumps){
         switch j{
         default:
-            print ("adding circle")
             let circle = SKShapeNode(circleOfRadius: 10)
             circle.fillColor = UIColor.black
             
@@ -478,9 +476,7 @@ class Level1Scene: SKScene {
     func successHighlightPath(){
         let numSolutionBlocks = Double(Level.solutionCoords.count)
         for (i,coord) in Level.solutionCoords.enumerated(){
-            print (coord)
             let tile = tile2DArray[coord.y][coord.x]
-            print (tile.alpha)
             tile.tile.removeAllActions()
             let sequence = SKAction.sequence(
                 [SKAction.wait(forDuration: Double(i) * 1.5/numSolutionBlocks),

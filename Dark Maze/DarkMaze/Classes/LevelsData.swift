@@ -41,9 +41,10 @@ class LevelsData{
         currentPage = 0
         
         //levelGroups = [(category: String, levels: [LevelData])]()
-        _4x4()
+        Normal()
         _5x5()
         _5x6Jump()
+        Blackout()
         _6x10Flip()
         //_BrokenTest()
     }
@@ -92,7 +93,7 @@ class LevelsData{
     //Description:
     //Easiest level to show how to play the game. Probably going to do all sorts of
     //directions to show the maze functionality
-    func _4x4(){
+    func Normal(){
         let array = [
         LevelData(
             gridX: 4, gridY: 4, delayTime: 0.5,
@@ -103,40 +104,109 @@ class LevelsData{
         LevelData(
             gridX: 4, gridY: 4, delayTime: 0.5,
             solutionCoords:
-            [(0,2),(1,2),(1,3)],
-            levelCompleted: true, modifications: nil
-        ),
-        LevelData(
-            gridX: 4, gridY: 4, delayTime: 0.5,
-            solutionCoords:
             [(0,3),(1,3),(1,2),(1,1),(1,0)],
             levelCompleted: true, modifications: nil
-        ),
+            ),
         LevelData(
             gridX: 4, gridY: 4, delayTime: 0.5,
             solutionCoords:
             [(2,3),(2,2),(1,2),(1,1),(1,0),(2,0)],
             levelCompleted: true, modifications: nil
-        ),
+            ),
         LevelData(
             gridX: 4, gridY: 4, delayTime: 0.5,
             solutionCoords:
             [(0,3),(1,3),(1,2),(2,2),(2,1),(3,1),(3,0)],
             levelCompleted: true, modifications: nil
-        ),
+            ),
         LevelData(
             gridX: 4, gridY: 4, delayTime: 0.5,
             solutionCoords:
             [(3,3),(3,2),(2,2),(2,1),(2,0),(1,0),(0,0),(0,1),(0,2)],
             levelCompleted: false, modifications: nil
-        ),
+            ),LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(0,3),(1,3),(1,2),(1,1),(1,0)],
+                levelCompleted: false, modifications: nil
+            ),
+              LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(2,3),(2,2),(1,2),(1,1),(1,0),(2,0)],
+                levelCompleted: false, modifications: nil
+            ),
+              LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(0,3),(1,3),(1,2),(2,2),(2,1),(3,1),(3,0)],
+                levelCompleted: false, modifications: nil
+            ),
+              LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(3,3),(3,2),(2,2),(2,1),(2,0),(1,0),(0,0),(0,1),(0,2)],
+                levelCompleted: false, modifications: nil
+            ),LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(2,3),(2,2),(1,2),(1,1),(1,0),(2,0)],
+                levelCompleted: false, modifications: nil
+            ),
+              LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(0,3),(1,3),(1,2),(2,2),(2,1),(3,1),(3,0)],
+                levelCompleted: false, modifications: nil
+            ),
+              LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(3,3),(3,2),(2,2),(2,1),(2,0),(1,0),(0,0),(0,1),(0,2)],
+                levelCompleted: false, modifications: nil
+            ),LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(2,3),(2,2),(1,2),(1,1),(1,0),(2,0)],
+                levelCompleted: false, modifications: nil
+            ),
+              LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(0,3),(1,3),(1,2),(2,2),(2,1),(3,1),(3,0)],
+                levelCompleted: false, modifications: nil
+            ),
+              LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(3,3),(3,2),(2,2),(2,1),(2,0),(1,0),(0,0),(0,1),(0,2)],
+                levelCompleted: false, modifications: nil
+            ),
+              LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(2,3),(2,2),(1,2),(1,1),(1,0),(2,0)],
+                levelCompleted: false, modifications: nil
+            ),
+              LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(0,3),(1,3),(1,2),(2,2),(2,1),(3,1),(3,0)],
+                levelCompleted: false, modifications: nil
+            ),
+              LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(3,3),(3,2),(2,2),(2,1),(2,0),(1,0),(0,0),(0,1),(0,2)],
+                levelCompleted: false, modifications: nil
+            ),
         LevelData(
             gridX: 4, gridY: 4, delayTime: 0.5,
             solutionCoords:
             [(0,2),(1,2),(1,3)],
             levelCompleted: false, modifications: nil
         )]
-        levelGroups.append ((category: "4x4", array))
+        levelGroups.append ((category: "Normal", array))
     }
     func _5x5(){
         let array = [LevelData(
@@ -179,7 +249,29 @@ class LevelsData{
             solutionCoords: [(0,1),(0,2),(0,3),(1,3),(2,3),(3,3),(4,3),(4,2),(4,1),(3,1),(2,1),(2,2),(2,3),(2,4),(2,5)],
             levelCompleted: false, modifications: nil
         )]
-        levelGroups.append ((category: "5x6 Jump", array))
+        levelGroups.append ((category: "Jump", array))
+    }
+    
+    func Blackout(){
+        let array = [
+            LevelData(
+                gridX: 3, gridY: 3, delayTime: 0.3,
+                solutionCoords:[(0,2),(0,1),(0,0),(1,0),(1,1),(1,2),(2,2),(2,1),(2,0)],
+                levelCompleted: true, modifications: nil
+            ),
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.3,
+                solutionCoords:[(0,0),(1,0),(1,1),(2,1),(2,0),(3,0),(3,1),(3,2),(3,3),(2,3),(2,2),(1,2),(1,3),(0,3),(0,2),(0,1)],
+                levelCompleted: false, modifications: nil
+            ),
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.3,
+                solutionCoords:
+                [(4,0),(3,0),(2,0),(2,1),(2,2),(1,2),(1,1),(1,0),(0,0),(0,1),(0,2),(0,3),(0,4),(1,4),(1,3),(2,3),(3,3),(3,2),(3,1),(4,1),(4,2),(4,3),(4,4),(3,4),(2,4)],
+                levelCompleted: false, modifications: nil
+            )
+        ]
+        levelGroups.append ((category: "Blackout", array))
     }
     
     func _6x10Flip(){
@@ -189,14 +281,14 @@ class LevelsData{
             [(0,7),(1,7),(1,8),(1,9),(2,9),(3,9),(3,8),(4,8),(4,7),(4,6),(5,6),(5,5),(5,4),(4,4),(3,4),(2,4),(1,4),(1,3),(2,3),(2,2),(3,2),(4,2),(4,1),(5,1)],
             levelCompleted: false, modifications: [.flip]
         )]
-        levelGroups.append ((category: "fucking hard", array))
+        levelGroups.append ((category: "Grande", array))
     }
     
     func _BrokenTest(){
         let array = [LevelData(
-            gridX: 6, gridY: 10, delayTime: 0.3,
+            gridX: 5, gridY: 5, delayTime: 0.3,
             solutionCoords:
-            [(1,7),(1,8),(1,9),(2,9),(3,9),(3,8),(4,8),(4,7),(4,6),(5,6),(5,5),(5,4),(4,4),(3,4),(2,4),(1,4),(1,3),(2,3),(2,2),(3,2),(4,2),(4,1),(4,2)],
+            [(1,1),(1,2),(2,2),(2,1),(3,1),(3,2),(3,3),(3,4),(2,4),(2,3),(1,3),(1,4),(0,4),(0,3),(0,2),(0,1)],
             levelCompleted: false, modifications: [.flip]
             )]
         levelGroups.append ((category: "broken", array))
