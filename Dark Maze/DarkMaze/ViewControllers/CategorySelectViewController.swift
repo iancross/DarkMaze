@@ -79,15 +79,21 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             let outOfTotal = LevelsData.shared.levelGroups[indexPath.row].levels.count
             
             cell.initCellData(category: cellCategory, progress: progress, outOfTotal: outOfTotal, path: indexPath, origHeight: defaultHeight)
-            
-            if indexPath == selectedRowIndex{
-                cell.initExpandedView()
-                cell.expanded = true
+            if isPathUnlocked(path: indexPath){
+                if indexPath == selectedRowIndex{
+                    cell.initExpandedView()
+                    cell.expanded = true
+                }
+                else{
+                    cell.initNormalView()
+                    cell.expanded = false
+                }
             }
             else{
-                cell.initNormalView()
-                cell.expanded = false
+                //cell.backgroundColor = UIColor.orange
+                cell.initLockedView()
             }
+
 
             switch scrollDirection{
             default:
@@ -99,6 +105,17 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
                 completion: nil)
             }
         }
+    }
+    
+    func isPathUnlocked(path: IndexPath)->Bool{
+        if path.row == 0{
+            return true
+        }
+        else{
+            return false
+        }
+        
+        //LevelsData.shared.isPageUnlocked(page: IndexPath.row)
     }
     
     // while scrolling this delegate is being called so you may now check which direction your scrollView is being scrolled to
@@ -117,8 +134,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         let cell = tableView.cellForRow(at: indexPath) as? CustomTableViewCell
         
         //if selected row doesn't equal the current indexPath row
-        if selectedRowIndex?.row != indexPath.row {
-            
+        if selectedRowIndex?.row != indexPath.row && isPathUnlocked(path: indexPath){
             //and as long as the index path isn't nil
             //close the previously selected row
             if selectedRowIndex != nil{
@@ -131,6 +147,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             
             cell?.reverseState()
         }
+        
     }
     
     //MARK Protocol ----------------------------------------------------

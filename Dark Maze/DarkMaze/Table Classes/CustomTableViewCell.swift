@@ -91,6 +91,14 @@ class CustomTableViewCell: UITableViewCell {
         addLevels()
     }
     
+    func initLockedView(){
+        setupScene()
+        let chain = SKSpriteNode(imageNamed: "ChainSprite1000")
+        chain.anchorPoint = CGPoint(x: chain.frame.midX, y: chain.frame.midY)
+        chain.scale(to: (drawing?.frame.size)!)
+        drawing?.scene?.addChild(chain)
+        
+    }
     
     private func addButton(){
         removeButton()
