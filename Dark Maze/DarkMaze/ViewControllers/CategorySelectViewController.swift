@@ -108,14 +108,14 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func isPathUnlocked(path: IndexPath)->Bool{
-        if path.row == 0{
-            return true
-        }
-        else{
-            return false
-        }
-        
-        //LevelsData.shared.isPageUnlocked(page: IndexPath.row)
+//        if path.row == 0{
+//            return true
+//        }
+//        else{
+//            return false
+//        }
+//        
+        return LevelsData.shared.isPageUnlocked(page: path.row)
     }
     
     // while scrolling this delegate is being called so you may now check which direction your scrollView is being scrolled to
@@ -128,6 +128,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         }
         self.lastContentOffset = currentOffset
     }
+    
     //if the indexpath isn't the selected row, close the current row
     //and expand the new row
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

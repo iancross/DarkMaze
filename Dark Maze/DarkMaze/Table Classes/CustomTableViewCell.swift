@@ -79,25 +79,44 @@ class CustomTableViewCell: UITableViewCell {
         clean()
         setupScene()
         drawProgressLine()
-        addCategoryLabel()
+        addCategoryLabel(alpha: 1.0)
     }
 
     func initExpandedView(){
         clean()
         setupScene()
-        addCategoryLabel()
-        addGradient()
+        addCategoryLabel(alpha: 1.0)
         addButton()
         addLevels()
     }
     
     func initLockedView(){
         setupScene()
-        let chain = SKSpriteNode(imageNamed: "ChainSprite1000")
-        chain.anchorPoint = CGPoint(x: chain.frame.midX, y: chain.frame.midY)
-        chain.scale(to: (drawing?.frame.size)!)
-        drawing?.scene?.addChild(chain)
+        addCategoryLabel(alpha: 0.35)
         
+        let center = CGPoint(x: (drawing?.frame.midX)!, y: (drawing?.frame.midY)!)
+        let chain = SKSpriteNode(imageNamed: "ChainSprite1000")
+        chain.alpha = 0.6
+
+        chain.scale(to: CGSize(width: (drawing?.frame.size.width)!/2, height: (drawing?.frame.size.height)! / 4))
+        chain.position = center
+        let chain2 = chain.copy() as! SKSpriteNode
+        chain.anchorPoint = CGPoint(x: Double.random(min: 0.42, max: 0.58) , y: 0.5)
+        chain2.anchorPoint = CGPoint(x: Double.random(min: 0.42, max: 0.58) , y: 0.5)
+
+        drawing?.scene?.addChild(chain)
+        drawing?.scene?.addChild(chain2)
+        let rot = CGFloat(Double.pi/Double.random(min: 10.0, max: 15.0))
+        let negrot = -CGFloat(Double.pi/Double.random(min: 10.0, max: 15.0))
+        chain.zRotation = rot
+        chain2.zRotation = negrot
+        
+        let lock = SKSpriteNode(imageNamed: "lock_sprite200x200")
+        lock.alpha = 0.8
+        lock.position = center
+        lock.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        lock.scale(to: CGSize(width: 22.0, height: 22.0))
+        drawing?.scene?.addChild(lock)
     }
     
     private func addButton(){
@@ -163,7 +182,7 @@ class CustomTableViewCell: UITableViewCell {
     
     private func addGradient(){
         //anchor is center for this gradient texture
-        let topColor = CIColor(color: UIColor(red: 0.2196, green: 0.2196, blue: 0.2196, alpha: 1.0))
+        let topColor = CIColor(color: UIColor(red: 0.15, green: 0.15, blue: 0.15, alpha: 1.0))
         let bottomColor = CIColor(color: UIColor.black)
         let texture = SKTexture(size: frame.size, color1: topColor, color2: bottomColor, direction: GradientDirection.up)
         texture.filteringMode = .nearest
@@ -219,6 +238,7 @@ class CustomTableViewCell: UITableViewCell {
         drawing?.presentScene(scene)
         drawing?.isAccessibilityElement = true
         drawing?.accessibilityIdentifier = "drawing"
+        addGradient()
     }
     
     func drawProgressLine(){
@@ -269,15 +289,15 @@ class CustomTableViewCell: UITableViewCell {
         Circle.position = circlePoint
         Circle.fillColor = SKColor.white
         drawing?.scene?.addChild(Circle)
-//        Circle.run(SKAction.fadeIn(withDuration: 0.3))
     }
     
-    private func addCategoryLabel(){
+    private func addCategoryLabel(alpha: CGFloat){
         let label = Helper.createGenericLabel(categoryString, fontsize: mainFontSize)
         label.horizontalAlignmentMode = .left
         label.verticalAlignmentMode = .center
         if let scene = drawing?.scene{
             scene.addChild(label)
+            label.alpha = alpha
             label.position = CGPoint(x: boarderBuffer, y: scene.frame.maxY - defaultHeight/2)
         }
         let completion = Helper.createGenericLabel(progressString, fontsize: mainFontSize)
@@ -285,6 +305,7 @@ class CustomTableViewCell: UITableViewCell {
         completion.verticalAlignmentMode = .center
         if let scene = drawing?.scene{
             scene.addChild(completion)
+            completion.alpha = alpha
             completion.position = CGPoint(x: scene.frame.width * 7.0/8.0, y: scene.frame.maxY - defaultHeight/2 - progressLabelBuffer)
         }
     }

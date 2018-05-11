@@ -22,6 +22,7 @@
 		C364CEC01FE74F98009140C7 /* Level1Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C364CEBF1FE74F98009140C7 /* Level1Scene.swift */; };
 		C37B707E1FE9D94D00F71B73 /* GridTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37B707D1FE9D94D00F71B73 /* GridTile.swift */; };
 		C37E691720A296860067B47C /* ChainSprite1000.png in Resources */ = {isa = PBXBuildFile; fileRef = C37E691620A296860067B47C /* ChainSprite1000.png */; };
+		C37E691920A5F5D70067B47C /* lock_sprite200x200.png in Resources */ = {isa = PBXBuildFile; fileRef = C37E691820A5F5D70067B47C /* lock_sprite200x200.png */; };
 		C38464C22055EC4700239EE0 /* nextArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = C38464C12055EC4700239EE0 /* nextArrow.png */; };
 		C3B46D8A207840D400C1EAC6 /* CellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B46D89207840D400C1EAC6 /* CellDelegate.swift */; };
 		C3B46D8C2078FB2500C1EAC6 /* SKTextureGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B46D8B2078FB2500C1EAC6 /* SKTextureGradient.swift */; };
@@ -61,6 +62,7 @@
 		C364CEBF1FE74F98009140C7 /* Level1Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level1Scene.swift; sourceTree = "<group>"; };
 		C37B707D1FE9D94D00F71B73 /* GridTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridTile.swift; sourceTree = "<group>"; };
 		C37E691620A296860067B47C /* ChainSprite1000.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ChainSprite1000.png; sourceTree = "<group>"; };
+		C37E691820A5F5D70067B47C /* lock_sprite200x200.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lock_sprite200x200.png; sourceTree = "<group>"; };
 		C38464C12055EC4700239EE0 /* nextArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nextArrow.png; sourceTree = "<group>"; };
 		C39E37F4208139C100A53519 /* DarkMazeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkMazeUITests.swift; sourceTree = "<group>"; };
 		C39E37F6208139C100A53519 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 				C3BA45C42069A69500D72A3F /* cracking.atlas */,
 				C38464C12055EC4700239EE0 /* nextArrow.png */,
 				C37E691620A296860067B47C /* ChainSprite1000.png */,
+				C37E691820A5F5D70067B47C /* lock_sprite200x200.png */,
 			);
 			path = Sprites;
 			sourceTree = "<group>";
@@ -332,6 +335,7 @@
 			files = (
 				C3189DFD1FD77988000A52A6 /* MYBLS___.TTF in Resources */,
 				C37E691720A296860067B47C /* ChainSprite1000.png in Resources */,
+				C37E691920A5F5D70067B47C /* lock_sprite200x200.png in Resources */,
 				C3BA45C52069A69500D72A3F /* cracking.atlas in Resources */,
 				C38464C22055EC4700239EE0 /* nextArrow.png in Resources */,
 				C3189DFE1FD7798F000A52A6 /* MYSCARS_.TTF in Resources */,
