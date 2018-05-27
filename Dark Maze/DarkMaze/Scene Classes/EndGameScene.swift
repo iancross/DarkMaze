@@ -30,12 +30,27 @@ class EndGameScene: SKScene {
     
     override func sceneDidLoad() {
         self.isUserInteractionEnabled = true
+        let success = determineSuccess()
+        addSuccessMessage(text: success.successMessage)
+        addButtons(text: success.variableText)
+    }
+    func addButtons(text: String){
+        let font = GameStyle.shared.TextBoxFontSize
+        let buffers: (CGFloat,CGFloat) = (20.0,20.0)
+        repeatOrNextButton = TextBoxButton(x: frame.midX, y: frame.midY + frame.midY/4, text: text,fontsize:font, buffers: buffers, parentScene: self)
+        levelSelectButton = TextBoxButton(x: frame.midX, y: frame.midY, text: "Level Select", fontsize:font, buffers: buffers, parentScene: self)
+        mainMenuButton = TextBoxButton(x: frame.midX, y: frame.midY - frame.midY/4, text: "Main Menu", fontsize:font, buffers: buffers, parentScene: self)
         
+//        let buttonsNode = SKNode()
+//        buttonsNode.addChild(repeatOrNextButton!)
+//        self.addChild(buttonsNode)
+//        buttonsNode.scene?.backgroundColor = UIColor.orange
+//        buttonsNode.zRotation = CGFloat(Double.pi/3.0)
+    }
+    func determineSuccess() -> (successMessage: String, variableText: String) {
         var successMessage : String
-        let success = LevelsData.shared.currentLevelSuccess
         var variableText: String
-        
-        
+        let success = LevelsData.shared.currentLevelSuccess
         if success {
             variableText = "Next Level"
             successMessage = "Success"
@@ -44,19 +59,15 @@ class EndGameScene: SKScene {
             variableText = "Try Again"
             successMessage = "Failed"
         }
-//        successMessageNode = self.childNode(withName: "successMessage") as! SKLabelNode
-        successMessageNode = Helper.createGenericLabel(successMessage, fontsize: GameStyle.shared.LargeTextBoxFontSize)
+        return (successMessage: successMessage, variableText: variableText )
+    }
+    func addSuccessMessage(text: String){
+        successMessageNode = Helper.createGenericLabel(text, fontsize: GameStyle.shared.LargeTextBoxFontSize)
         successMessageNode.position = CGPoint(x: frame.midX, y: 1130)
-        successMessageNode.text = successMessage
+        //successMessageNode.text = text
         self.addChild(successMessageNode)
 
-        let font = GameStyle.shared.TextBoxFontSize
-        let buffers: (CGFloat,CGFloat) = (20.0,20.0)
-        repeatOrNextButton = TextBoxButton(x: frame.midX, y: frame.midY + frame.midY/4, text: variableText,fontsize:font, buffers: buffers, parentScene: self)
-        levelSelectButton = TextBoxButton(x: frame.midX, y: frame.midY, text: "Level Select", fontsize:font, buffers: buffers, parentScene: self)
-        mainMenuButton = TextBoxButton(x: frame.midX, y: frame.midY - frame.midY/4, text: "Main Menu", fontsize:font, buffers: buffers, parentScene: self)
     }
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         //can we handle just first touch here?
         for t in touches {

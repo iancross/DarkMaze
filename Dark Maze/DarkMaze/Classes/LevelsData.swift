@@ -46,13 +46,15 @@ class LevelsData{
         //levelGroups = [(category: String, levels: [LevelData])]()
         Normal()
         Jump()
-        //ThisLooksFamiliar()
+        //ThisLooksFamiliar() //go back over itself
+        //disappearing trail()
         //MultiJump()
         //SplitPath()
         //Flip()
         //Spin()
         //Disorient() //Multiple spins and flips
         //MeetInTheMiddle()
+        //MovedTiles
         //Reverse()
         //HyperSpeed() //just speed it up like crazy
         //Flash() //just literally flash the grid

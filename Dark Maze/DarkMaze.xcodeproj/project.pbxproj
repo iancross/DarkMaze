@@ -63,6 +63,7 @@
 		C37B707D1FE9D94D00F71B73 /* GridTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridTile.swift; sourceTree = "<group>"; };
 		C37E691620A296860067B47C /* ChainSprite1000.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ChainSprite1000.png; sourceTree = "<group>"; };
 		C37E691820A5F5D70067B47C /* lock_sprite200x200.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lock_sprite200x200.png; sourceTree = "<group>"; };
+		C37E691E20ACFE0B0067B47C /* unlock_sprite200x200 */ = {isa = PBXFileReference; lastKnownFileType = file; path = unlock_sprite200x200; sourceTree = "<group>"; };
 		C38464C12055EC4700239EE0 /* nextArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nextArrow.png; sourceTree = "<group>"; };
 		C39E37F4208139C100A53519 /* DarkMazeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkMazeUITests.swift; sourceTree = "<group>"; };
 		C39E37F6208139C100A53519 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -163,6 +164,7 @@
 				C3BA45C42069A69500D72A3F /* cracking.atlas */,
 				C38464C12055EC4700239EE0 /* nextArrow.png */,
 				C37E691620A296860067B47C /* ChainSprite1000.png */,
+				C37E691E20ACFE0B0067B47C /* unlock_sprite200x200 */,
 				C37E691820A5F5D70067B47C /* lock_sprite200x200.png */,
 			);
 			path = Sprites;
