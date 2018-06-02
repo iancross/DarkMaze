@@ -14,6 +14,7 @@
 		C3189DFE1FD7798F000A52A6 /* MYSCARS_.TTF in Resources */ = {isa = PBXBuildFile; fileRef = C3EF4A2C1FD7771100528247 /* MYSCARS_.TTF */; };
 		C3189E021FD77D0B000A52A6 /* LevelSelectScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3189E011FD77D0B000A52A6 /* LevelSelectScene.swift */; };
 		C31C5C5E20857CD700A44505 /* DarkMazeUnitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31C5C5D20857CD700A44505 /* DarkMazeUnitTests.swift */; };
+		C32CB86120BE10CB008BD6C4 /* unlock_sprite200x200.png in Resources */ = {isa = PBXBuildFile; fileRef = C32CB86020BE10CB008BD6C4 /* unlock_sprite200x200.png */; };
 		C32DB4731FF02A6800040BA3 /* LevelsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32DB4721FF02A6800040BA3 /* LevelsData.swift */; };
 		C34AA0C7206F27F800DB2229 /* CategoryHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34AA0C6206F27F800DB2229 /* CategoryHeader.swift */; };
 		C34AA0F02071927100DB2229 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34AA0EF2071927100DB2229 /* Helper.swift */; };
@@ -54,6 +55,7 @@
 		C31C5C5B20857CD700A44505 /* DarkMazeUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DarkMazeUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C31C5C5D20857CD700A44505 /* DarkMazeUnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkMazeUnitTests.swift; sourceTree = "<group>"; };
 		C31C5C5F20857CD700A44505 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C32CB86020BE10CB008BD6C4 /* unlock_sprite200x200.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unlock_sprite200x200.png; sourceTree = "<group>"; };
 		C32DB4721FF02A6800040BA3 /* LevelsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelsData.swift; sourceTree = "<group>"; };
 		C34AA0C6206F27F800DB2229 /* CategoryHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryHeader.swift; sourceTree = "<group>"; };
 		C34AA0EF2071927100DB2229 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
@@ -63,7 +65,6 @@
 		C37B707D1FE9D94D00F71B73 /* GridTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridTile.swift; sourceTree = "<group>"; };
 		C37E691620A296860067B47C /* ChainSprite1000.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ChainSprite1000.png; sourceTree = "<group>"; };
 		C37E691820A5F5D70067B47C /* lock_sprite200x200.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lock_sprite200x200.png; sourceTree = "<group>"; };
-		C37E691E20ACFE0B0067B47C /* unlock_sprite200x200 */ = {isa = PBXFileReference; lastKnownFileType = file; path = unlock_sprite200x200; sourceTree = "<group>"; };
 		C38464C12055EC4700239EE0 /* nextArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nextArrow.png; sourceTree = "<group>"; };
 		C39E37F4208139C100A53519 /* DarkMazeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkMazeUITests.swift; sourceTree = "<group>"; };
 		C39E37F6208139C100A53519 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -164,8 +165,8 @@
 				C3BA45C42069A69500D72A3F /* cracking.atlas */,
 				C38464C12055EC4700239EE0 /* nextArrow.png */,
 				C37E691620A296860067B47C /* ChainSprite1000.png */,
-				C37E691E20ACFE0B0067B47C /* unlock_sprite200x200 */,
 				C37E691820A5F5D70067B47C /* lock_sprite200x200.png */,
+				C32CB86020BE10CB008BD6C4 /* unlock_sprite200x200.png */,
 			);
 			path = Sprites;
 			sourceTree = "<group>";
@@ -336,6 +337,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C3189DFD1FD77988000A52A6 /* MYBLS___.TTF in Resources */,
+				C32CB86120BE10CB008BD6C4 /* unlock_sprite200x200.png in Resources */,
 				C37E691720A296860067B47C /* ChainSprite1000.png in Resources */,
 				C37E691920A5F5D70067B47C /* lock_sprite200x200.png in Resources */,
 				C3BA45C52069A69500D72A3F /* cracking.atlas in Resources */,

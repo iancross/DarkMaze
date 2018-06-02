@@ -161,8 +161,8 @@ class CustomTableViewCell: UITableViewCell {
                         y: yPrime,
                         text: String(99),
                         fontsize: mainFontSize,
-                        buffers: (7.0,12.0),
-                        parentScene: (drawing?.scene)!)
+                        buffers: (7.0,12.0))
+                    drawing?.scene?.addChild(box)
                     box.isAccessibilityElement = true
                     box.updateText(String(levelNumber + 1))
                     if group.levels[levelNumber].levelCompleted{

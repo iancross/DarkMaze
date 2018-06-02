@@ -135,8 +135,8 @@ class Level1Scene: SKScene {
     //the game begins.
     func drawSolution(){
         gameActive = false
-        skipButton = TextBoxButton(x: 150, y: 100, text: "Skip", fontsize: GameStyle.shared.SmallTextBoxFontSize, buffers: (20.0,20.0), parentScene: self)
-
+        skipButton = TextBoxButton(x: 150, y: 100, text: "Skip", fontsize: GameStyle.shared.SmallTextBoxFontSize, buffers: (20.0,20.0))
+        self.addChild(skipButton!)
         for (index,coord) in Level.solutionCoords.enumerated(){
             let tile = tile2DArray[coord.y][coord.x]
             let actionList = SKAction.sequence(
@@ -223,15 +223,46 @@ class Level1Scene: SKScene {
                 break //not sure if i need this
             }
             else{
-                skip(touch: t.location(in: self))
+                if (skipButton?.within(point: (t.location(in: self))))!{
+                    skipButton!.tappedState()
+                }
+                else{
+                    skipButton!.originalState()
+                }
             }
         }
     }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for t in touches {
+            if gameActive {
+                handleTouch(t.location(in: gridNode))
+                break //not sure if i need this
+            }
+            else{
+                if (skipButton?.within(point: (t.location(in: self))))!{
+                    skip(touch: t.location(in: self))
+                }
+                else{
+                    skipButton!.originalState()
+                }
+            }
+        }
+    }
+    
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         let point = touches.first
         let positionInScene = point?.location(in: gridNode)
         if gameActive {
             handleTouch(positionInScene!)
+        }
+        else{
+            if (skipButton?.within(point: (point?.location(in: self))!))!{
+                skipButton!.tappedState()
+            }
+            else{
+                skipButton!.originalState()
+            }
         }
     }
     
@@ -310,7 +341,7 @@ class Level1Scene: SKScene {
             
             //we have an upcoming jump
             if xDiff > 1 || yDiff > 1 {
-                let coords = [currCoord, nextCoord]
+                _ = [currCoord, nextCoord]
                 let j = jumpsTypes.removeFirst()
                 jumpsToDraw.append(contentsOf: [j,j])
                 //addJumpIndication(t: lastTouchedTile!)
@@ -387,18 +418,22 @@ class Level1Scene: SKScene {
     // failure) show the end game success (failure = false). Otherwise,
     // show the end game failure (failure = true)
     func endGame (success: Bool){
-        _ = LevelsData.shared
+        let nextLevelUnlockedBefore = LevelsData.shared.isPageUnlocked(page: LevelsData.shared.selectedLevel.page + 1)
         if success{
-        LevelsData.shared.levelGroups[LevelsData.shared.selectedLevel.page].levels[LevelsData.shared.selectedLevel.level].levelCompleted = true
+            LevelsData.shared.levelGroups[LevelsData.shared.selectedLevel.page].levels[LevelsData.shared.selectedLevel.level].levelCompleted = true
+            
         }
+        let nextLevelUnlockedAfter = LevelsData.shared.isPageUnlocked(page: LevelsData.shared.selectedLevel.page + 1)
         for child in self.children {
             child.removeFromParent()
         }
-        switchToEndGameScene()
+        let b = !nextLevelUnlockedBefore && nextLevelUnlockedAfter
+        
+        switchToEndGameScene(unlockedLevel: b)
     }
     
-    private func switchToEndGameScene(){
-        (self.delegate as? GameDelegate)?.gameOver()
+    private func switchToEndGameScene(unlockedLevel: Bool){
+        (self.delegate as? GameDelegate)?.gameOver(unlockedLevel: unlockedLevel)
     }
     
     

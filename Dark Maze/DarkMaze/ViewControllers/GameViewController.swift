@@ -21,6 +21,7 @@ enum scenes {
 
 class GameViewController: UIViewController, GameDelegate {
     
+    
     var sceneString = "MenuScene"
 
     override func viewDidLoad() {
@@ -47,8 +48,9 @@ class GameViewController: UIViewController, GameDelegate {
     }
     
     //GameDelegate requirements
-    func gameOver() {
-        switchScene(scene: EndGameScene(size: GameStyle.shared.defaultSceneSize))
+    func gameOver(unlockedLevel: Bool) {
+        print ("GameOver")
+        switchScene(scene: EndGameScene (size: GameStyle.shared.defaultSceneSize, unlockedLevel: unlockedLevel))
     }
     
     func playGame() {

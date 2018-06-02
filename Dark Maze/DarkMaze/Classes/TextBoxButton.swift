@@ -15,7 +15,7 @@ class TextBoxButton: SKNode{
     var outline: SKShapeNode
     var buffer: CGFloat = 40
     
-    init(x: CGFloat, y: CGFloat, text: String, fontsize: CGFloat, buffers: (x: CGFloat, y: CGFloat), parentScene: SKScene) {
+    init(x: CGFloat, y: CGFloat, text: String, fontsize: CGFloat, buffers: (x: CGFloat, y: CGFloat)) {
         self.text = text
         labelNode = SKLabelNode(fontNamed: GameStyle.shared.mainFontString)
         labelNode.text = text
@@ -28,9 +28,9 @@ class TextBoxButton: SKNode{
         outline.lineWidth = 2.0
         outline.position = CGPoint(x: x, y: y)
         labelNode.position = CGPoint(x: x, y: y)
-        parentScene.addChild(outline)
-        parentScene.addChild(labelNode)
         super.init()
+        self.addChild(outline)
+        self.addChild(labelNode)
     }
     
     func within(point: CGPoint) -> Bool{
@@ -76,6 +76,27 @@ class TextBoxButton: SKNode{
         outline.run(action, completion: block)
         labelNode.run(action)
     }
+    
+    func tappedState(){
+        outline.fillColor = UIColor.white
+        labelNode.fontColor = UIColor.black
+    }
+    
+    func originalState(){
+        outline.fillColor = UIColor.black
+        labelNode.fontColor = UIColor.white
+    }
+//    func tremble(){
+//        let vectors = [-1,1]
+//        let tremble = SKAction.sequence(
+//            [SKAction.move(by: CGVector(dx: 2.0, dy: 2.0), duration: 0.1),
+//            SKAction.move(by: CGVector(dx: -2.0, dy: -2.0), duration: 0.1)
+//            ]
+//        )
+//        
+//        self.run(SKAction.repeatForever(tremble), withKey: "tremble")
+//
+//    }
     
     deinit {
         outline.removeFromParent()
