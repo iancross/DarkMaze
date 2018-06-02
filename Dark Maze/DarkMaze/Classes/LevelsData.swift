@@ -12,7 +12,7 @@ import Foundation
 //gridsize - self explanatory
 //delayTime - time between tiles showing up (0 means they all show up at the same time)
 //levelCompleted: shows us what to color the level in level select
-let REQUIRED_TO_UNLOCK = 8
+let REQUIRED_TO_UNLOCK = 2
 
 struct LevelData {
     var gridX: Int
@@ -25,6 +25,7 @@ struct LevelData {
 
 enum GridModification {
     case flip
+    case meetInTheMiddle
 }
 
 class LevelsData{
@@ -44,6 +45,8 @@ class LevelsData{
         currentPage = 0
         
         //levelGroups = [(category: String, levels: [LevelData])]()
+        Huge()
+        MeetInTheMiddle()
         Normal()
         Jump()
         //ThisLooksFamiliar() //go back over itself
@@ -53,14 +56,12 @@ class LevelsData{
         //Flip()
         //Spin()
         //Disorient() //Multiple spins and flips
-        //MeetInTheMiddle()
         //MovedTiles
         //Reverse()
         //HyperSpeed() //just speed it up like crazy
         //Flash() //just literally flash the grid
         //WhereToEnd() //multiple end arrows
         Blackout()
-        Huge()
         //_BrokenTest()
     }
     func isPageUnlocked(page: Int)->Bool{
@@ -128,42 +129,42 @@ class LevelsData{
             gridX: 4, gridY: 4, delayTime: 0.5,
             solutionCoords:
             [(0,1),(0,2),(0,3),(1,3),(2,3),(3,3)],
-            levelCompleted: true, modifications: nil
+            levelCompleted: false, modifications: nil
         ),
         LevelData(
             gridX: 4, gridY: 4, delayTime: 0.5,
             solutionCoords:
             [(0,3),(1,3),(1,2),(1,1),(1,0)],
-            levelCompleted: true, modifications: nil
+            levelCompleted: false, modifications: nil
             ),LevelData(
                 gridX: 4, gridY: 4, delayTime: 0.5,
                 solutionCoords:
                 [(0,1),(0,2),(0,3),(1,3),(2,3),(3,3)],
-                levelCompleted: true, modifications: nil
+                levelCompleted: false, modifications: nil
             ),
               LevelData(
                 gridX: 4, gridY: 4, delayTime: 0.5,
                 solutionCoords:
                 [(0,3),(1,3),(1,2),(1,1),(1,0)],
-                levelCompleted: true, modifications: nil
+                levelCompleted: false, modifications: nil
             ),
               LevelData(
                 gridX: 4, gridY: 4, delayTime: 0.5,
                 solutionCoords:
                 [(0,1),(0,2),(0,3),(1,3),(2,3),(3,3)],
-                levelCompleted: true, modifications: nil
+                levelCompleted: false, modifications: nil
             ),
              LevelData(
                 gridX: 4, gridY: 4, delayTime: 0.5,
                 solutionCoords:
                 [(0,3),(1,3),(1,2),(1,1),(1,0)],
-                levelCompleted: true, modifications: nil
+                levelCompleted: false, modifications: nil
             ),
              LevelData(
                 gridX: 4, gridY: 4, delayTime: 0.5,
                 solutionCoords:
                 [(0,3),(1,3),(1,2),(1,1),(1,0)],
-                levelCompleted: true, modifications: nil
+                levelCompleted: false, modifications: nil
             )
        ]
         for _ in 1...16-array.count{
@@ -171,6 +172,16 @@ class LevelsData{
         }
         levelGroups.append ((category: "Normal", array))
 
+    }
+    
+    private func MeetInTheMiddle(){
+        let array = [LevelData(
+            gridX: 5, gridY: 5, delayTime: 0.3,
+            solutionCoords:
+            [(1,0),(1,1),(1,2),(1,3),(1,4)],
+            levelCompleted: true, modifications: [.meetInTheMiddle]
+            )]
+        levelGroups.append ((category: "Meet In The Middle", array))
     }
     
     private func Jump(){
@@ -218,8 +229,13 @@ class LevelsData{
             gridX: 6, gridY: 10, delayTime: 0.3,
             solutionCoords:
             [(0,7),(1,7),(1,8),(1,9),(2,9),(3,9),(3,8),(4,8),(4,7),(4,6),(5,6),(5,5),(5,4),(4,4),(3,4),(2,4),(1,4),(1,3),(2,3),(2,2),(3,2),(4,2),(4,1),(5,1)],
-            levelCompleted: false, modifications: [.flip]
-        )]
+            levelCompleted: false, modifications: [.flip, .meetInTheMiddle]
+            ),LevelData(
+                gridX: 6, gridY: 10, delayTime: 0.7,
+                solutionCoords:
+                [(0,7),(1,7),(1,8),(1,9),(2,9),(3,9),(3,8),(4,8),(4,7),(4,6),(5,6),(5,5),(5,4),(4,4),(3,4),(2,4),(1,4),(1,3),(2,3),(2,2),(3,2),(4,2),(4,1),(5,1)],
+                levelCompleted: false, modifications: [.flip, .meetInTheMiddle]
+            )]
         levelGroups.append ((category: "Huge", array))
     }
     

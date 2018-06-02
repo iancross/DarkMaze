@@ -41,7 +41,7 @@ class EndGameScene: SKScene {
         addButtons(text: success.variableText)
         
         //really if a successful bonus/unlocked happened
-        let sequence = SKAction.sequence([SKAction.fadeAlpha(to: 1, duration: 3.0), SKAction.fadeAlpha(to: 0.3, duration: 2.0)])
+        let sequence = SKAction.sequence([SKAction.fadeAlpha(to: 1, duration: 3.0)])
         if displayUnlockLevelBonus! {
             print("unlocking next page")
             buttonsNode.position = CGPoint(x: buttonsNode.position.x, y: buttonsNode.position.y - frame.height/8)
@@ -51,11 +51,11 @@ class EndGameScene: SKScene {
             unlocked.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
                                             SKAction.fadeIn(withDuration: 1.0)]))
             {
-                //self.buttonsNode.run(SKAction.repeatForever(sequence))
+                self.buttonsNode.run(sequence)
             }
         }
         else{
-            //self.buttonsNode.run(SKAction.repeatForever(sequence))
+            self.buttonsNode.run(sequence)
         }
     }
     func levelUnlocked() -> SKNode{
@@ -80,7 +80,7 @@ class EndGameScene: SKScene {
     }
     func addButtons(text: String){
         let font = GameStyle.shared.TextBoxFontSize
-        let buffers: (CGFloat,CGFloat) = (20.0,20.0)
+        let buffers: (CGFloat,CGFloat) = (40.0,20.0)
 
         repeatOrNextButton = TextBoxButton(x: 0, y: frame.height/8, text: text, fontsize:font, buffers: buffers)
         repeatOrNextButton?.name = "repeat"
@@ -95,6 +95,7 @@ class EndGameScene: SKScene {
         buttonsNode.addChild(levelSelectButton!)
         buttonsNode.addChild(repeatOrNextButton!)
         buttonsNode.position = CGPoint(x: frame.midX, y: frame.midY)
+        buttonsNode.alpha = 0
     }
 
     func determineSuccess() -> (successMessage: String, variableText: String) {

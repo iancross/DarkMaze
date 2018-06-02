@@ -135,23 +135,71 @@ class Level1Scene: SKScene {
     //the game begins.
     func drawSolution(){
         gameActive = false
+        addSkipButton()
+        
+        if let mods = Level.modifications{
+            for mod in mods{
+                switch mod {
+                case .meetInTheMiddle:
+                    drawMeetInTheMiddle()
+                    return
+                default:
+                    break
+                }
+            }
+        }
+        drawNormal()
+    }
+    
+    func addSkipButton(){
         skipButton = TextBoxButton(x: 150, y: 100, text: "Skip", fontsize: GameStyle.shared.SmallTextBoxFontSize, buffers: (20.0,20.0))
         self.addChild(skipButton!)
+    }
+    
+    func drawNormal(){
         for (index,coord) in Level.solutionCoords.enumerated(){
             let tile = tile2DArray[coord.y][coord.x]
-            let actionList = SKAction.sequence(
-                [SKAction.wait(forDuration: Level.delayTime * Double(index)),
-                 SKAction.run { tile.switchToWhite() },
-                 SKAction.fadeOut(withDuration: 2)
-                ])
-            tile.tile.run(actionList){
-                if index == self.Level.solutionCoords.count-1{
-                    self.drawGridLines()
-                    //marking the first tile as available
-                    self.beginGame()
-                    self.gameActive = true
-                    self.skipButton?.hide()
-                }
+            runDrawingActions(t: tile,
+                lastTile: (index == self.Level.solutionCoords.count-1),
+                delay: Level.delayTime * Double(index)
+            )
+        }
+    }
+    func drawMeetInTheMiddle(){
+        let numTiles = Level.solutionCoords.count
+        var left,right: Int
+        if numTiles % 2 == 0 { //even
+            left = numTiles/2 - 1
+            right = numTiles/2
+        }
+        else{ //odd
+            left = numTiles/2
+            right = numTiles/2
+        }
+        
+        for i in 0...numTiles/2 - 1{
+            print ("\(left - i) and \(right + i)")
+            let coord1 = Level.solutionCoords[left-i]
+            let coord2 = Level.solutionCoords[right+i]
+            let tile1 = tile2DArray[coord1.y][coord1.x]
+            let tile2 = tile2DArray[coord2.y][coord2.x]
+            runDrawingActions(t: tile1, lastTile: false, delay: Level.delayTime * Double(i))
+            runDrawingActions(t: tile2, lastTile: (right + i == numTiles - 1), delay: Level.delayTime * Double(i))
+        }
+    }
+    func runDrawingActions(t: GridTile, lastTile: Bool, delay: Double){
+        let actionList = SKAction.sequence(
+            [SKAction.wait(forDuration: delay),
+             SKAction.run { t.switchToWhite() },
+             SKAction.fadeOut(withDuration: 2)
+            ])
+        t.tile.run(actionList){
+            if lastTile{
+                self.drawGridLines()
+                //marking the first tile as available
+                self.beginGame()
+                self.gameActive = true
+                self.skipButton?.hide()
             }
         }
     }
@@ -185,6 +233,8 @@ class Level1Scene: SKScene {
                 switch modification {
                 case .flip:
                     flipGrid()
+                default:
+                    print("fuck")
                 }
             }
         }
