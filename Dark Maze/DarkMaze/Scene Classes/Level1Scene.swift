@@ -177,14 +177,15 @@ class Level1Scene: SKScene {
             right = numTiles/2
         }
         
-        for i in 0...numTiles/2 - 1{
+        for i in 0...left{
             print ("\(left - i) and \(right + i)")
             let coord1 = Level.solutionCoords[left-i]
             let coord2 = Level.solutionCoords[right+i]
             let tile1 = tile2DArray[coord1.y][coord1.x]
             let tile2 = tile2DArray[coord2.y][coord2.x]
-            runDrawingActions(t: tile1, lastTile: false, delay: Level.delayTime * Double(i))
-            runDrawingActions(t: tile2, lastTile: (right + i == numTiles - 1), delay: Level.delayTime * Double(i))
+            runDrawingActions(t: tile1, lastTile: (left - i == 0), delay: Level.delayTime * Double(i))
+            runDrawingActions(t: tile2, lastTile: false, delay: Level.delayTime * Double(i))
+            //runDrawingActions(t: tile2, lastTile: (right + i == numTiles - 1), delay: Level.delayTime * Double(i))
         }
     }
     func runDrawingActions(t: GridTile, lastTile: Bool, delay: Double){

@@ -12,7 +12,7 @@ import Foundation
 //gridsize - self explanatory
 //delayTime - time between tiles showing up (0 means they all show up at the same time)
 //levelCompleted: shows us what to color the level in level select
-let REQUIRED_TO_UNLOCK = 2
+let REQUIRED_TO_UNLOCK = 1
 
 struct LevelData {
     var gridX: Int
@@ -45,10 +45,10 @@ class LevelsData{
         currentPage = 0
         
         //levelGroups = [(category: String, levels: [LevelData])]()
-        Huge()
-        MeetInTheMiddle()
         Normal()
         Jump()
+        Huge()
+        MeetInTheMiddle()
         //ThisLooksFamiliar() //go back over itself
         //disappearing trail()
         //MultiJump()
@@ -176,10 +176,16 @@ class LevelsData{
     
     private func MeetInTheMiddle(){
         let array = [LevelData(
-            gridX: 5, gridY: 5, delayTime: 0.3,
-            solutionCoords:
-            [(1,0),(1,1),(1,2),(1,3),(1,4)],
-            levelCompleted: true, modifications: [.meetInTheMiddle]
+                gridX: 5, gridY: 5, delayTime: 0.3,
+                solutionCoords:
+                [(1,0),(1,1),(1,2),(1,3),(1,4)],
+                levelCompleted: true, modifications: [.meetInTheMiddle]
+            ),
+            LevelData(
+                gridX: 5, gridY: 6, delayTime: 0.3,
+                solutionCoords:
+                [(1,0),(1,1),(1,2),(1,3),(1,4),(1,5)],
+                levelCompleted: true, modifications: [.meetInTheMiddle]
             )]
         levelGroups.append ((category: "Meet In The Middle", array))
     }
@@ -229,7 +235,7 @@ class LevelsData{
             gridX: 6, gridY: 10, delayTime: 0.3,
             solutionCoords:
             [(0,7),(1,7),(1,8),(1,9),(2,9),(3,9),(3,8),(4,8),(4,7),(4,6),(5,6),(5,5),(5,4),(4,4),(3,4),(2,4),(1,4),(1,3),(2,3),(2,2),(3,2),(4,2),(4,1),(5,1)],
-            levelCompleted: false, modifications: [.flip, .meetInTheMiddle]
+            levelCompleted: true, modifications: [.flip, .meetInTheMiddle]
             ),LevelData(
                 gridX: 6, gridY: 10, delayTime: 0.7,
                 solutionCoords:

@@ -51,6 +51,7 @@ class GridTile: SKNode{
     }
     
     func reInit(){
+        tile.removeAllActions()
         tile.fillColor = originColor
         tile.alpha = 1.0
         state = .unavailable
