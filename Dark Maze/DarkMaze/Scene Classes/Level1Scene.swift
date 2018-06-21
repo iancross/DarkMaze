@@ -37,8 +37,7 @@ class Level1Scene: SKScene {
     let endArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
     let startArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
     var categoryNode: CategoryHeader?
-    var jumpsTypes: [Jumps] = [.diamond, .circle, .square, .plus]
-    //var jumpTiles = [(Jumps,[(x: Int, y: Int)])]()
+    var jumpsTypes: [Jumps] = [.circle, .diamond, .square, .plus]
     var jumpsToDraw = [Jumps]()
     
     override init(size: CGSize) {
@@ -128,7 +127,6 @@ class Level1Scene: SKScene {
         }
         gridNode.position = CGPoint(x: frame.midX, y: frame.midY)
         self.addChild(gridNode)
-
     }
     
     //Once the solution is finished drawing and the grid appears,
@@ -178,7 +176,6 @@ class Level1Scene: SKScene {
         }
         
         for i in 0...left{
-            print ("\(left - i) and \(right + i)")
             let coord1 = Level.solutionCoords[left-i]
             let coord2 = Level.solutionCoords[right+i]
             let tile1 = tile2DArray[coord1.y][coord1.x]
@@ -287,7 +284,7 @@ class Level1Scene: SKScene {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
             if gameActive {
-                handleTouch(t.location(in: gridNode))
+                //handleTouch(t.location(in: gridNode))
                 break //not sure if i need this
             }
             else{
@@ -391,11 +388,10 @@ class Level1Scene: SKScene {
             let yDiff = abs(nextCoord.y - currCoord.y)
             
             //we have an upcoming jump
-            if xDiff > 1 || yDiff > 1 {
+            if xDiff > 1 || yDiff > 1 || (xDiff == 1 && yDiff == 1)  {
                 _ = [currCoord, nextCoord]
                 let j = jumpsTypes.removeFirst()
                 jumpsToDraw.append(contentsOf: [j,j])
-                //addJumpIndication(t: lastTouchedTile!)
 
                 for row in tile2DArray{
                     for tile in row{
@@ -420,13 +416,21 @@ class Level1Scene: SKScene {
     
     func addSymbol(t: GridTile, j: Jumps){
         switch j{
-        default:
+        case .circle:
             let circle = SKShapeNode(circleOfRadius: 10)
-            circle.fillColor = UIColor.black
+            circle.fillColor = .black
             
             t.addChild(circle)
-            circle.position = CGPoint.zero
+            circle.position = .zero
             circle.zPosition = 5
+        case .diamond:
+            let diamond = SKShapeNode(rectOf: CGSize(width: 20, height: 20))
+            diamond.fillColor = .black
+            diamond.zRotation += CGFloat(Double.pi/2.0)
+            t.addChild(diamond)
+            diamond.position = .zero
+        default:
+            print("default")
         }
     }
     
