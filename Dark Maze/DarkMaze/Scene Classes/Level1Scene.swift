@@ -319,7 +319,7 @@ class Level1Scene: SKScene {
             if within{
                 for col in tile2DArray {
                     for tile in col {
-                        tile.tile.removeAllActions()
+                        tile.removeAllActions()
                         tile.reInit()
                     }
                 }
@@ -567,7 +567,7 @@ class Level1Scene: SKScene {
         let numSolutionBlocks = Double(Level.solutionCoords.count)
         for (i,coord) in Level.solutionCoords.enumerated(){
             let tile = tile2DArray[coord.y][coord.x]
-            tile.tile.removeAllActions()
+            tile.removeAllActions()
             let sequence = SKAction.sequence(
                 [SKAction.wait(forDuration: Double(i) * 1.5/numSolutionBlocks),
                 SKAction.fadeAlpha(to: 1.0, duration: 0.2),

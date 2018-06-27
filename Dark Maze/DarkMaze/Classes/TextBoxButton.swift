@@ -86,17 +86,6 @@ class TextBoxButton: SKNode{
         outline.fillColor = UIColor.black
         labelNode.fontColor = UIColor.white
     }
-//    func tremble(){
-//        let vectors = [-1,1]
-//        let tremble = SKAction.sequence(
-//            [SKAction.move(by: CGVector(dx: 2.0, dy: 2.0), duration: 0.1),
-//            SKAction.move(by: CGVector(dx: -2.0, dy: -2.0), duration: 0.1)
-//            ]
-//        )
-//        
-//        self.run(SKAction.repeatForever(tremble), withKey: "tremble")
-//
-//    }
     
     deinit {
         outline.removeFromParent()

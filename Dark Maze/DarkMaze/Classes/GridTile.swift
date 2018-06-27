@@ -19,6 +19,7 @@ class GridTile: SKNode{
     var strokeAppearing = true //used to have the grid fade in and out
     let alphaDecrement = 0.005
     var state = TileState.unavailable
+    let outline: SKShapeNode
     
     enum TileState {
         case touched
@@ -45,12 +46,22 @@ class GridTile: SKNode{
         tile.name = "Grid Tile"
         tile.strokeColor = UIColor(displayP3Red: 0.40, green: 0.40, blue: 0.40, alpha: 0.0 )
         
+        outline = SKShapeNode(rectOf: CGSize(width: tile.frame.width-2, height: tile.frame.height-2))
+        outline.lineWidth = 1.0
+        outline.fillColor = .clear
+        outline.strokeColor = .white
+        //outline.position = CGPoint(x: 1.0, y: 1.0)
+        outline.isHidden = true
+        
         //add the tile to the parent scene
         super.init()
         self.addChild(tile)
+        self.addChild(outline)
     }
     
     func reInit(){
+        outline.isHidden = true
+        tile.zPosition = 0
         tile.removeAllActions()
         tile.fillColor = originColor
         tile.alpha = 1.0
@@ -160,10 +171,14 @@ class GridTile: SKNode{
             SKAction.fadeIn(withDuration: 0.4),
             SKAction.fadeOut(withDuration: 0.4)
         ]
-        
-        tile.run(SKAction.sequence(graySequence)){ [weak self] in
-            self?.switchToBlack()
-            self?.tile.zPosition -= 5
+        if !tile.hasActions(){
+            outline.isHidden = false
+            outline.alpha = CGFloat(strokeAlpha)
+            tile.run(SKAction.sequence(graySequence)){ [weak self] in
+                self?.switchToBlack()
+                self?.tile.zPosition -= 5
+                self?.outline.isHidden = true
+            }
         }
     }
     
@@ -172,6 +187,7 @@ class GridTile: SKNode{
     }
     
     override func removeAllActions() {
+        outline.isHidden = true
         tile.removeAllActions()
     }
     
