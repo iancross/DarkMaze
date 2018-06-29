@@ -10,6 +10,7 @@
 import UIKit
 import SpriteKit
 import GameplayKit
+import CoreData
 
 
 enum scenes {
@@ -25,6 +26,7 @@ class GameViewController: UIViewController, GameDelegate {
     var sceneString = "MenuScene"
 
     override func viewDidLoad() {
+        self.save()
         self.view.backgroundColor = UIColor.black
         super.viewDidLoad()
         //let scene = SKScene(size: (view?.frame.size)!)
@@ -36,6 +38,73 @@ class GameViewController: UIViewController, GameDelegate {
             view.ignoresSiblingOrder = true
             view.showsFPS = true
             view.showsNodeCount = true
+        }
+    }
+    
+    func save() {
+        deleteCoreData()
+        guard let appDelegate =
+            UIApplication.shared.delegate as? AppDelegate else {
+                return
+        }
+        
+        // 1
+        let managedContext =
+            appDelegate.persistentContainer.viewContext
+        
+        // 2
+        let entity =
+            NSEntityDescription.entity(forEntityName: "Level",
+                                       in: managedContext)!
+
+        for i in 1...25{
+            let level = NSManagedObject(entity: entity,
+                                        insertInto: managedContext)
+            level.setValue(i, forKey: "page")
+            level.setValue((i + 10), forKey: "levels_completed")
+        }
+        
+        
+        // 4
+        do {
+            try managedContext.save()
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+        }
+        
+        
+        let fetchRequest =
+            NSFetchRequest<NSManagedObject>(entityName: "Level")
+        do {
+            let levels = try managedContext.fetch(fetchRequest) as [NSManagedObject]
+            for (i,level) in levels.enumerated(){
+                print(i)
+                print(level.value(forKeyPath: "page"))
+            }
+            
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+        
+    }
+    
+    func deleteCoreData(){
+        guard let appDelegate =
+            UIApplication.shared.delegate as? AppDelegate else {
+                return
+        }
+        
+        // 1
+        let managedContext =
+            appDelegate.persistentContainer.viewContext
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Level")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        
+        do {
+            try managedContext.execute(deleteRequest)
+        } catch let error as NSError {
+            // TODO: handle the error
         }
     }
 

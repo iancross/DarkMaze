@@ -20,6 +20,7 @@
 		C34AA0F02071927100DB2229 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34AA0EF2071927100DB2229 /* Helper.swift */; };
 		C34AA0F2207199E000DB2229 /* GameDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34AA0F1207199E000DB2229 /* GameDelegates.swift */; };
 		C352CF39207570C300FCD5D0 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C352CF38207570C300FCD5D0 /* CustomTableViewCell.swift */; };
+		C360D94B20E5AAEA00580E80 /* DarkMaze.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C360D94920E5AAEA00580E80 /* DarkMaze.xcdatamodeld */; };
 		C364CEC01FE74F98009140C7 /* Level1Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C364CEBF1FE74F98009140C7 /* Level1Scene.swift */; };
 		C37B707E1FE9D94D00F71B73 /* GridTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37B707D1FE9D94D00F71B73 /* GridTile.swift */; };
 		C37E691720A296860067B47C /* ChainSprite1000.png in Resources */ = {isa = PBXBuildFile; fileRef = C37E691620A296860067B47C /* ChainSprite1000.png */; };
@@ -61,6 +62,7 @@
 		C34AA0EF2071927100DB2229 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		C34AA0F1207199E000DB2229 /* GameDelegates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDelegates.swift; sourceTree = "<group>"; };
 		C352CF38207570C300FCD5D0 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
+		C360D94A20E5AAEA00580E80 /* DarkMaze.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DarkMaze.xcdatamodel; sourceTree = "<group>"; };
 		C364CEBF1FE74F98009140C7 /* Level1Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level1Scene.swift; sourceTree = "<group>"; };
 		C37B707D1FE9D94D00F71B73 /* GridTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridTile.swift; sourceTree = "<group>"; };
 		C37E691620A296860067B47C /* ChainSprite1000.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ChainSprite1000.png; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 		C3EF4A071FD7748F00528247 = {
 			isa = PBXGroup;
 			children = (
+				C360D94920E5AAEA00580E80 /* DarkMaze.xcdatamodeld */,
 				C3EF4A121FD7749000528247 /* DarkMaze */,
 				C39E37F3208139C100A53519 /* DarkMazeUITests */,
 				C31C5C5C20857CD700A44505 /* DarkMazeUnitTests */,
@@ -380,6 +383,7 @@
 				C34AA0C7206F27F800DB2229 /* CategoryHeader.swift in Sources */,
 				C3B46D8A207840D400C1EAC6 /* CellDelegate.swift in Sources */,
 				C34AA0F2207199E000DB2229 /* GameDelegates.swift in Sources */,
+				C360D94B20E5AAEA00580E80 /* DarkMaze.xcdatamodeld in Sources */,
 				C30DB1CC20156C0300CE670C /* GameStyles.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -623,6 +627,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		C360D94920E5AAEA00580E80 /* DarkMaze.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				C360D94A20E5AAEA00580E80 /* DarkMaze.xcdatamodel */,
+			);
+			currentVersion = C360D94A20E5AAEA00580E80 /* DarkMaze.xcdatamodel */;
+			path = DarkMaze.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = C3EF4A081FD7748F00528247 /* Project object */;
 }
