@@ -75,7 +75,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         if let cell = cell as? CustomTableViewCell{
             cell.cellDelegate = self
             let cellCategory = levelGroups[indexPath.row].category
-            let progress = LevelsData.shared.getCategoryProgress(groupIndex: indexPath.row)
+            let progress = LevelsData.shared.nextLevelToCompleteOnPage(pageIndex: indexPath.row)
             let outOfTotal = LevelsData.shared.levelGroups[indexPath.row].levels.count
             
             cell.initCellData(category: cellCategory, progress: progress, outOfTotal: outOfTotal, path: indexPath, origHeight: defaultHeight)

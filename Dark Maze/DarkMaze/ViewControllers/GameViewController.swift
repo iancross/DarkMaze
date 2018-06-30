@@ -26,10 +26,9 @@ class GameViewController: UIViewController, GameDelegate {
     var sceneString = "MenuScene"
 
     override func viewDidLoad() {
-        self.save()
+        //self.save()
         self.view.backgroundColor = UIColor.black
         super.viewDidLoad()
-        //let scene = SKScene(size: (view?.frame.size)!)
         if let view = self.view as! SKView? {
             
             view.preferredFramesPerSecond = 30

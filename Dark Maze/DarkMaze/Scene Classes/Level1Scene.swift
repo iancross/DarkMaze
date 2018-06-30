@@ -28,7 +28,7 @@ class Level1Scene: SKScene {
     var cam: SKCameraNode?
     var blockAlphaIncrement: CGFloat = 0
     var blockAlphaMin: CGFloat = 0.35
-    let Level = LevelsData.shared.levelGroups[LevelsData.shared.selectedLevel.page].levels[LevelsData.shared.selectedLevel.level]
+    var Level: LevelData?
     var currentLevel = LevelsData.shared.selectedLevel.level
     let currentPage = LevelsData.shared.selectedLevel.page
     var gridNode =  SKNode()
@@ -44,6 +44,7 @@ class Level1Scene: SKScene {
         super.init(size: size)
         backgroundColor = UIColor.black
         anchorPoint = CGPoint(x: 0, y:0)
+        Level = LevelsData.shared.getSelectedLevelData()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -57,8 +58,6 @@ class Level1Scene: SKScene {
         self.addChild(cam!)
         cam?.position = CGPoint(x: frame.midX,y: frame.midY)
         countdown()
-        //self.initializeGrid() //remove comment to skip countdown
-        //self.drawSolution()  //remove comment to skip countdown
     }
 
     override func update(_ currentTime: TimeInterval) {
@@ -108,15 +107,15 @@ class Level1Scene: SKScene {
     }
     
     private func initializeGrid(){
-        blocksize = max(self.frame.maxX / (CGFloat(Level.gridX) + blockBuffer),
-                            self.frame.maxX / (CGFloat(Level.gridY) + blockBuffer))
-        let botOfGridY =  -CGFloat(Level.gridY) / 2.0 * blocksize
-        let leftOfGridX = -((CGFloat(Level.gridX) / 2.0) * blocksize)
+        blocksize = max(self.frame.maxX / (CGFloat(Level!.gridX) + blockBuffer),
+                            self.frame.maxX / (CGFloat(Level!.gridY) + blockBuffer))
+        let botOfGridY =  -CGFloat(Level!.gridY) / 2.0 * blocksize
+        let leftOfGridX = -((CGFloat(Level!.gridX) / 2.0) * blocksize)
         
-        for row in 0...Level.gridY-1{
+        for row in 0...Level!.gridY-1{
             let offsetY = blocksize * CGFloat(row) + blocksize/2
             tile2DArray.append([GridTile]())
-            for col in 0...Level.gridX-1{
+            for col in 0...Level!.gridX-1{
                 let offsetX = blocksize * CGFloat(col) + blocksize/2
                 let coord = (col,row)
                 let tile = GridTile(coord: coord, width: blocksize, height: blocksize)
@@ -135,7 +134,7 @@ class Level1Scene: SKScene {
         gameActive = false
         addSkipButton()
         
-        if let mods = Level.modifications{
+        if let mods = Level!.modifications{
             for mod in mods{
                 switch mod {
                 case .meetInTheMiddle:
@@ -155,16 +154,16 @@ class Level1Scene: SKScene {
     }
     
     func drawNormal(){
-        for (index,coord) in Level.solutionCoords.enumerated(){
+        for (index,coord) in Level!.solutionCoords.enumerated(){
             let tile = tile2DArray[coord.y][coord.x]
             runDrawingActions(t: tile,
-                lastTile: (index == self.Level.solutionCoords.count-1),
-                delay: Level.delayTime * Double(index)
+                lastTile: (index == self.Level!.solutionCoords.count-1),
+                delay: Level!.delayTime * Double(index)
             )
         }
     }
     func drawMeetInTheMiddle(){
-        let numTiles = Level.solutionCoords.count
+        let numTiles = Level!.solutionCoords.count
         var left,right: Int
         if numTiles % 2 == 0 { //even
             left = numTiles/2 - 1
@@ -176,13 +175,13 @@ class Level1Scene: SKScene {
         }
         
         for i in 0...left{
-            let coord1 = Level.solutionCoords[left-i]
-            let coord2 = Level.solutionCoords[right+i]
+            let coord1 = Level!.solutionCoords[left-i]
+            let coord2 = Level!.solutionCoords[right+i]
             let tile1 = tile2DArray[coord1.y][coord1.x]
             let tile2 = tile2DArray[coord2.y][coord2.x]
-            runDrawingActions(t: tile1, lastTile: (left - i == 0), delay: Level.delayTime * Double(i))
-            runDrawingActions(t: tile2, lastTile: false, delay: Level.delayTime * Double(i))
-            //runDrawingActions(t: tile2, lastTile: (right + i == numTiles - 1), delay: Level.delayTime * Double(i))
+            runDrawingActions(t: tile1, lastTile: (left - i == 0), delay: Level!.delayTime * Double(i))
+            runDrawingActions(t: tile2, lastTile: false, delay: Level!.delayTime * Double(i))
+            //runDrawingActions(t: tile2, lastTile: (right + i == numTiles - 1), delay: Level!.delayTime * Double(i))
         }
     }
     func runDrawingActions(t: GridTile, lastTile: Bool, delay: Double){
@@ -204,10 +203,10 @@ class Level1Scene: SKScene {
     
     func beginGame(){
         insertLevelTitle()
-        let firstTile = self.tile2DArray[(Level.solutionCoords.first?.y)!][(Level.solutionCoords.first?.x)!]
+        let firstTile = self.tile2DArray[(Level!.solutionCoords.first?.y)!][(Level!.solutionCoords.first?.x)!]
         drawArrows(firstTile: firstTile)
         firstTile.firstTile()
-        let numSolutionBlocks = Level.solutionCoords.count
+        let numSolutionBlocks = Level!.solutionCoords.count
         blockAlphaIncrement = (1.0 - blockAlphaMin) / CGFloat(numSolutionBlocks)
         modifyGrid()
     }
@@ -226,7 +225,7 @@ class Level1Scene: SKScene {
 /*---------------------------------------------------------------*/
 /*---------------------- Grid Modification ----------------------*/
     func modifyGrid(){
-        if let mods = Level.modifications{
+        if let mods = Level!.modifications{
             for modification in mods{
                 switch modification {
                 case .flip:
@@ -368,7 +367,7 @@ class Level1Scene: SKScene {
         //highlighted this tile
         else{
             if tupleContains(a: tile.gridCoord,
-                             v: Level.solutionCoords[touchedTiles]){
+                             v: Level!.solutionCoords[touchedTiles]){
                 tile.switchToWhite()
                 tile.setAlpha(alpha: alpha)
                 if gameOverSuccessOrFailure() != nil{
@@ -381,9 +380,9 @@ class Level1Scene: SKScene {
     
 /*---------------------- End Touches ----------------------*/
     func updateGridForPotentialJump(){
-        if touchedTiles < Level.solutionCoords.count - 1 && lastTouchedTile?.state == .touched{
-            let currCoord = Level.solutionCoords[touchedTiles-1]
-            let nextCoord = Level.solutionCoords[touchedTiles]
+        if touchedTiles < Level!.solutionCoords.count - 1 && lastTouchedTile?.state == .touched{
+            let currCoord = Level!.solutionCoords[touchedTiles-1]
+            let nextCoord = Level!.solutionCoords[touchedTiles]
             let xDiff = abs(nextCoord.x - currCoord.x)
             let yDiff = abs(nextCoord.y - currCoord.y)
             
@@ -441,8 +440,8 @@ class Level1Scene: SKScene {
         var flip = SKAction()
         let duration = 0.16
         if touchedTiles > 1 {
-            let currCoord = Level.solutionCoords[touchedTiles - 1]
-            let prevCoord = Level.solutionCoords[touchedTiles - 2]
+            let currCoord = Level!.solutionCoords[touchedTiles - 1]
+            let prevCoord = Level!.solutionCoords[touchedTiles - 2]
             let xDiff = abs(prevCoord.x - currCoord.x)
             let yDiff = abs(prevCoord.y - currCoord.y)
             if xDiff > 0{
@@ -475,8 +474,7 @@ class Level1Scene: SKScene {
     func endGame (success: Bool){
         let nextLevelUnlockedBefore = LevelsData.shared.isPageUnlocked(page: LevelsData.shared.selectedLevel.page + 1)
         if success{
-            LevelsData.shared.levelGroups[LevelsData.shared.selectedLevel.page].levels[LevelsData.shared.selectedLevel.level].levelCompleted = true
-            
+            LevelsData.shared.selectedLevelCompletedSuccessfully()
         }
         let nextLevelUnlockedAfter = LevelsData.shared.isPageUnlocked(page: LevelsData.shared.selectedLevel.page + 1)
         for child in self.children {
@@ -543,9 +541,9 @@ class Level1Scene: SKScene {
     //return false if game over as a failure
     //return nil if game not over
     func gameOverSuccessOrFailure()->Bool?{
-        if tupleContains(a: Level.solutionCoords[touchedTiles], v: (lastTouchedTile?.gridCoord)!){
+        if tupleContains(a: Level!.solutionCoords[touchedTiles], v: (lastTouchedTile?.gridCoord)!){
             touchedTiles += 1
-            if touchedTiles == Level.solutionCoords.count {
+            if touchedTiles == Level!.solutionCoords.count {
                 LevelsData.shared.currentLevelSuccess = true
                 self.gameActive = false
                 successHighlightPath()
@@ -564,8 +562,8 @@ class Level1Scene: SKScene {
     }
 
     func successHighlightPath(){
-        let numSolutionBlocks = Double(Level.solutionCoords.count)
-        for (i,coord) in Level.solutionCoords.enumerated(){
+        let numSolutionBlocks = Double(Level!.solutionCoords.count)
+        for (i,coord) in Level!.solutionCoords.enumerated(){
             let tile = tile2DArray[coord.y][coord.x]
             tile.removeAllActions()
             let sequence = SKAction.sequence(
@@ -577,7 +575,7 @@ class Level1Scene: SKScene {
                     tile.tile.strokeColor = .white
                 })
             ])
-            if i == Level.solutionCoords.count - 1 {
+            if i == Level!.solutionCoords.count - 1 {
                 tile.tile.run(SKAction.sequence([sequence,SKAction.wait(forDuration: 1.0)])){
                     self.endGame(success: true)
                 }
@@ -632,7 +630,7 @@ class Level1Scene: SKScene {
     }
     
     func crackAllTiles(){
-        for coord in Level.solutionCoords.reversed(){
+        for coord in Level!.solutionCoords.reversed(){
             let tile = tile2DArray[coord.y][coord.x]
             switch tile.state {
             case .touched:
@@ -648,7 +646,7 @@ class Level1Scene: SKScene {
 /*----------------------------------------------------------*/
 /*------------------------- Arrows -------------------------*/
     func drawArrows(firstTile: GridTile){
-        let endTile = self.tile2DArray[(Level.solutionCoords.last?.y)!][(Level.solutionCoords.last?.x)!]
+        let endTile = self.tile2DArray[(Level!.solutionCoords.last?.y)!][(Level!.solutionCoords.last?.x)!]
         placeArrow(tile: firstTile, arrow: startArrow, orient: -1)
         placeArrow(tile: endTile, arrow: endArrow, orient: 1)
         startArrowSequence(tile: firstTile)

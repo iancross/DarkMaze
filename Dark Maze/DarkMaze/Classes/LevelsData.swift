@@ -32,7 +32,6 @@ class LevelsData{
     static let shared = LevelsData()
     
     var currentLevelSuccess: Bool
-    var currentPage: Int  //page that contains the next level to be completed
     var selectedLevel: (page: Int, level: Int)
     var levelGroups = [(category: String, levels: [LevelData])]()
     var placeHolderLevel: LevelData?
@@ -42,7 +41,6 @@ class LevelsData{
         placeHolderLevel = LevelData(gridX: 4, gridY: 4, delayTime: 0.3, solutionCoords: [(0,0), (0,1), (1,1)], levelCompleted: true, modifications: nil)
         //used by the gameplay if you play an earlier level
         selectedLevel = (page: 0, level: 0)
-        currentPage = 0
         
         //levelGroups = [(category: String, levels: [LevelData])]()
         Normal()
@@ -79,35 +77,26 @@ class LevelsData{
         }
     }
     
-    func nextLevel(){
-        currentPage = selectedLevel.page
-        if selectedLevel.level < levelGroups[currentPage].levels.count - 1{
-            selectedLevel.level += 1
-        }
-        else if currentPage < levelGroups.count - 1 {
-            currentPage += 1
-            selectedLevel.level = 0
-            selectedLevel.page = currentPage
-        }
-        else{
-            // do nothing
-        }
+    func getSelectedLevelData() -> LevelData{ 
+        return levelGroups[selectedLevel.page].levels[selectedLevel.level]
     }
     
-    //returns the highest completed level
-    func getCategoryProgress(groupIndex: Int) -> Int{
-        var count = 0
-        for l in levelGroups[groupIndex].levels {
-            if l.levelCompleted {
-                count += 1
-            }
+    //This should be called when you hit "next level"
+    //Depending on which page you are on, it'll go to the next available level on that page
+    //by advancing "selected level"
+    func nextLevel(){
+        if selectedLevel.level < levelGroups[selectedLevel.page].levels.count - 1{
+            selectedLevel.level += 1
         }
-        return count
+        else if selectedLevel.page < levelGroups.count - 1 {
+            selectedLevel.level = 0
+            selectedLevel.page += 1
+        }
     }
     
     //returns the next level to complete within a page
-    func nextLevelToComplete(groupIndex: Int) -> Int{
-        let pageLevels = levelGroups[groupIndex].levels
+    func nextLevelToCompleteOnPage(pageIndex: Int) -> Int{
+        let pageLevels = levelGroups[pageIndex].levels
         for (i,level) in pageLevels.enumerated(){
             if !level.levelCompleted{
                 return i
@@ -116,9 +105,14 @@ class LevelsData{
         return pageLevels.count - 1
     }
     
+    func selectedLevelCompletedSuccessfully(){
+        levelGroups[selectedLevel.page].levels[selectedLevel.level].levelCompleted = true
+    }
+    
     func getSolutionCoords(group: Int, level: Int) -> [(x: Int,y: Int)]{
         return levelGroups[group].levels[level].solutionCoords
     }
+    
     /*------------------------------- 4x4 -------------------------------*/
     //Description:
     //Easiest level to show how to play the game. Probably going to do all sorts of
