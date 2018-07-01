@@ -22,10 +22,10 @@ class EndGameScene: SKScene {
     
     init(size: CGSize, unlockedLevel: Bool) {
         displayUnlockLevelBonus = unlockedLevel
-        print("init \(displayUnlockLevelBonus!)")
         super.init(size: size)
         backgroundColor = UIColor.black
         anchorPoint = CGPoint(x: 0, y:0)
+        LevelsData.shared.printAllLevelsUtil()
 
     }
     
@@ -43,7 +43,6 @@ class EndGameScene: SKScene {
         //really if a successful bonus/unlocked happened
         let sequence = SKAction.sequence([SKAction.fadeAlpha(to: 1, duration: 3.0)])
         if displayUnlockLevelBonus! {
-            print("unlocking next page")
             buttonsNode.position = CGPoint(x: buttonsNode.position.x, y: buttonsNode.position.y - frame.height/8)
             let unlocked = levelUnlocked()
             unlocked.alpha = 0

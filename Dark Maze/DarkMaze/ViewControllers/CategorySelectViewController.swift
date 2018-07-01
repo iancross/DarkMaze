@@ -96,7 +96,6 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
 
             switch scrollDirection{
             default:
-                print ("no scrolling")
                 cell.alpha = 0.0
                 UIView.animate(withDuration: 1.0, delay: 0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
                     cell.alpha = 1.0

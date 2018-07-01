@@ -50,7 +50,6 @@ class GameViewController: UIViewController, GameDelegate {
     
     //GameDelegate requirements
     func gameOver(unlockedLevel: Bool) {
-        print ("GameOver")
         switchScene(scene: EndGameScene (size: GameStyle.shared.defaultSceneSize, unlockedLevel: unlockedLevel))
     }
     
