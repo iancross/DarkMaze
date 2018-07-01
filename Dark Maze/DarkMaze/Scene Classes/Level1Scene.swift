@@ -213,8 +213,8 @@ class Level1Scene: SKScene {
     
     func insertLevelTitle(){
         let progress = LevelsData.shared.selectedLevel.level + 1
-        let outOfTotal = LevelsData.shared.levelGroups[currentPage].levels.count
-        let category = LevelsData.shared.levelGroups[currentPage].category
+        let outOfTotal = LevelsData.shared.getNumLevelsOnPage
+        let category = LevelsData.shared.getPageCategory(page: LevelsData.shared.selectedLevel.page)
         let title = "\(category) \(progress)/\(outOfTotal)"
         
         categoryNode = CategoryHeader(string: title, fontSize: GameStyle.shared.SmallTextBoxFontSize, frameWidth: frame.width)

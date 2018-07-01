@@ -35,7 +35,7 @@ class LevelsData{
     
     var currentLevelSuccess: Bool
     var selectedLevel: (page: Int, level: Int)
-    var levelGroups = [(category: String, levels: [LevelData])]()
+    private var levelGroups = [(category: String, levels: [LevelData])]()
     var placeHolderLevel: LevelData?
     
     init(){
@@ -76,60 +76,13 @@ class LevelsData{
         for (i,page) in levelGroups.enumerated(){
             let level = NSManagedObject(entity: entity, insertInto: managedContext)
             level.setValue(i, forKey: "page")
-            level.setValue(i+10, forKey: "levels_completed")
+            level.setValue(0, forKey: "levels_completed")
         }
         do {
             try managedContext.save()
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
         }
-        selectedLevelCompletedSuccessfully()
-        selectedLevelCompletedSuccessfully()
-    }
-    
-    
-    
-    func save() {
-        deleteCoreData()
-        
-        //here we save
-        guard let appDelegate =
-            UIApplication.shared.delegate as? AppDelegate else {
-                return
-        }
-        let managedContext =
-            appDelegate.persistentContainer.viewContext
-
-        let entity =
-            NSEntityDescription.entity(forEntityName: "Level",
-                                       in: managedContext)!
-        for i in 1...25{
-            let level = NSManagedObject(entity: entity,
-                                        insertInto: managedContext)
-            level.setValue(i, forKey: "page")
-            level.setValue((i + 10), forKey: "levels_completed")
-        }
-
-        do {
-            try managedContext.save()
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-        }
-        
-        //here we fetch
-        let fetchRequest =
-            NSFetchRequest<NSManagedObject>(entityName: "Level")
-        do {
-            let levels = try managedContext.fetch(fetchRequest) as [NSManagedObject]
-            for (i,level) in levels.enumerated(){
-                print(i)
-                print(level.value(forKeyPath: "page"))
-            }
-            
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-        }
-        
     }
     
     func deleteCoreData(){
@@ -183,45 +136,94 @@ class LevelsData{
     }
     
     //returns the next level to complete within a page
-    func nextLevelToCompleteOnPage(pageIndex: Int) -> Int{
-        let pageLevels = levelGroups[pageIndex].levels
-        for (i,level) in pageLevels.enumerated(){
-            if !level.levelCompleted{
-                return i
-            }
+    func nextLevelToCompleteOnPage(page: Int) -> Int{
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return 0
         }
-        return pageLevels.count - 1
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Level")
+        fetchRequest.predicate = NSPredicate(format: "page == \(page)")
+        do {
+            let levels = try managedContext.fetch(fetchRequest) as [NSManagedObject]
+            let levels_completed = levels[0].value(forKeyPath: "levels_completed") as! Int
+            return levels_completed
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+            return 0
+        }
+    }
+    
+    func hasLevelBeenCompleted(page: Int, levelToTest: Int) -> Bool{
+        print ("levelToTest \(levelToTest)")
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return false
+        }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Level")
+        fetchRequest.predicate = NSPredicate(format: "page == \(page)")
+        do {
+            let levels = try managedContext.fetch(fetchRequest) as [NSManagedObject]
+            let levels_completed = levels[0].value(forKeyPath: "levels_completed") as! Int
+            if levels_completed > levelToTest {
+                print("level has been completed")
+                return true
+            }
+            else{
+                return false
+            }
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+            return false
+        }
+    }
+    
+    func getNumPages() -> Int{
+        return levelGroups.count
+    }
+    func getNumLevelsOnPage(page: Int) -> Int{
+        return levelGroups[page].levels.count
+    }
+    func getPageCategory(page: Int) -> String{
+        return levelGroups[page].category
     }
     
     func selectedLevelCompletedSuccessfully(){
-        print("start")
-        levelGroups[selectedLevel.page].levels[selectedLevel.level].levelCompleted = true
-        
+        //levelGroups[selectedLevel.page].levels[selectedLevel.level].levelCompleted = true
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
         }
         let managedContext = appDelegate.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Level")
-        //fetchRequest.predicate = NSPredicate(format: "page == \(selectedLevel.page)")
+        fetchRequest.predicate = NSPredicate(format: "page == \(selectedLevel.page)")
         do {
             let levels = try managedContext.fetch(fetchRequest) as [NSManagedObject]
-            //level[0].setValue(10, forKey: "levels_complete")
-            for (i,level) in levels.enumerated(){
-                let levels_completed = level.value(forKeyPath: "levels_completed") as! Int
-                print("page is \(level.value(forKeyPath: "page") as! Int)")
-                print("levels completed is \(level.value(forKeyPath: "levels_completed") as! Int)")
-                level.setValue(levels_completed + 20, forKey: "levels_completed")
+            let levels_completed = levels[0].value(forKeyPath: "levels_completed") as! Int
+            if levels_completed < selectedLevel.level{
+                levels[0].setValue(levels_completed + 1, forKey: "levels_completed")
             }
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
+        
         do {
             try managedContext.save()
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
         }
-        
+
+    }
+    
+    func getSolutionCoords(group: Int, level: Int) -> [(x: Int,y: Int)]{
+        return levelGroups[group].levels[level].solutionCoords
+    }
+    
+    func printAllLevelsUtil(){
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Level")
         do {
             let levels = try managedContext.fetch(fetchRequest) as [NSManagedObject]
             //level[0].setValue(10, forKey: "levels_complete")
@@ -232,12 +234,6 @@ class LevelsData{
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
-        print ("end")
-
-    }
-    
-    func getSolutionCoords(group: Int, level: Int) -> [(x: Int,y: Int)]{
-        return levelGroups[group].levels[level].solutionCoords
     }
     
     /*------------------------------- 4x4 -------------------------------*/

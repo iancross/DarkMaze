@@ -17,7 +17,6 @@ enum Scrolling {
 
 class CategorySelectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, CellDelegate {
     
-    let levelGroups = LevelsData.shared.levelGroups
     let defaultHeight = 42 as CGFloat
     var scrollDirection: Scrolling = .none
     var lastContentOffset: CGPoint = CGPoint()
@@ -53,7 +52,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if selectedRowIndex == indexPath{
-            let count = Double(levelGroups[indexPath.row].levels.count)
+            let count = Double(LevelsData.shared.getNumLevelsOnPage(page: indexPath.row))
             let lines = ceil(count/Double(GameStyle.shared.numLevelsOnLine))
             
             return CGFloat(Double(defaultHeight) + lines * 55.0)
@@ -62,7 +61,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return levelGroups.count
+        return LevelsData.shared.getNumPages()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -74,9 +73,9 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let cell = cell as? CustomTableViewCell{
             cell.cellDelegate = self
-            let cellCategory = levelGroups[indexPath.row].category
-            let progress = LevelsData.shared.nextLevelToCompleteOnPage(pageIndex: indexPath.row)
-            let outOfTotal = LevelsData.shared.levelGroups[indexPath.row].levels.count
+            let cellCategory = LevelsData.shared.getPageCategory(page: indexPath.row)
+            let progress = LevelsData.shared.nextLevelToCompleteOnPage(page: indexPath.row)
+            let outOfTotal = LevelsData.shared.getNumLevelsOnPage(page: indexPath.row)
             
             cell.initCellData(category: cellCategory, progress: progress, outOfTotal: outOfTotal, path: indexPath, origHeight: defaultHeight)
             if isPathUnlocked(path: indexPath){

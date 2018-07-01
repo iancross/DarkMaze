@@ -133,9 +133,8 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     private func addLevels(){
-        let group = LevelsData.shared.levelGroups[indexPath.row]
-        let nextLevelToComplete = LevelsData.shared.nextLevelToCompleteOnPage(pageIndex: indexPath.row)
-        let levelCount = group.levels.count
+        let nextLevelToComplete = LevelsData.shared.nextLevelToCompleteOnPage(page: indexPath.row)
+        let levelCount = LevelsData.shared.getNumLevelsOnPage(page: indexPath.row)
         let n = GameStyle.shared.numLevelsOnLine
         for i in 0...levelCount/n{
             
@@ -146,7 +145,7 @@ class CustomTableViewCell: UITableViewCell {
             
             for j in 0...n-1{
                 let levelNumber = i * (n) + j
-                if levelNumber <= group.levels.count - 1 {
+                if levelNumber <= levelCount - 1 {
                     var yPrime = y
                     if levelNumber == NonBonusLevels - 1{
                         let bonus = CategoryHeader(string: "Bonus Levels", fontSize: mainFontSize*4/5, frameWidth: (drawing?.scene?.frame.width)!)
@@ -165,7 +164,7 @@ class CustomTableViewCell: UITableViewCell {
                     drawing?.scene?.addChild(box)
                     box.isAccessibilityElement = true
                     box.updateText(String(levelNumber + 1))
-                    if group.levels[levelNumber].levelCompleted{
+                    if LevelsData.shared.hasLevelBeenCompleted(page: indexPath.row, levelToTest: levelNumber){
                         box.markAsCompletedLevel()
                     }
                     else if levelNumber == nextLevelToComplete{
@@ -203,7 +202,7 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     private func touchedLevel(point: CGPoint){
-        let nextLevelToComplete = LevelsData.shared.nextLevelToCompleteOnPage(pageIndex: indexPath.row)
+        let nextLevelToComplete = LevelsData.shared.nextLevelToCompleteOnPage(page: indexPath.row)
         for button in levels{
             if button.within(point: point){
                 if Int(button.text)!-1 > nextLevelToComplete{
