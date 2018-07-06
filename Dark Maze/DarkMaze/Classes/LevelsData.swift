@@ -64,7 +64,7 @@ class LevelsData{
     }
     
     private func initCoreData(){
-        deleteCoreData()
+        //deleteCoreData()
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
         }

@@ -18,6 +18,7 @@ enum Jumps {
 class Level1Scene: SKScene {
     var tile2DArray = [[GridTile]]()
     var gameActive = false
+    var countdownActive = false
     var skipButton: TextBoxButton?
     let blockBuffer: CGFloat = 2
     var countdownTime = 3
@@ -73,6 +74,7 @@ class Level1Scene: SKScene {
     //does a 3 2 1 countdown on the screen and then
     //starts drawing the solution
     func countdown(){
+        countdownActive = true
         let number = SKLabelNode(fontNamed: GameStyle.shared.mainFontString)
         number.text = "\(countdownTime)"
         number.fontSize = 90
@@ -89,16 +91,15 @@ class Level1Scene: SKScene {
             SKAction.moveTo(y: frame.midY - frame.midY/2, duration: 0),
             SKAction.run({ self.decrementCountdown(number) }),
             SKAction.fadeIn(withDuration: 0.4),
-            SKAction.fadeOut(withDuration: 0.4),
-            SKAction.run({
-                number.removeFromParent()
-                self.countdownTime = 3
-                self.initializeGrid()
-                self.drawSolution()
-                })
+            SKAction.fadeOut(withDuration: 0.4)
             ]
         )
-        number.run(actionList)
+        number.run(actionList){
+            self.countdownActive = false
+            number.removeFromParent()
+            self.initializeGrid()
+            self.drawSolution()
+        }
     }
     
     private func decrementCountdown(_ label: SKLabelNode) -> Void{
@@ -131,7 +132,6 @@ class Level1Scene: SKScene {
     //Once the solution is finished drawing and the grid appears,
     //the game begins.
     func drawSolution(){
-        gameActive = false
         addSkipButton()
         
         if let mods = Level!.modifications{
@@ -213,7 +213,7 @@ class Level1Scene: SKScene {
     
     func insertLevelTitle(){
         let progress = LevelsData.shared.selectedLevel.level + 1
-        let outOfTotal = LevelsData.shared.getNumLevelsOnPage
+        let outOfTotal = LevelsData.shared.getNumLevelsOnPage(page: LevelsData.shared.selectedLevel.page)
         let category = LevelsData.shared.getPageCategory(page: LevelsData.shared.selectedLevel.page)
         let title = "\(category) \(progress)/\(outOfTotal)"
         
@@ -270,11 +270,13 @@ class Level1Scene: SKScene {
                 break //not sure if i need this
             }
             else{
-                if (skipButton?.within(point: (t.location(in: self))))!{
-                    skipButton!.tappedState()
-                }
-                else{
-                    skipButton!.originalState()
+                if !countdownActive{
+                    if (skipButton?.within(point: (t.location(in: self))))!{
+                        skipButton!.tappedState()
+                    }
+                    else{
+                        skipButton!.originalState()
+                    }
                 }
             }
         }
@@ -287,11 +289,13 @@ class Level1Scene: SKScene {
                 break //not sure if i need this
             }
             else{
-                if (skipButton?.within(point: (t.location(in: self))))!{
-                    skip(touch: t.location(in: self))
-                }
-                else{
-                    skipButton!.originalState()
+                if !countdownActive{
+                    if (skipButton?.within(point: (t.location(in: self))))!{
+                        skip(touch: t.location(in: self))
+                    }
+                    else{
+                        skipButton!.originalState()
+                    }
                 }
             }
         }
@@ -304,30 +308,28 @@ class Level1Scene: SKScene {
             handleTouch(positionInScene!)
         }
         else{
-            if (skipButton?.within(point: (point?.location(in: self))!))!{
-                skipButton!.tappedState()
-            }
-            else{
-                skipButton!.originalState()
+            if !countdownActive{
+                if (skipButton?.within(point: (point?.location(in: self))!))!{
+                    skipButton!.tappedState()
+                }
+                else{
+                    skipButton!.originalState()
+                }
             }
         }
     }
     
     func skip(touch: CGPoint){
-        if let within = skipButton?.within(point: touch){
-            if within{
-                for col in tile2DArray {
-                    for tile in col {
-                        tile.removeAllActions()
-                        tile.reInit()
-                    }
-                }
-                self.drawGridLines()
-                self.beginGame()
-                self.gameActive = true
-                skipButton?.hide()
+        for col in tile2DArray {
+            for tile in col {
+                tile.removeAllActions()
+                tile.reInit()
             }
         }
+        self.drawGridLines()
+        self.beginGame()
+        self.gameActive = true
+        skipButton?.hide()
     }
     
     private func handleTouch(_ point: CGPoint){
