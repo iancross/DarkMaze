@@ -25,7 +25,6 @@ class EndGameScene: SKScene {
         super.init(size: size)
         backgroundColor = UIColor.black
         anchorPoint = CGPoint(x: 0, y:0)
-        LevelsData.shared.printAllLevelsUtil()
 
     }
     

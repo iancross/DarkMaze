@@ -155,7 +155,6 @@ class LevelsData{
             let levels = try managedContext.fetch(fetchRequest) as [NSManagedObject]
             let levels_completed = levels[0].value(forKeyPath: "levels_completed") as! Int
             if levels_completed > levelToTest {
-                print("level has been completed")
                 return true
             }
             else{

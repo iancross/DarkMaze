@@ -378,6 +378,7 @@ class Level1Scene: SKScene {
                 updateGridState()
             }
         }
+        
     }
     
 /*---------------------- End Touches ----------------------*/
@@ -543,6 +544,8 @@ class Level1Scene: SKScene {
     //return false if game over as a failure
     //return nil if game not over
     func gameOverSuccessOrFailure()->Bool?{
+        print (Level!.solutionCoords[touchedTiles])
+        print ( (lastTouchedTile?.gridCoord)!)
         if tupleContains(a: Level!.solutionCoords[touchedTiles], v: (lastTouchedTile?.gridCoord)!){
             touchedTiles += 1
             if touchedTiles == Level!.solutionCoords.count {
@@ -599,8 +602,11 @@ class Level1Scene: SKScene {
         crackingFrames = frames
         let firstFrameTexture = crackingFrames[0]
         crack = SKSpriteNode(texture: firstFrameTexture)
+
         addChild(crack)
         crack.position = point
+        crack.zPosition = (lastTouchedTile?.tile.zPosition)! + 5 //hack! need to fix this. Caused by adding to the tile's z value repeatedly
+        print(blocksize)
         crack.scale(to: CGSize(width: blocksize, height: blocksize))
         crack.run(
             SKAction.sequence(
