@@ -301,23 +301,23 @@ class Level1Scene: SKScene {
         }
     }
     
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let point = touches.first
-        let positionInScene = point?.location(in: gridNode)
-        if gameActive {
-            handleTouch(positionInScene!)
-        }
-        else{
-            if !countdownActive{
-                if (skipButton?.within(point: (point?.location(in: self))!))!{
-                    skipButton!.tappedState()
-                }
-                else{
-                    skipButton!.originalState()
-                }
-            }
-        }
-    }
+//    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        let point = touches.first
+//        let positionInScene = point?.location(in: gridNode)
+//        if gameActive {
+//            handleTouch(positionInScene!)
+//        }
+//        else{
+//            if !countdownActive{
+//                if (skipButton?.within(point: (point?.location(in: self))!))!{
+//                    skipButton!.tappedState()
+//                }
+//                else{
+//                    skipButton!.originalState()
+//                }
+//            }
+//        }
+//    }
     
     func skip(touch: CGPoint){
         for col in tile2DArray {
@@ -338,9 +338,9 @@ class Level1Scene: SKScene {
                 if tile.pointIsWithin(point){
                     tile.removeAllActions()
                     startArrow.removeAllActions()
-//                    print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
-//                    tile.tile.fillColor = UIColor.green
-//                    return //comment out to get grid coords for levels
+                    print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
+                    tile.tile.fillColor = UIColor.green
+                    return //comment out to get grid coords for levels
                     lastTouchedTile = tile
                     touchTile(tile: lastTouchedTile!, alpha: blockAlphaMin + CGFloat(touchedTiles + 1) * blockAlphaIncrement)
                     return
