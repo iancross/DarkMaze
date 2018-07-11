@@ -64,7 +64,7 @@ class LevelsData{
     }
     
     private func initCoreData(){
-        deleteCoreData()
+        //deleteCoreData()
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
         }
@@ -73,8 +73,8 @@ class LevelsData{
         for i in 0...levelGroups.count-1{
             let level = NSManagedObject(entity: entity, insertInto: managedContext)
             level.setValue(i, forKey: "page")
-            //level.setValue(0, forKey: "levels_completed")
-            level.setValue(12, forKey: "levels_completed")
+            level.setValue(0, forKey: "levels_completed")
+            //level.setValue(12, forKey: "levels_completed")
         }
         do {
             try managedContext.save()

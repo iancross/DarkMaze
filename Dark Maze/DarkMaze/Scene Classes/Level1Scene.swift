@@ -15,6 +15,14 @@ enum Jumps {
     case plus
 }
 
+//enum CardinalDirection{
+//    case north
+//    case south
+//    case west
+//    case east
+//    case none
+//}
+
 class Level1Scene: SKScene {
     var tile2DArray = [[GridTile]]()
     var gameActive = false
@@ -40,12 +48,15 @@ class Level1Scene: SKScene {
     var categoryNode: CategoryHeader?
     var jumpsTypes: [Jumps] = [.circle, .diamond, .square, .plus]
     var jumpsToDraw = [Jumps]()
+    var currOrientationIndex: Int = 0
+    //var directionArray: [CardinalDirection] = [.east, .south, .west, .north]
     
     override init(size: CGSize) {
         super.init(size: size)
         backgroundColor = UIColor.black
         anchorPoint = CGPoint(x: 0, y:0)
         Level = LevelsData.shared.getSelectedLevelData()
+        initPrevOrientation()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -61,6 +72,22 @@ class Level1Scene: SKScene {
         countdown()
     }
 
+    private func initPrevOrientation(){
+        let t = Level?.solutionCoords[1]
+        
+        if t?.x == 0{
+            currOrientationIndex = 0
+        }
+        else if (t?.x)! == (Level?.solutionCoords.count)! - 1{
+            currOrientationIndex = 2
+        }
+        else if t?.y == 0{
+            currOrientationIndex = 3
+        }
+        else if (t?.x)! == (Level?.solutionCoords.count)! - 1{
+            currOrientationIndex = 1
+        }
+    }
     override func update(_ currentTime: TimeInterval) {
         if gridViewable {
             for row in tile2DArray{
@@ -301,23 +328,23 @@ class Level1Scene: SKScene {
         }
     }
     
-//    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        let point = touches.first
-//        let positionInScene = point?.location(in: gridNode)
-//        if gameActive {
-//            handleTouch(positionInScene!)
-//        }
-//        else{
-//            if !countdownActive{
-//                if (skipButton?.within(point: (point?.location(in: self))!))!{
-//                    skipButton!.tappedState()
-//                }
-//                else{
-//                    skipButton!.originalState()
-//                }
-//            }
-//        }
-//    }
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let point = touches.first
+        let positionInScene = point?.location(in: gridNode)
+        if gameActive {
+            handleTouch(positionInScene!)
+        }
+        else{
+            if !countdownActive{
+                if (skipButton?.within(point: (point?.location(in: self))!))!{
+                    skipButton!.tappedState()
+                }
+                else{
+                    skipButton!.originalState()
+                }
+            }
+        }
+    }
     
     func skip(touch: CGPoint){
         for col in tile2DArray {
@@ -338,9 +365,9 @@ class Level1Scene: SKScene {
                 if tile.pointIsWithin(point){
                     tile.removeAllActions()
                     startArrow.removeAllActions()
-                    print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
-                    tile.tile.fillColor = UIColor.green
-                    return //comment out to get grid coords for levels
+//                    print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
+//                    tile.tile.fillColor = UIColor.green
+//                    return //comment out to get grid coords for levels
                     lastTouchedTile = tile
                     touchTile(tile: lastTouchedTile!, alpha: blockAlphaMin + CGFloat(touchedTiles + 1) * blockAlphaIncrement)
                     return
@@ -437,6 +464,7 @@ class Level1Scene: SKScene {
     }
     
     func flipTile(tile: GridTile, a: CGFloat){
+        //let nextPoint = nextPointToConnectPath()
         tile.setColor(color: UIColor.black)
         tile.restoreOutline()
         tile.setLineWidth(w: 7.0)
@@ -467,9 +495,12 @@ class Level1Scene: SKScene {
             tile.switchToWhite()
             tile.setAlpha(alpha: a)
             self.addJumpIndication(t: tile)
-            tile.run(SKAction.scaleX(to: 1, y: 1, duration: duration))
+            tile.run(SKAction.scaleX(to: 1, y: 1, duration: duration)){
+                self.bootsAnimation(point: (tile.scene?.convert((tile.position), from: tile.parent!))!)
+            }
         }
     }
+
     
     // If all the solutions coords are filled (and there wasn't a
     // failure) show the end game success (failure = false). Otherwise,
@@ -544,8 +575,6 @@ class Level1Scene: SKScene {
     //return false if game over as a failure
     //return nil if game not over
     func gameOverSuccessOrFailure()->Bool?{
-        print (Level!.solutionCoords[touchedTiles])
-        print ( (lastTouchedTile?.gridCoord)!)
         if tupleContains(a: Level!.solutionCoords[touchedTiles], v: (lastTouchedTile?.gridCoord)!){
             touchedTiles += 1
             if touchedTiles == Level!.solutionCoords.count {
@@ -591,6 +620,76 @@ class Level1Scene: SKScene {
         }
     }
     
+    func bootsAnimation(point: CGPoint){
+        let ccwBootsAtlas = SKTextureAtlas(named: "ccw_boots")
+        var frames: [SKTexture] = []
+        let numImages = ccwBootsAtlas.textureNames.count-1
+        for i in 0...numImages{
+            print("goin through frames")
+            let bootsTextureName = "ccw-boot-walking\(i)"
+            frames.append(ccwBootsAtlas.textureNamed(bootsTextureName))
+        }
+        let ccwBootsFrames = frames
+        let firstFrameTexture = ccwBootsFrames[0]
+        let ccwBoots = SKSpriteNode(texture: firstFrameTexture)
+        
+        addChild(ccwBoots)
+        ccwBoots.position = point
+        let nextDir = nextDirToConnectPath()
+        ccwBoots.zRotation = CGFloat((Double(currOrientationIndex + 1) * Double.pi))
+        ccwBoots.zPosition = 100 //(lastTouchedTile?.tile.zPosition)! + 5 //hack! need to fix this. Caused by adding to the tile's z value repeatedly
+        ccwBoots.scale(to: CGSize(width: blocksize, height: blocksize))
+        if currOrientationIndex % 2 == 0 {
+            ccwBoots.yScale *= CGFloat(bootsOrientation(nextDir: nextDir))
+        }
+        else {
+            ccwBoots.xScale *= CGFloat(bootsOrientation(nextDir: nextDir))
+        }
+        ccwBoots.run(
+            SKAction.sequence(
+                [SKAction.animate(with: ccwBootsFrames, timePerFrame: 2/Double(numImages), resize: false, restore: false),
+                ])
+        ){
+            self.currOrientationIndex = nextDir
+        }
+    }
+    
+    func nextDirToConnectPath() -> Int{
+        if touchedTiles < (Level?.solutionCoords.count)!{
+            let currX = (lastTouchedTile?.gridCoord.x)!
+            let currY = (lastTouchedTile?.gridCoord.y)!
+            let nextX = Level?.solutionCoords[touchedTiles].x  //gets the next tile coords
+            let nextY = Level?.solutionCoords[touchedTiles].y
+            
+            if currX + 1 == nextX {
+                return 0
+            }
+            else if currX - 1 == nextX{
+                return 2
+            }
+            else if currY + 1 == nextY{
+                return 3
+            }
+            else if currY - 1 == nextY{
+                return 1
+            }
+        }
+        return 0
+    }
+    func bootsOrientation(nextDir: Int) -> Int{
+        if currOrientationIndex == nextDir{
+            //straight
+            return nextDir
+        }
+        else if currOrientationIndex < nextDir{
+            //turn right
+            return 1
+        }
+        else{
+            return -1
+        }
+    }
+    
     func crackAnimation(point: CGPoint){
         let crackingAtlas = SKTextureAtlas(named: "cracking")
         var frames: [SKTexture] = []
@@ -606,7 +705,6 @@ class Level1Scene: SKScene {
         addChild(crack)
         crack.position = point
         crack.zPosition = (lastTouchedTile?.tile.zPosition)! + 5 //hack! need to fix this. Caused by adding to the tile's z value repeatedly
-        print(blocksize)
         crack.scale(to: CGSize(width: blocksize, height: blocksize))
         crack.run(
             SKAction.sequence(

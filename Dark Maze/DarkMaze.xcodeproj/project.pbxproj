@@ -22,6 +22,7 @@
 		C352CF39207570C300FCD5D0 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C352CF38207570C300FCD5D0 /* CustomTableViewCell.swift */; };
 		C360D94B20E5AAEA00580E80 /* DarkMaze.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C360D94920E5AAEA00580E80 /* DarkMaze.xcdatamodeld */; };
 		C364CEC01FE74F98009140C7 /* Level1Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C364CEBF1FE74F98009140C7 /* Level1Scene.swift */; };
+		C365F40420F4471B003AB2D3 /* ccw_boots.atlas in Resources */ = {isa = PBXBuildFile; fileRef = C365F40320F4471B003AB2D3 /* ccw_boots.atlas */; };
 		C37B707E1FE9D94D00F71B73 /* GridTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37B707D1FE9D94D00F71B73 /* GridTile.swift */; };
 		C37E691720A296860067B47C /* ChainSprite1000.png in Resources */ = {isa = PBXBuildFile; fileRef = C37E691620A296860067B47C /* ChainSprite1000.png */; };
 		C37E691920A5F5D70067B47C /* lock_sprite200x200.png in Resources */ = {isa = PBXBuildFile; fileRef = C37E691820A5F5D70067B47C /* lock_sprite200x200.png */; };
@@ -64,6 +65,7 @@
 		C352CF38207570C300FCD5D0 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 		C360D94A20E5AAEA00580E80 /* DarkMaze.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DarkMaze.xcdatamodel; sourceTree = "<group>"; };
 		C364CEBF1FE74F98009140C7 /* Level1Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level1Scene.swift; sourceTree = "<group>"; };
+		C365F40320F4471B003AB2D3 /* ccw_boots.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = ccw_boots.atlas; path = ../../../../Photoshop/ccw_boots.atlas; sourceTree = "<group>"; };
 		C37B707D1FE9D94D00F71B73 /* GridTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridTile.swift; sourceTree = "<group>"; };
 		C37E691620A296860067B47C /* ChainSprite1000.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ChainSprite1000.png; sourceTree = "<group>"; };
 		C37E691820A5F5D70067B47C /* lock_sprite200x200.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lock_sprite200x200.png; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 		C38464C02055E48C00239EE0 /* Sprites */ = {
 			isa = PBXGroup;
 			children = (
+				C365F40320F4471B003AB2D3 /* ccw_boots.atlas */,
 				C3BA45C42069A69500D72A3F /* cracking.atlas */,
 				C38464C12055EC4700239EE0 /* nextArrow.png */,
 				C37E691620A296860067B47C /* ChainSprite1000.png */,
@@ -342,6 +345,7 @@
 				C3189DFD1FD77988000A52A6 /* MYBLS___.TTF in Resources */,
 				C32CB86120BE10CB008BD6C4 /* unlock_sprite200x200.png in Resources */,
 				C37E691720A296860067B47C /* ChainSprite1000.png in Resources */,
+				C365F40420F4471B003AB2D3 /* ccw_boots.atlas in Resources */,
 				C37E691920A5F5D70067B47C /* lock_sprite200x200.png in Resources */,
 				C3BA45C52069A69500D72A3F /* cracking.atlas in Resources */,
 				C38464C22055EC4700239EE0 /* nextArrow.png in Resources */,
