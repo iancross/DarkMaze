@@ -636,21 +636,22 @@ class Level1Scene: SKScene {
         addChild(ccwBoots)
         ccwBoots.position = point
         let nextDir = nextDirToConnectPath()
+        if currOrientationIndex % 2 == 0 {
+            ccwBoots.xScale *= CGFloat(bootsOrientation(nextDir: nextDir))
+        }
+        else {
+            ccwBoots.yScale *= CGFloat(bootsOrientation(nextDir: nextDir))
+        }
         ccwBoots.zRotation = CGFloat((Double(currOrientationIndex + 1) * Double.pi))
         ccwBoots.zPosition = 100 //(lastTouchedTile?.tile.zPosition)! + 5 //hack! need to fix this. Caused by adding to the tile's z value repeatedly
         ccwBoots.scale(to: CGSize(width: blocksize, height: blocksize))
-        if currOrientationIndex % 2 == 0 {
-            ccwBoots.yScale *= CGFloat(bootsOrientation(nextDir: nextDir))
-        }
-        else {
-            ccwBoots.xScale *= CGFloat(bootsOrientation(nextDir: nextDir))
-        }
         ccwBoots.run(
             SKAction.sequence(
                 [SKAction.animate(with: ccwBootsFrames, timePerFrame: 2/Double(numImages), resize: false, restore: false),
                 ])
         ){
             self.currOrientationIndex = nextDir
+            print ("finished animation")
         }
     }
     
