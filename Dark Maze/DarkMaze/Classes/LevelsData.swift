@@ -106,7 +106,6 @@ class LevelsData{
             return true
         }
         else{
-            print( nextLevelToCompleteOnPage(page: page-1))
             return nextLevelToCompleteOnPage(page: page-1) >= REQUIRED_TO_UNLOCK
         }
     }
@@ -140,7 +139,6 @@ class LevelsData{
         do {
             let levels = try managedContext.fetch(fetchRequest) as [NSManagedObject]
             let levels_completed = levels[0].value(forKeyPath: "levels_completed") as! Int
-            print(levels_completed)
             return levels_completed
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")

@@ -74,19 +74,16 @@ class Level1Scene: SKScene {
         countdown()
     }
     private func initPathPoints(coord: (x: Int, y: Int)) -> (x: CGFloat, y: CGFloat){
-        print (tile2DArray.count)
         if coord.x == 0{
             return (x: -1, y: 0)
         }
         else if coord.x == (Level?.gridX)! - 1{
-            print("yup")
             return (x: 1, y: 0)
         }
         else if coord.y == 0{
             return (x: -1, y: 0)
         }
         else if coord.y == (Level?.gridY)! - 1{
-            print("bleh")
             return (x: 1, y: 0)
         }
         return (x: 0, y: 0)
@@ -505,7 +502,8 @@ class Level1Scene: SKScene {
         }
     }
 
-    private func drawPath(){
+    private func drawPath(){ /// LEFT OFF HERE - need to pass in the current tile
+                                //otherwise we could update touchedtiles a bunch of times
         if touchedTiles == 0{
             return
         }
