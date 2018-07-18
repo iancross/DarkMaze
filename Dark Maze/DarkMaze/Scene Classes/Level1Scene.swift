@@ -50,13 +50,15 @@ class Level1Scene: SKScene {
     var jumpsToDraw = [Jumps]()
     var currOrientationIndex: Int = 0
     //var directionArray: [CardinalDirection] = [.east, .south, .west, .north]
+    var startPathCoord: (x: CGFloat, y: CGFloat) = (x: 0, y: 0)
+    var endPathCoord: (x: CGFloat, y: CGFloat) = (x: 0, y: 0)
     
     override init(size: CGSize) {
         super.init(size: size)
         backgroundColor = UIColor.black
         anchorPoint = CGPoint(x: 0, y:0)
         Level = LevelsData.shared.getSelectedLevelData()
-        initPrevOrientation()
+        startPathCoord = initPathPoints(coord: (Level?.solutionCoords.first)!)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -71,23 +73,25 @@ class Level1Scene: SKScene {
         cam?.position = CGPoint(x: frame.midX,y: frame.midY)
         countdown()
     }
-
-    private func initPrevOrientation(){
-        let t = Level?.solutionCoords[1]
-        
-        if t?.x == 0{
-            currOrientationIndex = 0
+    private func initPathPoints(coord: (x: Int, y: Int)) -> (x: CGFloat, y: CGFloat){
+        print (tile2DArray.count)
+        if coord.x == 0{
+            return (x: -1, y: 0)
         }
-        else if (t?.x)! == (Level?.solutionCoords.count)! - 1{
-            currOrientationIndex = 2
+        else if coord.x == (Level?.gridX)! - 1{
+            print("yup")
+            return (x: 1, y: 0)
         }
-        else if t?.y == 0{
-            currOrientationIndex = 3
+        else if coord.y == 0{
+            return (x: -1, y: 0)
         }
-        else if (t?.x)! == (Level?.solutionCoords.count)! - 1{
-            currOrientationIndex = 1
+        else if coord.y == (Level?.gridY)! - 1{
+            print("bleh")
+            return (x: 1, y: 0)
         }
+        return (x: 0, y: 0)
     }
+    
     override func update(_ currentTime: TimeInterval) {
         if gridViewable {
             for row in tile2DArray{
@@ -494,13 +498,49 @@ class Level1Scene: SKScene {
             tile.removeOutline()
             tile.switchToWhite()
             tile.setAlpha(alpha: a)
+            self.drawPath()
             self.addJumpIndication(t: tile)
             tile.run(SKAction.scaleX(to: 1, y: 1, duration: duration)){
-                self.bootsAnimation(point: (tile.scene?.convert((tile.position), from: tile.parent!))!)
             }
         }
     }
 
+    private func drawPath(){
+        if touchedTiles == 0{
+            return
+        }
+        else if touchedTiles == 1{
+            let first = (Level?.solutionCoords.first)!
+            let firstTile = tile2DArray[first.y][first.x]
+            let point = CGPoint(x: firstTile.position.x + startPathCoord.x * blocksize/2.0, y: firstTile.position.y + startPathCoord.y * blocksize/2.0)
+            let node = connectPoints(p1: point, p2: firstTile.position)
+            gridNode.addChild(node)
+        }
+        else if touchedTiles == Level!.solutionCoords.count{
+
+        }
+        else{
+            //first point is previous center, second is current center
+            let prevCoord = (Level?.solutionCoords[touchedTiles-2])!
+            let prevTile = tile2DArray[prevCoord.y][prevCoord.x]
+            let currCoord = (Level?.solutionCoords[touchedTiles-1])!
+            let currTile = tile2DArray[currCoord.y][currCoord.x]
+            gridNode.addChild(connectPoints(p1: prevTile.position, p2: currTile.position))
+        }
+    }
+    
+    private func connectPoints(p1: CGPoint, p2: CGPoint) -> SKShapeNode{
+        print (p1,p2)
+        let path = UIBezierPath()
+        path.move(to:p1)
+        path.addLine(to: p2)
+        let line = SKShapeNode()
+        line.path = path.cgPath
+        line.lineWidth = 10
+        line.strokeColor = .black
+        line.zPosition = 10
+        return line
+    }
     
     // If all the solutions coords are filled (and there wasn't a
     // failure) show the end game success (failure = false). Otherwise,
@@ -617,77 +657,6 @@ class Level1Scene: SKScene {
             else{
                 tile.tile.run(sequence)
             }
-        }
-    }
-    
-    func bootsAnimation(point: CGPoint){
-        let ccwBootsAtlas = SKTextureAtlas(named: "ccw_boots")
-        var frames: [SKTexture] = []
-        let numImages = ccwBootsAtlas.textureNames.count-1
-        for i in 0...numImages{
-            print("goin through frames")
-            let bootsTextureName = "ccw-boot-walking\(i)"
-            frames.append(ccwBootsAtlas.textureNamed(bootsTextureName))
-        }
-        let ccwBootsFrames = frames
-        let firstFrameTexture = ccwBootsFrames[0]
-        let ccwBoots = SKSpriteNode(texture: firstFrameTexture)
-        
-        addChild(ccwBoots)
-        ccwBoots.position = point
-        let nextDir = nextDirToConnectPath()
-        if currOrientationIndex % 2 == 0 {
-            ccwBoots.xScale *= CGFloat(bootsOrientation(nextDir: nextDir))
-        }
-        else {
-            ccwBoots.yScale *= CGFloat(bootsOrientation(nextDir: nextDir))
-        }
-        ccwBoots.zRotation = CGFloat((Double(currOrientationIndex + 1) * Double.pi))
-        ccwBoots.zPosition = 100 //(lastTouchedTile?.tile.zPosition)! + 5 //hack! need to fix this. Caused by adding to the tile's z value repeatedly
-        ccwBoots.scale(to: CGSize(width: blocksize, height: blocksize))
-        ccwBoots.run(
-            SKAction.sequence(
-                [SKAction.animate(with: ccwBootsFrames, timePerFrame: 2/Double(numImages), resize: false, restore: false),
-                ])
-        ){
-            self.currOrientationIndex = nextDir
-            print ("finished animation")
-        }
-    }
-    
-    func nextDirToConnectPath() -> Int{
-        if touchedTiles < (Level?.solutionCoords.count)!{
-            let currX = (lastTouchedTile?.gridCoord.x)!
-            let currY = (lastTouchedTile?.gridCoord.y)!
-            let nextX = Level?.solutionCoords[touchedTiles].x  //gets the next tile coords
-            let nextY = Level?.solutionCoords[touchedTiles].y
-            
-            if currX + 1 == nextX {
-                return 0
-            }
-            else if currX - 1 == nextX{
-                return 2
-            }
-            else if currY + 1 == nextY{
-                return 3
-            }
-            else if currY - 1 == nextY{
-                return 1
-            }
-        }
-        return 0
-    }
-    func bootsOrientation(nextDir: Int) -> Int{
-        if currOrientationIndex == nextDir{
-            //straight
-            return nextDir
-        }
-        else if currOrientationIndex < nextDir{
-            //turn right
-            return 1
-        }
-        else{
-            return -1
         }
     }
     
