@@ -59,6 +59,7 @@ class Level1Scene: SKScene {
         anchorPoint = CGPoint(x: 0, y:0)
         Level = LevelsData.shared.getSelectedLevelData()
         startPathCoord = initPathPoints(coord: (Level?.solutionCoords.first)!)
+        endPathCoord = initPathPoints(coord: (Level?.solutionCoords.last)!)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -81,10 +82,10 @@ class Level1Scene: SKScene {
             return (x: 1, y: 0)
         }
         else if coord.y == 0{
-            return (x: -1, y: 0)
+            return (x: 0, y: -1)
         }
         else if coord.y == (Level?.gridY)! - 1{
-            return (x: 1, y: 0)
+            return (x: 0, y: 1)
         }
         return (x: 0, y: 0)
     }
@@ -477,62 +478,65 @@ class Level1Scene: SKScene {
             let xDiff = abs(prevCoord.x - currCoord.x)
             let yDiff = abs(prevCoord.y - currCoord.y)
             if xDiff > 0{
-                flip = SKAction.scaleX(to: 0, y: 1, duration: duration)
+                flip = SKAction.scaleX(to: 1, y: 0, duration: duration)
             }
             else if yDiff > 0{
-                flip = SKAction.scaleX(to: 1, y: 0, duration: duration)
+                flip = SKAction.scaleX(to: 0, y: 1, duration: duration)
             }
         }
         else{
             if lastTouchedTile?.gridCoord.x == 0{
-                flip = SKAction.scaleX(to: 0, y: 1, duration: duration)
+                flip = SKAction.scaleX(to: 1, y: 0, duration: duration)
             }
             else {
-                flip = SKAction.scaleX(to: 1, y: 0, duration: duration)
+                flip = SKAction.scaleX(to: 0, y: 1, duration: duration)
             }
         }
         tile.run(flip) {
             tile.removeOutline()
             tile.switchToWhite()
             tile.setAlpha(alpha: a)
-            self.drawPath()
+            self.drawPath(currTile: tile)
             self.addJumpIndication(t: tile)
             tile.run(SKAction.scaleX(to: 1, y: 1, duration: duration)){
             }
         }
     }
 
-    private func drawPath(){ /// LEFT OFF HERE - need to pass in the current tile
-                                //otherwise we could update touchedtiles a bunch of times
-        if touchedTiles == 0{
-            return
-        }
-        else if touchedTiles == 1{
-            let first = (Level?.solutionCoords.first)!
-            let firstTile = tile2DArray[first.y][first.x]
-            let point = CGPoint(x: firstTile.position.x + startPathCoord.x * blocksize/2.0, y: firstTile.position.y + startPathCoord.y * blocksize/2.0)
-            let node = connectPoints(p1: point, p2: firstTile.position)
+    private func drawPath(currTile : GridTile){ /// LEFT OFF HERE - need to pass in the current tile
+        //otherwise we could update touchedtiles a bunch of times
+        //if we are dealing with the first coordinate
+        if tupleContains(a: currTile.gridCoord, v: (Level?.solutionCoords[0])!){
+            let point = CGPoint(x: currTile.position.x + startPathCoord.x * blocksize * 2.0/3.0, y: currTile.position.y + startPathCoord.y * blocksize * 2.0/3.0)
+            let node = connectPoints(points: [point, currTile.position])
             gridNode.addChild(node)
         }
-        else if touchedTiles == Level!.solutionCoords.count{
-
-        }
-        else{
-            //first point is previous center, second is current center
+        //we are dealing with the last solution coord
+        else if tupleContains(a: currTile.gridCoord, v: (Level?.solutionCoords.last)!){
             let prevCoord = (Level?.solutionCoords[touchedTiles-2])!
             let prevTile = tile2DArray[prevCoord.y][prevCoord.x]
-            let currCoord = (Level?.solutionCoords[touchedTiles-1])!
-            let currTile = tile2DArray[currCoord.y][currCoord.x]
-            gridNode.addChild(connectPoints(p1: prevTile.position, p2: currTile.position))
+            let point = CGPoint(x: currTile.position.x + endPathCoord.x * blocksize * 2.0/3.0, y: currTile.position.y + endPathCoord.y * blocksize * 2.0/3.0)
+            let node = connectPoints(points: [prevTile.position, currTile.position, point])
+            gridNode.addChild(node)
         }
+        //all the tiles in the middle
+        else{
+            let prevCoord = (Level?.solutionCoords[touchedTiles-2])!
+            let prevTile = tile2DArray[prevCoord.y][prevCoord.x]
+            gridNode.addChild(connectPoints(points: [prevTile.position, currTile.position]))
+        }
+        
     }
+
     
-    private func connectPoints(p1: CGPoint, p2: CGPoint) -> SKShapeNode{
-        print (p1,p2)
+    private func connectPoints(points: [CGPoint]) -> SKShapeNode{
         let path = UIBezierPath()
-        path.move(to:p1)
-        path.addLine(to: p2)
+        for i in 0...points.count - 2{
+            path.move(to: points[i])
+            path.addLine(to: points[i+1])
+        }
         let line = SKShapeNode()
+        line.lineCap = .round
         line.path = path.cgPath
         line.lineWidth = 10
         line.strokeColor = .black
