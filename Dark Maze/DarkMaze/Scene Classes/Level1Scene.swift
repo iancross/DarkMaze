@@ -413,7 +413,25 @@ class Level1Scene: SKScene {
     
 /*---------------------- End Touches ----------------------*/
     func updateGridForPotentialJump(){
-        if touchedTiles < Level!.solutionCoords.count - 1 && lastTouchedTile?.state == .touched{
+        if nextTileIsJump(){
+            let j = jumpsTypes.removeFirst()
+            jumpsToDraw.append(contentsOf: [j,j])
+
+            for row in tile2DArray{
+                for tile in row{
+                    switch tile.state{
+                    case .touched:
+                        break
+                    default:
+                        tile.state = .availableToTouch
+                    }
+                }
+            }
+        }
+    }
+    
+    func nextTileIsJump() -> Bool{
+        if touchedTiles < Level!.solutionCoords.count && lastTouchedTile?.state == .touched{
             let currCoord = Level!.solutionCoords[touchedTiles-1]
             let nextCoord = Level!.solutionCoords[touchedTiles]
             let xDiff = abs(nextCoord.x - currCoord.x)
@@ -421,22 +439,10 @@ class Level1Scene: SKScene {
             
             //we have an upcoming jump
             if xDiff > 1 || yDiff > 1 || (xDiff == 1 && yDiff == 1)  {
-                _ = [currCoord, nextCoord]
-                let j = jumpsTypes.removeFirst()
-                jumpsToDraw.append(contentsOf: [j,j])
-
-                for row in tile2DArray{
-                    for tile in row{
-                        switch tile.state{
-                        case .touched:
-                            break
-                        default:
-                            tile.state = .availableToTouch
-                        }
-                    }
-                }
+                return true
             }
         }
+        return false
     }
     
     func addJumpIndication(t: GridTile){
@@ -500,15 +506,21 @@ class Level1Scene: SKScene {
             tile.setAlpha(alpha: a)
             self.addJumpIndication(t: tile)
             tile.run(SKAction.scaleX(to: 1, y: 1, duration: duration)){
-                self.gridNode.addChild(path)
+                if let p = path {
+                    self.gridNode.addChild(p)   //accounts for the null path, means we have a null jump
+                }
             }
         }
     }
-
-    private func drawPath(currTile : GridTile) -> SKShapeNode{ /// LEFT OFF HERE - need to pass in the current tile
-        //otherwise we could update touchedtiles a bunch of times
-        //if we are dealing with the first coordinate
+    
+    //We pass in the current tile otherwise we could update touchedtiles a bunch of times
+    //Returns either the path to draw or nil (if it's a jump)
+    private func drawPath(currTile : GridTile) -> SKShapeNode?{
+        if nextTileIsJump(){
+            return nil
+        }
         var path = SKShapeNode()
+        //we are dealing with the first coordinate
         if tupleContains(a: currTile.gridCoord, v: (Level?.solutionCoords[0])!){
             let point = CGPoint(x: currTile.position.x + startPathCoord.x * blocksize * 2.0/3.0, y: currTile.position.y + startPathCoord.y * blocksize * 2.0/3.0)
             path = connectPoints(points: [point, currTile.position])
@@ -543,7 +555,6 @@ class Level1Scene: SKScene {
         line.strokeColor = .black
         line.zPosition = 10
         line.name = "Line"
-        //line.isHidden = true
         return line
     }
     
@@ -560,7 +571,6 @@ class Level1Scene: SKScene {
             child.removeFromParent()
         }
         let b = !nextLevelUnlockedBefore && nextLevelUnlockedAfter
-        
         switchToEndGameScene(unlockedLevel: b)
     }
     
