@@ -410,10 +410,9 @@ class Level1Scene: SKScene {
         }
         
     }
-    
 /*---------------------- End Touches ----------------------*/
     func updateGridForPotentialJump(){
-        if nextTileIsJump(){
+        if nextTileIsJump(fromTileNumber: touchedTiles){
             let j = jumpsTypes.removeFirst()
             jumpsToDraw.append(contentsOf: [j,j])
 
@@ -430,10 +429,11 @@ class Level1Scene: SKScene {
         }
     }
     
-    func nextTileIsJump() -> Bool{
-        if touchedTiles < Level!.solutionCoords.count && lastTouchedTile?.state == .touched{
-            let currCoord = Level!.solutionCoords[touchedTiles-1]
-            let nextCoord = Level!.solutionCoords[touchedTiles]
+    func nextTileIsJump(fromTileNumber: Int) -> Bool{
+        if fromTileNumber < Level!.solutionCoords.count && fromTileNumber > 0 && lastTouchedTile?.state == .touched{
+            let currCoord = Level!.solutionCoords[fromTileNumber-1]
+            let nextCoord = Level!.solutionCoords[fromTileNumber]
+            print (currCoord,nextCoord)
             let xDiff = abs(nextCoord.x - currCoord.x)
             let yDiff = abs(nextCoord.y - currCoord.y)
             
@@ -441,6 +441,9 @@ class Level1Scene: SKScene {
             if xDiff > 1 || yDiff > 1 || (xDiff == 1 && yDiff == 1)  {
                 return true
             }
+        }
+        else{
+            print("this index is past what is allowed in nextTileIsJump")
         }
         return false
     }
@@ -516,7 +519,9 @@ class Level1Scene: SKScene {
     //We pass in the current tile otherwise we could update touchedtiles a bunch of times
     //Returns either the path to draw or nil (if it's a jump)
     private func drawPath(currTile : GridTile) -> SKShapeNode?{
-        if nextTileIsJump(){
+        if nextTileIsJump(fromTileNumber: touchedTiles - 1){
+            print(touchedTiles)
+            print ("next tile is jump")
             return nil
         }
         var path = SKShapeNode()
