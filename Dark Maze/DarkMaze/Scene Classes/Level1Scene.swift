@@ -165,17 +165,22 @@ class Level1Scene: SKScene {
         addSkipButton()
         
         if let mods = Level!.modifications{
-            for mod in mods{
+            for (mod, modData) in mods{
                 switch mod {
                 case .meetInTheMiddle:
                     drawMeetInTheMiddle()
                     return
+                case .splitPath:
+                    //drawSplitPath(splitPaths: modData as! [[(Int, Int)]])
+                    print ("split path")
                 default:
-                    break
+                    drawNormal()
                 }
             }
         }
-        drawNormal()
+        else{
+            drawNormal()
+        }
     }
     
     func addSkipButton(){
@@ -192,6 +197,7 @@ class Level1Scene: SKScene {
             )
         }
     }
+    
     func drawMeetInTheMiddle(){
         let numTiles = Level!.solutionCoords.count
         var left,right: Int
@@ -211,9 +217,40 @@ class Level1Scene: SKScene {
             let tile2 = tile2DArray[coord2.y][coord2.x]
             runDrawingActions(t: tile1, lastTile: (left - i == 0), delay: Level!.delayTime * Double(i))
             runDrawingActions(t: tile2, lastTile: false, delay: Level!.delayTime * Double(i))
-            //runDrawingActions(t: tile2, lastTile: (right + i == numTiles - 1), delay: Level!.delayTime * Double(i))
         }
     }
+    
+    func drawSplitPath(splitPaths: [[(x: Int, y: Int)]] ){
+        var splitPathsStarted = false
+        var splitPathIndex = 0
+        for (index,coord) in Level!.solutionCoords.enumerated(){
+            let tile = tile2DArray[coord.y][coord.x]
+            runDrawingActions(t: tile,
+                              lastTile: (index == self.Level!.solutionCoords.count-1),
+                              delay: Level!.delayTime * Double(index)
+            )
+            
+            if !splitPathsStarted{
+                if tupleContains(a: coord, v: splitPaths[0][0]){
+                    splitPathsStarted = true
+                }
+            }
+            if splitPathsStarted{
+                for path in splitPaths{
+                    if splitPathIndex < path.count{
+                        let pathCoord = path[splitPathIndex]
+                        let splitTile = tile2DArray[pathCoord.y][pathCoord.x]
+                        runDrawingActions(t: splitTile,
+                            lastTile: (index == self.Level!.solutionCoords.count-1),
+                            delay: Level!.delayTime * Double(index)
+                        )
+                    }
+                }
+                splitPathIndex += 1
+            }
+        }
+    }
+    
     func runDrawingActions(t: GridTile, lastTile: Bool, delay: Double){
         let actionList = SKAction.sequence(
             [SKAction.wait(forDuration: delay),
@@ -256,10 +293,12 @@ class Level1Scene: SKScene {
 /*---------------------- Grid Modification ----------------------*/
     func modifyGrid(){
         if let mods = Level!.modifications{
-            for modification in mods{
-                switch modification {
+            for (mod, modData) in mods{
+                switch mod {
                 case .flip:
                     flipGrid()
+                case .splitPath:
+                    print ("splitPath")
                 default:
                     print("fuck")
                 }
@@ -366,7 +405,7 @@ class Level1Scene: SKScene {
         for row in tile2DArray{
             for tile in row{
                 if tile.pointIsWithin(point){
-                    tile.removeAllActions()
+                    //tile.removeAllActions()
                     startArrow.removeAllActions()
 //                    print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
 //                    tile.tile.fillColor = UIColor.green
@@ -382,7 +421,7 @@ class Level1Scene: SKScene {
     func touchTile(tile: GridTile, alpha: CGFloat){
         if let successfulTouch = tile.touched(alpha: alpha){
             if successfulTouch{
-                if let gameOver = gameOverSuccessOrFailure(){
+                if let gameOver = gameOverSuccessOrFailure(alpha: alpha){
                     if gameOver{
                         flipTile(tile: tile, a: alpha)
                     }
@@ -398,19 +437,80 @@ class Level1Scene: SKScene {
         //if nil was returned, it means we've already
         //highlighted this tile
         else{
-            if tupleContains(a: tile.gridCoord,
-                             v: Level!.solutionCoords[touchedTiles]){
-                tile.switchToWhite()
-                tile.setAlpha(alpha: alpha)
-                if gameOverSuccessOrFailure() != nil{
+            print ("nil was returned")
+            //if the tile is already touched but it's the bridge
+            if isTileAdjacentAndUpcoming(tileToTest: tile){
+                if gameOverSuccessOrFailure(alpha: alpha) != nil{
                     return
                 }
+                jiggleNew()
+                flipTile(tile: tile, a: alpha)
                 updateGridState()
             }
         }
-        
     }
 /*---------------------- End Touches ----------------------*/
+    func isTileAdjacentAndUpcoming(tileToTest: GridTile)->Bool{
+        let tiles = adjacentTiles()
+        for t in tiles{
+            if touchedTiles <= 1 && tupleContains(a: t.gridCoord, v: tileToTest.gridCoord){
+                return true
+            }
+            else if touchedTiles > 1{
+                
+                if tupleContains(a: (Level?.solutionCoords[touchedTiles-2])!, v: tileToTest.gridCoord){
+                    return false
+                }
+                else {
+                    if tupleContains(a: t.gridCoord, v: tileToTest.gridCoord){
+                        return true
+                    }
+                }
+            }
+        }
+        return false
+    }
+    
+    //returns a list of gridTiles that are adjacent to the passed in tile
+    // and not the previous tile
+    func adjacentTiles()->[GridTile]{
+        var tiles: [GridTile] = []
+        if touchedTiles == 0{
+            let coord = Level!.solutionCoords[0]
+            tile2DArray[(coord.y)][coord.x].jiggle()
+        }
+        else if let coord = Level?.solutionCoords[touchedTiles - 1]{
+            if coord.x - 1 >= 0{
+                tiles.append(tile2DArray[coord.y][coord.x-1])
+            }
+            if coord.x + 1 < tile2DArray[0].count{
+                tiles.append(tile2DArray[coord.y][coord.x+1])
+            }
+            if coord.y - 1 >= 0{
+                tiles.append(tile2DArray[coord.y-1][coord.x])
+            }
+            if coord.y + 1 < tile2DArray.count{
+                tiles.append(tile2DArray[coord.y+1][coord.x])
+            }
+        }
+        for tile in tiles{
+            print (tile.gridCoord)
+        }
+        return tiles
+    }
+    
+    func jiggleNew(){
+        let tiles = adjacentTiles()
+        for tile in tiles{
+            if touchedTiles <= 1{
+                tile.jiggle()
+            }
+            else if touchedTiles > 1 && !tupleContains(a: (Level?.solutionCoords[touchedTiles-2])!, v: tile.gridCoord){
+                tile.jiggle()
+            }
+        }
+    }
+        
     func updateGridForPotentialJump(){
         if nextTileIsJump(fromTileNumber: touchedTiles){
             let j = jumpsTypes.removeFirst()
@@ -433,7 +533,6 @@ class Level1Scene: SKScene {
         if fromTileNumber < Level!.solutionCoords.count && fromTileNumber > 0 && lastTouchedTile?.state == .touched{
             let currCoord = Level!.solutionCoords[fromTileNumber-1]
             let nextCoord = Level!.solutionCoords[fromTileNumber]
-            print (currCoord,nextCoord)
             let xDiff = abs(nextCoord.x - currCoord.x)
             let yDiff = abs(nextCoord.y - currCoord.y)
             
@@ -460,7 +559,7 @@ class Level1Scene: SKScene {
         case .circle:
             let circle = SKShapeNode(circleOfRadius: 10)
             circle.fillColor = .black
-            
+            circle.lineWidth = 0
             t.addChild(circle)
             circle.position = .zero
             circle.zPosition = 5
@@ -477,9 +576,6 @@ class Level1Scene: SKScene {
     
     func flipTile(tile: GridTile, a: CGFloat){
         touchedTiles += 1
-        tile.setColor(color: UIColor.black)
-        tile.restoreOutline()
-        tile.setLineWidth(w: 7.0)
         var flip = SKAction()
         let duration = 0.16
         if touchedTiles > 1 {
@@ -527,11 +623,13 @@ class Level1Scene: SKScene {
         var path = SKShapeNode()
         //we are dealing with the first coordinate
         if tupleContains(a: currTile.gridCoord, v: (Level?.solutionCoords[0])!){
+            print ("first coord")
             let point = CGPoint(x: currTile.position.x + startPathCoord.x * blocksize * 2.0/3.0, y: currTile.position.y + startPathCoord.y * blocksize * 2.0/3.0)
             path = connectPoints(points: [point, currTile.position])
         }
         //we are dealing with the last solution coord
         else if tupleContains(a: currTile.gridCoord, v: (Level?.solutionCoords.last)!){
+            print ("last")
             let prevCoord = (Level?.solutionCoords[touchedTiles-2])!
             let prevTile = tile2DArray[prevCoord.y][prevCoord.x]
             let point = CGPoint(x: currTile.position.x + endPathCoord.x * blocksize * 2.0/3.0, y: currTile.position.y + endPathCoord.y * blocksize * 2.0/3.0)
@@ -539,6 +637,7 @@ class Level1Scene: SKScene {
         }
         //all the tiles in the middle
         else{
+            print ("middle")
             let prevCoord = (Level?.solutionCoords[touchedTiles-2])!
             let prevTile = tile2DArray[prevCoord.y][prevCoord.x]
             path = connectPoints(points: [prevTile.position, currTile.position])
@@ -619,25 +718,29 @@ class Level1Scene: SKScene {
     }
     
     func giveHint(){
-        for row in tile2DArray{
-            for tile in row{
-                switch tile.state{
-                case .availableToTouch:
-                    tile.jiggle()
-                default:
-                    break
-                }
-            }
-        }
+        jiggleNew()
+//        for row in tile2DArray{
+//            for tile in row{
+//                switch tile.state{
+//                case .availableToTouch:
+//                    tile.jiggle()
+//                case .touched:
+//                    let coord = Level?.solutionCoords[touchedTiles]
+//                    if tupleContains(a: tile.gridCoord, v: coord!){
+//                        tile2DArray[(Level?.solutionCoords[touchedTiles].y)!][(Level?.solutionCoords[touchedTiles].x)!].jiggle()
+//                    }
+//                default:
+//                    break
+//                }
+//            }
+//        }
     }
     
     //return true if game over as a success
     //return false if game over as a failure
     //return nil if game not over
-    func gameOverSuccessOrFailure()->Bool?{
+    func gameOverSuccessOrFailure(alpha: CGFloat)->Bool?{
         if tupleContains(a: Level!.solutionCoords[touchedTiles], v: (lastTouchedTile?.gridCoord)!){
-//            touchedTiles += 1
-            //if touchedTiles == Level!.solutionCoords.count {
             if tupleContains(a: (Level!.solutionCoords.last)!, v: (lastTouchedTile?.gridCoord)!){
                 LevelsData.shared.currentLevelSuccess = true
                 self.gameActive = false
@@ -646,10 +749,18 @@ class Level1Scene: SKScene {
             }
         }
         else{
+            print("game over")
+            touchedTiles += 1
             self.gameActive = false
             LevelsData.shared.currentLevelSuccess = false
             lastTouchedTile?.restoreOutline()
             let positionInScene = lastTouchedTile?.scene?.convert((lastTouchedTile?.position)!, from: (lastTouchedTile?.parent)!)
+
+            lastTouchedTile?.switchToWhite()
+            lastTouchedTile?.setAlpha(alpha: alpha)
+            if let p = drawPath(currTile: lastTouchedTile!) {
+                self.gridNode.addChild(p)   //accounts for the null path, means we have a null jump
+            }
             crackAnimation(point: positionInScene!)
             return false
         }
@@ -695,7 +806,7 @@ class Level1Scene: SKScene {
 
         addChild(crack)
         crack.position = point
-        crack.zPosition = (lastTouchedTile?.tile.zPosition)! + 5 //hack! need to fix this. Caused by adding to the tile's z value repeatedly
+        crack.zPosition = (lastTouchedTile?.tile.zPosition)! + 4 //hack! need to fix this. Caused by adding to the tile's z value repeatedly
         crack.scale(to: CGSize(width: blocksize, height: blocksize))
         crack.run(
             SKAction.sequence(

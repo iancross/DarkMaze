@@ -21,12 +21,14 @@ struct LevelData {
     var gridY: Int
     var delayTime: Double
     var solutionCoords: [(x: Int,y: Int)]
-    var modifications: [GridModification]?
+    var modifications: [(GridModification, Any?)]?
 }
 
 enum GridModification {
     case flip
     case meetInTheMiddle
+    case splitPath //(.splitpath, array coord arrays [[1,2,3,4],[1,2,3,6]]
+    case thisLooksFamiliar //the path loops back onto itself
 }
 
 class LevelsData{
@@ -42,14 +44,15 @@ class LevelsData{
         selectedLevel = (page: 0, level: 0)
         
         //levelGroups = [(category: String, levels: [LevelData])]()
+        //SplitPath()
+        ThisLooksFamiliar() //go back over itself
         Normal()
         Jump()
         Huge()
         MeetInTheMiddle()
-        //ThisLooksFamiliar() //go back over itself
+
         //disappearing trail()
         //MultiJump()
-        //SplitPath()
         //Flip()
         //Spin()
         //Disorient() //Multiple spins and flips
@@ -232,7 +235,7 @@ class LevelsData{
     //Easiest level to show how to play the game. Probably going to do all sorts of
     //directions to show the maze functionality
     private func Normal(){
-        var array = [
+        let array = [
             LevelData(
                 gridX: 4, gridY: 4, delayTime: 0.5,
                 solutionCoords:
@@ -311,7 +314,7 @@ class LevelsData{
         
     }
     private func Jump(){
-        var array = [
+        let array = [
             LevelData(
                 gridX: 5, gridY: 5, delayTime: 0.5,
                 solutionCoords:
@@ -390,23 +393,53 @@ class LevelsData{
         levelGroups.append ((category: "Jump", array))
     }
     
+//    private func SplitPath(){
+//        let array = [
+//            LevelData(
+//                gridX: 5, gridY: 5, delayTime: 0.5,
+//                solutionCoords:
+//                [(4,3),(3,3),(3,4),(2,4),(1,4),(1,2),(1,1),(1,0)],
+//                modifications: [
+//                                    (.splitPath, [[(4,3),(4,2),(4,1)]])
+//                                ]
+//            )
+//        ]
+//
+//        levelGroups.append ((category: "Split Paths", array))
+//    }
+    
     private func MeetInTheMiddle(){
         let array = [LevelData(
             gridX: 5, gridY: 5, delayTime: 0.3,
             solutionCoords:
             [(1,0),(1,1),(1,2),(1,3),(1,4)],
-             modifications: [.meetInTheMiddle]
+             modifications: [(.meetInTheMiddle, nil)]
             ),
                      LevelData(
                         gridX: 5, gridY: 6, delayTime: 0.3,
                         solutionCoords:
                         [(1,0),(1,1),(1,2),(1,3),(1,4),(1,5)],
-                         modifications: [.meetInTheMiddle]
+                         modifications: [(.meetInTheMiddle, nil)]
             )]
         levelGroups.append ((category: "Meet In The Middle", array))
     }
     
-    
+    private func ThisLooksFamiliar(){
+        let array = [
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.3,
+                solutionCoords:
+                [(0,1),(1,1),(2,1),(2,2),(2,3),(1,3),(0,3),(0,2),(1,2),(2,2),(3,2)],
+                modifications: [(.thisLooksFamiliar, nil)]
+            ),
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.3,
+                solutionCoords:
+                [(0,1),(1,1),(2,1),(2,2),(2,3),(1,3),(0,3),(0,2),(1,2),(2,2),(3,2)],
+                modifications: [(.thisLooksFamiliar, nil)]
+            )]
+        levelGroups.append ((category: "This Looks Familiar", array))
+    }
     
     private func Blackout(){
         let array = [
@@ -432,15 +465,15 @@ class LevelsData{
     
     private func Huge(){
         let array = [LevelData(
-            gridX: 6, gridY: 10, delayTime: 0.3,
-            solutionCoords:
-            [(0,7),(1,7),(1,8),(1,9),(2,9),(3,9),(3,8),(4,8),(4,7),(4,6),(5,6),(5,5),(5,4),(4,4),(3,4),(2,4),(1,4),(1,3),(2,3),(2,2),(3,2),(4,2),(4,1),(5,1)],
-             modifications: [.flip, .meetInTheMiddle]
+                gridX: 6, gridY: 10, delayTime: 0.3,
+                solutionCoords:
+                [(0,7),(1,7),(1,8),(1,9),(2,9),(3,9),(3,8),(4,8),(4,7),(4,6),(5,6),(5,5),(5,4),(4,4),(3,4),(2,4),(1,4),(1,3),(2,3),(2,2),(3,2),(4,2),(4,1),(5,1)],
+                modifications: [(.flip, nil), (.meetInTheMiddle, nil)]
             ),LevelData(
                 gridX: 6, gridY: 10, delayTime: 0.7,
                 solutionCoords:
                 [(0,7),(1,7),(1,8),(1,9),(2,9),(3,9),(3,8),(4,8),(4,7),(4,6),(5,6),(5,5),(5,4),(4,4),(3,4),(2,4),(1,4),(1,3),(2,3),(2,2),(3,2),(4,2),(4,1),(5,1)],
-                 modifications: [.flip, .meetInTheMiddle]
+                 modifications: [(.flip, nil), (.meetInTheMiddle, nil)]
             )]
         levelGroups.append ((category: "Huge", array))
     }
@@ -450,39 +483,9 @@ class LevelsData{
             gridX: 5, gridY: 5, delayTime: 0.3,
             solutionCoords:
             [(1,1),(1,2),(2,2),(2,1),(3,1),(3,2),(3,3),(3,4),(2,4),(2,3),(1,3),(1,4),(0,4),(0,3),(0,2),(0,1)],
-             modifications: [.flip]
+             modifications: [(.flip, nil)]
             )]
         levelGroups.append ((category: "broken", array))
     }
 }
-
-
-//---------left off here
-/*levels.append (LevelData(
- gridX: 6, gridY: 10, delayTime: 0.5,
- solutionCoords:
- [(0,7),(1,7),(1,8),(1,9),(2,9),(3,9),(3,8),(4,8),(4,7),(4,6),(5,6),(5,5),(5,4),(4,4),(3,4),(2,4),(1,4),(1,3),(2,3),(2,2),(3,2),(4,2),(4,1),(5,1)],
-  modifications: nil
- ))
- 
- levels.append (LevelData(
- gridX: 6, gridY: 10, delayTime: 0.01,
- solutionCoords:
- [(0,7),(1,7),(2,7),(3,7),(4,7),(4,6),(4,5),(4,4),(4,3),(4,2),(4,1),(4,0)],
-  modifications: nil
- ))
- 
- levels.append (LevelData(
- gridX: 5, gridY: 5, delayTime: 0.5,
- solutionCoords:
- [(0,4),(1,4),(1,3),(2,3),(2,2),(3,2),(3,1),(3,0),(4,0)],
-  modifications: nil
- ))
- 
- levels.append (LevelData(
- gridX: 5, gridY: 5, delayTime: 0.5,
- solutionCoords:
- [(0,4),(1,4),(1,3),(2,3),(2,2),(3,2),(3,1),(3,0),(4,0)],
-  modifications: nil
- ))*/
 
