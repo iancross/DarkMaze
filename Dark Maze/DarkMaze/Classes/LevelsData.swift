@@ -45,14 +45,14 @@ class LevelsData{
         
         //levelGroups = [(category: String, levels: [LevelData])]()
         //SplitPath()
-        ThisLooksFamiliar() //go back over itself
         Normal()
+        ThisLooksFamiliar() //go back over itself
         Jump()
-        Huge()
         MeetInTheMiddle()
+        Combo1()
+        MultiJump()
 
         //disappearing trail()
-        //MultiJump()
         //Flip()
         //Spin()
         //Disorient() //Multiple spins and flips
@@ -67,7 +67,7 @@ class LevelsData{
     }
     
     private func initCoreData(){
-        //deleteCoreData()
+        deleteCoreData()
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
         }
@@ -76,8 +76,10 @@ class LevelsData{
         for i in 0...levelGroups.count-1{
             let level = NSManagedObject(entity: entity, insertInto: managedContext)
             level.setValue(i, forKey: "page")
-            level.setValue(0, forKey: "levels_completed")
-            //level.setValue(12, forKey: "levels_completed")
+            //level.setValue(0, forKey: "levels_completed")
+            level.setValue(12, forKey: "levels_completed")
+            level.setValue(0, forKey: "attempts")
+            level.setValue((0,1), forKey: "monkey")
         }
         do {
             try managedContext.save()
@@ -182,8 +184,6 @@ class LevelsData{
     }
     
     func selectedLevelCompletedSuccessfully(){
-        
-        
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
         }
@@ -410,16 +410,16 @@ class LevelsData{
     
     private func MeetInTheMiddle(){
         let array = [LevelData(
-            gridX: 5, gridY: 5, delayTime: 0.3,
+            gridX: 5, gridY: 5, delayTime: 0.5,
             solutionCoords:
             [(1,0),(1,1),(1,2),(1,3),(1,4)],
              modifications: [(.meetInTheMiddle, nil)]
             ),
-                     LevelData(
-                        gridX: 5, gridY: 6, delayTime: 0.3,
-                        solutionCoords:
-                        [(1,0),(1,1),(1,2),(1,3),(1,4),(1,5)],
-                         modifications: [(.meetInTheMiddle, nil)]
+             LevelData(
+                gridX: 5, gridY: 6, delayTime: 0.5,
+                solutionCoords:
+                [(1,0),(1,1),(1,2),(1,3),(1,4),(1,5)],
+                 modifications: [(.meetInTheMiddle, nil)]
             )]
         levelGroups.append ((category: "Meet In The Middle", array))
     }
@@ -427,34 +427,92 @@ class LevelsData{
     private func ThisLooksFamiliar(){
         let array = [
             LevelData(
-                gridX: 4, gridY: 4, delayTime: 0.3,
+                gridX: 4, gridY: 4, delayTime: 0.5,
                 solutionCoords:
                 [(0,1),(1,1),(2,1),(2,2),(2,3),(1,3),(0,3),(0,2),(1,2),(2,2),(3,2)],
                 modifications: [(.thisLooksFamiliar, nil)]
             ),
             LevelData(
-                gridX: 4, gridY: 4, delayTime: 0.3,
+                gridX: 5, gridY: 5, delayTime: 0.5,
                 solutionCoords:
-                [(0,1),(1,1),(2,1),(2,2),(2,3),(1,3),(0,3),(0,2),(1,2),(2,2),(3,2)],
+                [(4,4),(4,3),(4,2),(3,2),(3,3),(2,3),(1,3),(0,3),(0,2),(0,1),(0,0),(1,0),(2,0),(2,1),(3,1),(3,2),(3,3),(3,4)],
+                modifications: [(.thisLooksFamiliar, nil)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 6, delayTime: 0.5,
+                solutionCoords:
+                [(0,4),(1,4),(1,3),(2,3),(3,3),(4,3),(4,2),(4,1),(3,1),(2,1),(2,2),(2,3),(2,4),(2,5),(1,5),(0,5),(0,4),(0,3),(0,2),(0,1),(0,0)],
+                modifications: [(.thisLooksFamiliar, nil)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 6, delayTime: 0.5,
+                solutionCoords:
+                [(4,5),(4,4),(3,4),(3,3),(3,2),(4,2),(4,1),(3,1),(2,1),(1,1),(1,2),(0,2),(0,3),(0,4),(1,4),(1,3),(2,3),(2,2),(2,1),(2,0)],
+                modifications: [(.thisLooksFamiliar, nil)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 6, delayTime: 0.5,
+                solutionCoords:
+                [(4,5),(4,4),(4,3),(4,2),(3,2),(2,2),(1,2),(1,3),(2,3),(2,2),(2,1),(1,1),(0,1),(0,2),(0,3),(0,4),(1,4),(2,4),(3,4),(3,3),(3,2),(3,1),(4,1)],
+                modifications: [(.thisLooksFamiliar, nil)]
+            ),
+            LevelData(
+                gridX: 6, gridY: 6, delayTime: 0.5,
+                solutionCoords:
+                [(0,2),(1,2),(2,2),(3,2),(4,2),(4,3),(3,3),(2,3),(2,2),(2,1),(3,1),(4,1),(4,0),(3,0),(2,0),(1,0),(0,0),(0,1),(0,2),(0,3),(0,4),(0,5),(1,5),(2,5),(3,5),(4,5),(4,4),(4,3),(5,3)],
+                modifications: [(.thisLooksFamiliar, nil)]
+            ),
+            LevelData(
+                gridX: 6, gridY: 8, delayTime: 0.5,
+                solutionCoords:
+                [(0,0),(0,1),(0,2),(0,3),(0,4),(1,4),(1,4),(2,4),(3,4),(3,5),(2,5),(1,5),(0,5),(0,6),(0,7),(1,7),(2,7),(2,6),(3,6),(3,5),(4,5),(4,4),(5,4),(5,3),(4,3),(4,2),(3,2),(3,1),(2,1),(2,0),(1,0)],
+                modifications: [(.thisLooksFamiliar, nil)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 10, delayTime: 0.5,
+                solutionCoords:
+                [(0,9),(0,8),(0,7),(1,7),(2,7),(3,7),(3,6),(4,6),(4,5),(4,4),(3,4),(2,4),(1,4),(0,4),(0,5),(1,5),(2,5),(2,4),(2,3),(2,2),(3,2),(3,1),(2,1),(1,1),(0,1),(0,2),(0,3),(1,3),(2,3),(3,3),(4,3),(4,2)],
                 modifications: [(.thisLooksFamiliar, nil)]
             )]
         levelGroups.append ((category: "This Looks Familiar", array))
     }
     
+    func Combo1(){
+        let array = [
+            LevelData(
+                gridX: 3, gridY: 3, delayTime: 0.5,
+                solutionCoords:[(0,2),(0,1),(0,0),(1,0),(1,1),(1,2),(2,2),(2,1),(2,0)],
+                modifications: nil
+            )
+        ]
+        levelGroups.append ((category: "\u{2606} Combo 1", array))
+    }
+    
+    func MultiJump(){
+        let array = [
+            LevelData(
+                gridX: 3, gridY: 3, delayTime: 0.5,
+                solutionCoords:[(0,2),(0,1),(0,0),(1,0),(1,1),(1,2),(2,2),(2,1),(2,0)],
+                modifications: nil
+            )
+        ]
+        levelGroups.append ((category: "Multi-Jump", array))
+    }
+    
     private func Blackout(){
         let array = [
             LevelData(
-                gridX: 3, gridY: 3, delayTime: 0.3,
+                gridX: 3, gridY: 3, delayTime: 0.5,
                 solutionCoords:[(0,2),(0,1),(0,0),(1,0),(1,1),(1,2),(2,2),(2,1),(2,0)],
                  modifications: nil
             ),
             LevelData(
-                gridX: 4, gridY: 4, delayTime: 0.3,
+                gridX: 4, gridY: 4, delayTime: 0.5,
                 solutionCoords:[(0,0),(1,0),(1,1),(2,1),(2,0),(3,0),(3,1),(3,2),(3,3),(2,3),(2,2),(1,2),(1,3),(0,3),(0,2),(0,1)],
                  modifications: nil
             ),
             LevelData(
-                gridX: 5, gridY: 5, delayTime: 0.3,
+                gridX: 5, gridY: 5, delayTime: 0.5,
                 solutionCoords:
                 [(4,0),(3,0),(2,0),(2,1),(2,2),(1,2),(1,1),(1,0),(0,0),(0,1),(0,2),(0,3),(0,4),(1,4),(1,3),(2,3),(3,3),(3,2),(3,1),(4,1),(4,2),(4,3),(4,4),(3,4),(2,4)],
                  modifications: nil

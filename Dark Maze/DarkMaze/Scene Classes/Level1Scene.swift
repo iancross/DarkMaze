@@ -50,7 +50,6 @@ class Level1Scene: SKScene {
     var jumpsTypes: [Jumps] = [.circle, .diamond, .square, .plus]
     var jumpsToDraw = [Jumps]()
     var currOrientationIndex: Int = 0
-    //var directionArray: [CardinalDirection] = [.east, .south, .west, .north]
     var startPathCoord: (x: CGFloat, y: CGFloat) = (x: 0, y: 0)
     var endPathCoord: (x: CGFloat, y: CGFloat) = (x: 0, y: 0)
     
@@ -405,11 +404,12 @@ class Level1Scene: SKScene {
         for row in tile2DArray{
             for tile in row{
                 if tile.pointIsWithin(point){
-                    //tile.removeAllActions()
                     startArrow.removeAllActions()
+//
 //                    print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
 //                    tile.tile.fillColor = UIColor.green
 //                    return //comment out to get grid coords for levels
+
                     lastTouchedTile = tile
                     touchTile(tile: lastTouchedTile!, alpha: blockAlphaMin + CGFloat(touchedTiles + 1) * blockAlphaIncrement)
                     return
@@ -434,8 +434,7 @@ class Level1Scene: SKScene {
                 giveHint()
             }
         }
-        //if nil was returned, it means we've already
-        //highlighted this tile
+        //if nil was returned, it means we've already highlighted this tile
         else{
             print ("nil was returned")
             //if the tile is already touched but it's the bridge
@@ -443,7 +442,6 @@ class Level1Scene: SKScene {
                 if gameOverSuccessOrFailure(alpha: alpha) != nil{
                     return
                 }
-                jiggleNew()
                 flipTile(tile: tile, a: alpha)
                 updateGridState()
             }
@@ -713,27 +711,11 @@ class Level1Scene: SKScene {
             return
         default:
             tile.state = .availableToTouch
-            //tile.switchToGrey() //enable this line if we want to give them a preview
         }
     }
     
     func giveHint(){
         jiggleNew()
-//        for row in tile2DArray{
-//            for tile in row{
-//                switch tile.state{
-//                case .availableToTouch:
-//                    tile.jiggle()
-//                case .touched:
-//                    let coord = Level?.solutionCoords[touchedTiles]
-//                    if tupleContains(a: tile.gridCoord, v: coord!){
-//                        tile2DArray[(Level?.solutionCoords[touchedTiles].y)!][(Level?.solutionCoords[touchedTiles].x)!].jiggle()
-//                    }
-//                default:
-//                    break
-//                }
-//            }
-//        }
     }
     
     //return true if game over as a success

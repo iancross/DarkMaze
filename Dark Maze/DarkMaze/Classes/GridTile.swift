@@ -50,7 +50,6 @@ class GridTile: SKNode{
         outline.lineWidth = 1.0
         outline.fillColor = .clear
         outline.strokeColor = .white
-        //outline.position = CGPoint(x: 1.0, y: 1.0)
         outline.isHidden = true
         
         //add the tile to the parent scene
@@ -161,16 +160,12 @@ class GridTile: SKNode{
     func jiggle(){
         if !tile.hasActions(){
             let angle: CGFloat = 0.2
-            let originalAlpha = self.alpha
-            let originalColor = tile.fillColor
             outline.glowWidth = 3
-            //switchToGray()
             tile.zPosition += 5
             
             let graySequence = [SKAction.rotate(byAngle: angle, duration: 0.1),
                                 SKAction.rotate(byAngle: -angle*2.0, duration: 0.1),
                                 SKAction.rotate(byAngle: angle, duration: 0.1)]
-            
             //        let graySequence =
             //            [SKAction.run({ [weak self] in
             //                self?.tile.alpha = 0;
@@ -179,14 +174,10 @@ class GridTile: SKNode{
             //             SKAction.fadeIn(withDuration: 0.4),
             //             SKAction.fadeOut(withDuration: 0.4)
             //        ]
-            
             outline.isHidden = false
             outline.alpha = CGFloat(strokeAlpha)
             tile.run(SKAction.sequence(graySequence)){ [weak self] in
-                //self?.switchToBlack()
-                //self?.setAlpha(alpha: originalAlpha)
-                self?.tile.fillColor = originalColor
-                //self?.tile.alpha = originalAlpha
+                //self?.tile.fillColor = originalColor
                 self?.restoreOutline()
                 self?.tile.zPosition -= 5
                 self?.outline.isHidden = true
