@@ -79,11 +79,18 @@ class LevelsData{
         let levelEntity = NSEntityDescription.entity(forEntityName: "Level",in: managedContext)!
         for i in 0...levelGroups.count-1{
             let page = Page(entity: pageEntity, insertInto: managedContext)
+            if i == 0{
+                page.unlocked = true
+            }
+            else{
+                page.unlocked = false
+            }
             page.number = Int32(i)
             for (j,levelData) in levelGroups[i].levels.enumerated(){
                 let level = Level(entity: levelEntity, insertInto: managedContext)
-                level.attempts = Int32(j)
-                level.success = false
+                level.attempts = 0
+                level.completed = false
+                level.number = Int32(j)
                 level.page = page
             }
         }
@@ -100,26 +107,37 @@ class LevelsData{
             UIApplication.shared.delegate as? AppDelegate else {
                 return
         }
-
-        let managedContext =
-            appDelegate.persistentContainer.viewContext
         
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Level")
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        let managedContext = appDelegate.persistentContainer.viewContext
         
-        do {
-            try managedContext.execute(deleteRequest)
-        } catch let error as NSError {
-            // TODO: handle the error
+        let entities = ["Level","Page"]
+        for entity in entities {
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity)
+            let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+            
+            do {
+                try managedContext.execute(deleteRequest)
+            } catch let error as NSError {
+                // TODO: handle the error
+            }
         }
     }
+    
+    //updated
     func isPageUnlocked(page: Int)->Bool{
-        if page == 0{
-            return true
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return false
         }
-        else{
-            return nextLevelToCompleteOnPage(page: page-1) >= REQUIRED_TO_UNLOCK
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Page")
+        fetchRequest.predicate = NSPredicate(format: "number == \(Int32(page))")
+        do {
+            let pages = try managedContext.fetch(fetchRequest) as [NSManagedObject]
+            return (pages[0] as! Page).unlocked
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
         }
+        return false
     }
     
     func getSelectedLevelData() -> LevelData{ 
@@ -140,22 +158,27 @@ class LevelsData{
     }
     
     //returns the next level to complete within a page
+    //Updated
     func nextLevelToCompleteOnPage(page: Int) -> Int{
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            print ("appdelegate problem")
             return 0
         }
         let managedContext = appDelegate.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Level")
-        fetchRequest.predicate = NSPredicate(format: "page == \(page)")
+        fetchRequest.predicate = NSPredicate(format: "page.number == \(page)")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "number", ascending: true)]
         do {
-            let levels = try managedContext.fetch(fetchRequest) as [NSManagedObject]
-            let levels_completed = levels[0].value(forKeyPath: "levels_completed") as! Int
-            return levels_completed
+            if let levels = try managedContext.fetch(fetchRequest) as? [Level]{
+                for level in levels{
+                    if !level.completed{
+                        return Int(level.number)
+                    }
+                }
+            }
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
-            return 0
         }
+        return 0
     }
     
     func hasLevelBeenCompleted(page: Int, levelToTest: Int) -> Bool{
