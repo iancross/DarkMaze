@@ -66,26 +66,33 @@ class LevelsData{
         initCoreData()
     }
     
+    
+    //https://stackoverflow.com/questions/35372450/core-data-one-to-many-relationship-in-swift
+    //https://stackoverflow.com/questions/35372450/core-data-one-to-many-relationship-in-swift
     private func initCoreData(){
         deleteCoreData()
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
         }
         let managedContext = appDelegate.persistentContainer.viewContext
-        let entity = NSEntityDescription.entity(forEntityName: "Level",in: managedContext)!
+        let pageEntity = NSEntityDescription.entity(forEntityName: "Page",in: managedContext)!
+        let levelEntity = NSEntityDescription.entity(forEntityName: "Level",in: managedContext)!
         for i in 0...levelGroups.count-1{
-            let level = NSManagedObject(entity: entity, insertInto: managedContext)
-            level.setValue(i, forKey: "page")
-            //level.setValue(0, forKey: "levels_completed")
-            level.setValue(12, forKey: "levels_completed")
-            level.setValue(0, forKey: "attempts")
-            level.setValue((0,1), forKey: "monkey")
+            let page = Page(entity: pageEntity, insertInto: managedContext)
+            page.number = Int32(i)
+            for (j,levelData) in levelGroups[i].levels.enumerated(){
+                let level = Level(entity: levelEntity, insertInto: managedContext)
+                level.attempts = Int32(j)
+                level.success = false
+                level.page = page
+            }
         }
         do {
             try managedContext.save()
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
         }
+        printAllLevelsUtil()
     }
     
     func deleteCoreData(){
@@ -217,13 +224,23 @@ class LevelsData{
             return
         }
         let managedContext = appDelegate.persistentContainer.viewContext
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Level")
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Page")
         do {
-            let levels = try managedContext.fetch(fetchRequest) as [NSManagedObject]
-            //level[0].setValue(10, forKey: "levels_complete")
-            for (i,level) in levels.enumerated(){
-                print("page is \(level.value(forKeyPath: "page") as! Int)")
-                print("levels completed is \(level.value(forKeyPath: "levels_completed") as! Int)")
+            let pages = try managedContext.fetch(fetchRequest) as [NSManagedObject]
+            print ("count of all pages is \(pages.count)")
+            for (i,page) in pages.enumerated(){
+                let num = page.value(forKeyPath: "number")
+      
+                let fetchRequest2 = NSFetchRequest<NSManagedObject>(entityName: "Level")
+
+                fetchRequest2.predicate = NSPredicate(format: "page.number == \(num as! Int32)")
+                let levels = try managedContext.fetch(fetchRequest2) as [NSManagedObject]
+                print ("count of all levels in page \(num) is \(pages.count)")
+                for l in levels{
+                    print (l.value(forKeyPath: "attempts"))
+                }
+
+                
             }
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
