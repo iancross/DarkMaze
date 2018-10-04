@@ -89,7 +89,16 @@ class LevelsData{
             for (j,levelData) in levelGroups[i].levels.enumerated(){
                 let level = Level(entity: levelEntity, insertInto: managedContext)
                 level.attempts = 0
-                level.completed = false
+
+                //testing
+                if i == 0 && j < 7{
+                    level.completed = true
+                }
+                else{
+                    level.completed = false
+                }
+                //end test
+                
                 level.number = Int32(j)
                 level.page = page
             }
@@ -125,19 +134,27 @@ class LevelsData{
     
     //updated
     func isPageUnlocked(page: Int)->Bool{
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+        if page == 0{
+            return true
+        }
+        else{
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+                return false
+            }
+            let managedContext = appDelegate.persistentContainer.viewContext
+            let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Level")
+            
+            fetchRequest.predicate = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.and, subpredicates:
+                [NSPredicate(format: "page.number == \(Int32(page - 1))"),
+                 NSPredicate(format: "completed == \(true)")])
+            do {
+                let levelsCount = try (managedContext.fetch(fetchRequest) as [NSManagedObject]).count
+                return levelsCount >= REQUIRED_TO_UNLOCK
+            } catch let error as NSError {
+                print("Could not fetch. \(error), \(error.userInfo)")
+            }
             return false
         }
-        let managedContext = appDelegate.persistentContainer.viewContext
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Page")
-        fetchRequest.predicate = NSPredicate(format: "number == \(Int32(page))")
-        do {
-            let pages = try managedContext.fetch(fetchRequest) as [NSManagedObject]
-            return (pages[0] as! Page).unlocked
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-        }
-        return false
     }
     
     func getSelectedLevelData() -> LevelData{ 
@@ -180,28 +197,7 @@ class LevelsData{
         }
         return 0
     }
-    
-    func hasLevelBeenCompleted(page: Int, levelToTest: Int) -> Bool{
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            return false
-        }
-        let managedContext = appDelegate.persistentContainer.viewContext
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Level")
-        fetchRequest.predicate = NSPredicate(format: "page == \(page)")
-        do {
-            let levels = try managedContext.fetch(fetchRequest) as [NSManagedObject]
-            let levels_completed = levels[0].value(forKeyPath: "levels_completed") as! Int
-            if levels_completed > levelToTest {
-                return true
-            }
-            else{
-                return false
-            }
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-            return false
-        }
-    }
+
     
     func getNumPages() -> Int{
         return levelGroups.count
@@ -217,15 +213,16 @@ class LevelsData{
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
         }
+        print(selectedLevel)
         let managedContext = appDelegate.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Level")
-        fetchRequest.predicate = NSPredicate(format: "page == \(selectedLevel.page)")
+        let pagePredicate = NSPredicate(format: "page.number == \(selectedLevel.page)")
+        let levelPredicate = NSPredicate(format: "number == \(selectedLevel.level)")
+        let compoundPredicate = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.and, subpredicates: [pagePredicate,levelPredicate])
+        fetchRequest.predicate = compoundPredicate
         do {
             let levels = try managedContext.fetch(fetchRequest) as [NSManagedObject]
-            let levels_completed = levels[0].value(forKeyPath: "levels_completed") as! Int
-            if levels_completed == selectedLevel.level{
-                levels[0].setValue(levels_completed + 1, forKey: "levels_completed")
-            }
+                levels[0].setValue(true, forKey: "completed")
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
@@ -235,7 +232,7 @@ class LevelsData{
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
         }
-
+        printAllLevelsUtil()
     }
     
     func getSolutionCoords(group: Int, level: Int) -> [(x: Int,y: Int)]{
@@ -248,6 +245,7 @@ class LevelsData{
         }
         let managedContext = appDelegate.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Page")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "number", ascending: true)]
         do {
             let pages = try managedContext.fetch(fetchRequest) as [NSManagedObject]
             print ("count of all pages is \(pages.count)")
@@ -255,12 +253,13 @@ class LevelsData{
                 let num = page.value(forKeyPath: "number")
       
                 let fetchRequest2 = NSFetchRequest<NSManagedObject>(entityName: "Level")
-
+                fetchRequest2.sortDescriptors = [NSSortDescriptor(key: "number", ascending: true)]
                 fetchRequest2.predicate = NSPredicate(format: "page.number == \(num as! Int32)")
                 let levels = try managedContext.fetch(fetchRequest2) as [NSManagedObject]
                 print ("count of all levels in page \(num) is \(pages.count)")
                 for l in levels{
-                    print (l.value(forKeyPath: "attempts"))
+                    print ("completed \(l.value(forKeyPath: "completed"))")
+                    print ("number \(l.value(forKeyPath: "number"))")
                 }
 
                 

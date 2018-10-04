@@ -164,13 +164,13 @@ class CustomTableViewCell: UITableViewCell {
                     drawing?.scene?.addChild(box)
                     box.isAccessibilityElement = true
                     box.updateText(String(levelNumber + 1))
-                    if LevelsData.shared.hasLevelBeenCompleted(page: indexPath.row, levelToTest: levelNumber){
+//                    if LevelsData.shared.hasLevelBeenCompleted(page: indexPath.row, levelToTest: levelNumber){
+//                        box.markAsCompletedLevel()
+//                    }
+                    if levelNumber < nextLevelToComplete{
                         box.markAsCompletedLevel()
                     }
-                    else if levelNumber == nextLevelToComplete{
-                        //do nothing
-                    }
-                    else {
+                    else if levelNumber > nextLevelToComplete{
                         box.setAlpha(0.3)
                     }
                     levels.append(box)
