@@ -26,15 +26,16 @@ class TextBoxButton: SKNode{
         
         outline = SKShapeNode(rectOf: CGSize(width: labelNode.frame.width + buffers.x, height: labelNode.frame.height + buffers.y))
         outline.lineWidth = 2.0
-        outline.position = CGPoint(x: x, y: y)
-        labelNode.position = CGPoint(x: x, y: y)
+//        outline.position = CGPoint(x: x, y: y)
+//        labelNode.position = CGPoint(x: x, y: y)
         super.init()
+        self.position = CGPoint(x: x, y: y)
         self.addChild(outline)
         self.addChild(labelNode)
     }
     
     func within(point: CGPoint) -> Bool{
-        if outline.contains(point) {
+        if self.contains(point) {
             return true
         }
         else {

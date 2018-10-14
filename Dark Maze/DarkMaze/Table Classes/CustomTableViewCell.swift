@@ -168,13 +168,14 @@ class CustomTableViewCell: UITableViewCell {
                     if levelNumber < nextLevelToComplete{
                         box.markAsCompletedLevel()
                         let star = SKLabelNode(fontNamed: GameStyle.shared.mainFontString)
-                        star.text = "\u{2606} 123"
-                        star.fontSize = mainFontSize
+                        star.text =  "\u{2b50}"//"\u{2606}"
+                        star.fontSize = mainFontSize - 13
                         star.fontColor = .black
                         star.verticalAlignmentMode = .center
-                        box.labelNode.addChild(star)
+                        box.addChild(star)
                         star.zPosition = box.zPosition + 1
-                        star.position = box.position
+                        star.position = CGPoint(x: -box.outline.frame.width/2.0+3.0, y: box.outline.frame.width/2.0-3.0)
+                        //star.position = box.position
                     }
                     else if levelNumber > nextLevelToComplete{
                         box.setAlpha(0.3)
