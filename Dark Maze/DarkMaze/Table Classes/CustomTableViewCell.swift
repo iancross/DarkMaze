@@ -164,11 +164,17 @@ class CustomTableViewCell: UITableViewCell {
                     drawing?.scene?.addChild(box)
                     box.isAccessibilityElement = true
                     box.updateText(String(levelNumber + 1))
-//                    if LevelsData.shared.hasLevelBeenCompleted(page: indexPath.row, levelToTest: levelNumber){
-//                        box.markAsCompletedLevel()
-//                    }
+
                     if levelNumber < nextLevelToComplete{
                         box.markAsCompletedLevel()
+                        let star = SKLabelNode(fontNamed: GameStyle.shared.mainFontString)
+                        star.text = "\u{2606} 123"
+                        star.fontSize = mainFontSize
+                        star.fontColor = .black
+                        star.verticalAlignmentMode = .center
+                        box.labelNode.addChild(star)
+                        star.zPosition = box.zPosition + 1
+                        star.position = box.position
                     }
                     else if levelNumber > nextLevelToComplete{
                         box.setAlpha(0.3)

@@ -88,11 +88,12 @@ class LevelsData{
             page.number = Int32(i)
             for (j,levelData) in levelGroups[i].levels.enumerated(){
                 let level = Level(entity: levelEntity, insertInto: managedContext)
-                level.attempts = 0
+                level.attemptsBeforeSuccess = 0
 
                 //testing
                 if i == 0 && j < 7{
                     level.completed = true
+                    //attemps
                 }
                 else{
                     level.completed = false
@@ -101,6 +102,7 @@ class LevelsData{
                 
                 level.number = Int32(j)
                 level.page = page
+                level.attemptsBeforeSuccess = 0
             }
         }
         do {
@@ -108,7 +110,6 @@ class LevelsData{
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
         }
-        printAllLevelsUtil()
     }
     
     func deleteCoreData(){
@@ -208,21 +209,28 @@ class LevelsData{
     func getPageCategory(page: Int) -> String{
         return levelGroups[page].category
     }
-    
-    func selectedLevelCompletedSuccessfully(){
+    func levelCompleted(success: Bool){
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
         }
-        print(selectedLevel)
         let managedContext = appDelegate.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Level")
         let pagePredicate = NSPredicate(format: "page.number == \(selectedLevel.page)")
         let levelPredicate = NSPredicate(format: "number == \(selectedLevel.level)")
         let compoundPredicate = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.and, subpredicates: [pagePredicate,levelPredicate])
         fetchRequest.predicate = compoundPredicate
+        
+        //update completed and update attemptsBeforeSuccess
         do {
             let levels = try managedContext.fetch(fetchRequest) as [NSManagedObject]
+            
+            if success{
                 levels[0].setValue(true, forKey: "completed")
+            }
+            else{
+                let attemptsBeforeSuccess = levels[0].value(forKey: "attemptsBeforeSuccess") as? Int32
+                levels[0].setValue(attemptsBeforeSuccess!+1, forKey: "attemptsBeforeSuccess")
+            }
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
@@ -256,13 +264,12 @@ class LevelsData{
                 fetchRequest2.sortDescriptors = [NSSortDescriptor(key: "number", ascending: true)]
                 fetchRequest2.predicate = NSPredicate(format: "page.number == \(num as! Int32)")
                 let levels = try managedContext.fetch(fetchRequest2) as [NSManagedObject]
-                print ("count of all levels in page \(num) is \(pages.count)")
+                print ("count of all levels in page \(String(describing: num)) is \(pages.count)")
                 for l in levels{
-                    print ("completed \(l.value(forKeyPath: "completed"))")
-                    print ("number \(l.value(forKeyPath: "number"))")
+                    print ("completed \(String(describing: l.value(forKeyPath: "completed")))")
+                    print ("number \(String(describing: l.value(forKeyPath: "number")))")
+                    print ("attemptsBeforeSuccess \(String(describing: l.value(forKeyPath: "attemptsBeforeSuccess")))")
                 }
-
-                
             }
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")

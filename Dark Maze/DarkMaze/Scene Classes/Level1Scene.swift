@@ -436,7 +436,6 @@ class Level1Scene: SKScene {
         }
         //if nil was returned, it means we've already highlighted this tile
         else{
-            print ("nil was returned")
             //if the tile is already touched but it's the bridge
             if isTileAdjacentAndUpcoming(tileToTest: tile){
                 if gameOverSuccessOrFailure(alpha: alpha) != nil{
@@ -490,9 +489,6 @@ class Level1Scene: SKScene {
             if coord.y + 1 < tile2DArray.count{
                 tiles.append(tile2DArray[coord.y+1][coord.x])
             }
-        }
-        for tile in tiles{
-            print (tile.gridCoord)
         }
         return tiles
     }
@@ -614,12 +610,12 @@ class Level1Scene: SKScene {
     //Returns either the path to draw or nil (if it's a jump)
     private func drawPath(currTile : GridTile) -> SKShapeNode?{
         if nextTileIsJump(fromTileNumber: touchedTiles - 1){
-            print(touchedTiles)
-            print ("next tile is jump")
             return nil
         }
         var path = SKShapeNode()
         //we are dealing with the first coordinate
+        
+        //BUG HERE - if the first coord is actually later in the path, we don't draw a path here. Like if the first coord is repeated later
         if tupleContains(a: currTile.gridCoord, v: (Level?.solutionCoords[0])!){
             print ("first coord")
             let point = CGPoint(x: currTile.position.x + startPathCoord.x * blocksize * 2.0/3.0, y: currTile.position.y + startPathCoord.y * blocksize * 2.0/3.0)
@@ -665,9 +661,9 @@ class Level1Scene: SKScene {
     // show the end game failure (failure = true)
     func endGame (success: Bool){
         let nextLevelUnlockedBefore = LevelsData.shared.isPageUnlocked(page: LevelsData.shared.selectedLevel.page + 1)
-        if success{
-            LevelsData.shared.selectedLevelCompletedSuccessfully()
-        }
+
+        LevelsData.shared.levelCompleted(success: success)
+        
         let nextLevelUnlockedAfter = LevelsData.shared.isPageUnlocked(page: LevelsData.shared.selectedLevel.page + 1)
         for child in self.children {
             child.removeFromParent()
@@ -731,7 +727,6 @@ class Level1Scene: SKScene {
             }
         }
         else{
-            print("game over")
             touchedTiles += 1
             self.gameActive = false
             LevelsData.shared.currentLevelSuccess = false
