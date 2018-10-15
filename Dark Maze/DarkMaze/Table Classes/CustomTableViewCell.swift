@@ -147,7 +147,7 @@ class CustomTableViewCell: UITableViewCell {
                 let levelNumber = i * (n) + j
                 if levelNumber <= levelCount - 1 {
                     var yPrime = y
-                    if levelNumber == NonBonusLevels - 1{
+                    if levelNumber == NonBonusLevels - 1 && levelCount > 8{
                         let bonus = CategoryHeader(string: "Bonus Levels", fontSize: mainFontSize*4/5, frameWidth: (drawing?.scene?.frame.width)!)
                         bonus.position = CGPoint(x: frame.width/2.0, y: y - offset*4/6)
                         drawing?.scene?.addChild(bonus)
@@ -167,15 +167,17 @@ class CustomTableViewCell: UITableViewCell {
 
                     if levelNumber < nextLevelToComplete{
                         box.markAsCompletedLevel()
-                        let star = SKLabelNode(fontNamed: GameStyle.shared.mainFontString)
-                        star.text =  "\u{2b50}"//"\u{2606}"
-                        star.fontSize = mainFontSize - 13
-                        star.fontColor = .black
-                        star.verticalAlignmentMode = .center
-                        box.addChild(star)
-                        star.zPosition = box.zPosition + 1
-                        star.position = CGPoint(x: -box.outline.frame.width/2.0+3.0, y: box.outline.frame.width/2.0-3.0)
-                        //star.position = box.position
+                        if LevelsData.shared.firstAttemptSuccess(forLevel: (indexPath.row, levelNumber)){
+                            let star = SKLabelNode(fontNamed: GameStyle.shared.mainFontString)
+                            star.text =  "\u{2b50}"//"\u{2606}"
+                            star.fontSize = mainFontSize - 13
+                            star.fontColor = .black
+                            star.verticalAlignmentMode = .center
+                            box.addChild(star)
+                            star.zPosition = box.zPosition + 1
+                            star.position = CGPoint(x: -box.outline.frame.width/2.0+3.0, y: box.outline.frame.width/2.0-3.0)
+                            //star.position = box.position
+                        }
                     }
                     else if levelNumber > nextLevelToComplete{
                         box.setAlpha(0.3)

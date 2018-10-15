@@ -14,7 +14,7 @@ import CoreData
 //gridsize - self explanatory
 //delayTime - time between tiles showing up (0 means they all show up at the same time)
 //levelCompleted: shows us what to color the level in level select
-let REQUIRED_TO_UNLOCK = 8
+let REQUIRED_TO_UNLOCK = 1
 
 struct LevelData {
     var gridX: Int
@@ -88,21 +88,21 @@ class LevelsData{
             page.number = Int32(i)
             for (j,levelData) in levelGroups[i].levels.enumerated(){
                 let level = Level(entity: levelEntity, insertInto: managedContext)
-                level.attemptsBeforeSuccess = 0
+                level.failedAttempts = 0
 
-                //testing
-                if i == 0 && j < 7{
-                    level.completed = true
-                    //attemps
-                }
-                else{
-                    level.completed = false
-                }
-                //end test
+//                //testing
+//                if i == 0 && j < 7{
+//                    level.completed = true
+//                }
+//                else{
+//                    level.completed = false
+//                }
+//                //end test
                 
+                level.completed = false
                 level.number = Int32(j)
                 level.page = page
-                level.attemptsBeforeSuccess = 0
+                level.failedAttempts = 0
             }
         }
         do {
@@ -220,27 +220,57 @@ class LevelsData{
         let compoundPredicate = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.and, subpredicates: [pagePredicate,levelPredicate])
         fetchRequest.predicate = compoundPredicate
         
-        //update completed and update attemptsBeforeSuccess
+        //update completed and update failedAttempts
         do {
             let levels = try managedContext.fetch(fetchRequest) as [NSManagedObject]
-            
-            if success{
-                levels[0].setValue(true, forKey: "completed")
-            }
-            else{
-                let attemptsBeforeSuccess = levels[0].value(forKey: "attemptsBeforeSuccess") as? Int32
-                levels[0].setValue(attemptsBeforeSuccess!+1, forKey: "attemptsBeforeSuccess")
+            if (levels[0].value(forKey: "completed") as! Bool) == false{
+                if success{
+                    levels[0].setValue(true, forKey: "completed")
+                }
+                else{
+                    let failedAttempts = levels[0].value(forKey: "failedAttempts") as? Int32
+                    levels[0].setValue(failedAttempts!+1, forKey: "failedAttempts")
+                }
             }
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
         
+        //now save
         do {
             try managedContext.save()
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
         }
-        printAllLevelsUtil()
+    }
+    
+    func selectedLevelFirstAttemptSuccess()-> Bool{
+        return firstAttemptSuccess(forLevel: (selectedLevel))
+    }
+    
+    func firstAttemptSuccess(forLevel toTest: (page: Int, level: Int))->Bool{
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return false
+        }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Level")
+        let pagePredicate = NSPredicate(format: "page.number == \(toTest.page)")
+        let levelPredicate = NSPredicate(format: "number == \(toTest.level)")
+        let compoundPredicate = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.and, subpredicates: [pagePredicate,levelPredicate])
+        fetchRequest.predicate = compoundPredicate
+        
+        do {
+            let levels = try managedContext.fetch(fetchRequest) as [NSManagedObject]
+            if levels[0].value(forKey: "completed") as? Bool == true && levels[0].value(forKey: "failedAttempts") as? Int32 == 0 {
+                return true
+            }
+            else{
+                return false
+            }
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+            return false
+        }
     }
     
     func getSolutionCoords(group: Int, level: Int) -> [(x: Int,y: Int)]{
@@ -268,7 +298,7 @@ class LevelsData{
                 for l in levels{
                     print ("completed \(String(describing: l.value(forKeyPath: "completed")))")
                     print ("number \(String(describing: l.value(forKeyPath: "number")))")
-                    print ("attemptsBeforeSuccess \(String(describing: l.value(forKeyPath: "attemptsBeforeSuccess")))")
+                    print ("failedAttempts \(String(describing: l.value(forKeyPath: "failedAttempts")))")
                 }
             }
         } catch let error as NSError {

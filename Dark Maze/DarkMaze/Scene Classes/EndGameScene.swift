@@ -38,30 +38,76 @@ class EndGameScene: SKScene {
         let success = determineSuccess()
         addSuccessMessage(text: success.successMessage)
         addButtons(text: success.variableText)
+        //firstTryBonus()
+        bonuses()
+    }
+    
+    func bonuses(){
+        var nodes: [SKNode] = collectBonuses()
+        let positions: [CGPoint] =
+            [CGPoint(x: frame.midX, y: frame.height*5.8/8),
+             CGPoint(x: frame.midX, y: frame.height*5/8)]
         
-        //really if a successful bonus/unlocked happened
-        let sequence = SKAction.sequence([SKAction.fadeAlpha(to: 1, duration: 3.0)])
-        if displayUnlockLevelBonus! {
-            buttonsNode.position = CGPoint(x: buttonsNode.position.x, y: buttonsNode.position.y - frame.height/8)
-            let unlocked = levelUnlocked()
-            unlocked.alpha = 0
-            self.addChild(unlocked)
-            unlocked.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
-                                            SKAction.fadeIn(withDuration: 1.0)]))
-            {
-                self.buttonsNode.run(sequence)
-            }
+        for (i, node) in nodes.enumerated(){
+            node.position = positions[i]
+            node.alpha = 0
+            self.addChild(node)
+            let sequence = SKAction.sequence([SKAction.wait(forDuration: Double(i+1)*0.5),
+                                              SKAction.fadeIn(withDuration: 1.0)])
+            node.run(sequence)
+        }
+        
+        if nodes.count == 2{
+            buttonsNode.position = CGPoint(x: frame.midX, y: frame.height*2.5/8)
+        }
+        else if nodes.count == 1{
+            buttonsNode.position = CGPoint(x: frame.midX, y: frame.height*3/8)
         }
         else{
-            self.buttonsNode.run(sequence)
+            buttonsNode.position = CGPoint(x: frame.midX, y: frame.height*4/8)
         }
+        self.addChild(buttonsNode)
+        buttonsNode.run(SKAction.sequence([SKAction.wait(forDuration: Double(nodes.count + 1)*0.5),
+                                          SKAction.fadeIn(withDuration: 1.0)]))
     }
-    func levelUnlocked() -> SKNode{
+    
+    func collectBonuses() -> [SKNode]{
+        var nodes = [SKNode]()
+        if LevelsData.shared.selectedLevelFirstAttemptSuccess(){
+            nodes.append(firstTryBonus())
+        }
+        if displayUnlockLevelBonus!{
+            nodes.append(levelUnlockedBonus())
+        }
+        return nodes
+    }
+    
+    func firstTryBonus()-> SKNode{
+        let firstTryNode = SKNode()
+        let label1 = Helper.createGenericLabel("First Try!", fontsize: GameStyle.shared.TextBoxFontSize - 15)
+        label1.verticalAlignmentMode = .baseline
+        label1.position.y = 5
+        firstTryNode.addChild(label1)
+        
+        let starLabel1 = SKLabelNode(text: "\u{2b50}")
+        starLabel1.fontSize = GameStyle.shared.SubHeaderFontSize
+        starLabel1.horizontalAlignmentMode = .center
+        starLabel1.position = CGPoint(x: label1.frame.width/2 + 10 + starLabel1.frame.width/2, y: 5)
+        
+        let starLabel2 = starLabel1.copy() as! SKLabelNode
+        starLabel2.position.x = -starLabel2.position.x - 10
+        
+        firstTryNode.addChild(starLabel1)
+        firstTryNode.addChild(starLabel2)
+        return firstTryNode
+    }
+    
+    func levelUnlockedBonus() -> SKNode{
         let bonusesNode = SKNode()
-        let unlockedLabel1 = Helper.createGenericLabel("Next Level", fontsize: GameStyle.shared.TextBoxFontSize - 10)
+        let unlockedLabel1 = Helper.createGenericLabel("Next Level", fontsize: GameStyle.shared.TextBoxFontSize - 15)
         unlockedLabel1.verticalAlignmentMode = .baseline
         unlockedLabel1.position.y = 5
-        let unlockedLabel2 = Helper.createGenericLabel("Unlocked", fontsize: GameStyle.shared.TextBoxFontSize - 20)
+        let unlockedLabel2 = Helper.createGenericLabel("Unlocked", fontsize: GameStyle.shared.TextBoxFontSize - 25)
         unlockedLabel2.verticalAlignmentMode = .top
         bonusesNode.addChild(unlockedLabel1)
         bonusesNode.addChild(unlockedLabel2)
@@ -73,6 +119,8 @@ class EndGameScene: SKScene {
         
         bonusesNode.addChild(unlockSprite)
         bonusesNode.addChild(unlockSprite2)
+        
+        //the final position
         bonusesNode.position = CGPoint(x: frame.midX, y: frame.height*6/8)
         return bonusesNode
     }
@@ -87,12 +135,10 @@ class EndGameScene: SKScene {
 
         buttonsNode.position = CGPoint.zero
         buttonsNode.scene?.backgroundColor = UIColor.orange
-        self.addChild(buttonsNode)
         buttonsNode.name = "BUTTONNODE"
         buttonsNode.addChild(mainMenuButton!)
         buttonsNode.addChild(levelSelectButton!)
         buttonsNode.addChild(repeatOrNextButton!)
-        buttonsNode.position = CGPoint(x: frame.midX, y: frame.midY)
         buttonsNode.alpha = 0
     }
 
