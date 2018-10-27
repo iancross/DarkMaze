@@ -8,9 +8,11 @@
 
 import Foundation
 import SpriteKit
+import GoogleMobileAds
 
 class Helper{
-    
+    static let shared = Helper()
+
     //creates a label with the normal font, color, alignment
     //must pass in the fontsize and the actual text to be displayed
     static func createGenericLabel(_ label: String, fontsize: CGFloat) -> SKLabelNode{
@@ -29,6 +31,12 @@ class Helper{
         }
         return false
     }
+
+
+}
+
+public func getAddSizeForScreen()->GADAdSize{
+    return GADAdSizeFromCGSize(CGSize(width: screenWidth, height: screenHeight * 0.15))
 }
 
 // MARK: Double Extension
@@ -47,6 +55,16 @@ public extension Double {
     public static func random(min: Double, max: Double) -> Double {
         return Double.random * (max - min) + min
     }
+}
+
+//Screen width
+public var screenWidth: CGFloat {
+    return UIScreen.main.bounds.width
+}
+
+// Screen height.
+public var screenHeight: CGFloat {
+    return UIScreen.main.bounds.height
 }
 
 

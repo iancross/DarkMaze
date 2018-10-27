@@ -14,6 +14,7 @@
 		C3189DFE1FD7798F000A52A6 /* MYSCARS_.TTF in Resources */ = {isa = PBXBuildFile; fileRef = C3EF4A2C1FD7771100528247 /* MYSCARS_.TTF */; };
 		C3189E021FD77D0B000A52A6 /* LevelSelectScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3189E011FD77D0B000A52A6 /* LevelSelectScene.swift */; };
 		C31C5C5E20857CD700A44505 /* DarkMazeUnitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31C5C5D20857CD700A44505 /* DarkMazeUnitTests.swift */; };
+		C320FAED2184C7020005A2D9 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C320FAEC2184C7020005A2D9 /* GoogleMobileAds.framework */; };
 		C32CB86120BE10CB008BD6C4 /* unlock_sprite200x200.png in Resources */ = {isa = PBXBuildFile; fileRef = C32CB86020BE10CB008BD6C4 /* unlock_sprite200x200.png */; };
 		C32DB4731FF02A6800040BA3 /* LevelsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32DB4721FF02A6800040BA3 /* LevelsData.swift */; };
 		C34AA0C7206F27F800DB2229 /* CategoryHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34AA0C6206F27F800DB2229 /* CategoryHeader.swift */; };
@@ -57,6 +58,7 @@
 		C31C5C5B20857CD700A44505 /* DarkMazeUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DarkMazeUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C31C5C5D20857CD700A44505 /* DarkMazeUnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkMazeUnitTests.swift; sourceTree = "<group>"; };
 		C31C5C5F20857CD700A44505 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C320FAEC2184C7020005A2D9 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMobileAds.framework; sourceTree = "<group>"; };
 		C32CB86020BE10CB008BD6C4 /* unlock_sprite200x200.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unlock_sprite200x200.png; sourceTree = "<group>"; };
 		C32DB4721FF02A6800040BA3 /* LevelsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelsData.swift; sourceTree = "<group>"; };
 		C34AA0C6206F27F800DB2229 /* CategoryHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryHeader.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C320FAED2184C7020005A2D9 /* GoogleMobileAds.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -205,6 +208,7 @@
 		C3EF4A071FD7748F00528247 = {
 			isa = PBXGroup;
 			children = (
+				C320FAEC2184C7020005A2D9 /* GoogleMobileAds.framework */,
 				C360D94920E5AAEA00580E80 /* DarkMaze.xcdatamodeld */,
 				C3EF4A121FD7749000528247 /* DarkMaze */,
 				C39E37F3208139C100A53519 /* DarkMazeUITests */,
@@ -575,6 +579,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8S2E38T6C8;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/DarkMaze/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				"OTHER_SWIFT_FLAGS[sdk=iphonesimulator*]" = "-Xfrontend -debug-time-function-bodies";
@@ -591,6 +599,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8S2E38T6C8;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/DarkMaze/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.crossibc.Dark-Maze";

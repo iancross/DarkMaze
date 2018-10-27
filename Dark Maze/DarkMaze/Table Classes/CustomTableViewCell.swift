@@ -169,9 +169,9 @@ class CustomTableViewCell: UITableViewCell {
                         box.markAsCompletedLevel()
                         if LevelsData.shared.firstAttemptSuccess(forLevel: (indexPath.row, levelNumber)){
                             let star = SKLabelNode(fontNamed: GameStyle.shared.mainFontString)
-                            star.text =  "\u{2b50}"//"\u{2606}"
-                            star.fontSize = mainFontSize - 13
-                            star.fontColor = .black
+                            star.text =  "\u{2605}" //"\u{2b50}"
+                            star.fontSize = mainFontSize - 7
+                            star.fontColor = UIColor.init(red: 0.8, green: 0.8, blue: 0.0, alpha: 1.0)
                             star.verticalAlignmentMode = .center
                             box.addChild(star)
                             star.zPosition = box.zPosition + 1

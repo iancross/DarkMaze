@@ -10,6 +10,7 @@
 import UIKit
 import SpriteKit
 import GameplayKit
+import GoogleMobileAds
 
 enum scenes {
     case menu
@@ -18,19 +19,19 @@ enum scenes {
     case endGame
 }
 
-class GameViewController: UIViewController, GameDelegate {
-    
-    
+class GameViewController: UIViewController, GameDelegate, GADBannerViewDelegate {
+
+    var bannerView: GADBannerView = GADBannerView()
     var sceneString = "MenuScene"
 
     override func viewDidLoad() {
-        //self.save()
         self.view.backgroundColor = UIColor.black
         super.viewDidLoad()
         if let view = self.view as! SKView? {
             
             view.preferredFramesPerSecond = 30
-            mainMenu()
+            //mainMenu()
+            gameOver(unlockedLevel: false)
 
             view.ignoresSiblingOrder = true
             view.showsFPS = true
@@ -38,8 +39,6 @@ class GameViewController: UIViewController, GameDelegate {
         }
     }
     
-
-
     func cleanUp(){
         if let v = self.view as? SKView{
             v.scene?.removeAllChildren()
@@ -50,7 +49,9 @@ class GameViewController: UIViewController, GameDelegate {
     
     //GameDelegate requirements
     func gameOver(unlockedLevel: Bool) {
-        switchScene(scene: EndGameScene (size: GameStyle.shared.defaultSceneSize, unlockedLevel: unlockedLevel))
+        switchScene(scene: EndGameScene (size: GameStyle.shared.sceneSizeWithAd, unlockedLevel: unlockedLevel))
+        addBannerViewToView()
+
     }
     
     func playGame() {
@@ -73,12 +74,45 @@ class GameViewController: UIViewController, GameDelegate {
         }
     }
     private func switchScene(scene: SKScene){
-        
+        bannerView.removeFromSuperview()
         scene.scaleMode = .aspectFill
         scene.delegate = self
         if let v = (view as? SKView){
             v.presentScene(scene)
         }
+    }
+    
+    private func addBannerViewToView() {
+        bannerView = GADBannerView(adSize: getAddSizeForScreen())
+        bannerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(bannerView)
+        bannerView.rootViewController = self
+        bannerView.backgroundColor = .black
+        bannerView.adUnitID = GameStyle.shared.adMobTestToken
+        view.addConstraint(NSLayoutConstraint(item: bannerView,
+                                              attribute: .leading,
+                                              relatedBy: .equal,
+                                              toItem: view,
+                                              attribute: .leading,
+                                              multiplier: 1,
+                                              constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: bannerView,
+                                              attribute: .trailing,
+                                              relatedBy: .equal,
+                                              toItem: view,
+                                              attribute: .trailing,
+                                              multiplier: 1,
+                                              constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: bannerView,
+                                              attribute: .bottom,
+                                              relatedBy: .equal,
+                                              toItem: bottomLayoutGuide,
+                                              attribute: .top,
+                                              multiplier: 1,
+                                              constant: 0))
+        let request = GADRequest()
+        request.testDevices = [kGADSimulatorID]
+        bannerView.load(request)
     }
 }
 
@@ -87,23 +121,8 @@ extension UIWindow {
     func set(rootViewController newRootViewController: UIViewController, withTransition transition: CATransition? = nil) {
         
         let previousViewController = rootViewController
-        
-//        if let transition = transition {
-//            // Add the transition
-//            layer.add(transition, forKey: kCATransition)
-//        }
-        
+
         rootViewController = newRootViewController
-        
-//        // Update status bar appearance using the new view controllers appearance - animate if needed
-//        if UIView.areAnimationsEnabled {
-//            UIView.animate(withDuration: CATransaction.animationDuration()) {
-//                newRootViewController.setNeedsStatusBarAppearanceUpdate()
-//            }
-//        } else {
-//            newRootViewController.setNeedsStatusBarAppearanceUpdate()
-//        }
-        
         // The presenting view controllers view doesn't get removed from the window as its currently transistioning and presenting a view controller
         if let transitionViewClass = NSClassFromString("UITransitionView") {
             for subview in subviews where subview.isKind(of: transitionViewClass) {

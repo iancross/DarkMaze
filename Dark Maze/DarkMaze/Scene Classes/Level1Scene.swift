@@ -15,13 +15,6 @@ enum Jumps {
     case plus
 }
 
-//enum CardinalDirection{
-//    case north
-//    case south
-//    case west
-//    case east
-//    case none
-//}
 
 class Level1Scene: SKScene {
     var tile2DArray = [[GridTile]]()
@@ -164,7 +157,7 @@ class Level1Scene: SKScene {
         addSkipButton()
         
         if let mods = Level!.modifications{
-            for (mod, modData) in mods{
+            for (mod, _) in mods{
                 switch mod {
                 case .meetInTheMiddle:
                     drawMeetInTheMiddle()
@@ -292,7 +285,7 @@ class Level1Scene: SKScene {
 /*---------------------- Grid Modification ----------------------*/
     func modifyGrid(){
         if let mods = Level!.modifications{
-            for (mod, modData) in mods{
+            for (mod, _) in mods{
                 switch mod {
                 case .flip:
                     flipGrid()

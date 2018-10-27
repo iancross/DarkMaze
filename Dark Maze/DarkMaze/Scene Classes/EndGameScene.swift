@@ -22,6 +22,7 @@ class EndGameScene: SKScene {
     
     init(size: CGSize, unlockedLevel: Bool) {
         displayUnlockLevelBonus = unlockedLevel
+        print (size.height)
         super.init(size: size)
         backgroundColor = UIColor.black
         anchorPoint = CGPoint(x: 0, y:0)
@@ -38,7 +39,6 @@ class EndGameScene: SKScene {
         let success = determineSuccess()
         addSuccessMessage(text: success.successMessage)
         addButtons(text: success.variableText)
-        //firstTryBonus()
         bonuses()
     }
     
@@ -89,7 +89,8 @@ class EndGameScene: SKScene {
         label1.position.y = 5
         firstTryNode.addChild(label1)
         
-        let starLabel1 = SKLabelNode(text: "\u{2b50}")
+        let starLabel1 = SKLabelNode(text: "\u{2605}")
+        starLabel1.fontColor = UIColor.init(red: 0.8, green: 0.8, blue: 0.0, alpha: 1.0)
         starLabel1.fontSize = GameStyle.shared.SubHeaderFontSize
         starLabel1.horizontalAlignmentMode = .center
         starLabel1.position = CGPoint(x: label1.frame.width/2 + 10 + starLabel1.frame.width/2, y: 5)

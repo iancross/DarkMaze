@@ -8,6 +8,7 @@
 
 import UIKit
 import SpriteKit
+import GoogleMobileAds
 
 enum Scrolling {
     case up
@@ -21,6 +22,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     var scrollDirection: Scrolling = .none
     var lastContentOffset: CGPoint = CGPoint()
     var cellSizeBuffer: CGFloat = 30
+    var bannerView = GADBannerView()
     
     //set when we initially click a row. reinit when that row is finally closed
     var selectedRowIndex: IndexPath? = nil
@@ -35,11 +37,19 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         customTableView.decelerationRate = UIScrollViewDecelerationRateNormal
         let i = IndexPath(item:12, section: 0)
         lastContentOffset = CGPoint.zero
-
+        addBannerViewToView()
+        
         //customTableView.scrollToRow(at: i, at: .middle, animated: false)
         self.customTableView.rowHeight = defaultHeight;
         super.viewDidLoad()
         view.backgroundColor = UIColor.black
+        view.addConstraint(NSLayoutConstraint(item: customTableView,
+                                              attribute: .bottom,
+                                              relatedBy: .equal,
+                                              toItem: bannerView,
+                                              attribute: .top,
+                                              multiplier: 1,
+                                              constant: 0))
     }
     
     override func didReceiveMemoryWarning() {
@@ -106,13 +116,6 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func isPathUnlocked(path: IndexPath)->Bool{
-//        if path.row == 0{
-//            return true
-//        }
-//        else{
-//            return false
-//        }
-//        
         return LevelsData.shared.isPageUnlocked(page: path.row)
     }
     
@@ -170,5 +173,45 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             appDelegate.window?.set(rootViewController: ivc!)
             ivc?.playGame()
         }
+    }
+    
+    private func addBannerViewToView() {
+        bannerView = GADBannerView(adSize: kGADAdSizeFullBanner)
+        bannerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(bannerView)
+        bannerView.rootViewController = self
+        bannerView.backgroundColor = .black
+        bannerView.adUnitID = GameStyle.shared.adMobTestToken
+        view.addConstraint(NSLayoutConstraint(item: bannerView,
+                                              attribute: .leading,
+                                              relatedBy: .equal,
+                                              toItem: view,
+                                              attribute: .leading,
+                                              multiplier: 1,
+                                              constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: bannerView,
+                                              attribute: .trailing,
+                                              relatedBy: .equal,
+                                              toItem: view,
+                                              attribute: .trailing,
+                                              multiplier: 1,
+                                              constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: bannerView,
+                                              attribute: .bottom,
+                                              relatedBy: .equal,
+                                              toItem: view,
+                                              attribute: .bottom,
+                                              multiplier: 1,
+                                              constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: bannerView,
+                                              attribute: NSLayoutConstraint.Attribute.height,
+                                              relatedBy: NSLayoutConstraint.Relation.equal,
+                                              toItem: nil,
+                                              attribute: NSLayoutConstraint.Attribute.notAnAttribute,
+                                              multiplier: 1,
+                                              constant: bannerView.frame.height))
+        let request = GADRequest()
+        request.testDevices = [kGADSimulatorID]
+        bannerView.load(request)
     }
 }

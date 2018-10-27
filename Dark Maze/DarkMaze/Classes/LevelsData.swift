@@ -14,7 +14,7 @@ import CoreData
 //gridsize - self explanatory
 //delayTime - time between tiles showing up (0 means they all show up at the same time)
 //levelCompleted: shows us what to color the level in level select
-let REQUIRED_TO_UNLOCK = 1
+let REQUIRED_TO_UNLOCK = 8
 
 struct LevelData {
     var gridX: Int
@@ -62,6 +62,18 @@ class LevelsData{
         //Flash() //just literally flash the grid
         //WhereToEnd() //multiple end arrows
         Blackout()
+        Blackout()
+        Blackout()
+        Blackout()
+        Blackout()
+        Blackout()
+        Blackout()
+        Blackout()
+        Blackout()
+        Blackout()
+        Blackout()
+        Blackout()
+        Blackout()
         //_BrokenTest()
         initCoreData()
     }
@@ -70,7 +82,7 @@ class LevelsData{
     //https://stackoverflow.com/questions/35372450/core-data-one-to-many-relationship-in-swift
     //https://stackoverflow.com/questions/35372450/core-data-one-to-many-relationship-in-swift
     private func initCoreData(){
-        deleteCoreData()
+        //deleteCoreData()
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
         }
