@@ -132,6 +132,7 @@ class Level1Scene: SKScene {
     private func initializeGrid(){
         blocksize = max(self.frame.maxX / (CGFloat(Level!.gridX) + blockBuffer),
                             self.frame.maxX / (CGFloat(Level!.gridY) + blockBuffer))
+        print ("blocksize \(blocksize)")
         let botOfGridY =  -CGFloat(Level!.gridY) / 2.0 * blocksize
         let leftOfGridX = -((CGFloat(Level!.gridX) / 2.0) * blocksize)
         
@@ -279,7 +280,7 @@ class Level1Scene: SKScene {
         let title = "\(category) \(progress)/\(outOfTotal)"
         
         categoryNode = CategoryHeader(string: title, fontSize: blocksize/3.0, frameWidth: frame.width)
-        categoryNode?.position = CGPoint(x: frame.midX, y: frame.maxY - screenHeight*0.1)
+        categoryNode?.position = CGPoint(x: frame.midX, y: frame.maxY - screenHeight*0.05)
         addChild(categoryNode!)
     }
     
@@ -546,14 +547,14 @@ class Level1Scene: SKScene {
     func addSymbol(t: GridTile, j: Jumps){
         switch j{
         case .circle:
-            let circle = SKShapeNode(circleOfRadius: 10)
+            let circle = SKShapeNode(circleOfRadius: blocksize/10)
             circle.fillColor = .black
             circle.lineWidth = 0
             t.addChild(circle)
             circle.position = .zero
             circle.zPosition = 5
         case .diamond:
-            let diamond = SKShapeNode(rectOf: CGSize(width: 20, height: 20))
+            let diamond = SKShapeNode(rectOf: CGSize(width: blocksize/5, height: blocksize/5))
             diamond.fillColor = .black
             diamond.zRotation += CGFloat(Double.pi/2.0)
             t.addChild(diamond)
@@ -748,7 +749,7 @@ class Level1Scene: SKScene {
                 [SKAction.wait(forDuration: Double(i) * 1.5/numSolutionBlocks),
                 SKAction.fadeAlpha(to: 1.0, duration: 0.2),
                 SKAction.run({
-                    tile.tile.glowWidth = 15.0
+                    tile.tile.glowWidth = self.blocksize/7.0
                     tile.tile.zPosition += 5
                     tile.tile.strokeColor = .white
                 })
