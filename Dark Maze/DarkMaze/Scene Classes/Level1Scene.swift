@@ -176,7 +176,9 @@ class Level1Scene: SKScene {
     }
     
     func addSkipButton(){
-        skipButton = TextBoxButton(x: 150, y: 100, text: "Skip", fontsize: GameStyle.shared.SmallTextBoxFontSize, buffers: (20.0,20.0))
+        let bottomOfGridY = screenHeight/2.0 - (gridNode.calculateAccumulatedFrame().height/2.0)
+        let y = bottomOfGridY - bottomOfGridY/3.0
+        skipButton = TextBoxButton(x: screenWidth/4.0, y: y, text: "Skip", fontsize: blocksize/3.0, buffers: (blocksize/5.0,blocksize/5.0))
         self.addChild(skipButton!)
     }
     
@@ -276,8 +278,8 @@ class Level1Scene: SKScene {
         let category = LevelsData.shared.getPageCategory(page: LevelsData.shared.selectedLevel.page)
         let title = "\(category) \(progress)/\(outOfTotal)"
         
-        categoryNode = CategoryHeader(string: title, fontSize: GameStyle.shared.SmallTextBoxFontSize, frameWidth: frame.width)
-        categoryNode?.position = CGPoint(x: frame.midX, y: frame.maxY - 100)
+        categoryNode = CategoryHeader(string: title, fontSize: blocksize/3.0, frameWidth: frame.width)
+        categoryNode?.position = CGPoint(x: frame.midX, y: frame.maxY - screenHeight*0.1)
         addChild(categoryNode!)
     }
     
@@ -642,7 +644,7 @@ class Level1Scene: SKScene {
         let line = SKShapeNode()
         line.lineCap = .round
         line.path = path.cgPath
-        line.lineWidth = 10
+        line.lineWidth = blocksize/10
         line.strokeColor = .black
         line.zPosition = 10
         line.name = "Line"
@@ -824,6 +826,8 @@ class Level1Scene: SKScene {
 /*----------------------------------------------------------*/
 /*------------------------- Arrows -------------------------*/
     func drawArrows(firstTile: GridTile){
+        startArrow.scale(to: CGSize(width: blocksize, height: blocksize))
+        endArrow.scale(to: CGSize(width: blocksize, height: blocksize))
         let endTile = self.tile2DArray[(Level!.solutionCoords.last?.y)!][(Level!.solutionCoords.last?.x)!]
         placeArrow(tile: firstTile, arrow: startArrow, orient: -1)
         placeArrow(tile: endTile, arrow: endArrow, orient: 1)
@@ -833,10 +837,10 @@ class Level1Scene: SKScene {
     func startArrowSequence(tile: GridTile){
         var vector = CGVector()
         if tile.gridCoord.x == 0 || tile.gridCoord.x == tile2DArray[0].count - 1{
-            vector = CGVector(dx: -20.0,dy: 0)
+            vector = CGVector(dx: -blocksize/5.0,dy: 0)
         }
         else{
-            vector = CGVector(dx: 0, dy: -20)
+            vector = CGVector(dx: 0, dy: -blocksize/5.0)
         }
         let sequence = SKAction.sequence(
             [SKAction.move(by: vector, duration: 0.4),

@@ -13,10 +13,10 @@ class GameStyle {
     static let shared = GameStyle()
     
     let defaultHeight = 1334
-//    let defaultSceneSize: CGSize = CGSize(width: screenWidth, height: screenHeight)
-//    let sceneSizeWithAd: CGSize = CGSize(width: screenWidth, height: screenHeight - 50)
-    let defaultSceneSize: CGSize = CGSize(width: 750, height: 1334)
-    let sceneSizeWithAd: CGSize = CGSize(width: 750, height: 1334 - 50)
+    let defaultSceneSize: CGSize = CGSize(width: screenWidth, height: screenHeight)
+    let sceneSizeWithAd: CGSize = CGSize(width: screenWidth, height: screenHeight - 50)
+//    let defaultSceneSize: CGSize = CGSize(width: 750, height: 1334)
+//    let sceneSizeWithAd: CGSize = CGSize(width: 750, height: 1334 - 100)
     var mainFontString = "My Scars"
     var SmallTextBoxFontSize: CGFloat = 40
     var SubHeaderFontSize: CGFloat = 75

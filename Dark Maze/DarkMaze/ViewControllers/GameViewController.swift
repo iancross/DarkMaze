@@ -30,8 +30,8 @@ class GameViewController: UIViewController, GameDelegate, GADBannerViewDelegate 
         if let view = self.view as! SKView? {
             
             view.preferredFramesPerSecond = 30
-            //mainMenu()
-            gameOver(unlockedLevel: false)
+            mainMenu()
+            //gameOver(unlockedLevel: false)
 
             view.ignoresSiblingOrder = true
             view.showsFPS = true
@@ -60,7 +60,6 @@ class GameViewController: UIViewController, GameDelegate, GADBannerViewDelegate 
     
     func mainMenu() {
         switchScene(scene: MenuScene(size: GameStyle.shared.defaultSceneSize))
-        //test comment
     }
     
     func levelSelect(){
