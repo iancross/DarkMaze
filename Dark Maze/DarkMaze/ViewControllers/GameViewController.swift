@@ -60,6 +60,7 @@ class GameViewController: UIViewController, GameDelegate, GADBannerViewDelegate 
     
     func mainMenu() {
         switchScene(scene: MenuScene(size: GameStyle.shared.defaultSceneSize))
+        
     }
     
     func levelSelect(){
