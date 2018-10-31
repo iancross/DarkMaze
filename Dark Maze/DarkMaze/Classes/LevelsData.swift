@@ -14,7 +14,7 @@ import CoreData
 //gridsize - self explanatory
 //delayTime - time between tiles showing up (0 means they all show up at the same time)
 //levelCompleted: shows us what to color the level in level select
-let REQUIRED_TO_UNLOCK = 8
+let REQUIRED_TO_UNLOCK = 1
 
 struct LevelData {
     var gridX: Int
@@ -42,7 +42,6 @@ class LevelsData{
         currentLevelSuccess = false
         //used by the gameplay if you play an earlier level
         selectedLevel = (page: 0, level: 0)
-        
         //levelGroups = [(category: String, levels: [LevelData])]()
         //SplitPath()
         Normal()
@@ -61,66 +60,82 @@ class LevelsData{
         //HyperSpeed() //just speed it up like crazy
         //Flash() //just literally flash the grid
         //WhereToEnd() //multiple end arrows
-        Blackout()
-        Blackout()
-        Blackout()
-        Blackout()
-        Blackout()
-        Blackout()
-        Blackout()
-        Blackout()
-        Blackout()
-        Blackout()
-        Blackout()
-        Blackout()
-        Blackout()
+
         //_BrokenTest()
         initCoreData()
+
     }
     
     
     //https://stackoverflow.com/questions/35372450/core-data-one-to-many-relationship-in-swift
     //https://stackoverflow.com/questions/35372450/core-data-one-to-many-relationship-in-swift
     private func initCoreData(){
-        //deleteCoreData()
+        
+        //testing
+        deleteCoreData()
+        
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            print("something bad app delegate ------------------------------------")
             return
         }
-        let managedContext = appDelegate.persistentContainer.viewContext
-        let pageEntity = NSEntityDescription.entity(forEntityName: "Page",in: managedContext)!
-        let levelEntity = NSEntityDescription.entity(forEntityName: "Level",in: managedContext)!
-        for i in 0...levelGroups.count-1{
-            let page = Page(entity: pageEntity, insertInto: managedContext)
-            if i == 0{
-                page.unlocked = true
-            }
-            else{
-                page.unlocked = false
-            }
-            page.number = Int32(i)
-            for (j,levelData) in levelGroups[i].levels.enumerated(){
-                let level = Level(entity: levelEntity, insertInto: managedContext)
-                level.failedAttempts = 0
-
-//                //testing
-//                if i == 0 && j < 7{
-//                    level.completed = true
+        if !doesDataExist(){
+            print ("init core data")
+            let managedContext = appDelegate.persistentContainer.viewContext
+            let pageEntity = NSEntityDescription.entity(forEntityName: "Page",in: managedContext)!
+            let levelEntity = NSEntityDescription.entity(forEntityName: "Level",in: managedContext)!
+            for i in 0...levelGroups.count-1{
+                let page = Page(entity: pageEntity, insertInto: managedContext)
+//                if i == 0{
+//                    page.unlocked = true
 //                }
 //                else{
-//                    level.completed = false
+//                    page.unlocked = false
 //                }
-//                //end test
                 
-                level.completed = false
-                level.number = Int32(j)
-                level.page = page
-                level.failedAttempts = 0
+                //testing
+                page.unlocked = true
+                
+                page.number = Int32(i)
+                for (j,levelData) in levelGroups[i].levels.enumerated(){
+                    let level = Level(entity: levelEntity, insertInto: managedContext)
+                    level.failedAttempts = 0
+    //                //testing
+    //                if i == 0 && j < 7{
+    //                    level.completed = true
+    //                }
+    //                else{
+    //                    level.completed = false
+    //                }
+    //                //end test
+                    level.completed = true
+                    level.number = Int32(j)
+                    level.page = page
+                    level.failedAttempts = 0
+                }
+            }
+            do {
+                try managedContext.save()
+            } catch let error as NSError {
+                print("Could not save. \(error), \(error.userInfo)")
             }
         }
+        printAllLevelsUtil()
+    }
+    
+    func doesDataExist()->Bool{
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return false
+        }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Page")
         do {
-            try managedContext.save()
+            let pages = try managedContext.fetch(fetchRequest)
+            //print ("------------------------------- \(pages)")
+            return pages.count > 0
+            
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            print("Could not fetch. \(error), \(error.userInfo)")
+            return false
         }
     }
     
@@ -190,6 +205,8 @@ class LevelsData{
     //returns the next level to complete within a page
     //Updated
     func nextLevelToCompleteOnPage(page: Int) -> Int{
+        printAllLevelsUtil()
+        
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return 0
         }
@@ -199,12 +216,16 @@ class LevelsData{
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "number", ascending: true)]
         do {
             if let levels = try managedContext.fetch(fetchRequest) as? [Level]{
+                print ("made it here")
                 for level in levels{
                     if !level.completed{
                         return Int(level.number)
                     }
                 }
+                //if all levels are completed
+                return levels.count
             }
+            
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
@@ -254,6 +275,7 @@ class LevelsData{
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
         }
+        printAllLevelsUtil()
     }
     
     func selectedLevelFirstAttemptSuccess()-> Bool{
@@ -301,16 +323,16 @@ class LevelsData{
             print ("count of all pages is \(pages.count)")
             for (i,page) in pages.enumerated(){
                 let num = page.value(forKeyPath: "number")
-      
+                print ("Page \(num as! Int32)")
                 let fetchRequest2 = NSFetchRequest<NSManagedObject>(entityName: "Level")
                 fetchRequest2.sortDescriptors = [NSSortDescriptor(key: "number", ascending: true)]
                 fetchRequest2.predicate = NSPredicate(format: "page.number == \(num as! Int32)")
                 let levels = try managedContext.fetch(fetchRequest2) as [NSManagedObject]
-                print ("count of all levels in page \(String(describing: num)) is \(pages.count)")
+                print ("count of all levels in page \(String(describing: num)) is \(levels.count)")
                 for l in levels{
-                    print ("completed \(String(describing: l.value(forKeyPath: "completed")))")
-                    print ("number \(String(describing: l.value(forKeyPath: "number")))")
-                    print ("failedAttempts \(String(describing: l.value(forKeyPath: "failedAttempts")))")
+                    print ("---- completed \(l.value(forKeyPath: "completed") as! Int32)")
+                    print ("---- level number \(l.value(forKeyPath: "number") as! Int32))")
+                    print ("---- failedAttempts \(l.value(forKeyPath: "failedAttempts") as! Int32))")
                 }
             }
         } catch let error as NSError {
@@ -567,6 +589,21 @@ class LevelsData{
     
     func Combo1(){
         let array = [
+            LevelData(
+                gridX: 3, gridY: 3, delayTime: 0.5,
+                solutionCoords:[(0,2),(0,1),(0,0),(1,0),(1,1),(1,2),(2,2),(2,1),(2,0)],
+                modifications: nil
+            ),
+            LevelData(
+                gridX: 3, gridY: 3, delayTime: 0.5,
+                solutionCoords:[(0,2),(0,1),(0,0),(1,0),(1,1),(1,2),(2,2),(2,1),(2,0)],
+                modifications: nil
+            ),
+            LevelData(
+                gridX: 3, gridY: 3, delayTime: 0.5,
+                solutionCoords:[(0,2),(0,1),(0,0),(1,0),(1,1),(1,2),(2,2),(2,1),(2,0)],
+                modifications: nil
+            ),
             LevelData(
                 gridX: 3, gridY: 3, delayTime: 0.5,
                 solutionCoords:[(0,2),(0,1),(0,0),(1,0),(1,1),(1,2),(2,2),(2,1),(2,0)],

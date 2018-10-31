@@ -134,6 +134,7 @@ class CustomTableViewCell: UITableViewCell {
     
     private func addLevels(){
         let nextLevelToComplete = LevelsData.shared.nextLevelToCompleteOnPage(page: indexPath.row)
+        print ("------------------- \(nextLevelToComplete)")
         let levelCount = LevelsData.shared.getNumLevelsOnPage(page: indexPath.row)
         let n = GameStyle.shared.numLevelsOnLine
         for i in 0...levelCount/n{

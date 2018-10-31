@@ -84,16 +84,16 @@ class EndGameScene: SKScene {
     
     func firstTryBonus()-> SKNode{
         let firstTryNode = SKNode()
-        let label1 = Helper.createGenericLabel("First Try!", fontsize: GameStyle.shared.TextBoxFontSize - 15)
+        let label1 = Helper.createGenericLabel("First Try!", fontsize: screenWidth*0.1)
         label1.verticalAlignmentMode = .baseline
         label1.position.y = 5
         firstTryNode.addChild(label1)
         
         let starLabel1 = SKLabelNode(text: "\u{2605}")
         starLabel1.fontColor = UIColor.init(red: 0.8, green: 0.8, blue: 0.0, alpha: 1.0)
-        starLabel1.fontSize = GameStyle.shared.SubHeaderFontSize
+        starLabel1.fontSize = screenWidth*0.1
         starLabel1.horizontalAlignmentMode = .center
-        starLabel1.position = CGPoint(x: label1.frame.width/2 + 10 + starLabel1.frame.width/2, y: 5)
+        starLabel1.position = CGPoint(x: label1.frame.width/2 + screenWidth*0.01 + starLabel1.frame.width/2, y: 5)
         
         let starLabel2 = starLabel1.copy() as! SKLabelNode
         starLabel2.position.x = -starLabel2.position.x - 10
@@ -105,10 +105,10 @@ class EndGameScene: SKScene {
     
     func levelUnlockedBonus() -> SKNode{
         let bonusesNode = SKNode()
-        let unlockedLabel1 = Helper.createGenericLabel("Next Level", fontsize: GameStyle.shared.TextBoxFontSize - 15)
+        let unlockedLabel1 = Helper.createGenericLabel("Next Level", fontsize: screenWidth*0.1)
         unlockedLabel1.verticalAlignmentMode = .baseline
         unlockedLabel1.position.y = 5
-        let unlockedLabel2 = Helper.createGenericLabel("Unlocked", fontsize: GameStyle.shared.TextBoxFontSize - 25)
+        let unlockedLabel2 = Helper.createGenericLabel("Unlocked", fontsize: screenWidth*0.086)
         unlockedLabel2.verticalAlignmentMode = .top
         bonusesNode.addChild(unlockedLabel1)
         bonusesNode.addChild(unlockedLabel2)
@@ -126,8 +126,8 @@ class EndGameScene: SKScene {
         return bonusesNode
     }
     func addButtons(text: String){
-        let font = GameStyle.shared.TextBoxFontSize
-        let buffers: (CGFloat,CGFloat) = (40.0,20.0)
+        let font = screenWidth*0.11 //GameStyle.shared.TextBoxFontSize
+        let buffers: (CGFloat,CGFloat) = (screenWidth*0.05,screenWidth*0.025)
 
         repeatOrNextButton = TextBoxButton(x: 0, y: frame.height/8, text: text, fontsize:font, buffers: buffers)
         repeatOrNextButton?.name = "repeat"
@@ -158,7 +158,7 @@ class EndGameScene: SKScene {
         return (successMessage: successMessage, variableText: variableText )
     }
     func addSuccessMessage(text: String){
-        successMessageNode = Helper.createGenericLabel(text, fontsize: GameStyle.shared.LargeTextBoxFontSize)
+        successMessageNode = Helper.createGenericLabel(text, fontsize: 0.19*screenWidth)
         successMessageNode.position = CGPoint(x: frame.midX, y: frame.height*7/8)
         //successMessageNode.text = text
         self.addChild(successMessageNode)

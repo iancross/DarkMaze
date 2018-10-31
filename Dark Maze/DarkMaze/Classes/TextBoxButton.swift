@@ -25,7 +25,7 @@ class TextBoxButton: SKNode{
         
         
         outline = SKShapeNode(rectOf: CGSize(width: labelNode.frame.width + buffers.x, height: labelNode.frame.height + buffers.y))
-        outline.lineWidth = fontsize/12.0
+        outline.lineWidth = 2 + fontsize/70.0
 //        outline.position = CGPoint(x: x, y: y)
 //        labelNode.position = CGPoint(x: x, y: y)
         super.init()

@@ -17,7 +17,7 @@ class MenuScene: SKScene {
     var blockPoints = [CGPoint]()
     var tileLoop = 20
     var currentTile: GridTile?
-    var blocksize: CGFloat = 100
+    var blocksize: CGFloat = screenWidth/7.0
     
     override init(size: CGSize) {
         super.init(size: size)
@@ -44,13 +44,13 @@ class MenuScene: SKScene {
         darkMaze = SKLabelNode(text: "Dark Maze")
         darkMaze!.position = CGPoint(x: frame.midX, y: frame.midY)
         darkMaze!.fontName = GameStyle.shared.mainFontString
-        darkMaze!.fontSize = GameStyle.shared.TextBoxFontSize
+        darkMaze!.fontSize = screenWidth*0.12
         addChild(darkMaze!)
         
         tapToBegin = SKLabelNode(text: "Tap to begin")
-        tapToBegin!.position = CGPoint(x: frame.midX, y: frame.midY - 100)
+        tapToBegin!.position = CGPoint(x: frame.midX, y: frame.midY - darkMaze!.frame.height)
         tapToBegin!.fontName = GameStyle.shared.mainFontString
-        tapToBegin!.fontSize = GameStyle.shared.SmallTextBoxFontSize
+        tapToBegin!.fontSize = screenWidth*0.05
         addChild(tapToBegin!)
     }
     
@@ -90,7 +90,7 @@ class MenuScene: SKScene {
         let newX = arc4random_uniform(UInt32(self.frame.width))
         let newY = arc4random_uniform(UInt32(self.frame.height))
         let startingPoint = CGPoint(x: CGFloat(newX), y: CGFloat(newY))
-        currentTile = GridTile(coord: (0,0), width: 50.0, height: 50.0)
+        currentTile = GridTile(coord: (0,0), width: blocksize, height: blocksize)
         currentTile?.position = startingPoint
         blockPoints.append(CGPoint(x: (currentTile?.frame.midX)!, y: (currentTile?.frame.midY)!)) //first is the prev
         blockPoints.append(CGPoint(x: (currentTile?.frame.midX)!, y: (currentTile?.frame.midY)!)) //second is the current
