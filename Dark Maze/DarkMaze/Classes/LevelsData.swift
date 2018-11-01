@@ -14,7 +14,7 @@ import CoreData
 //gridsize - self explanatory
 //delayTime - time between tiles showing up (0 means they all show up at the same time)
 //levelCompleted: shows us what to color the level in level select
-let REQUIRED_TO_UNLOCK = 1
+let REQUIRED_TO_UNLOCK = 2
 
 struct LevelData {
     var gridX: Int
@@ -45,11 +45,25 @@ class LevelsData{
         //levelGroups = [(category: String, levels: [LevelData])]()
         //SplitPath()
         Normal()
-        ThisLooksFamiliar() //go back over itself
         Jump()
+        ThisLooksFamiliar() //go back over itself
         MeetInTheMiddle()
         Combo1()
         MultiJump()
+        _BryanTest()
+        _BryanTest()
+        _BryanTest()
+        _BryanTest()
+        _BryanTest()
+        _BryanTest()
+        _BryanTest()
+        _BryanTest()
+        _BryanTest()
+        _BryanTest()
+        _BryanTest()
+        _BryanTest()
+        _BryanTest()
+        _BryanTest()
 
         //disappearing trail()
         //Flip()
@@ -72,28 +86,27 @@ class LevelsData{
     private func initCoreData(){
         
         //testing
-        deleteCoreData()
+        //deleteCoreData()
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             print("something bad app delegate ------------------------------------")
             return
         }
         if !doesDataExist(){
-            print ("init core data")
             let managedContext = appDelegate.persistentContainer.viewContext
             let pageEntity = NSEntityDescription.entity(forEntityName: "Page",in: managedContext)!
             let levelEntity = NSEntityDescription.entity(forEntityName: "Level",in: managedContext)!
             for i in 0...levelGroups.count-1{
                 let page = Page(entity: pageEntity, insertInto: managedContext)
-//                if i == 0{
-//                    page.unlocked = true
-//                }
-//                else{
-//                    page.unlocked = false
-//                }
+                if i == 0{
+                    page.unlocked = true
+                }
+                else{
+                    page.unlocked = false
+                }
                 
                 //testing
-                page.unlocked = true
+                //page.unlocked = true
                 
                 page.number = Int32(i)
                 for (j,levelData) in levelGroups[i].levels.enumerated(){
@@ -107,7 +120,7 @@ class LevelsData{
     //                    level.completed = false
     //                }
     //                //end test
-                    level.completed = true
+                    level.completed = false
                     level.number = Int32(j)
                     level.page = page
                     level.failedAttempts = 0
@@ -119,7 +132,6 @@ class LevelsData{
                 print("Could not save. \(error), \(error.userInfo)")
             }
         }
-        printAllLevelsUtil()
     }
     
     func doesDataExist()->Bool{
@@ -130,7 +142,6 @@ class LevelsData{
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Page")
         do {
             let pages = try managedContext.fetch(fetchRequest)
-            //print ("------------------------------- \(pages)")
             return pages.count > 0
             
         } catch let error as NSError {
@@ -205,8 +216,6 @@ class LevelsData{
     //returns the next level to complete within a page
     //Updated
     func nextLevelToCompleteOnPage(page: Int) -> Int{
-        printAllLevelsUtil()
-        
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return 0
         }
@@ -216,7 +225,6 @@ class LevelsData{
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "number", ascending: true)]
         do {
             if let levels = try managedContext.fetch(fetchRequest) as? [Level]{
-                print ("made it here")
                 for level in levels{
                     if !level.completed{
                         return Int(level.number)
@@ -275,7 +283,6 @@ class LevelsData{
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
         }
-        printAllLevelsUtil()
     }
     
     func selectedLevelFirstAttemptSuccess()-> Bool{
@@ -519,17 +526,54 @@ class LevelsData{
 //    }
     
     private func MeetInTheMiddle(){
-        let array = [LevelData(
-            gridX: 5, gridY: 5, delayTime: 0.5,
-            solutionCoords:
-            [(1,0),(1,1),(1,2),(1,3),(1,4)],
-             modifications: [(.meetInTheMiddle, nil)]
+        let array = [
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(0,0),(0,1),(0,2),(0,3),(1,3),(1,2),(2,2),(2,3),(3,3),(3,2),(3,1),(3,0)],
+                modifications: [(.meetInTheMiddle, nil)]
             ),
-             LevelData(
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(4,2),(3,2),(2,2),(2,1),(2,0),(1,0),(0,0),(0,1),(0,2),(0,3),(0,4)],
+                modifications: [(.meetInTheMiddle, nil)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(4,4),(3,4),(3,3),(2,3),(2,2),(3,2),(4,2),(4,1),(4,0),(3,0),(2,0),(1,0),(0,0)],
+                modifications: [(.meetInTheMiddle, nil)]
+            ),
+            LevelData(
                 gridX: 5, gridY: 6, delayTime: 0.5,
                 solutionCoords:
-                [(1,0),(1,1),(1,2),(1,3),(1,4),(1,5)],
-                 modifications: [(.meetInTheMiddle, nil)]
+                [(4,5),(4,4),(3,4),(3,3),(3,2),(4,2),(4,1),(3,1),(2,1),(1,1),(1,2),(0,2),(0,3),(0,4),(1,4),(1,3),(2,3),(2,2),(2,1),(2,0)],
+                modifications: [(.meetInTheMiddle, nil)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 6, delayTime: 0.5,
+                solutionCoords:
+                [(4,5),(4,4),(4,3),(4,2),(3,2),(2,2),(1,2),(1,3),(2,3),(2,2),(2,1),(1,1),(0,1),(0,2),(0,3),(0,4),(1,4),(2,4),(3,4),(3,3),(3,2),(3,1),(4,1)],
+                modifications: [(.meetInTheMiddle, nil)]
+            ),
+            LevelData(
+                gridX: 6, gridY: 6, delayTime: 0.5,
+                solutionCoords:
+                [(0,2),(1,2),(2,2),(3,2),(4,2),(4,3),(3,3),(2,3),(2,2),(2,1),(3,1),(4,1),(4,0),(3,0),(2,0),(1,0),(0,0),(0,1),(0,2),(0,3),(0,4),(0,5),(1,5),(2,5),(3,5),(4,5),(4,4),(4,3),(5,3)],
+                modifications: [(.meetInTheMiddle, nil)]
+            ),
+            LevelData(
+                gridX: 6, gridY: 8, delayTime: 0.5,
+                solutionCoords:
+                [(0,0),(0,1),(0,2),(0,3),(0,4),(1,4),(1,4),(2,4),(3,4),(3,5),(2,5),(1,5),(0,5),(0,6),(0,7),(1,7),(2,7),(2,6),(3,6),(3,5),(4,5),(4,4),(5,4),(5,3),(4,3),(4,2),(3,2),(3,1),(2,1),(2,0),(1,0)],
+                modifications: [(.meetInTheMiddle, nil)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 10, delayTime: 0.5,
+                solutionCoords:
+                [(0,9),(0,8),(0,7),(1,7),(2,7),(3,7),(3,6),(4,6),(4,5),(4,4),(3,4),(2,4),(1,4),(0,4),(0,5),(1,5),(2,5),(2,4),(2,3),(2,2),(3,2),(3,1),(2,1),(1,1),(0,1),(0,2),(0,3),(1,3),(2,3),(3,3),(4,3),(4,2)],
+                modifications: [(.meetInTheMiddle, nil)]
             )]
         levelGroups.append ((category: "Meet In The Middle", array))
     }
@@ -661,12 +705,21 @@ class LevelsData{
         levelGroups.append ((category: "Huge", array))
     }
     
-    private func _BrokenTest(){
+    private func _BryanTest(){
         let array = [LevelData(
             gridX: 5, gridY: 5, delayTime: 0.3,
             solutionCoords:
             [(1,1),(1,2),(2,2),(2,1),(3,1),(3,2),(3,3),(3,4),(2,4),(2,3),(1,3),(1,4),(0,4),(0,3),(0,2),(0,1)],
              modifications: [(.flip, nil)]
+            )]
+        levelGroups.append ((category: "Bryan is a dangus", array))
+    }
+    private func _BrokenTest(){
+        let array = [LevelData(
+            gridX: 5, gridY: 5, delayTime: 0.3,
+            solutionCoords:
+            [(1,1),(1,2),(2,2),(2,1),(3,1),(3,2),(3,3),(3,4),(2,4),(2,3),(1,3),(1,4),(0,4),(0,3),(0,2),(0,1)],
+            modifications: [(.flip, nil)]
             )]
         levelGroups.append ((category: "broken", array))
     }

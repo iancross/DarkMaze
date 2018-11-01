@@ -38,7 +38,8 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         let i = IndexPath(item:12, section: 0)
         lastContentOffset = CGPoint.zero
         addBannerViewToView()
-        
+        customTableView.decelerationRate = UIScrollViewDecelerationRateFast
+
         //customTableView.scrollToRow(at: i, at: .middle, animated: false)
         self.customTableView.rowHeight = defaultHeight;
         super.viewDidLoad()

@@ -253,8 +253,12 @@ class Level1Scene: SKScene {
              SKAction.fadeOut(withDuration: 2)
             ])
         t.tile.run(actionList){
+            
             if lastTile{
+                t.reInit()
+                t.restoreOutline()
                 self.drawGridLines()
+                print (t.gridCoord)
                 //marking the first tile as available
                 self.beginGame()
                 self.gameActive = true
@@ -401,7 +405,7 @@ class Level1Scene: SKScene {
             for tile in row{
                 if tile.pointIsWithin(point){
                     startArrow.removeAllActions()
-//
+
 //                    print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
 //                    tile.tile.fillColor = UIColor.green
 //                    return //comment out to get grid coords for levels
