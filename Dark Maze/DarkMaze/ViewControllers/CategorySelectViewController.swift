@@ -41,9 +41,8 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         addBannerViewToView()
         customTableView.decelerationRate = UIScrollViewDecelerationRateFast
         let selected = IndexPath(row: getTopLevelToScrollTo(), section: 0)
-        print("selectedLevel is \(selected)")
+        //print("selectedLevel is \(selected)")
         
-        customTableView.scrollToRow(at: selected, at: .middle, animated: true)
         self.customTableView.rowHeight = defaultHeight;
         super.viewDidLoad()
         view.backgroundColor = UIColor.black
@@ -54,6 +53,12 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
                                               attribute: .top,
                                               multiplier: 1,
                                               constant: 0))
+        let originalSelectedIndexPath = IndexPath(row: LevelsData.shared.selectedLevel.page, section: 0)
+        //print ("selectedIndexPath is \(selectedIndexPath)")
+        selectedRowIndex = originalSelectedIndexPath
+        customTableView.selectRow(at: selectedRowIndex, animated: true, scrollPosition: .none)
+        customTableView.scrollToRow(at: IndexPath(row: getTopLevelToScrollTo(), section: 0), at: .top, animated: true)
+        //customTableView.scrollToNearestSelectedRow(at: .middle, animated: true)
     }
     
     func getTopLevelToScrollTo()->Int{
@@ -64,7 +69,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
 //        }
 //        return 0
         if LevelsData.shared.selectedLevel.page > 0{
-            return LevelsData.shared.selectedLevel.page
+            return LevelsData.shared.selectedLevel.page - 1
         }
         return 0
         
@@ -106,6 +111,11 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             
             cell.initCellData(category: cellCategory, progress: progress, outOfTotal: outOfTotal, path: indexPath, origHeight: defaultHeight)
             if isPathUnlocked(path: indexPath){
+//                if LevelsData.shared.selectedLevel.page == indexPath.row && !tableDidLoad{
+//                    cell.initExpandedView()
+//                    cell.expanded = true
+//                    tableDidLoad = true
+//                }
                 if indexPath == selectedRowIndex{
                     cell.initExpandedView()
                     cell.expanded = true
@@ -216,10 +226,11 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         view.addConstraint(NSLayoutConstraint(item: bannerView,
                                               attribute: .bottom,
                                               relatedBy: .equal,
-                                              toItem: view,
+                                              toItem: view.safeAreaLayoutGuide,
                                               attribute: .bottom,
                                               multiplier: 1,
                                               constant: 0))
+        
         view.addConstraint(NSLayoutConstraint(item: bannerView,
                                               attribute: NSLayoutConstraint.Attribute.height,
                                               relatedBy: NSLayoutConstraint.Relation.equal,

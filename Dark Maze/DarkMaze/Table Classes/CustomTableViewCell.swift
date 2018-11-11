@@ -251,8 +251,9 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     func drawProgressLine(){
-        let yBuffer: CGFloat = 4
-        let Circle = SKShapeNode(circleOfRadius: 3 ) // Size of Circle
+        //print("drawing is \()")
+        let yBuffer: CGFloat = drawing!.frame.height/5
+        let Circle = SKShapeNode(circleOfRadius: drawing!.frame.height/14 ) // Size of Circle
 
         // Define start & end point for line
         let startPoint = CGPoint(x: (drawing?.frame.maxX)! * 3.0/4.0 - progressLabelBuffer, y: yBuffer)
@@ -315,7 +316,8 @@ class CustomTableViewCell: UITableViewCell {
         if let scene = drawing?.scene{
             scene.addChild(completion)
             completion.alpha = alpha
-            completion.position = CGPoint(x: scene.frame.width * 7.0/8.0, y: scene.frame.maxY - defaultHeight/2 - progressLabelBuffer)
+            completion.position = CGPoint(x: scene.frame.width * 7.0/8.0, y: scene.frame.maxY - defaultHeight/2)
+                //- progressLabelBuffer)
         }
     }
     
