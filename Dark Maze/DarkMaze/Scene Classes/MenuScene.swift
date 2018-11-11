@@ -19,10 +19,12 @@ class MenuScene: SKScene {
     var currentTile: GridTile?
     var blocksize: CGFloat = screenWidth/7.0
     
+    
     override init(size: CGSize) {
         super.init(size: size)
         backgroundColor = UIColor.black
         anchorPoint = CGPoint(x: 0, y:0)
+        var initializingLevelDataHack = LevelsData.shared.currentLevelSuccess
     }
     
     required init?(coder aDecoder: NSCoder) {

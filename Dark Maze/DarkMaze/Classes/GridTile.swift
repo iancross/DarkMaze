@@ -59,7 +59,7 @@ class GridTile: SKNode{
     }
     
     func reInit(){
-        outline.isHidden = true
+        //outline.isHidden = true
         tile.zPosition = 0
         //tile.removeAllActions()
         tile.fillColor = originColor

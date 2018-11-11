@@ -23,6 +23,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     var lastContentOffset: CGPoint = CGPoint()
     var cellSizeBuffer: CGFloat = 30
     var bannerView = GADBannerView()
+    var tableDidLoad = false
     
     //set when we initially click a row. reinit when that row is finally closed
     var selectedRowIndex: IndexPath? = nil
@@ -39,8 +40,10 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         lastContentOffset = CGPoint.zero
         addBannerViewToView()
         customTableView.decelerationRate = UIScrollViewDecelerationRateFast
-
-        //customTableView.scrollToRow(at: i, at: .middle, animated: false)
+        let selected = IndexPath(row: getTopLevelToScrollTo(), section: 0)
+        print("selectedLevel is \(selected)")
+        
+        customTableView.scrollToRow(at: selected, at: .middle, animated: true)
         self.customTableView.rowHeight = defaultHeight;
         super.viewDidLoad()
         view.backgroundColor = UIColor.black
@@ -53,6 +56,19 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
                                               constant: 0))
     }
     
+    func getTopLevelToScrollTo()->Int{
+//        if let index = selectedRowIndex{
+//            if index.row > 0{
+//                return index.row - 1
+//            }
+//        }
+//        return 0
+        if LevelsData.shared.selectedLevel.page > 0{
+            return LevelsData.shared.selectedLevel.page
+        }
+        return 0
+        
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

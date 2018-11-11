@@ -156,7 +156,6 @@ class Level1Scene: SKScene {
     //the game begins.
     func drawSolution(){
         addSkipButton()
-        
         if let mods = Level!.modifications{
             for (mod, _) in mods{
                 switch mod {
@@ -178,7 +177,7 @@ class Level1Scene: SKScene {
     
     func addSkipButton(){
         let bottomOfGridY = screenHeight/2.0 - (gridNode.calculateAccumulatedFrame().height/2.0)
-        let y = bottomOfGridY - bottomOfGridY/3.0
+        let y = bottomOfGridY - bottomOfGridY/2.0
         skipButton = TextBoxButton(x: screenWidth/4.0, y: y, text: "Skip", fontsize: blocksize/3.0, buffers: (blocksize/5.0,blocksize/5.0))
         self.addChild(skipButton!)
     }
@@ -186,7 +185,7 @@ class Level1Scene: SKScene {
     func drawNormal(){
         for (index,coord) in Level!.solutionCoords.enumerated(){
             let tile = tile2DArray[coord.y][coord.x]
-            runDrawingActions(t: tile,
+            runDrawingActions(tiles: [tile],
                 lastTile: (index == self.Level!.solutionCoords.count-1),
                 delay: Level!.delayTime * Double(index)
             )
@@ -210,59 +209,59 @@ class Level1Scene: SKScene {
             let coord2 = Level!.solutionCoords[right+i]
             let tile1 = tile2DArray[coord1.y][coord1.x]
             let tile2 = tile2DArray[coord2.y][coord2.x]
-            runDrawingActions(t: tile1, lastTile: (left - i == 0), delay: Level!.delayTime * Double(i))
-            runDrawingActions(t: tile2, lastTile: false, delay: Level!.delayTime * Double(i))
+            let tiles = [tile1, tile2]
+            runDrawingActions(tiles: tiles, lastTile: (left - i == 0), delay: Level!.delayTime * Double(i))
         }
     }
     
-    func drawSplitPath(splitPaths: [[(x: Int, y: Int)]] ){
-        var splitPathsStarted = false
-        var splitPathIndex = 0
-        for (index,coord) in Level!.solutionCoords.enumerated(){
-            let tile = tile2DArray[coord.y][coord.x]
-            runDrawingActions(t: tile,
-                              lastTile: (index == self.Level!.solutionCoords.count-1),
-                              delay: Level!.delayTime * Double(index)
-            )
-            
-            if !splitPathsStarted{
-                if tupleContains(a: coord, v: splitPaths[0][0]){
-                    splitPathsStarted = true
-                }
-            }
-            if splitPathsStarted{
-                for path in splitPaths{
-                    if splitPathIndex < path.count{
-                        let pathCoord = path[splitPathIndex]
-                        let splitTile = tile2DArray[pathCoord.y][pathCoord.x]
-                        runDrawingActions(t: splitTile,
-                            lastTile: (index == self.Level!.solutionCoords.count-1),
-                            delay: Level!.delayTime * Double(index)
-                        )
+//    func drawSplitPath(splitPaths: [[(x: Int, y: Int)]] ){
+//        var splitPathsStarted = false
+//        var splitPathIndex = 0
+//        for (index,coord) in Level!.solutionCoords.enumerated(){
+//            let tile = tile2DArray[coord.y][coord.x]
+//            runDrawingActions(t: tile,
+//                              lastTile: (index == self.Level!.solutionCoords.count-1),
+//                              delay: Level!.delayTime * Double(index)
+//            )
+//
+//            if !splitPathsStarted{
+//                if tupleContains(a: coord, v: splitPaths[0][0]){
+//                    splitPathsStarted = true
+//                }
+//            }
+//            if splitPathsStarted{
+//                for path in splitPaths{
+//                    if splitPathIndex < path.count{
+//                        let pathCoord = path[splitPathIndex]
+//                        let splitTile = tile2DArray[pathCoord.y][pathCoord.x]
+//                        runDrawingActions(t: splitTile,
+//                            lastTile: (index == self.Level!.solutionCoords.count-1),
+//                            delay: Level!.delayTime * Double(index)
+//                        )
+//                    }
+//                }
+//                splitPathIndex += 1
+//            }
+//        }
+//    }
+    
+    func runDrawingActions(tiles: [GridTile], lastTile: Bool, delay: Double){
+        for (index,t) in tiles.enumerated(){
+            let actionList = SKAction.sequence(
+                [SKAction.wait(forDuration: delay),
+                 SKAction.run { t.switchToWhite() },
+                 SKAction.fadeOut(withDuration: 2)
+                ])
+            t.tile.run(actionList){
+                if lastTile && index == tiles.count-1{
+                    t.tile.run(SKAction.wait(forDuration: 0.1)){
+                        self.drawGridLines()
+                        //marking the first tile as available
+                        self.beginGame()
+                        self.gameActive = true
+                        self.skipButton?.hide()
                     }
                 }
-                splitPathIndex += 1
-            }
-        }
-    }
-    
-    func runDrawingActions(t: GridTile, lastTile: Bool, delay: Double){
-        let actionList = SKAction.sequence(
-            [SKAction.wait(forDuration: delay),
-             SKAction.run { t.switchToWhite() },
-             SKAction.fadeOut(withDuration: 2)
-            ])
-        t.tile.run(actionList){
-            
-            if lastTile{
-                t.reInit()
-                t.restoreOutline()
-                self.drawGridLines()
-                print (t.gridCoord)
-                //marking the first tile as available
-                self.beginGame()
-                self.gameActive = true
-                self.skipButton?.hide()
             }
         }
     }
@@ -292,16 +291,27 @@ class Level1Scene: SKScene {
 /*---------------------- Grid Modification ----------------------*/
     func modifyGrid(){
         if let mods = Level!.modifications{
-            for (mod, _) in mods{
+            for (mod, modData) in mods{
                 switch mod {
                 case .flip:
                     flipGrid()
+                case .spin:
+                    if let r = modData as? CGFloat{
+                        spinGrid(rotation: r)
+                    }
                 case .splitPath:
                     print ("splitPath")
                 default:
                     print("fuck")
                 }
             }
+        }
+    }
+    func spinGrid(rotation: CGFloat){
+        let sequence = SKAction.rotate(byAngle: rotation, duration: 0.4)
+             
+        gridNode.run(sequence){
+            self.gameActive = true
         }
     }
     func flipGrid(){
@@ -405,7 +415,7 @@ class Level1Scene: SKScene {
             for tile in row{
                 if tile.pointIsWithin(point){
                     startArrow.removeAllActions()
-
+//
 //                    print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
 //                    tile.tile.fillColor = UIColor.green
 //                    return //comment out to get grid coords for levels
@@ -616,7 +626,7 @@ class Level1Scene: SKScene {
         //we are dealing with the first coordinate
         
         //BUG HERE - if the first coord is actually later in the path, we don't draw a path here. Like if the first coord is repeated later
-        if tupleContains(a: currTile.gridCoord, v: (Level?.solutionCoords[0])!){
+        if touchedTiles == 1{//tupleContains(a: currTile.gridCoord, v: (Level?.solutionCoords[0])!){
             print ("first coord")
             let point = CGPoint(x: currTile.position.x + startPathCoord.x * blocksize * 2.0/3.0, y: currTile.position.y + startPathCoord.y * blocksize * 2.0/3.0)
             path = connectPoints(points: [point, currTile.position])
