@@ -437,6 +437,18 @@ class LevelsData{
     private func Jump(){
         let array = [
             LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(0,0),(1,0),(2,0),(3,0),(3,1),(1,2),(1,3),(2,3),(3,3)],
+                modifications: nil
+            ),
+            LevelData(
+                gridX: 4, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(3,0),(2,0),(1,0),(0,0),(0,1),(1,1),(2,2),(1,2),(1,3),(2,3),(3,3)],
+                modifications: nil
+            ),
+            LevelData(
                 gridX: 5, gridY: 5, delayTime: 0.5,
                 solutionCoords:
                 [(4,3),(3,3),(3,4),(2,4),(1,4),(1,2),(1,1),(1,0)],
@@ -455,29 +467,17 @@ class LevelsData{
                  modifications: nil
             ),
             LevelData(
-                gridX: 5, gridY: 5, delayTime: 0.5,
+                gridX: 5, gridY: 6, delayTime: 0.5,
                 solutionCoords:
                 [(0,4),(0,3),(1,3),(2,3),(4,1),(3,1),(3,0),(2,0),(1,0),(1,1),(0,1)],
                  modifications: nil
             ),
             LevelData(
-                gridX: 5, gridY: 6, delayTime: 0.5,
+                gridX: 6, gridY: 6, delayTime: 0.5,
                 solutionCoords:
                 [(4,5),(4,4),(3,4),(2,4),(1,4),(1,3),(1,2),(1,1),(1,0),(0,0),(3,2),(3,1),(3,0),(4,0)],
                  modifications: nil
             ),
-//            LevelData(
-//                gridX: 6, gridY: 6, delayTime: 0.5,
-//                solutionCoords:
-//                [(4,0),(4,1),(1,4),(1,3),(0,3),(0,4),(0,5),(1,5),(2,5),(2,4),(2,3),(3,3),(3,4),(3,5),(4,5),(5,5),(5,4),(5,3),(5,2),(4,2),(3,2),(3,1),(3,0)],
-//                 modifications: nil
-//            ),
-//            LevelData(
-//                gridX: 6, gridY: 6, delayTime: 0.5,
-//                solutionCoords:
-//                [(5,5),(4,5),(3,5),(2,5),(2,4),(1,4),(1,3),(2,3),(3,3),(4,3),(5,3),(5,2),(5,1),(4,1),(4,0),(3,0),(3,1),(2,1),(1,1),(0,1),(4,2),(3,2),(2,2),(1,2),(0,2)],
-//                 modifications: nil
-//            ),
             LevelData(
                 gridX: 6, gridY: 7, delayTime: 0.5,
                 solutionCoords:
