@@ -379,23 +379,23 @@ class Level1Scene: SKScene {
         }
     }
     
-//    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        let point = touches.first
-//        let positionInScene = point?.location(in: gridNode)
-//        if gameActive {
-//            handleTouch(positionInScene!)
-//        }
-//        else{
-//            if !countdownActive{
-//                if (skipButton?.within(point: (point?.location(in: self))!))!{
-//                    skipButton!.tappedState()
-//                }
-//                else{
-//                    skipButton!.originalState()
-//                }
-//            }
-//        }
-//    }
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let point = touches.first
+        let positionInScene = point?.location(in: gridNode)
+        if gameActive {
+            handleTouch(positionInScene!)
+        }
+        else{
+            if !countdownActive{
+                if (skipButton?.within(point: (point?.location(in: self))!))!{
+                    skipButton!.tappedState()
+                }
+                else{
+                    skipButton!.originalState()
+                }
+            }
+        }
+    }
     
     func skip(touch: CGPoint){
         for col in tile2DArray {
@@ -416,9 +416,9 @@ class Level1Scene: SKScene {
                 if tile.pointIsWithin(point){
                     startArrow.removeAllActions()
 //
-                    print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
-                    tile.tile.fillColor = UIColor.green
-                    return //comment out to get grid coords for levels
+//                    print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
+//                    tile.tile.fillColor = UIColor.green
+//                    return //comment out to get grid coords for levels
 
                     lastTouchedTile = tile
                     touchTile(tile: lastTouchedTile!, alpha: blockAlphaMin + CGFloat(touchedTiles + 1) * blockAlphaIncrement)
@@ -433,6 +433,7 @@ class Level1Scene: SKScene {
             if successfulTouch{
                 if let gameOver = gameOverSuccessOrFailure(alpha: alpha){
                     if gameOver{
+                        print ("game over condition is true")
                         flipTile(tile: tile, a: alpha)
                     }
                     return
@@ -446,9 +447,11 @@ class Level1Scene: SKScene {
         }
         //if nil was returned, it means we've already highlighted this tile
         else{
+            print ("nil was returned")
             //if the tile is already touched but it's the bridge
             if isTileAdjacentAndUpcoming(tileToTest: tile){
                 if gameOverSuccessOrFailure(alpha: alpha) != nil{
+                    flipTile(tile: tile, a: alpha)
                     return
                 }
                 flipTile(tile: tile, a: alpha)
@@ -616,27 +619,67 @@ class Level1Scene: SKScene {
         }
     }
     
+    func flipTile2(tile: GridTile, a: CGFloat){
+        touchedTiles += 1
+        var flip = SKAction()
+        let duration = 0.16
+        if touchedTiles > 1 {
+            let currCoord = Level!.solutionCoords[touchedTiles - 1]
+            let prevCoord = Level!.solutionCoords[touchedTiles - 2]
+            let xDiff = abs(prevCoord.x - currCoord.x)
+            let yDiff = abs(prevCoord.y - currCoord.y)
+            if xDiff > 0{
+                flip = SKAction.scaleX(to: 0.5, y: 0, duration: duration)
+            }
+            else if yDiff > 0{
+                flip = SKAction.scaleX(to: 0, y: 0.5, duration: duration)
+            }
+        }
+        else{
+            if lastTouchedTile?.gridCoord.x == 0{
+                flip = SKAction.scaleX(to: 0.5, y: 0, duration: duration)
+            }
+            else {
+                flip = SKAction.scaleX(to: 0, y: 0.5, duration: duration)
+            }
+        }
+        let path = self.drawPath(currTile: tile)
+        tile.run(flip) {
+            tile.removeOutline()
+            tile.switchToWhite()
+            tile.setAlpha(alpha: a)
+            self.addJumpIndication(t: tile)
+            tile.run(SKAction.scaleX(to: 0.5, y: 1, duration: duration)){
+                if let p = path {
+                    self.gridNode.addChild(p)   //accounts for the null path, means we have a null jump
+                }
+            }
+        }
+    }
+    
     //We pass in the current tile otherwise we could update touchedtiles a bunch of times
     //Returns either the path to draw or nil (if it's a jump)
     private func drawPath(currTile : GridTile) -> SKShapeNode?{
         if nextTileIsJump(fromTileNumber: touchedTiles - 1){
             return nil
         }
+        print ("touched tiles is \(touchedTiles)")
         var path = SKShapeNode()
         //we are dealing with the first coordinate
         
         //BUG HERE - if the first coord is actually later in the path, we don't draw a path here. Like if the first coord is repeated later
         if touchedTiles == 1{//tupleContains(a: currTile.gridCoord, v: (Level?.solutionCoords[0])!){
             print ("first coord")
-            let point = CGPoint(x: currTile.position.x + startPathCoord.x * blocksize * 2.0/3.0, y: currTile.position.y + startPathCoord.y * blocksize * 2.0/3.0)
+//            let point = CGPoint(x: currTile.position.x + startPathCoord.x * blocksize * 2.0/3.0, y: currTile.position.y + startPathCoord.y * blocksize * 2.0/3.0)
+            let point = CGPoint(x: currTile.position.x + startPathCoord.x * blocksize / 2.0, y: currTile.position.y + startPathCoord.y / 2.0)
             path = connectPoints(points: [point, currTile.position])
         }
         //we are dealing with the last solution coord
-        else if tupleContains(a: currTile.gridCoord, v: (Level?.solutionCoords.last)!){
+        else if touchedTiles == (Level?.solutionCoords.count ?? 0){//tupleContains(a: currTile.gridCoord, v: (Level?.solutionCoords.last)!){
             print ("last")
             let prevCoord = (Level?.solutionCoords[touchedTiles-2])!
             let prevTile = tile2DArray[prevCoord.y][prevCoord.x]
-            let point = CGPoint(x: currTile.position.x + endPathCoord.x * blocksize * 2.0/3.0, y: currTile.position.y + endPathCoord.y * blocksize * 2.0/3.0)
+            let point = CGPoint(x: currTile.position.x + endPathCoord.x * blocksize / 2.0, y: currTile.position.y + endPathCoord.y * blocksize / 2.0)
             path = connectPoints(points: [prevTile.position, currTile.position, point])
         }
         //all the tiles in the middle
@@ -651,6 +694,7 @@ class Level1Scene: SKScene {
 
     
     private func connectPoints(points: [CGPoint]) -> SKShapeNode{
+        //let bridgeLine
         let path = UIBezierPath()
         for i in 0...points.count - 2{
             path.move(to: points[i])
@@ -663,9 +707,60 @@ class Level1Scene: SKScene {
         line.strokeColor = .black
         line.zPosition = 10
         line.name = "Line"
+        
+        
+        
+//        let backgroundLineWidth = blocksize/2
+//        let backgroundLineBuffer = blocksize/4.0 - 0.5
+//        let path2 = UIBezierPath()
+//
+//        for i in 0...points.count - 2{
+//            var a = points[i]
+//            var b = points[i+1]
+//            if a.x < b.x{
+//                a = CGPoint(x: a.x + backgroundLineBuffer, y: a.y)
+//                b = CGPoint(x: b.x - backgroundLineBuffer, y: b.y)
+//            }
+//            else if a.x > b.x{
+//                a = CGPoint(x: a.x - backgroundLineBuffer, y: a.y)
+//                b = CGPoint(x: b.x + backgroundLineBuffer, y: b.y)
+//            }
+//            else{
+//                if a.y < b.y{
+//                    a = CGPoint(x: a.x, y: a.y + backgroundLineBuffer)
+//                    b = CGPoint(x: b.x, y: b.y - backgroundLineBuffer)
+//                }
+//                else{
+//                    a = CGPoint(x: a.x, y: a.y - backgroundLineBuffer)
+//                    b = CGPoint(x: b.x, y: b.y + backgroundLineBuffer)
+//                }
+//            }
+//            path2.move(to: a)
+//            path2.addLine(to: b)
+//        }
+//        let backgroundLine = SKShapeNode()
+//        backgroundLine.lineCap = .square
+//        backgroundLine.path = path2.cgPath
+//        backgroundLine.lineWidth = blocksize/2
+//        backgroundLine.strokeColor = .white
+//        backgroundLine.zPosition = 9
+//        backgroundLine.name = "backgroundLine"
+//        self.gridNode.addChild(backgroundLine)
+//        let circle = SKShapeNode(circleOfRadius: blocksize/4 - 1)
+//        circle.fillColor = .white
+//        circle.position = points[0]
+//        self.gridNode.addChild(circle)
+        
+
         return line
     }
-    
+    private func pointABelowB (a: CGPoint, b: CGPoint) -> Bool{
+        return a.y < b.y
+    }
+    private func pointALeftOfB (a: CGPoint, b: CGPoint) -> Bool{
+        return a.x < b.x
+    }
+            
     // If all the solutions coords are filled (and there wasn't a
     // failure) show the end game success (failure = false). Otherwise,
     // show the end game failure (failure = true)
@@ -729,7 +824,7 @@ class Level1Scene: SKScene {
     //return nil if game not over
     func gameOverSuccessOrFailure(alpha: CGFloat)->Bool?{
         if tupleContains(a: Level!.solutionCoords[touchedTiles], v: (lastTouchedTile?.gridCoord)!){
-            if tupleContains(a: (Level!.solutionCoords.last)!, v: (lastTouchedTile?.gridCoord)!){
+            if tupleContains(a: (Level!.solutionCoords.last)!, v: (lastTouchedTile?.gridCoord)!) && touchedTiles - 1 >= (Level?.solutionCoords.count ?? 0) - 2 {
                 LevelsData.shared.currentLevelSuccess = true
                 self.gameActive = false
                 successHighlightPath()
