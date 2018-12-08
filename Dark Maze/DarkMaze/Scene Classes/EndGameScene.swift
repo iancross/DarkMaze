@@ -5,7 +5,7 @@
 //  Created by crossibc on 1/21/18.
 //  Copyright © 2018 crossibc. All rights reserved.
 //
-
+let YELLOW = UIColor.init(red: 0.8, green: 0.8, blue: 0.0, alpha: 1.0)
 import SpriteKit
 
 class EndGameScene: SKScene {
@@ -90,7 +90,7 @@ class EndGameScene: SKScene {
         firstTryNode.addChild(label1)
         
         let starLabel1 = SKLabelNode(text: "\u{2605}")
-        starLabel1.fontColor = UIColor.init(red: 0.8, green: 0.8, blue: 0.0, alpha: 1.0)
+        starLabel1.fontColor = YELLOW //UIColor.init(red: 0.8, green: 0.8, blue: 0.0, alpha: 1.0)
         starLabel1.fontSize = screenWidth*0.1
         starLabel1.horizontalAlignmentMode = .center
         starLabel1.position = CGPoint(x: label1.frame.width/2 + screenWidth*0.01 + starLabel1.frame.width/2, y: 5)

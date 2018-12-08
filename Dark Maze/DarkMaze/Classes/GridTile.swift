@@ -20,6 +20,7 @@ class GridTile: SKNode{
     let alphaDecrement = 0.005
     var state = TileState.unavailable
     let outline: SKShapeNode
+    var path: SKShapeNode? = nil
     
     enum TileState {
         case touched

@@ -45,6 +45,7 @@ class Level1Scene: SKScene {
     var currOrientationIndex: Int = 0
     var startPathCoord: (x: CGFloat, y: CGFloat) = (x: 0, y: 0)
     var endPathCoord: (x: CGFloat, y: CGFloat) = (x: 0, y: 0)
+    var pathLines: [SKShapeNode] = []
     
     override init(size: CGSize) {
         super.init(size: size)
@@ -132,7 +133,6 @@ class Level1Scene: SKScene {
     private func initializeGrid(){
         blocksize = max(self.frame.maxX / (CGFloat(Level!.gridX) + blockBuffer),
                             self.frame.maxX / (CGFloat(Level!.gridY) + blockBuffer))
-        print ("blocksize \(blocksize)")
         let botOfGridY =  -CGFloat(Level!.gridY) / 2.0 * blocksize
         let leftOfGridX = -((CGFloat(Level!.gridX) / 2.0) * blocksize)
         
@@ -433,12 +433,11 @@ class Level1Scene: SKScene {
             if successfulTouch{
                 if let gameOver = gameOverSuccessOrFailure(alpha: alpha){
                     if gameOver{
-                        print ("game over condition is true")
-                        flipTile(tile: tile, a: alpha, repeatTile: false)
+                        flipTile(tile: tile, a: alpha, repeatTile: false, highlightPathAfterFlip: true)
                     }
                     return
                 }
-                flipTile(tile: tile, a: alpha, repeatTile: false)
+                flipTile(tile: tile, a: alpha, repeatTile: false, highlightPathAfterFlip: false)
                 updateGridState()
             }
             else{
@@ -451,10 +450,10 @@ class Level1Scene: SKScene {
             //if the tile is already touched but it's the bridge
             if isTileAdjacentAndUpcoming(tileToTest: tile){
                 if gameOverSuccessOrFailure(alpha: alpha) != nil{
-                    flipTile(tile: tile, a: alpha, repeatTile: true)
+                    flipTile(tile: tile, a: alpha, repeatTile: true, highlightPathAfterFlip: true)
                     return
                 }
-                flipTile(tile: tile, a: alpha, repeatTile: true)
+                flipTile(tile: tile, a: alpha, repeatTile: true, highlightPathAfterFlip: false)
                 updateGridState()
             }
         }
@@ -581,7 +580,7 @@ class Level1Scene: SKScene {
         }
     }
     
-    func flipTile(tile: GridTile, a: CGFloat, repeatTile: Bool){
+    func flipTile(tile: GridTile, a: CGFloat, repeatTile: Bool, highlightPathAfterFlip: Bool){
         touchedTiles += 1
         var flip = SKAction()
         let duration = 0.16
@@ -607,15 +606,20 @@ class Level1Scene: SKScene {
         }
         let path = self.drawPath(currTile: tile, repeatTile: repeatTile, alpha: alpha)
         tile.run(flip) {
-            if !repeatTile{
+            //if we aren't passing over a previously flipped tile
+            //if !repeatTile{
                 tile.removeOutline()
                 tile.switchToWhite()
                 tile.setAlpha(alpha: a)
                 self.addJumpIndication(t: tile)
-            }
+            //}
             tile.run(SKAction.scaleX(to: 1, y: 1, duration: duration)){
                 if let p = path {
+                    tile.path = p
                     self.gridNode.addChild(p)   //accounts for the null path, means we have a null jump
+                }
+                if highlightPathAfterFlip {
+                    self.successHighlightPath()
                 }
             }
         }
@@ -628,12 +632,11 @@ class Level1Scene: SKScene {
         if nextTileIsJump(fromTileNumber: touchedTiles - 1){
             return nil
         }
-        print ("touched tiles is \(touchedTiles)")
         var path = SKShapeNode()
         //we are dealing with the first coordinate
         if touchedTiles == 1{//tupleContains(a: currTile.gridCoord, v: (Level?.solutionCoords[0])!){
             print ("first coord")
-            let point = CGPoint(x: currTile.position.x + startPathCoord.x * blocksize / 2.0, y: currTile.position.y + startPathCoord.y / 2.0)
+            let point = CGPoint(x: currTile.position.x + startPathCoord.x * blocksize / 2.0, y: currTile.position.y + startPathCoord.y * blocksize / 2.0)
             path = connectPoints(points: [point, currTile.position], repeatTile: repeatTile, alpha: alpha)
         }
         //we are dealing with the last solution coord
@@ -651,6 +654,8 @@ class Level1Scene: SKScene {
             let prevTile = tile2DArray[prevCoord.y][prevCoord.x]
             path = connectPoints(points: [prevTile.position, currTile.position], repeatTile: repeatTile, alpha: alpha)
         }
+        self.pathLines.append(path)
+        print (pathLines.count)
         return path
     }
 
@@ -661,7 +666,7 @@ class Level1Scene: SKScene {
             path.move(to: points[i])
             path.addLine(to: points[i+1])
         }
-        let node = SKNode()
+        _ = SKNode()
         let line = SKShapeNode()
         line.lineCap = .round
         line.path = path.cgPath
@@ -671,53 +676,77 @@ class Level1Scene: SKScene {
         line.name = "Line"
         
         
-        if (repeatTile){
-            let backgroundLineWidth = blocksize/2
-            let backgroundLineBuffer = blocksize/4.0 - 0.5
-            let path2 = UIBezierPath()
-
-            for i in 0...points.count - 2{
-                var a = points[i]
-                var b = points[i+1]
-                if a.x < b.x{
-                    a = CGPoint(x: a.x + backgroundLineBuffer, y: a.y)
-                    b = CGPoint(x: b.x - backgroundLineBuffer, y: b.y)
-                }
-                else if a.x > b.x{
-                    a = CGPoint(x: a.x - backgroundLineBuffer, y: a.y)
-                    b = CGPoint(x: b.x + backgroundLineBuffer, y: b.y)
-                }
-                else{
-                    if a.y < b.y{
-                        a = CGPoint(x: a.x, y: a.y + backgroundLineBuffer)
-                        b = CGPoint(x: b.x, y: b.y - backgroundLineBuffer)
-                    }
-                    else{
-                        a = CGPoint(x: a.x, y: a.y - backgroundLineBuffer)
-                        b = CGPoint(x: b.x, y: b.y + backgroundLineBuffer)
-                    }
-                }
-                path2.move(to: a)
-                path2.addLine(to: b)
-            }
-            let backgroundLine = SKShapeNode()
-            backgroundLine.lineCap = .square
-            backgroundLine.alpha = alpha
-            backgroundLine.path = path2.cgPath
-            backgroundLine.lineWidth = blocksize/2
-            backgroundLine.strokeColor = .white
-            backgroundLine.zPosition = -1
-            backgroundLine.name = "backgroundLine"
-            let circle = SKShapeNode(circleOfRadius: blocksize/4 - 1)
-            circle.alpha = alpha
-            circle.fillColor = .white
-            circle.position = points[0]
-            circle.zPosition = -1
-            
-            line.addChild(backgroundLine)
-            line.addChild(circle)
-        }
+//        if (repeatTile){
+//            let backgroundLineWidth = blocksize/2
+//            let backgroundLineBuffer = blocksize/4.0 + 1
+//            let path2 = UIBezierPath()
+//
+//            for i in 0...points.count - 2{
+//                var a = points[i]
+//                var b = points[i+1]
+//                if a.x < b.x{
+//                    a = CGPoint(x: a.x + backgroundLineBuffer, y: a.y)
+//                    b = CGPoint(x: b.x - backgroundLineBuffer, y: b.y)
+//                }
+//                else if a.x > b.x{
+//                    a = CGPoint(x: a.x - backgroundLineBuffer, y: a.y)
+//                    b = CGPoint(x: b.x + backgroundLineBuffer, y: b.y)
+//                }
+//                else{
+//                    if a.y < b.y{
+//                        a = CGPoint(x: a.x, y: a.y + backgroundLineBuffer)
+//                        b = CGPoint(x: b.x, y: b.y - backgroundLineBuffer)
+//                    }
+//                    else{
+//                        a = CGPoint(x: a.x, y: a.y - backgroundLineBuffer)
+//                        b = CGPoint(x: b.x, y: b.y + backgroundLineBuffer)
+//                    }
+//                }
+//                path2.move(to: b)
+//                if let bL = convertIndexToTile(i: touchedTiles-2)?.path?.childNode(withName: "backgroundLine"){
+//                    print ("previous tile was a repeated one")
+//                    path2.addLine(to: a)
+//                }
+//                else{
+//                    path2.addLine(to: b)
+//                }
+//            }
+//            let backgroundLine = SKShapeNode()
+//            backgroundLine.lineCap = .square
+//            backgroundLine.alpha = alpha
+//            backgroundLine.path = path2.cgPath
+//            backgroundLine.lineWidth = blocksize/2
+//            backgroundLine.strokeColor = .white
+//            backgroundLine.zPosition = -1
+//            backgroundLine.name = "backgroundLine"
+//            let circle = SKShapeNode(circleOfRadius: blocksize/4 - 1)
+//            circle.alpha = alpha
+//            circle.fillColor = .white
+//            circle.position = points[1]
+//            circle.zPosition = -1
+//
+//            line.addChild(backgroundLine)
+//            line.addChild(circle)
+//
+//        }
+        
         return line
+    }
+    private func convertIndexToTile(i: Int)->GridTile?{
+        if i > 0{
+            let coord = Level!.solutionCoords[i]
+            let tile = tile2DArray[coord.y][coord.x]
+            print(tile.gridCoord)
+            return tile
+        }
+        return nil
+    }
+    
+    private func tileIsRepeat(tileNumber: Int) -> Bool{
+        let coord = Level!.solutionCoords[tileNumber]
+        print(coord)
+        let tile = tile2DArray[coord.y][coord.x]
+        return (tile.tile.fillColor != .black)
     }
 
     // If all the solutions coords are filled (and there wasn't a
@@ -786,7 +815,6 @@ class Level1Scene: SKScene {
             if tupleContains(a: (Level!.solutionCoords.last)!, v: (lastTouchedTile?.gridCoord)!) && touchedTiles - 1 >= (Level?.solutionCoords.count ?? 0) - 2 {
                 LevelsData.shared.currentLevelSuccess = true
                 self.gameActive = false
-                successHighlightPath()
                 return true
             }
         }
@@ -809,30 +837,69 @@ class Level1Scene: SKScene {
     }
 
     func successHighlightPath(){
-        let numSolutionBlocks = Double(Level!.solutionCoords.count)
-        for (i,coord) in Level!.solutionCoords.enumerated(){
-            let tile = tile2DArray[coord.y][coord.x]
-            tile.removeAllActions()
-            let sequence = SKAction.sequence(
-                [SKAction.wait(forDuration: Double(i) * 1.5/numSolutionBlocks),
-                SKAction.fadeAlpha(to: tile.alpha + 0.1, duration: 0.2),
-                SKAction.run({
-//                    tile.tile.glowWidth = self.blocksize/8.0
-//                    tile.tile.zPosition += 5
-//                    tile.tile.strokeColor = .white
-                    //tile.outline.alpha = tile.alpha
-                    
-                })
-            ])
-            if i == Level!.solutionCoords.count - 1 {
-                tile.tile.run(SKAction.sequence([sequence,SKAction.wait(forDuration: 1.0)])){
-                    self.endGame(success: true)
+        print("count is \(pathLines.count)")
+        _ = Double(pathLines.count)
+        let sequence = SKAction.sequence(
+            [//SKAction.wait(forDuration: 1.0),
+             SKAction.run({
+                for (_,path) in self.pathLines.enumerated(){
+                    path.strokeColor = YELLOW
+                    path.lineWidth = path.lineWidth + 1
+                    path.glowWidth = 1
                 }
-            }
-            else{
-                tile.tile.run(sequence)
-            }
+             }),
+             SKAction.wait(forDuration: 1.0)
+            ])
+        pathLines[0].run(sequence){
+            self.endGame(success: true)
+
         }
+        
+        
+        
+        //        for (i,path) in pathLines.enumerated(){
+//            let sequence = SKAction.sequence(
+//                [//SKAction.wait(forDuration: Double(i) * 1.5/numSolutionBlocks),
+//                SKAction.wait(forDuration: 1.0),
+//                 SKAction.run({
+//                    path.strokeColor = YELLOW
+//                 })
+//                ])
+//            if i >= self.pathLines.count - 1{
+//                //path.run(SKAction.sequence([sequence,SKAction.wait(forDuration: 1.0)])){
+//                path.run(sequence){
+//                    self.endGame(success: true)
+//                }
+//            }
+//            else{
+//                path.run(sequence)
+//            }
+//        }
+//        for (i,coord) in Level!.solutionCoords.enumerated(){
+//            let tile = tile2DArray[coord.y][coord.x]
+//            //tile.removeAllActions()
+//            let sequence = SKAction.sequence(
+//                [SKAction.wait(forDuration: Double(i) * 1.5/numSolutionBlocks),
+//                SKAction.fadeAlpha(to: 1.0, duration: 0.2),
+//                SKAction.run({
+//
+//                    tile.tile.glowWidth = self.blocksize/8.0
+////                    tile.tile.zPosition += 5
+//                    tile.tile.strokeColor = .white
+//                    //tile.outline.alpha = tile.alpha
+//                    tile.tile.fillColor = .white
+//
+//                })
+//            ])
+//            if i == Level!.solutionCoords.count - 1 {
+//                tile.tile.run(SKAction.sequence([sequence,SKAction.wait(forDuration: 1.0)])){
+//                    self.endGame(success: true)
+//                }
+//            }
+//            else{
+//                tile.tile.run(sequence)
+//            }
+//        }
     }
     
     func crackAnimation(point: CGPoint){
