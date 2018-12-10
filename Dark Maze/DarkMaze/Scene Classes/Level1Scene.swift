@@ -842,17 +842,19 @@ class Level1Scene: SKScene {
         let sequence = SKAction.sequence(
             [//SKAction.wait(forDuration: 1.0),
              SKAction.run({
-                for (_,path) in self.pathLines.enumerated(){
+                for (i,path) in self.pathLines.enumerated(){
+                    if i == 0 || i == self.pathLines.count-1{
+                        path.lineCap = .butt
+                    }
                     path.strokeColor = YELLOW
                     path.lineWidth = path.lineWidth + 1
                     path.glowWidth = 1
                 }
              }),
-             SKAction.wait(forDuration: 1.0)
+             SKAction.wait(forDuration: 1.3)
             ])
         pathLines[0].run(sequence){
             self.endGame(success: true)
-
         }
         
         
