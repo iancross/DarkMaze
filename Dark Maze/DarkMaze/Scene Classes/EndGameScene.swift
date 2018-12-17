@@ -166,6 +166,10 @@ class EndGameScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for child in self.children{
+            child.removeAllActions()
+            child.alpha = 1.0
+        }
         for i in buttonsNode.children{
             if let child = i as? TextBoxButton{
                 if !child.within(point: (touches.first?.location(in: buttonsNode))!){

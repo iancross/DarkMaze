@@ -404,32 +404,6 @@ class LevelsData{
                 [(0,0),(0,1),(0,2),(0,3),(0,4),(0,5),(1,5),(2,5),(3,5),(4,5),(4,4),(4,3),(3,3),(2,3),(2,2),(2,1),(2,0),(3,0),(4,0),(4,1)],
                  modifications: nil
             )
-//            ,
-//            //-------BONUS LEVELS--------
-//            LevelData(
-//                gridX: 5, gridY: 6, delayTime: 0.5,
-//                solutionCoords:
-//                [(2,5),(2,4),(1,4),(1,3),(2,3),(3,3),(3,2),(2,2),(1,2),(0,2),(0,1),(1,1),(2,1),(3,1),(4,1),(4,0),(3,0),(2,0)],
-//                 modifications: nil
-//            ),
-//            LevelData(
-//                gridX: 5, gridY: 6, delayTime: 0.5,
-//                solutionCoords:
-//                [(0,3),(0,4),(0,5),(1,5),(1,4),(2,4),(2,3),(2,2),(1,2),(1,1),(0,1),(0,0),(1,0),(2,0),(3,0),(4,0),(4,1)],
-//                 modifications: nil
-//            ),
-//            LevelData(
-//                gridX: 6, gridY: 6, delayTime: 0.5,
-//                solutionCoords:
-//                [(5,5),(5,4),(4,4),(4,3),(4,2),(5,2),(5,1),(5,0),(4,0),(3,0),(3,1),(2,1),(2,2),(1,2),(1,3),(1,4),(2,4),(2,5),(3,5)],
-//                 modifications: nil
-//            ),
-//            LevelData(
-//                gridX: 6, gridY: 6, delayTime: 0.5,
-//                solutionCoords:
-//                [(1,5),(1,4),(1,3),(1,2),(1,1),(2,1),(3,1),(3,2),(3,3),(3,4),(4,4),(5,4),(5,3),(5,2),(5,1),(4,1),(4,0),(3,0)],
-//                 modifications: nil
-//            )
         ]
         levelGroups.append ((category: "Normal", array))
         
@@ -489,21 +463,6 @@ class LevelsData{
         
         levelGroups.append ((category: "Jump", array))
     }
-    
-//    private func SplitPath(){
-//        let array = [
-//            LevelData(
-//                gridX: 5, gridY: 5, delayTime: 0.5,
-//                solutionCoords:
-//                [(4,3),(3,3),(3,4),(2,4),(1,4),(1,2),(1,1),(1,0)],
-//                modifications: [
-//                                    (.splitPath, [[(4,3),(4,2),(4,1)]])
-//                                ]
-//            )
-//        ]
-//
-//        levelGroups.append ((category: "Split Paths", array))
-//    }
     
     private func MeetInTheMiddle(){
         let array = [
@@ -616,39 +575,52 @@ class LevelsData{
             LevelData(
                 gridX: 4, gridY: 4, delayTime: 0.5,
                 solutionCoords:
-                [(3,3),(3,2),(3,1),(2,1),(1,1),(0,1),(0,0)],
+                [(2,3),(2,2),(2,1),(1,1),(0,1)],
                 modifications: [(.spin, CGFloat.pi/2.0)]
+            ),
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(3,0),(3,1),(2,1),(2,0),(1,0),(0,0),(0,1),(0,2),(0,3)],
+                modifications: [(.spin, -CGFloat.pi/2.0)]
+            ),
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(3,2),(3,1),(2,1),(2,2),(1,2),(1,1),(1,0),(0,0)],
+                modifications: [(.spin, 3.0*CGFloat.pi/4.0)]
             ),
             LevelData(
                 gridX: 4, gridY: 5, delayTime: 0.5,
                 solutionCoords:
-                [(0,2),(0,1),(1,1),(1,2),(2,2),(2,3),(2,4),(3,4)],
+                [(0,2),(0,3),(1,3),(1,2),(1,1),(2,1),(3,1),(3,2),(3,3),(3,4)],
                 modifications: [(.spin, CGFloat.pi/2.0)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(2,0),(3,0),(4,0),(4,1),(4,2),(3,2),(2,2),(1,2),(1,1),(0,1),(0,2),(0,3)],
+                modifications: [(.spin, -CGFloat.pi/2.0)]
             ),
             LevelData(
                 gridX: 5, gridY: 5, delayTime: 0.5,
                 solutionCoords:
-                [(4,0),(4,1),(4,2),(4,3),(3,3),(3,2),(2,2),(2,1),(1,1),(0,1)],
-                modifications: [(.spin, CGFloat.pi/2.0)]
+                [(4,3),(3,3),(3,2),(2,2),(2,1),(1,1),(1,2),(0,2)],
+                modifications: [(.spin, -3.0*CGFloat.pi/2.0)]
             ),
             LevelData(
                 gridX: 5, gridY: 5, delayTime: 0.5,
                 solutionCoords:
                 [(2,4),(2,3),(3,3),(3,2),(3,1),(3,0),(2,0),(1,0),(1,1),(1,2),(0,2)],
-                modifications: [(.spin, CGFloat.pi/2.0)]
+                modifications: [(.spin, 2.0*CGFloat.pi)]
             ),
             LevelData(
-                gridX: 5, gridY: 6, delayTime: 0.5,
+                gridX: 6, gridY: 6, delayTime: 0.5,
                 solutionCoords:
-                [(1,5),(1,4),(0,4),(0,3),(1,3),(2,3),(3,3),(4,3),(4,2),(3,2),(2,2),(2,1),(2,0)],
-                modifications: [(.spin, CGFloat.pi/2.0)]
+                [(0,5),(1,5),(1,4),(0,4),(0,3),(1,3),(2,3),(3,3),(4,3),(4,4),(4,5),(5,5)],
+                modifications: [(.spin, 3.0*CGFloat.pi/2.0)]
             ),
-            LevelData(
-                gridX: 5, gridY: 6, delayTime: 0.5,
-                solutionCoords:
-                [(0,0),(0,1),(0,2),(0,3),(0,4),(0,5),(1,5),(2,5),(3,5),(4,5),(4,4),(4,3),(3,3),(2,3),(2,2),(2,1),(2,0),(3,0),(4,0),(4,1)],
-                modifications: [(.spin, CGFloat.pi/2.0)]
-            )
+            
         ]
         levelGroups.append ((category: "Spin", array))
     }
@@ -767,3 +739,18 @@ class LevelsData{
     }
 }
 
+
+//    private func SplitPath(){
+//        let array = [
+//            LevelData(
+//                gridX: 5, gridY: 5, delayTime: 0.5,
+//                solutionCoords:
+//                [(4,3),(3,3),(3,4),(2,4),(1,4),(1,2),(1,1),(1,0)],
+//                modifications: [
+//                                    (.splitPath, [[(4,3),(4,2),(4,1)]])
+//                                ]
+//            )
+//        ]
+//
+//        levelGroups.append ((category: "Split Paths", array))
+//    }

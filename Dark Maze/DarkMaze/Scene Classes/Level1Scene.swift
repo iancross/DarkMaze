@@ -46,7 +46,7 @@ class Level1Scene: SKScene {
     var startPathCoord: (x: CGFloat, y: CGFloat) = (x: 0, y: 0)
     var endPathCoord: (x: CGFloat, y: CGFloat) = (x: 0, y: 0)
     var pathLines: [SKShapeNode] = []
-    
+    var gridSpinning = false
     override init(size: CGSize) {
         super.init(size: size)
         backgroundColor = UIColor.black
@@ -308,7 +308,10 @@ class Level1Scene: SKScene {
         }
     }
     func spinGrid(rotation: CGFloat){
-        let sequence = SKAction.rotate(byAngle: rotation, duration: 0.4)
+        gridSpinning = true
+        let d = abs(rotation / (CGFloat.pi / 4.0) * 0.3)
+        print("\(rotation) / \(CGFloat.pi / 4.0) * 0.4 = \(d)")
+        let sequence = SKAction.rotate(byAngle: rotation, duration: Double(d))
              
         gridNode.run(sequence){
             self.gameActive = true
@@ -356,6 +359,12 @@ class Level1Scene: SKScene {
                         skipButton!.originalState()
                     }
                 }
+                else{ //if count down IS happening, let's clear it
+                    self.countdownActive = false
+                    removeAllChildren()
+                    self.initializeGrid()
+                    self.drawSolution()
+                }
             }
         }
     }
@@ -363,8 +372,7 @@ class Level1Scene: SKScene {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
             if gameActive {
-                //handleTouch(t.location(in: gridNode))
-                break //not sure if i need this
+                break
             }
             else{
                 if !countdownActive{
@@ -379,7 +387,7 @@ class Level1Scene: SKScene {
         }
     }
     
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func  touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         let point = touches.first
         let positionInScene = point?.location(in: gridNode)
         if gameActive {
@@ -919,6 +927,7 @@ class Level1Scene: SKScene {
         addChild(crack)
         crack.position = point
         crack.zPosition = (lastTouchedTile?.tile.zPosition)! + 4 //hack! need to fix this. Caused by adding to the tile's z value repeatedly
+        crack.zRotation = gridNode.zRotation
         crack.scale(to: CGSize(width: blocksize, height: blocksize))
         crack.run(
             SKAction.sequence(
