@@ -116,14 +116,14 @@ class LevelsData{
                     let level = Level(entity: levelEntity, insertInto: managedContext)
                     level.attemptsBeforeSuccess = 0
                     //testing
-                    if i == 0 && j < 7{
-                        level.completed = true
-                    }
-                    else{
-                        level.completed = false
-                    }
+//                    if i == 0 && j < 7{
+//                        level.completed = true
+//                    }
+//                    else{
+//                        level.completed = false
+//                    }
                     //end test
-                    //level.completed = true
+                    level.completed = true
                     level.number = Int32(j)
                     level.page = page
                     level.totalAttempts = 0
@@ -636,47 +636,54 @@ class LevelsData{
     func Combo1(){
         let array = [
             LevelData(
-                gridX: 3, gridY: 3, delayTime: 0.5,
-                solutionCoords:[(0,2),(0,1),(0,0),(1,0),(1,1),(1,2),(2,2),(2,1),(2,0)],
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(2,3),(3,3),(3,2),(3,1),(2,1),(1,1),(0,1),(2,2),(2,1),(2,0)],
                 modifications: nil
             ),
             LevelData(
-                gridX: 3, gridY: 3, delayTime: 0.5,
-                solutionCoords:[(0,2),(0,1),(0,0),(1,0),(1,1),(1,2),(2,2),(2,1),(2,0)],
-                modifications: nil
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(3,2),(2,2),(1,2),(1,3),(0,2),(0,1),(1,1),(2,1),(3,1),(3,0)],
+                modifications: [(.spin, -CGFloat.pi/4.0)]
             ),
             LevelData(
-                gridX: 3, gridY: 3, delayTime: 0.5,
-                solutionCoords:[(0,2),(0,1),(0,0),(1,0),(1,1),(1,2),(2,2),(2,1),(2,0)],
-                modifications: nil
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(3,2),(3,1),(2,1),(2,2),(1,2),(1,1),(1,0),(0,0)],
+                modifications: [(.spin, 3.0*CGFloat.pi/4.0)]
             ),
             LevelData(
-                gridX: 3, gridY: 3, delayTime: 0.5,
-                solutionCoords:[(0,2),(0,1),(0,0),(1,0),(1,1),(1,2),(2,2),(2,1),(2,0)],
-                modifications: nil
+                gridX: 4, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(0,2),(0,3),(1,3),(1,2),(1,1),(2,1),(3,1),(3,2),(3,3),(3,4)],
+                modifications: [(.spin, CGFloat.pi/2.0)]
             ),
             LevelData(
-                gridX: 3, gridY: 3, delayTime: 0.5,
-                solutionCoords:[(0,2),(0,1),(0,0),(1,0),(1,1),(1,2),(2,2),(2,1),(2,0)],
-                modifications: nil
+                gridX: 5, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(2,0),(3,0),(4,0),(4,1),(4,2),(3,2),(2,2),(1,2),(1,1),(0,1),(0,2),(0,3)],
+                modifications: [(.spin, -CGFloat.pi/2.0)]
             ),
             LevelData(
-                gridX: 3, gridY: 3, delayTime: 0.5,
-                solutionCoords:[(0,2),(0,1),(0,0),(1,0),(1,1),(1,2),(2,2),(2,1),(2,0)],
-                modifications: nil
+                gridX: 5, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(4,3),(3,3),(3,2),(2,2),(2,1),(1,1),(1,2),(0,2)],
+                modifications: [(.spin, -3.0*CGFloat.pi/2.0)]
             ),
             LevelData(
-                gridX: 3, gridY: 3, delayTime: 0.5,
-                solutionCoords:[(0,2),(0,1),(0,0),(1,0),(1,1),(1,2),(2,2),(2,1),(2,0)],
-                modifications: nil
+                gridX: 5, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(2,4),(2,3),(3,3),(3,2),(3,1),(3,0),(2,0),(1,0),(1,1),(1,2),(0,2)],
+                modifications: [(.spin, 2.0*CGFloat.pi)]
             ),
             LevelData(
-                gridX: 3, gridY: 3, delayTime: 0.5,
-                solutionCoords:[(0,2),(0,1),(0,0),(1,0),(1,1),(1,2),(2,2),(2,1),(2,0)],
-                modifications: nil
-            )
-        ]
-        levelGroups.append ((category: "\u{2606} Combo 1", array))
+                gridX: 6, gridY: 6, delayTime: 0.5,
+                solutionCoords:
+                [(0,5),(1,5),(1,4),(0,4),(0,3),(1,3),(2,3),(3,3),(4,3),(4,4),(4,5),(5,5)],
+                modifications: [(.spin, 3.0*CGFloat.pi/2.0)]
+            )]
+        levelGroups.append ((category: "Combo 1", array))
     }
     
     func MultiJump(){

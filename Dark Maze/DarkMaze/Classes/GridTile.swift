@@ -21,6 +21,7 @@ class GridTile: SKNode{
     var state = TileState.unavailable
     let outline: SKShapeNode
     var path: SKShapeNode? = nil
+    var jumpIndication: Jumps?
     
     enum TileState {
         case touched
