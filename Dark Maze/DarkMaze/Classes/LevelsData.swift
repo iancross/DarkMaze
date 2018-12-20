@@ -14,7 +14,7 @@ import CoreData
 //gridsize - self explanatory
 //delayTime - time between tiles showing up (0 means they all show up at the same time)
 //levelCompleted: shows us what to color the level in level select
-let REQUIRED_TO_UNLOCK = 2
+let REQUIRED_TO_UNLOCK = 8
 
 struct LevelData {
     var gridX: Int
@@ -114,19 +114,21 @@ class LevelsData{
                 page.number = Int32(i)
                 for (j,levelData) in levelGroups[i].levels.enumerated(){
                     let level = Level(entity: levelEntity, insertInto: managedContext)
-                    level.failedAttempts = 0
-    //                //testing
-    //                if i == 0 && j < 7{
-    //                    level.completed = true
-    //                }
-    //                else{
-    //                    level.completed = false
-    //                }
-    //                //end test
-                    level.completed = true
+                    level.attemptsBeforeSuccess = 0
+                    //testing
+                    if i == 0 && j < 7{
+                        level.completed = true
+                    }
+                    else{
+                        level.completed = false
+                    }
+                    //end test
+                    //level.completed = true
                     level.number = Int32(j)
                     level.page = page
-                    level.failedAttempts = 0
+                    level.totalAttempts = 0
+                    level.attemptsBeforeSuccess = 0
+                    level.firstTimeBonus = false
                 }
             }
             do {
@@ -264,17 +266,24 @@ class LevelsData{
         let compoundPredicate = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.and, subpredicates: [pagePredicate,levelPredicate])
         fetchRequest.predicate = compoundPredicate
         
-        //update completed and update failedAttempts
+        //update completed and update attemptsBeforeSuccess
         do {
             let levels = try managedContext.fetch(fetchRequest) as [NSManagedObject]
-            if (levels[0].value(forKey: "completed") as! Bool) == false{
-                if success{
-                    levels[0].setValue(true, forKey: "completed")
+            if !(levels[0].value(forKey: "completed") as! Bool){
+                if let attemptsBeforeSuccess = levels[0].value(forKey: "attemptsBeforeSuccess") as? Int32{
+                    if success{
+                        levels[0].setValue(true, forKey: "completed")
+                        if attemptsBeforeSuccess == 0{
+                            levels[0].setValue(true, forKey: "firstTimeBonus")
+                        }
+                    }
+                    else{
+                        levels[0].setValue(attemptsBeforeSuccess+1, forKey: "attemptsBeforeSuccess")
+                    }
                 }
-                else{
-                    let failedAttempts = levels[0].value(forKey: "failedAttempts") as? Int32
-                    levels[0].setValue(failedAttempts!+1, forKey: "failedAttempts")
-                }
+            }
+            if let totalAttempts = levels[0].value(forKey: "totalAttempts") as? Int32{
+                levels[0].setValue(totalAttempts+1, forKey: "totalAttempts")
             }
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
@@ -305,16 +314,15 @@ class LevelsData{
         
         do {
             let levels = try managedContext.fetch(fetchRequest) as [NSManagedObject]
-            if levels[0].value(forKey: "completed") as? Bool == true && levels[0].value(forKey: "failedAttempts") as? Int32 == 0 {
-                return true
-            }
-            else{
-                return false
+            if let bonus = levels[0].value(forKey: "firstTimeBonus") as? Bool {
+                print ("------- The value of bonus is  \(bonus)")
+                return bonus
             }
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
-            return false
         }
+        print ("something fucked uppppppppppppp")
+        return false
     }
     
     func getSolutionCoords(group: Int, level: Int) -> [(x: Int,y: Int)]{
@@ -342,7 +350,7 @@ class LevelsData{
                 for l in levels{
                     print ("---- completed \(l.value(forKeyPath: "completed") as! Int32)")
                     print ("---- level number \(l.value(forKeyPath: "number") as! Int32))")
-                    print ("---- failedAttempts \(l.value(forKeyPath: "failedAttempts") as! Int32))")
+                    print ("---- attemptsBeforeSuccess \(l.value(forKeyPath: "attemptsBeforeSuccess") as! Int32))")
                 }
             }
         } catch let error as NSError {

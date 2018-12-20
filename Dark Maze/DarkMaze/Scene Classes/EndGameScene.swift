@@ -7,6 +7,8 @@
 //
 let YELLOW = UIColor.init(red: 0.8, green: 0.8, blue: 0.0, alpha: 1.0)
 import SpriteKit
+import GoogleMobileAds
+
 
 class EndGameScene: SKScene {
     var repeatOrNextButton: TextBoxButton? = nil
@@ -43,6 +45,7 @@ class EndGameScene: SKScene {
     }
     
     func bonuses(){
+        let bannerHeight = kGADAdSizeFullBanner.size.height
         var nodes: [SKNode] = collectBonuses()
         let positions: [CGPoint] =
             [CGPoint(x: frame.midX, y: frame.height*5.8/8),
@@ -57,15 +60,31 @@ class EndGameScene: SKScene {
             node.run(sequence)
         }
         
-        if nodes.count == 2{
-            buttonsNode.position = CGPoint(x: frame.midX, y: frame.height*2.5/8)
+        let height = self.frame.height
+        print ("height is \(height)")
+        
+        if let last = nodes.last{
+            let y = (last.position.y - bannerHeight)/2 + bannerHeight
+            buttonsNode.position = CGPoint(x: frame.midX, y: y)
         }
-        else if nodes.count == 1{
-            buttonsNode.position = CGPoint(x: frame.midX, y: frame.height*3/8)
-        }
-        else{
+        else {
             buttonsNode.position = CGPoint(x: frame.midX, y: frame.height*4/8)
         }
+
+//        if nodes.count == 2{
+//            let height = self.frame.height
+//            print ("height is \(height)")
+////            let y = (height - bannerHeight - nodes.last!.position.y)/2 + nodes.last!.position.y
+//            let y = (nodes.last!.position.y - bannerHeight)/2 + bannerHeight
+//
+//            buttonsNode.position = CGPoint(x: frame.midX, y: y)
+//        }
+//        else if nodes.count == 1{
+//            buttonsNode.position = CGPoint(x: frame.midX, y: frame.height*3/8)
+//        }
+//        else{
+//            buttonsNode.position = CGPoint(x: frame.midX, y: frame.height*4/8)
+//        }
         self.addChild(buttonsNode)
         buttonsNode.run(SKAction.sequence([SKAction.wait(forDuration: Double(nodes.count + 1)*0.5),
                                           SKAction.fadeIn(withDuration: 1.0)]))
@@ -113,10 +132,10 @@ class EndGameScene: SKScene {
         bonusesNode.addChild(unlockedLabel1)
         bonusesNode.addChild(unlockedLabel2)
         let unlockSprite = SKSpriteNode(imageNamed: "unlock_sprite200x200")
-        unlockSprite.setScale(0.4)
-        unlockSprite.position = CGPoint(x: unlockedLabel1.frame.width/2 + 10 + unlockSprite.frame.width/2, y: 5)
+        unlockSprite.setScale(screenHeight / 1334 * 0.4)
+        unlockSprite.position = CGPoint(x: unlockedLabel1.frame.width/2 + screenWidth*0.01 + unlockSprite.frame.width/2, y: 5)
         let unlockSprite2 = unlockSprite.copy() as! SKSpriteNode
-        unlockSprite2.position.x = -unlockSprite2.position.x - 10
+        unlockSprite2.position.x = -unlockSprite2.position.x - screenWidth*0.01
         
         bonusesNode.addChild(unlockSprite)
         bonusesNode.addChild(unlockSprite2)

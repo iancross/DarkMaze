@@ -51,7 +51,6 @@ class GameViewController: UIViewController, GameDelegate, GADBannerViewDelegate 
     func gameOver(unlockedLevel: Bool) {
         switchScene(scene: EndGameScene (size: GameStyle.shared.sceneSizeWithAd, unlockedLevel: unlockedLevel))
         addBannerViewToView()
-
     }
     
     func playGame() {
