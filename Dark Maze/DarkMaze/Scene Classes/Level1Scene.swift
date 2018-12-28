@@ -17,6 +17,8 @@ enum Jumps {
 
 
 class Level1Scene: SKScene {
+    let testing = false //testing variable controls touches moved and printing the green coords
+    
     var tile2DArray = [[GridTile]]()
     var gameActive = false
     var countdownActive = false
@@ -157,11 +159,14 @@ class Level1Scene: SKScene {
     func drawSolution(){
         addSkipButton()
         if let mods = Level!.modifications{
-            for (mod, _) in mods{
+            for (mod, modData) in mods{
                 switch mod {
                 case .meetInTheMiddle:
                     drawMeetInTheMiddle()
-                    return
+                case .blockReveal:
+                    if let arr = modData as? [Int]{
+                        drawBlockReveal(blocksToDisplay: arr)
+                    }
                 case .splitPath:
                     //drawSplitPath(splitPaths: modData as! [[(Int, Int)]])
                     print ("split path")
@@ -191,6 +196,42 @@ class Level1Scene: SKScene {
             )
         }
     }
+
+    func drawBlockReveal(blocksToDisplay: [Int]){
+        var solutionCoordIndex = 0
+        for (i,num) in blocksToDisplay.enumerated(){
+            var solutionTiles = [GridTile]()
+            var counter = 0
+            while counter < num && (solutionCoordIndex + counter) < (Level?.solutionCoords.count)!{
+                let coord = Level?.solutionCoords[solutionCoordIndex + counter]
+                solutionTiles.append(tile2DArray[coord!.y][coord!.x])
+                counter += 1
+            }
+            runDrawingActions(tiles: solutionTiles, lastTile: false, delay: Level!.delayTime * Double(i))
+            solutionCoordIndex += counter
+        }
+       
+    }
+    
+//    func drawBlockReveal(blocksToDisplay: [[(Int,Int)]]){
+//
+//        for (i,block) in blocksToDisplay.enumerated(){
+//            var solutionTiles = [GridTile]()
+//            var nonSolutionTiles = [GridTile]()
+//            //for each coordinate in the block we are going to be showing
+//            for (x,y) in block{
+//                for coord in (Level?.solutionCoords)!{
+//                    if tupleContains(a: coord, v: (x,y)){
+//                        solutionTiles.append(tile2DArray[y][x])
+//                    }
+//                    else{
+//                        nonSolutionTiles.append(tile2DArray[y][x])
+//                    }
+//                }
+//            }
+//            runDrawingActions(tiles: solutionTiles, lastTile: false, delay: Level!.delayTime * Double(i))
+//        }
+//    }
     
     func drawMeetInTheMiddle(){
         let numTiles = Level!.solutionCoords.count
@@ -388,18 +429,21 @@ class Level1Scene: SKScene {
     }
     
     override func  touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let point = touches.first
-        let positionInScene = point?.location(in: gridNode)
-        if gameActive {
-            handleTouch(positionInScene!)
-        }
-        else{
-            if !countdownActive{
-                if (skipButton?.within(point: (point?.location(in: self))!))!{
-                    skipButton!.tappedState()
-                }
-                else{
-                    skipButton!.originalState()
+        //testing
+        if !testing{
+            let point = touches.first
+            let positionInScene = point?.location(in: gridNode)
+            if gameActive {
+                handleTouch(positionInScene!)
+            }
+            else{
+                if !countdownActive{
+                    if (skipButton?.within(point: (point?.location(in: self))!))!{
+                        skipButton!.tappedState()
+                    }
+                    else{
+                        skipButton!.originalState()
+                    }
                 }
             }
         }
@@ -423,10 +467,13 @@ class Level1Scene: SKScene {
             for tile in row{
                 if tile.pointIsWithin(point){
                     startArrow.removeAllActions()
-//
-//                    print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
-//                    tile.tile.fillColor = UIColor.green
-//                    return //comment out to get grid coords for levels
+
+                    //testing
+                    if testing{
+                        print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
+                        tile.tile.fillColor = UIColor.green
+                        return //comment out to get grid coords for levels
+                    }
 
                     lastTouchedTile = tile
                     touchTile(tile: lastTouchedTile!, alpha: blockAlphaMin + CGFloat(touchedTiles + 1) * blockAlphaIncrement)

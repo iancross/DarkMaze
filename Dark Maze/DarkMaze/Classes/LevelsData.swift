@@ -30,6 +30,7 @@ enum GridModification {
     case meetInTheMiddle
     case splitPath //(.splitpath, array coord arrays [[1,2,3,4],[1,2,3,6]]
     case thisLooksFamiliar //the path loops back onto itself
+    case blockReveal
 }
 
 class LevelsData{
@@ -52,8 +53,8 @@ class LevelsData{
         MeetInTheMiddle()
         Spin()
         Combo1()
+        BlockReveal()
         MultiJump()
-        _BryanTest()
         _BryanTest()
         _BryanTest()
         _BryanTest()
@@ -732,6 +733,61 @@ class LevelsData{
                  modifications: [(.flip, nil), (.meetInTheMiddle, nil)]
             )]
         levelGroups.append ((category: "Huge", array))
+    }
+    
+    private func BlockReveal(){
+        let array = [
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 1,
+                solutionCoords:
+                [(2,3),(3,3),(3,2),(3,1),(2,1),(1,1),(0,1),(2,2),(2,1),(2,0)],
+                modifications: [(.blockReveal, [2,3,2,10])]
+                                 
+                                 //[[(0,3),(0,2),(1,2),(1,3),(2,3),(2,2),(3,2),(3,3)], [(0,1),(1,1),(2,1),(3,1),(3,0),(2,0),(1,0),(0,0)]])]
+            ),
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(3,2),(2,2),(1,2),(1,3),(0,2),(0,1),(1,1),(2,1),(3,1),(3,0)],
+                modifications: [(.spin, -CGFloat.pi/4.0)]
+            ),
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(3,2),(3,1),(2,1),(2,2),(1,2),(1,1),(1,0),(0,0)],
+                modifications: [(.spin, 3.0*CGFloat.pi/4.0)]
+            ),
+            LevelData(
+                gridX: 4, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(0,2),(0,3),(1,3),(1,2),(1,1),(2,1),(3,1),(3,2),(3,3),(3,4)],
+                modifications: [(.spin, CGFloat.pi/2.0)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(2,0),(3,0),(4,0),(4,1),(4,2),(3,2),(2,2),(1,2),(1,1),(0,1),(0,2),(0,3)],
+                modifications: [(.spin, -CGFloat.pi/2.0)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(4,3),(3,3),(3,2),(2,2),(2,1),(1,1),(1,2),(0,2)],
+                modifications: [(.spin, -3.0*CGFloat.pi/2.0)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(2,4),(2,3),(3,3),(3,2),(3,1),(3,0),(2,0),(1,0),(1,1),(1,2),(0,2)],
+                modifications: [(.spin, 2.0*CGFloat.pi)]
+            ),
+            LevelData(
+                gridX: 6, gridY: 6, delayTime: 0.5,
+                solutionCoords:
+                [(0,5),(1,5),(1,4),(0,4),(0,3),(1,3),(2,3),(3,3),(4,3),(4,4),(4,5),(5,5)],
+                modifications: [(.spin, 3.0*CGFloat.pi/2.0)]
+            )]
+        levelGroups.append ((category: "Blocked Reveal", array))
     }
     
     private func _BryanTest(){
