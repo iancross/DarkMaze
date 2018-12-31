@@ -342,6 +342,8 @@ class Level1Scene: SKScene {
                     }
                 case .splitPath:
                     print ("splitPath")
+                case .jumbled:
+                    swapTiles()
                 default:
                     print("fuck")
                 }
@@ -366,6 +368,24 @@ class Level1Scene: SKScene {
             SKAction.wait(forDuration: 0.3)])
         gridNode.run(sequence){
             self.gameActive = true
+        }
+    }
+    private func swapTiles(){
+        let path = UIBezierPath()
+        
+        let originalPoint = tile2DArray[0][0].position
+        path.move(to: originalPoint)
+        path.addCurve(to: tile2DArray[3][3].position, controlPoint1: tile2DArray[0][1].position, controlPoint2: tile2DArray[1][2].position)
+
+        tile2DArray[0][0].tile.fillColor = .orange
+        let s = SKAction.sequence(
+                [SKAction.run({
+                    self.tile2DArray[0][0].zPosition = 1
+                }),
+                SKAction.follow(path.cgPath, asOffset: false, orientToPath: false, duration: 2.0)
+            ])
+        tile2DArray[0][0].run(s){
+            self.tile2DArray[0][0].position = self.tile2DArray[3][3].position
         }
     }
 /*---------------------- End Grid Modification ----------------------*/
@@ -732,7 +752,6 @@ class Level1Scene: SKScene {
             path.move(to: points[i])
             path.addLine(to: points[i+1])
         }
-        _ = SKNode()
         let line = SKShapeNode()
         line.lineCap = .round
         line.path = path.cgPath
@@ -921,7 +940,7 @@ class Level1Scene: SKScene {
             let tile = tile2DArray[coord.y][coord.x]
             switch tile.state {
             case .touched:
-                let center = tile.scene?.convert((tile.position), from: tile.parent!)
+                let center = tile.scene?.convert(tile.position, from: tile.parent!)
                 crackAnimation(point: center!)
             default:
                 break

@@ -109,6 +109,8 @@ class GridTile: SKNode{
     //returns false if it's unavailable
     //returns nil if it was already touched
     func touched(alpha: CGFloat) -> Bool?{
+        print(gridCoord)
+
         switch state {
         case .availableToTouch:
             self.state = .touched

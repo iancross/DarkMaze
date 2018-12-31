@@ -30,6 +30,7 @@ enum GridModification {
     case meetInTheMiddle
     case splitPath //(.splitpath, array coord arrays [[1,2,3,4],[1,2,3,6]]
     case thisLooksFamiliar //the path loops back onto itself
+    case jumbled
     case blockReveal
 }
 
@@ -369,7 +370,7 @@ class LevelsData{
                 gridX: 4, gridY: 4, delayTime: 0.5,
                 solutionCoords:
                 [(0,1),(1,1),(2,1),(2,2),(3,2)],
-                 modifications: nil
+                 modifications: [(.jumbled, nil)]
             ),
             LevelData(
                 gridX: 4, gridY: 4, delayTime: 0.5,
