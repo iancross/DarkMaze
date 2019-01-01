@@ -371,19 +371,44 @@ class Level1Scene: SKScene {
         }
     }
     private func swapTiles(){
-        let path = UIBezierPath()
         
         let originalPoint = tile2DArray[0][0].position
-        path.move(to: originalPoint)
-        path.addCurve(to: tile2DArray[3][3].position, controlPoint1: tile2DArray[0][1].position, controlPoint2: tile2DArray[1][2].position)
+        let newPoint = tile2DArray[3][3].position
 
+        
+        let testPath = UIBezierPath()
+        let mid = calcMidPointOf(a: originalPoint, b: newPoint)
+        let slope = calcSlopeOf(a: originalPoint, b: newPoint)
+        let hypotenuseD = calcDistanceBetweenPoints(a: originalPoint, b: newPoint)
+        print("hypotenuse distance between a and b is \(hypotenuseD)")
+        let sideDistance = calcSidesOfPerfectRightTriangleGiven(hypotenuse: hypotenuseD)
+        print ("sideDistance of a right perfect triangle is \(sideDistance)")
+        let distanceFromMidToRightAngle = calcSideOfRightTriangle(hypotenuse: sideDistance, side: hypotenuseD/2)/2 //dividing by 2 to make it a bit closer
+        let points = calcPointsGiven(source: mid, slope: -slope, distance: distanceFromMidToRightAngle)
+        let midpoints = [calcMidPointOf(a: originalPoint, b: points[0]), calcMidPointOf(a: newPoint, b: points[0])]
+        testPath.move(to: midpoints[0])
+        testPath.addLine(to: midpoints[1])
+        let line = SKShapeNode()
+        line.lineCap = .round
+        line.path = testPath.cgPath
+        line.lineWidth = blocksize/10
+        line.strokeColor = .orange
+        line.zPosition = 9
+        line.name = "Line"
+        gridNode.addChild(line)
+        
+        let path = UIBezierPath()
+        path.move(to: originalPoint)
+        path.addCurve(to: newPoint, controlPoint1: midpoints[0], controlPoint2: midpoints[1])
+        
         tile2DArray[0][0].tile.fillColor = .orange
         let s = SKAction.sequence(
-                [SKAction.run({
-                    self.tile2DArray[0][0].zPosition = 1
-                }),
-                SKAction.follow(path.cgPath, asOffset: false, orientToPath: false, duration: 2.0)
+            [SKAction.run({
+                self.tile2DArray[0][0].zPosition = 1
+            }),
+             SKAction.follow(path.cgPath, asOffset: false, orientToPath: false, duration: 1.5)
             ])
+        
         tile2DArray[0][0].run(s){
             self.tile2DArray[0][0].position = self.tile2DArray[3][3].position
         }

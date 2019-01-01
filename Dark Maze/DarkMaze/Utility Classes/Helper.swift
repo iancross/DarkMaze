@@ -39,6 +39,40 @@ public func getAddSizeForScreen()->GADAdSize{
     return GADAdSizeFromCGSize(CGSize(width: screenWidth, height: screenHeight * 0.15))
 }
 
+public func calcMidPointOf(a: CGPoint, b: CGPoint) -> CGPoint{
+    print("midpoint of \(a) and \(b) is \(CGPoint(x: (a.x + b.x)/2, y: (a.y + b.y)/2))")
+    return CGPoint(x: (a.x + b.x)/2, y: (a.y + b.y)/2)
+}
+
+public func calcDistanceBetweenPoints(a: CGPoint, b: CGPoint) -> CGFloat{
+    return (pow((a.x - b.x), 2) + pow((a.y - b.y), 2)).squareRoot()
+}
+
+public func calcSidesOfPerfectRightTriangleGiven(hypotenuse: CGFloat)->CGFloat{
+    return (pow(hypotenuse,2)/2).squareRoot()
+}
+
+public func calcSideOfRightTriangle(hypotenuse: CGFloat, side: CGFloat) -> CGFloat{
+    return (pow(hypotenuse,2) - pow(side,2)).squareRoot()
+}
+
+public func calcSlopeOf(a: CGPoint, b: CGPoint) -> CGFloat{
+    print ("slope is \((a.y - b.y)/(a.x-b.x))")
+    return (a.y - b.y)/(a.x-b.x)
+}
+
+public func calcPointsGiven(source: CGPoint, slope: CGFloat, distance: CGFloat) -> [CGPoint]{
+    let p = distance * (1/1+pow(slope, 2)).squareRoot()
+
+    var x1 = source.x + p
+    var x2 = source.x - p
+    var y1 = source.y + slope * p
+    var y2 = source.y - slope * p
+    
+    print ("the points are \([CGPoint(x: x1, y: y1), CGPoint(x: x2, y: y2)])")
+    return [CGPoint(x: x1, y: y1), CGPoint(x: x2, y: y2)]
+}
+
 // MARK: Double Extension
 
 public extension Double {
