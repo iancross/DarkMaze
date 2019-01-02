@@ -343,7 +343,12 @@ class Level1Scene: SKScene {
                 case .splitPath:
                     print ("splitPath")
                 case .jumbled:
-                    swapTiles()
+                    if let pairs = modData as? [((Int,Int),(Int,Int))]{
+                        print ("pairs look good ----------------------------------------")
+                        for (x, y) in pairs{
+                            swapTiles(coord1: x, coord2: y)
+                        }
+                    }
                 default:
                     print("fuck")
                 }
@@ -370,48 +375,41 @@ class Level1Scene: SKScene {
             self.gameActive = true
         }
     }
-    private func swapTiles(){
-        
-        let originalPoint = tile2DArray[0][0].position
-        let newPoint = tile2DArray[3][3].position
+    private func swapTiles(coord1: (x: Int, y: Int), coord2: (x: Int, y: Int)){
+        let tile1 = tile2DArray[coord1.y][coord1.x]
+        let tile2 = tile2DArray[coord2.y][coord2.x]
+        let controlPoints = getBezierControlPoints(a: tile1.position, b: tile2.position)
+
 
         
-        let testPath = UIBezierPath()
-        let mid = calcMidPointOf(a: originalPoint, b: newPoint)
-        let slope = calcSlopeOf(a: originalPoint, b: newPoint)
-        let hypotenuseD = calcDistanceBetweenPoints(a: originalPoint, b: newPoint)
+        let path = UIBezierPath()
+        path.move(to:tile1.position )
+        path.addCurve(to: tile2.position, controlPoint1: controlPoints[0], controlPoint2: controlPoints[1])
+        
+        tile1.tile.fillColor = .orange
+        let s = SKAction.sequence(
+            [SKAction.run({
+                tile1.zPosition = 1
+                }),
+                SKAction.follow(path.cgPath, asOffset: false, orientToPath: false, duration: 4)
+            ])
+        
+        tile1.run(s){
+            tile1.position = tile2.position
+        }
+    }
+    
+    private func getBezierControlPoints(a: CGPoint, b: CGPoint)->[CGPoint]{
+        let mid = calcMidPointOf(a: a, b: b)
+        let slope = calcSlopeOf(a: a, b: b)
+        let hypotenuseD = calcDistanceBetweenPoints(a: a, b: b)
         print("hypotenuse distance between a and b is \(hypotenuseD)")
         let sideDistance = calcSidesOfPerfectRightTriangleGiven(hypotenuse: hypotenuseD)
         print ("sideDistance of a right perfect triangle is \(sideDistance)")
-        let distanceFromMidToRightAngle = calcSideOfRightTriangle(hypotenuse: sideDistance, side: hypotenuseD/2)/2 //dividing by 2 to make it a bit closer
-        let points = calcPointsGiven(source: mid, slope: -slope, distance: distanceFromMidToRightAngle)
-        let midpoints = [calcMidPointOf(a: originalPoint, b: points[0]), calcMidPointOf(a: newPoint, b: points[0])]
-        testPath.move(to: midpoints[0])
-        testPath.addLine(to: midpoints[1])
-        let line = SKShapeNode()
-        line.lineCap = .round
-        line.path = testPath.cgPath
-        line.lineWidth = blocksize/10
-        line.strokeColor = .orange
-        line.zPosition = 9
-        line.name = "Line"
-        gridNode.addChild(line)
-        
-        let path = UIBezierPath()
-        path.move(to: originalPoint)
-        path.addCurve(to: newPoint, controlPoint1: midpoints[0], controlPoint2: midpoints[1])
-        
-        tile2DArray[0][0].tile.fillColor = .orange
-        let s = SKAction.sequence(
-            [SKAction.run({
-                self.tile2DArray[0][0].zPosition = 1
-            }),
-             SKAction.follow(path.cgPath, asOffset: false, orientToPath: false, duration: 1.5)
-            ])
-        
-        tile2DArray[0][0].run(s){
-            self.tile2DArray[0][0].position = self.tile2DArray[3][3].position
-        }
+        let distanceFromMidToRightAngle = calcSideOfRightTriangle(hypotenuse: sideDistance, side: hypotenuseD/2)/1.5 //dividing by 2 to make it a bit closer
+        let vertexPoints = calcPointsGiven(source: mid, slope: calcPerpendicularSlope(s: slope), distance: distanceFromMidToRightAngle)
+        let controlPoints = [calcMidPointOf(a: a, b: vertexPoints[0]), calcMidPointOf(a: b, b: vertexPoints[0])]
+        return controlPoints
     }
 /*---------------------- End Grid Modification ----------------------*/
 

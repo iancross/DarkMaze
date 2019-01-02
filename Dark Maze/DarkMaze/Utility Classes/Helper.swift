@@ -56,21 +56,47 @@ public func calcSideOfRightTriangle(hypotenuse: CGFloat, side: CGFloat) -> CGFlo
     return (pow(hypotenuse,2) - pow(side,2)).squareRoot()
 }
 
-public func calcSlopeOf(a: CGPoint, b: CGPoint) -> CGFloat{
+public func calcSlopeOf(a: CGPoint, b: CGPoint) -> CGFloat?{
+    print ("in the slope function, points are \(a) and \(b)")
     print ("slope is \((a.y - b.y)/(a.x-b.x))")
-    return (a.y - b.y)/(a.x-b.x)
+    if a.x - b.x == 0{
+        return nil
+    }
+    else if a.y - b.y == 0{
+        return 0
+    }
+    else{
+        return (a.y - b.y)/(a.x-b.x)
+    }
 }
 
-public func calcPointsGiven(source: CGPoint, slope: CGFloat, distance: CGFloat) -> [CGPoint]{
-    let p = distance * (1/1+pow(slope, 2)).squareRoot()
+public func calcPerpendicularSlope(s: CGFloat?) -> CGFloat?{
+    if s == 0{
+        return nil
+    }
+    else if s == nil{
+        return 0
+    }
+    else{
+        return -s!
+    }
+}
 
-    var x1 = source.x + p
-    var x2 = source.x - p
-    var y1 = source.y + slope * p
-    var y2 = source.y - slope * p
-    
-    print ("the points are \([CGPoint(x: x1, y: y1), CGPoint(x: x2, y: y2)])")
-    return [CGPoint(x: x1, y: y1), CGPoint(x: x2, y: y2)]
+public func calcPointsGiven(source: CGPoint, slope: CGFloat?, distance: CGFloat) -> [CGPoint]{
+    print ("\(source),\(slope),\(distance)")
+    if let s = slope {
+        let p = distance * (1/1+pow(s, 2)).squareRoot()
+        let x1 = source.x + p
+        let x2 = source.x - p
+        var y1 = source.y + s * p
+        var y2 = source.y - s * p
+        
+        print ("the points are \([CGPoint(x: x1, y: y1), CGPoint(x: x2, y: y2)])")
+        return [CGPoint(x: x1, y: y1), CGPoint(x: x2, y: y2)]
+    }
+    else{
+        return [CGPoint(x: source.x + distance, y:source.y),CGPoint(x: source.x - distance, y:source.y)]
+    }
 }
 
 // MARK: Double Extension
