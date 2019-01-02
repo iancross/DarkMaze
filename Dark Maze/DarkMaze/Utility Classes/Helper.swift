@@ -85,6 +85,9 @@ public func calcPerpendicularSlope(s: CGFloat?) -> CGFloat?{
 public func calcPointsGiven(source: CGPoint, slope: CGFloat?, distance: CGFloat) -> [CGPoint]{
     print ("\(source),\(slope),\(distance)")
     if let s = slope {
+        
+        
+        //need to account for case where the slope is 0
         let p = distance * (1/1+pow(s, 2)).squareRoot()
         let x1 = source.x + p
         let x2 = source.x - p
