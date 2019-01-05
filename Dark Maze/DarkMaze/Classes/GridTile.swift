@@ -13,7 +13,7 @@ import SpriteKit
 class GridTile: SKNode{
     var tile: SKShapeNode
     var originColor = UIColor.black
-    let gridCoord: (x: Int,y: Int)
+    var gridCoord: (x: Int,y: Int)
     var strokeAlpha = 0.2
     var strokeActive = true
     var strokeAppearing = true //used to have the grid fade in and out

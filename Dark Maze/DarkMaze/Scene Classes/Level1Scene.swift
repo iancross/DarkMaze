@@ -167,6 +167,10 @@ class Level1Scene: SKScene {
                     if let arr = modData as? [Int]{
                         drawBlockReveal(blocksToDisplay: arr)
                     }
+                case .jumbled:
+                    print ("fuck")
+                    //I think we might have to just DRAW it jumbled and then the graph is later represented as it should be
+                    //Leaving off here
                 case .splitPath:
                     //drawSplitPath(splitPaths: modData as! [[(Int, Int)]])
                     print ("split path")
@@ -309,12 +313,13 @@ class Level1Scene: SKScene {
     
     func beginGame(){
         insertLevelTitle()
-        let firstTile = self.tile2DArray[(Level!.solutionCoords.first?.y)!][(Level!.solutionCoords.first?.x)!]
+        var firstTile = self.tile2DArray[(Level!.solutionCoords.first?.y)!][(Level!.solutionCoords.first?.x)!]
         drawArrows(firstTile: firstTile)
-        firstTile.firstTile()
         let numSolutionBlocks = Level!.solutionCoords.count
         blockAlphaIncrement = (1.0 - blockAlphaMin) / CGFloat(numSolutionBlocks)
         modifyGrid()
+        firstTile = self.tile2DArray[(Level!.solutionCoords.first?.y)!][(Level!.solutionCoords.first?.x)!]
+        firstTile.firstTile()
     }
     
     func insertLevelTitle(){
@@ -378,30 +383,43 @@ class Level1Scene: SKScene {
     private func swapTiles(coord1: (x: Int, y: Int), coord2: (x: Int, y: Int)){
         let tile1 = tile2DArray[coord1.y][coord1.x]
         let tile2 = tile2DArray[coord2.y][coord2.x]
-        let controlPoints = getBezierControlPoints(a: tile1.position, b: tile2.position)
-
-
+        let tile1OriginalPosition = tile1.position
+        let tile2OriginalPosition = tile2.position
+        let controlPointPairs = getBezierControlPoints(a: tile1.position, b: tile2.position)
+        runBezierMovement(tile1: tile1, tile2: tile2, controlPointPair: controlPointPairs[0], endPosition: tile2OriginalPosition)
+        runBezierMovement(tile1: tile2, tile2: tile1, controlPointPair: controlPointPairs[1], endPosition: tile1OriginalPosition)
         
+        //now swap gridCoords
+        let original = tile1.gridCoord
+//        tile1.gridCoord = tile2.gridCoord
+//        tile2.gridCoord = original
+//        tile2DArray[coord1.y][coord1.x] = tile2
+//        tile2DArray[coord2.y][coord2.x] = tile1
+    }
+    
+    private func runBezierMovement(tile1: GridTile, tile2: GridTile, controlPointPair: [CGPoint], endPosition: CGPoint){
         let path = UIBezierPath()
         path.move(to:tile1.position )
-        path.addCurve(to: tile2.position, controlPoint1: controlPoints[0], controlPoint2: controlPoints[1])
+        path.addCurve(to: tile2.position, controlPoint1: controlPointPair[0], controlPoint2: controlPointPair[1])
         
         tile1.tile.fillColor = .orange
         let s = SKAction.sequence(
-            [SKAction.run({
+        [SKAction.run({
                 tile1.zPosition = 1
-                }),
-                SKAction.follow(path.cgPath, asOffset: false, orientToPath: false, duration: 4)
-            ])
+            }),
+            SKAction.follow(path.cgPath, asOffset: false, orientToPath: false, duration: 4)
+        ])
         
         tile1.run(s){
-            tile1.position = tile2.position
+            tile1.position = endPosition
+            //tile1.reInit()
         }
     }
     
-    private func getBezierControlPoints(a: CGPoint, b: CGPoint)->[CGPoint]{
+    private func getBezierControlPoints(a: CGPoint, b: CGPoint)->[[CGPoint]]{
         let mid = calcMidPointOf(a: a, b: b)
         let slope = calcSlopeOf(a: a, b: b)
+        print ("slope is \(slope)")
         let hypotenuseD = calcDistanceBetweenPoints(a: a, b: b)
         print("hypotenuse distance between a and b is \(hypotenuseD)")
         let sideDistance = calcSidesOfPerfectRightTriangleGiven(hypotenuse: hypotenuseD)
@@ -409,7 +427,8 @@ class Level1Scene: SKScene {
         let distanceFromMidToRightAngle = calcSideOfRightTriangle(hypotenuse: sideDistance, side: hypotenuseD/2)/1.5 //dividing by 2 to make it a bit closer
         let vertexPoints = calcPointsGiven(source: mid, slope: calcPerpendicularSlope(s: slope), distance: distanceFromMidToRightAngle)
         let controlPoints = [calcMidPointOf(a: a, b: vertexPoints[0]), calcMidPointOf(a: b, b: vertexPoints[0])]
-        return controlPoints
+        let controlPointsPrime = [calcMidPointOf(a: a, b: vertexPoints[1]), calcMidPointOf(a: b, b: vertexPoints[1])]
+        return [controlPoints,controlPointsPrime]
     }
 /*---------------------- End Grid Modification ----------------------*/
 
@@ -527,6 +546,7 @@ class Level1Scene: SKScene {
     }
     
     func touchTile(tile: GridTile, alpha: CGFloat){
+        print ("tile state when it's touched is \(tile.state)")
         if let successfulTouch = tile.touched(alpha: alpha){
             if successfulTouch{
                 if let gameOver = gameOverSuccessOrFailure(alpha: alpha){
