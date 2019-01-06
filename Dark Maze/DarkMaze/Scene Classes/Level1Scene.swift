@@ -169,6 +169,10 @@ class Level1Scene: SKScene {
                     }
                 case .jumbled:
                     print ("fuck")
+                    if let pairs = modData as? [((x: Int,y: Int),(x: Int,y: Int))]{
+                        print ("drawing pairs!!!")
+                        drawJumbled(pairs: pairs)
+                    }
                     //I think we might have to just DRAW it jumbled and then the graph is later represented as it should be
                     //Leaving off here
                 case .splitPath:
@@ -199,6 +203,20 @@ class Level1Scene: SKScene {
                 delay: Level!.delayTime * Double(index)
             )
         }
+    }
+    
+    func drawJumbled(pairs: [((x: Int,y: Int),(x: Int,y: Int))]){
+        for pair in pairs{
+            let (coord1, _) = pair
+            let (_, coord2) = pair
+            let tile1 = tile2DArray[coord1.y][coord1.x]
+            let tile2 = tile2DArray[coord2.y][coord2.x]
+            tile2DArray[coord1.y][coord1.x] = tile2
+            tile2DArray[coord2.y][coord2.x] = tile1
+            tile1.gridCoord = coord2
+            tile2.gridCoord = coord1
+        }
+        drawNormal()
     }
 
     func drawBlockReveal(blocksToDisplay: [Int]){
@@ -313,13 +331,16 @@ class Level1Scene: SKScene {
     
     func beginGame(){
         insertLevelTitle()
-        var firstTile = self.tile2DArray[(Level!.solutionCoords.first?.y)!][(Level!.solutionCoords.first?.x)!]
-        drawArrows(firstTile: firstTile)
         let numSolutionBlocks = Level!.solutionCoords.count
         blockAlphaIncrement = (1.0 - blockAlphaMin) / CGFloat(numSolutionBlocks)
         modifyGrid()
-        firstTile = self.tile2DArray[(Level!.solutionCoords.first?.y)!][(Level!.solutionCoords.first?.x)!]
+    }
+    
+    func setFirstTile(){
+        print ("setting first tile")
+        let firstTile = self.tile2DArray[(Level!.solutionCoords.first?.y)!][(Level!.solutionCoords.first?.x)!]
         firstTile.firstTile()
+        drawArrows(firstTile: firstTile)
     }
     
     func insertLevelTitle(){
@@ -350,8 +371,8 @@ class Level1Scene: SKScene {
                 case .jumbled:
                     if let pairs = modData as? [((Int,Int),(Int,Int))]{
                         print ("pairs look good ----------------------------------------")
-                        for (x, y) in pairs{
-                            swapTiles(coord1: x, coord2: y)
+                        for (i,(x, y)) in pairs.enumerated(){
+                            swapTiles(coord1: x, coord2: y, lastPair: i == pairs.count-1)
                         }
                     }
                 default:
@@ -365,7 +386,7 @@ class Level1Scene: SKScene {
         let d = abs(rotation / (CGFloat.pi / 4.0) * 0.3)
         print("\(rotation) / \(CGFloat.pi / 4.0) * 0.4 = \(d)")
         let sequence = SKAction.rotate(byAngle: rotation, duration: Double(d))
-             
+        setFirstTile()
         gridNode.run(sequence){
             self.gameActive = true
         }
@@ -376,28 +397,30 @@ class Level1Scene: SKScene {
             SKAction.wait(forDuration: 0.2),
             SKAction.scaleX(to: -1.0, duration: 1.0),
             SKAction.wait(forDuration: 0.3)])
+        setFirstTile()
         gridNode.run(sequence){
             self.gameActive = true
         }
     }
-    private func swapTiles(coord1: (x: Int, y: Int), coord2: (x: Int, y: Int)){
+    private func swapTiles(coord1: (x: Int, y: Int), coord2: (x: Int, y: Int), lastPair: Bool){
         let tile1 = tile2DArray[coord1.y][coord1.x]
         let tile2 = tile2DArray[coord2.y][coord2.x]
         let tile1OriginalPosition = tile1.position
         let tile2OriginalPosition = tile2.position
         let controlPointPairs = getBezierControlPoints(a: tile1.position, b: tile2.position)
-        runBezierMovement(tile1: tile1, tile2: tile2, controlPointPair: controlPointPairs[0], endPosition: tile2OriginalPosition)
-        runBezierMovement(tile1: tile2, tile2: tile1, controlPointPair: controlPointPairs[1], endPosition: tile1OriginalPosition)
+        runBezierMovement(tile1: tile1, tile2: tile2, controlPointPair: controlPointPairs[0], endPosition: tile2OriginalPosition, drawArrows: false)
+        runBezierMovement(tile1: tile2, tile2: tile1, controlPointPair: controlPointPairs[1], endPosition: tile1OriginalPosition, drawArrows: lastPair)
         
         //now swap gridCoords
         let original = tile1.gridCoord
+
 //        tile1.gridCoord = tile2.gridCoord
 //        tile2.gridCoord = original
 //        tile2DArray[coord1.y][coord1.x] = tile2
 //        tile2DArray[coord2.y][coord2.x] = tile1
     }
     
-    private func runBezierMovement(tile1: GridTile, tile2: GridTile, controlPointPair: [CGPoint], endPosition: CGPoint){
+    private func runBezierMovement(tile1: GridTile, tile2: GridTile, controlPointPair: [CGPoint], endPosition: CGPoint, drawArrows: Bool){
         let path = UIBezierPath()
         path.move(to:tile1.position )
         path.addCurve(to: tile2.position, controlPoint1: controlPointPair[0], controlPoint2: controlPointPair[1])
@@ -412,7 +435,9 @@ class Level1Scene: SKScene {
         
         tile1.run(s){
             tile1.position = endPosition
-            //tile1.reInit()
+            if drawArrows{
+                self.setFirstTile()
+            }
         }
     }
     

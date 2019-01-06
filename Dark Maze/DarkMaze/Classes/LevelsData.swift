@@ -701,8 +701,12 @@ class LevelsData{
             LevelData(
                 gridX: 4, gridY: 4, delayTime: 0.5,
                 solutionCoords:
-                [(0,3),(1,3),(1,2),(1,1),(2,1),(2,0)],
-                modifications: nil
+                [(0,3),(1,3),(1,2),(2,2),(3,2)],
+                modifications: [(.jumbled, [
+                                    ((0,3),(0,1)),
+                                    ((1,3),(1,1))
+                                    ]
+                                )]
             ),
             LevelData(
                 gridX: 4, gridY: 4, delayTime: 0.5,
