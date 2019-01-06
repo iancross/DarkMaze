@@ -371,7 +371,7 @@ class LevelsData{
                 gridX: 4, gridY: 4, delayTime: 0.5,
                 solutionCoords:
                 [(0,1),(1,1),(2,1),(2,2),(3,2)],
-                 modifications: [(.jumbled, nil)]
+                 modifications: nil
             ),
             LevelData(
                 gridX: 4, gridY: 4, delayTime: 0.5,

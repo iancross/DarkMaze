@@ -88,7 +88,6 @@ class Level1Scene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         if gridViewable {
-            print (gameActive)
             for row in tile2DArray{
                 for tile in row{
                     tile.updateFrameAlpha()
@@ -236,25 +235,6 @@ class Level1Scene: SKScene {
        
     }
     
-//    func drawBlockReveal(blocksToDisplay: [[(Int,Int)]]){
-//
-//        for (i,block) in blocksToDisplay.enumerated(){
-//            var solutionTiles = [GridTile]()
-//            var nonSolutionTiles = [GridTile]()
-//            //for each coordinate in the block we are going to be showing
-//            for (x,y) in block{
-//                for coord in (Level?.solutionCoords)!{
-//                    if tupleContains(a: coord, v: (x,y)){
-//                        solutionTiles.append(tile2DArray[y][x])
-//                    }
-//                    else{
-//                        nonSolutionTiles.append(tile2DArray[y][x])
-//                    }
-//                }
-//            }
-//            runDrawingActions(tiles: solutionTiles, lastTile: false, delay: Level!.delayTime * Double(i))
-//        }
-//    }
     
     func drawMeetInTheMiddle(){
         let numTiles = Level!.solutionCoords.count
@@ -277,37 +257,7 @@ class Level1Scene: SKScene {
             runDrawingActions(tiles: tiles, lastTile: (left - i == 0), delay: Level!.delayTime * Double(i))
         }
     }
-    
-//    func drawSplitPath(splitPaths: [[(x: Int, y: Int)]] ){
-//        var splitPathsStarted = false
-//        var splitPathIndex = 0
-//        for (index,coord) in Level!.solutionCoords.enumerated(){
-//            let tile = tile2DArray[coord.y][coord.x]
-//            runDrawingActions(t: tile,
-//                              lastTile: (index == self.Level!.solutionCoords.count-1),
-//                              delay: Level!.delayTime * Double(index)
-//            )
-//
-//            if !splitPathsStarted{
-//                if tupleContains(a: coord, v: splitPaths[0][0]){
-//                    splitPathsStarted = true
-//                }
-//            }
-//            if splitPathsStarted{
-//                for path in splitPaths{
-//                    if splitPathIndex < path.count{
-//                        let pathCoord = path[splitPathIndex]
-//                        let splitTile = tile2DArray[pathCoord.y][pathCoord.x]
-//                        runDrawingActions(t: splitTile,
-//                            lastTile: (index == self.Level!.solutionCoords.count-1),
-//                            delay: Level!.delayTime * Double(index)
-//                        )
-//                    }
-//                }
-//                splitPathIndex += 1
-//            }
-//        }
-//    }
+
     
     func runDrawingActions(tiles: [GridTile], lastTile: Bool, delay: Double){
         for (index,t) in tiles.enumerated(){
@@ -322,7 +272,7 @@ class Level1Scene: SKScene {
                         self.drawGridLines()
                         //marking the first tile as available
                         self.beginGame()
-                        self.gameActive = true
+                        print ("gameActive = true in 'runDrawingActions'")
                         self.skipButton?.hide()
                     }
                 }
@@ -331,6 +281,7 @@ class Level1Scene: SKScene {
     }
     
     func beginGame(){
+        gameActive = true
         insertLevelTitle()
         let numSolutionBlocks = Level!.solutionCoords.count
         blockAlphaIncrement = (1.0 - blockAlphaMin) / CGFloat(numSolutionBlocks)
@@ -357,6 +308,8 @@ class Level1Scene: SKScene {
     
 /*---------------------------------------------------------------*/
 /*---------------------- Grid Modification ----------------------*/
+    //it's the responsibility of each modification to set gameActive to false
+    //if need be
     func modifyGrid(){
         if let mods = Level!.modifications{
             for (mod, modData) in mods{
@@ -371,16 +324,21 @@ class Level1Scene: SKScene {
                     print ("splitPath")
                 case .jumbled:
                     if let pairs = modData as? [((Int,Int),(Int,Int))]{
-                        print ("pairs look good ----------------------------------------")
                         gameActive = false
                         for (i,(x, y)) in pairs.enumerated(){
                             swapTiles(coord1: x, coord2: y, lastPair: i == pairs.count-1)
                         }
                     }
                 default:
-                    print("fuck")
+                    print ("this is being called")
+                    gameActive = true
+                    setFirstTile()
                 }
             }
+        }
+        else{
+            gameActive = true
+            setFirstTile()
         }
     }
     func spinGrid(rotation: CGFloat){
@@ -390,6 +348,7 @@ class Level1Scene: SKScene {
         let sequence = SKAction.rotate(byAngle: rotation, duration: Double(d))
         setFirstTile()
         gridNode.run(sequence){
+            print ("gameActive = true in spinGrid")
             self.gameActive = true
         }
     }
@@ -401,10 +360,12 @@ class Level1Scene: SKScene {
             SKAction.wait(forDuration: 0.3)])
         setFirstTile()
         gridNode.run(sequence){
+            print ("gameActive = true in flipGrid")
             self.gameActive = true
         }
     }
     private func swapTiles(coord1: (x: Int, y: Int), coord2: (x: Int, y: Int), lastPair: Bool){
+        gameActive = false
         let tile1 = tile2DArray[coord1.y][coord1.x]
         let tile2 = tile2DArray[coord2.y][coord2.x]
         let tile1OriginalPosition = tile1.position
@@ -432,13 +393,14 @@ class Level1Scene: SKScene {
         [SKAction.run({
                 tile1.zPosition = 1
             }),
-            SKAction.follow(path.cgPath, asOffset: false, orientToPath: false, duration: 1.5)
+            SKAction.follow(path.cgPath, asOffset: false, orientToPath: false, duration: 5)
         ])
         
         tile1.run(s){
             tile1.position = endPosition
             if lastSwappedPair{
                 self.setFirstTile()
+                print ("gameActive = true in runBezierMovement")
                 self.gameActive = true
             }
         }
@@ -549,7 +511,7 @@ class Level1Scene: SKScene {
         }
         self.drawGridLines()
         self.beginGame()
-        self.gameActive = true
+        print ("gameActive = true in skip")
         skipButton?.hide()
     }
     
