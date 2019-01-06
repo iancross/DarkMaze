@@ -90,8 +90,8 @@ public func calcPointsGiven(source: CGPoint, slope: CGFloat?, distance: CGFloat)
         
         //need to account for case where the slope is 0
         if s == 0{
-            //print ("we're in the case were slope is 0")
-            return [CGPoint(x: source.x, y:source.y + distance),CGPoint(x: source.x, y:source.y - distance)]
+            print ("we're in the case where the perpendicular slope is 0")
+            return [CGPoint(x: source.x + distance, y:source.y),CGPoint(x: source.x - distance, y:source.y)]
         }
         let p = distance * (1/1+pow(s, 2)).squareRoot()
         let x1 = source.x + p
@@ -103,7 +103,8 @@ public func calcPointsGiven(source: CGPoint, slope: CGFloat?, distance: CGFloat)
         return [CGPoint(x: x1, y: y1), CGPoint(x: x2, y: y2)]
     }
     else{
-        return [CGPoint(x: source.x + distance, y:source.y),CGPoint(x: source.x - distance, y:source.y )]
+        //we're in the case where slope is undefined
+        return [CGPoint(x: source.x, y:source.y + distance),CGPoint(x: source.x, y:source.y - distance)]
     }
 }
 

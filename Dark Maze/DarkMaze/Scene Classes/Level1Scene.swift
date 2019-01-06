@@ -88,6 +88,7 @@ class Level1Scene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         if gridViewable {
+            print (gameActive)
             for row in tile2DArray{
                 for tile in row{
                     tile.updateFrameAlpha()
@@ -371,6 +372,7 @@ class Level1Scene: SKScene {
                 case .jumbled:
                     if let pairs = modData as? [((Int,Int),(Int,Int))]{
                         print ("pairs look good ----------------------------------------")
+                        gameActive = false
                         for (i,(x, y)) in pairs.enumerated(){
                             swapTiles(coord1: x, coord2: y, lastPair: i == pairs.count-1)
                         }
@@ -408,8 +410,8 @@ class Level1Scene: SKScene {
         let tile1OriginalPosition = tile1.position
         let tile2OriginalPosition = tile2.position
         let controlPointPairs = getBezierControlPoints(a: tile1.position, b: tile2.position)
-        runBezierMovement(tile1: tile1, tile2: tile2, controlPointPair: controlPointPairs[0], endPosition: tile2OriginalPosition, drawArrows: false)
-        runBezierMovement(tile1: tile2, tile2: tile1, controlPointPair: controlPointPairs[1], endPosition: tile1OriginalPosition, drawArrows: lastPair)
+        runBezierMovement(tile1: tile1, tile2: tile2, controlPointPair: controlPointPairs[0], endPosition: tile2OriginalPosition, lastSwappedPair: false)
+        runBezierMovement(tile1: tile2, tile2: tile1, controlPointPair: controlPointPairs[1], endPosition: tile1OriginalPosition, lastSwappedPair: lastPair)
         
         //now swap gridCoords
         let original = tile1.gridCoord
@@ -420,23 +422,24 @@ class Level1Scene: SKScene {
 //        tile2DArray[coord2.y][coord2.x] = tile1
     }
     
-    private func runBezierMovement(tile1: GridTile, tile2: GridTile, controlPointPair: [CGPoint], endPosition: CGPoint, drawArrows: Bool){
+    private func runBezierMovement(tile1: GridTile, tile2: GridTile, controlPointPair: [CGPoint], endPosition: CGPoint, lastSwappedPair: Bool){
         let path = UIBezierPath()
         path.move(to:tile1.position )
         path.addCurve(to: tile2.position, controlPoint1: controlPointPair[0], controlPoint2: controlPointPair[1])
         
-        tile1.tile.fillColor = .orange
+        //tile1.tile.fillColor = .orange
         let s = SKAction.sequence(
         [SKAction.run({
                 tile1.zPosition = 1
             }),
-            SKAction.follow(path.cgPath, asOffset: false, orientToPath: false, duration: 4)
+            SKAction.follow(path.cgPath, asOffset: false, orientToPath: false, duration: 1.5)
         ])
         
         tile1.run(s){
             tile1.position = endPosition
-            if drawArrows{
+            if lastSwappedPair{
                 self.setFirstTile()
+                self.gameActive = true
             }
         }
     }
@@ -478,6 +481,7 @@ class Level1Scene: SKScene {
                 handleTouch(t.location(in: gridNode))
                 break //not sure if i need this
             }
+            
             else{
                 if !countdownActive{
                     if (skipButton?.within(point: (t.location(in: self))))!{
