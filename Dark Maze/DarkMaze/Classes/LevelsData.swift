@@ -28,6 +28,7 @@ enum GridModification {
     case flip
     case spin
     case meetInTheMiddle
+    case divideAndConquer
     case splitPath //(.splitpath, array coord arrays [[1,2,3,4],[1,2,3,6]]
     case thisLooksFamiliar //the path loops back onto itself
     case jumbled
@@ -48,28 +49,18 @@ class LevelsData{
         selectedLevel = (page: 0, level: 0)
         //levelGroups = [(category: String, levels: [LevelData])]()
         //SplitPath()
+        Intro()
         Normal()
         Jump()
         ThisLooksFamiliar() //go back over itself
         MeetInTheMiddle()
+        DivideAndConquer()
         Spin()
         Jumbled()
         Combo1()
         BlockReveal()
         MultiJump()
-        _BryanTest()
-        _BryanTest()
-        _BryanTest()
-        _BryanTest()
-        _BryanTest()
-        _BryanTest()
-        _BryanTest()
-        _BryanTest()
-        _BryanTest()
-        _BryanTest()
-        _BryanTest()
-        _BryanTest()
-        _BryanTest()
+        
 
         //disappearing trail()
         //Flip()
@@ -111,22 +102,15 @@ class LevelsData{
                     page.unlocked = false
                 }
                 
-                //testing
-                page.unlocked = true
+//                //testing
+//                page.unlocked = true
                 
                 page.number = Int32(i)
                 for (j,levelData) in levelGroups[i].levels.enumerated(){
                     let level = Level(entity: levelEntity, insertInto: managedContext)
                     level.attemptsBeforeSuccess = 0
-                    //testing
-//                    if i == 0 && j < 7{
-//                        level.completed = true
-//                    }
-//                    else{
-//                        level.completed = false
-//                    }
-                    //end test
-                    level.completed = true
+                    
+                    level.completed = false
                     level.number = Int32(j)
                     level.page = page
                     level.totalAttempts = 0
@@ -196,7 +180,7 @@ class LevelsData{
                  NSPredicate(format: "completed == \(true)")])
             do {
                 let levelsCount = try (managedContext.fetch(fetchRequest) as [NSManagedObject]).count
-                return levelsCount >= REQUIRED_TO_UNLOCK
+                return levelsCount >= levelGroups[page-1].levels.count//REQUIRED_TO_UNLOCK
             } catch let error as NSError {
                 print("Could not fetch. \(error), \(error.userInfo)")
             }
@@ -361,7 +345,24 @@ class LevelsData{
         }
     }
     
-    /*------------------------------- 4x4 -------------------------------*/
+    private func Intro(){
+        let array = [
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(0,1),(1,1),(2,1),(2,2),(3,2)],
+                modifications: nil
+            ),
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(0,3),(1,3),(1,2),(1,1),(2,1),(2,0)],
+                modifications: nil
+            )
+        ]
+        levelGroups.append ((category: "Intro", array))
+    }
+    
     //Description:
     //Easiest level to show how to play the game. Probably going to do all sorts of
     //directions to show the maze functionality
@@ -526,6 +527,59 @@ class LevelsData{
                 modifications: [(.meetInTheMiddle, nil)]
             )]
         levelGroups.append ((category: "Meet In The Middle", array))
+    }
+    
+    private func DivideAndConquer(){
+        let array = [
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.8,
+                solutionCoords:
+                [(0,0),(0,1),(0,2),(0,3),(1,3),(2,3),(2,2),(2,1),(2,0),(3,0)],
+                modifications: [(.divideAndConquer, nil)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.8,
+                solutionCoords:
+                [(4,2),(3,2),(2,2),(2,1),(2,0),(1,0),(0,0),(0,1),(0,2),(0,3),(0,4)],
+                modifications: [(.divideAndConquer, nil)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.8,
+                solutionCoords:
+                [(4,4),(3,4),(3,3),(2,3),(2,2),(3,2),(4,2),(4,1),(4,0),(3,0),(2,0),(1,0),(0,0)],
+                modifications: [(.divideAndConquer, nil)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.8,
+                solutionCoords:
+                [(0,4),(0,3),(1,3),(1,2),(2,2),(2,1),(2,0),(3,0),(4,0)],
+                modifications: [(.divideAndConquer, nil)]
+            ),
+            LevelData(   //5
+                gridX: 5, gridY: 6, delayTime: 0.9,
+                solutionCoords:
+                [(4,3),(3,3),(3,2),(4,2),(4,1),(4,0),(3,0),(2,0),(1,0),(1,1),(1,2),(0,2),(0,3),(0,4),(1,4),(2,4),(2,5)],
+                modifications: [(.divideAndConquer, nil)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 6, delayTime: 0.9,
+                solutionCoords:
+                [(0,0),(1,0),(2,0),(3,0),(4,0),(4,1),(3,1),(2,1),(1,1),(0,1),(0,2),(1,2),(2,2),(3,2),(3,3),(3,4),(2,4),(1,4),(0,4),(0,5),(1,5)],
+                modifications: [(.divideAndConquer, nil)]
+            ),
+            LevelData(
+                gridX: 4, gridY: 7, delayTime: 0.8,
+                solutionCoords:
+                [(0,5),(0,4),(0,3),(1,3),(1,2),(1,1),(1,0),(2,0),(2,1),(2,2),(2,3),(3,3),(3,4),(3,5),(3,6),],
+                modifications: [(.divideAndConquer, nil)]
+            ),
+            LevelData(
+                gridX: 4, gridY: 8, delayTime: 0.8,
+                solutionCoords:
+                [(3,2),(2,2),(2,3),(3,3),(3,4),(3,5),(3,6),(2,6),(1,6),(1,7),(0,7),(0,6),(0,5),(0,4),(1,4),(1,3),(1,2),(0,2),(0,1),(0,0),(1,0)],
+                modifications: [(.divideAndConquer, nil)]
+            )]
+        levelGroups.append ((category: "Divide and Conquer", array))
     }
     
     private func ThisLooksFamiliar(){
@@ -786,12 +840,12 @@ class LevelsData{
                 gridX: 6, gridY: 10, delayTime: 0.3,
                 solutionCoords:
                 [(0,7),(1,7),(1,8),(1,9),(2,9),(3,9),(3,8),(4,8),(4,7),(4,6),(5,6),(5,5),(5,4),(4,4),(3,4),(2,4),(1,4),(1,3),(2,3),(2,2),(3,2),(4,2),(4,1),(5,1)],
-                modifications: [(.flip, nil), (.meetInTheMiddle, nil)]
+                modifications: [(.flip, nil), (.divideAndConquer, nil)]
             ),LevelData(
                 gridX: 6, gridY: 10, delayTime: 0.7,
                 solutionCoords:
                 [(0,7),(1,7),(1,8),(1,9),(2,9),(3,9),(3,8),(4,8),(4,7),(4,6),(5,6),(5,5),(5,4),(4,4),(3,4),(2,4),(1,4),(1,3),(2,3),(2,2),(3,2),(4,2),(4,1),(5,1)],
-                 modifications: [(.flip, nil), (.meetInTheMiddle, nil)]
+                 modifications: [(.flip, nil), (.divideAndConquer, nil)]
             )]
         levelGroups.append ((category: "Huge", array))
     }

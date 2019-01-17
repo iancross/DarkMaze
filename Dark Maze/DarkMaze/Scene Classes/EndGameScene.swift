@@ -9,6 +9,7 @@ let YELLOW = UIColor.init(red: 0.8, green: 0.8, blue: 0.0, alpha: 1.0)
 import SpriteKit
 import GoogleMobileAds
 
+let buffers: (CGFloat,CGFloat) = (screenWidth*0.05,screenWidth*0.025)
 
 class EndGameScene: SKScene {
     var repeatOrNextButton: TextBoxButton? = nil
@@ -146,7 +147,6 @@ class EndGameScene: SKScene {
     }
     func addButtons(text: String){
         let font = screenWidth*0.11 //GameStyle.shared.TextBoxFontSize
-        let buffers: (CGFloat,CGFloat) = (screenWidth*0.05,screenWidth*0.025)
 
         repeatOrNextButton = TextBoxButton(x: 0, y: frame.height/8, text: text, fontsize:font, buffers: buffers)
         repeatOrNextButton?.name = "repeat"

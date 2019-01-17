@@ -21,8 +21,11 @@ class Level1Scene: SKScene {
     
     var tile2DArray = [[GridTile]]()
     var gameActive = false
+    var tutorialActive = false
     var countdownActive = false
     var skipButton: TextBoxButton?
+    var continueButton: TextBoxButton?
+    var continueButtonFunction: (()->())?
     let blockBuffer: CGFloat = 2
     var countdownTime = 3
     var gridViewable = false
@@ -49,13 +52,12 @@ class Level1Scene: SKScene {
     var endPathCoord: (x: CGFloat, y: CGFloat) = (x: 0, y: 0)
     var pathLines: [SKShapeNode] = []
     var gridSpinning = false
+    var nextPageUnlocked = false
     override init(size: CGSize) {
         super.init(size: size)
         backgroundColor = UIColor.black
         anchorPoint = CGPoint(x: 0, y:0)
-        Level = LevelsData.shared.getSelectedLevelData()
-        startPathCoord = initPathPoints(coord: (Level?.solutionCoords.first)!)
-        endPathCoord = initPathPoints(coord: (Level?.solutionCoords.last)!)
+
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -64,11 +66,23 @@ class Level1Scene: SKScene {
     
     override func didMove(to view: SKView) {
         super.didMove(to: view)
+        initializeGame()
+    }
+    
+    private func initializeGame(){
+        Level = LevelsData.shared.getSelectedLevelData()
+        startPathCoord = initPathPoints(coord: (Level?.solutionCoords.first)!)
+        endPathCoord = initPathPoints(coord: (Level?.solutionCoords.last)!)
         cam = SKCameraNode()
         self.camera = cam
         self.addChild(cam!)
         cam?.position = CGPoint(x: frame.midX,y: frame.midY)
-        countdown()
+        if LevelsData.shared.getPageCategory(page: currentPage) == "Intro"{
+            tutorialBeforeCountdown()
+        }
+        else {
+            countdown()
+        }
     }
     private func initPathPoints(coord: (x: Int, y: Int)) -> (x: CGFloat, y: CGFloat){
         if coord.x == 0{
@@ -96,9 +110,58 @@ class Level1Scene: SKScene {
         }
     }
     
+    private func tutorialBeforeCountdown(){
+        
+        var text = ""
+        if currentLevel == 0{
+            text = "After a short countdown, you'll be shown how to escape the maze. Pay attention, you'll need to do it in the dark..."
+        }
+        else if currentLevel == 1{
+            text = "Be warned, the light may play tricks on you. You must prepare yourself for harder mazes yet to come..."
+        }
+        tutorial(text: text, buttonText: "Continue")
+        continueButtonFunction = countdown
+    }
+    private func tutorial(text: String, buttonText: String){
+        tutorialActive = true
+        let instructionNode = SKNode()
+        instructionNode.addChild(createInstructionBorder())
+        instructionNode.addChild(createInstructionText(text: text))
+        continueButton = TextBoxButton(x: frame.width/2, y: frame.height * 5/18, text: buttonText, fontsize: frame.width/13, buffers: buffers)
+        instructionNode.addChild(continueButton!)
+        instructionNode.addChild(addIntroTitle())
+        instructionNode.alpha = 0
+        addChild(instructionNode)
+        instructionNode.run(SKAction.fadeIn(withDuration: 0.5))
+    }
+    
+    private func addIntroTitle() -> SKLabelNode{
+        let label = Helper.createGenericLabel("Intro: \(currentLevel + 1)", fontsize: frame.width/13)
+        label.horizontalAlignmentMode = .left
+        label.position = CGPoint(x: frame.width * 1/6, y: frame.height * 31/36)
+        return label
+    }
+    private func createInstructionBorder()->SKShapeNode{
+        let outline = SKShapeNode(rectOf: CGSize(width: frame.width * 2/3, height: frame.height * 2/3))
+        outline.position = CGPoint(x: frame.width / 2, y: frame.height / 2)
+        outline.lineWidth = 2 + frame.width/500.0
+        return outline
+    }
+    private func createInstructionText(text: String)->SKLabelNode{
+        let instruction = Helper.createGenericLabel(text, fontsize: frame.width/13.5)
+        instruction.verticalAlignmentMode = .top
+        instruction.position = CGPoint(x: frame.width / 2, y: frame.height * 14/18)
+        instruction.preferredMaxLayoutWidth = frame.width * 5/9
+        instruction.numberOfLines = 0
+        instruction.lineBreakMode = .byWordWrapping
+        return instruction
+    }
+    
     //does a 3 2 1 countdown on the screen and then
     //starts drawing the solution
     func countdown(){
+        tutorialActive = false
+        removeAllChildren()
         countdownActive = true
         let number = SKLabelNode(fontNamed: GameStyle.shared.mainFontString)
         number.text = "\(countdownTime)"
@@ -161,8 +224,8 @@ class Level1Scene: SKScene {
         if let mods = Level!.modifications{
             for (mod, modData) in mods{
                 switch mod {
-                case .meetInTheMiddle:
-                    drawMeetInTheMiddle()
+                case .divideAndConquer:
+                    drawDivideAndConquer()
                 case .blockReveal:
                     if let arr = modData as? [Int]{
                         drawBlockReveal(blocksToDisplay: arr)
@@ -236,7 +299,7 @@ class Level1Scene: SKScene {
     }
     
     
-    func drawMeetInTheMiddle(){
+    func drawDivideAndConquer(){
         let numTiles = Level!.solutionCoords.count
         var left,right: Int
         if numTiles % 2 == 0 { //even
@@ -446,11 +509,21 @@ class Level1Scene: SKScene {
             
             else{
                 if !countdownActive{
-                    if (skipButton?.within(point: (t.location(in: self))))!{
-                        skipButton!.tappedState()
+                    if tutorialActive{
+                        if(continueButton?.within(point: (t.location(in: self))))!{
+                            continueButton!.tappedState()
+                        }
+                        else{
+                            continueButton!.originalState()
+                        }
                     }
                     else{
-                        skipButton!.originalState()
+                        if (skipButton?.within(point: (t.location(in: self))))!{
+                            skipButton!.tappedState()
+                        }
+                        else{
+                            skipButton!.originalState()
+                        }
                     }
                 }
                 else{ //if count down IS happening, let's clear it
@@ -470,11 +543,24 @@ class Level1Scene: SKScene {
             }
             else{
                 if !countdownActive{
-                    if (skipButton?.within(point: (t.location(in: self))))!{
-                        skip(touch: t.location(in: self))
+                    if tutorialActive{
+                        if(continueButton?.within(point: (t.location(in: self))))!{
+                            removeAllChildren()
+                            if let f = continueButtonFunction{
+                                f()
+                            }
+                        }
+                        else{
+                            continueButton!.originalState()
+                        }
                     }
                     else{
-                        skipButton!.originalState()
+                        if (skipButton?.within(point: (t.location(in: self))))!{
+                            skip(touch: t.location(in: self))
+                        }
+                        else{
+                            skipButton!.originalState()
+                        }
                     }
                 }
             }
@@ -491,11 +577,23 @@ class Level1Scene: SKScene {
             }
             else{
                 if !countdownActive{
-                    if (skipButton?.within(point: (point?.location(in: self))!))!{
-                        skipButton!.tappedState()
-                    }
-                    else{
-                        skipButton!.originalState()
+                    if !countdownActive{
+                        if tutorialActive{
+                            if(continueButton?.within(point: (point!.location(in: self))))!{
+                                continueButton!.tappedState()
+                            }
+                            else{
+                                continueButton!.originalState()
+                            }
+                        }
+                        else{
+                            if (skipButton?.within(point: (point!.location(in: self))))!{
+                                skipButton!.tappedState()
+                            }
+                            else{
+                                skipButton!.originalState()
+                            }
+                        }
                     }
                 }
             }
@@ -818,19 +916,61 @@ class Level1Scene: SKScene {
     // show the end game failure (failure = true)
     func endGame (success: Bool){
         let nextLevelUnlockedBefore = LevelsData.shared.isPageUnlocked(page: LevelsData.shared.selectedLevel.page + 1)
-
+        
+        
         LevelsData.shared.levelCompleted(success: success)
         
         let nextLevelUnlockedAfter = LevelsData.shared.isPageUnlocked(page: LevelsData.shared.selectedLevel.page + 1)
         for child in self.children {
             child.removeFromParent()
         }
-        let b = !nextLevelUnlockedBefore && nextLevelUnlockedAfter
-        switchToEndGameScene(unlockedLevel: b)
+        nextPageUnlocked = !nextLevelUnlockedBefore && nextLevelUnlockedAfter
+        if LevelsData.shared.getPageCategory(page: currentPage) == "Intro"{
+            var text = ""
+            var buttonText = ""
+            if currentLevel == 0{
+                if success {
+                    text = "Always try to escape on your first try, this will give you a bonus to help you later..."
+                    buttonText = "Next Level"
+                    LevelsData.shared.nextLevel()
+                }
+                else{
+                    text = "You stepped outside the maze..."
+                    buttonText = "Try Again"
+                }
+            }
+            else if currentLevel == 1{
+                if !success{
+                    LevelsData.shared.levelCompleted(success: true)
+                }
+                nextPageUnlocked = true
+                text = "You're obviously not prepared. Let's start at the beginning..."
+                buttonText = "Continue"
+            }
+            tutorial(text: text, buttonText: buttonText)
+            continueButtonFunction = tutorialContinue
+        }
+        else{
+            switchToEndGameScene()
+        }
+            
     }
     
-    private func switchToEndGameScene(unlockedLevel: Bool){
-        (self.delegate as? GameDelegate)?.gameOver(unlockedLevel: unlockedLevel)
+    private func tutorialContinue(){
+        if currentLevel == 0{
+            //LevelsData.shared.nextLevel()
+            removeAllChildren()
+            (self.delegate as? GameDelegate)?.playGame()
+        }
+        else if currentLevel == 1{
+            LevelsData.shared.nextLevel()
+            (self.delegate as? GameDelegate)?.levelSelect()
+        }
+            
+    }
+    
+    private func switchToEndGameScene(){
+        (self.delegate as? GameDelegate)?.gameOver(unlockedLevel: nextPageUnlocked)
     }
     
     
