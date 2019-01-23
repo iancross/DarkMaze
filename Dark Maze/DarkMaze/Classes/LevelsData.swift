@@ -26,7 +26,7 @@ struct LevelData {
 
 enum GridModification {
     case flip
-    case spin
+    case spin //looks like: (.spin, CGFloat.pi)
     case meetInTheMiddle
     case divideAndConquer
     case splitPath //(.splitpath, array coord arrays [[1,2,3,4],[1,2,3,6]]
@@ -110,7 +110,7 @@ class LevelsData{
                     let level = Level(entity: levelEntity, insertInto: managedContext)
                     level.attemptsBeforeSuccess = 0
                     
-                    level.completed = false
+                    level.completed = true
                     level.number = Int32(j)
                     level.page = page
                     level.totalAttempts = 0
@@ -354,10 +354,10 @@ class LevelsData{
                 modifications: nil
             ),
             LevelData(
-                gridX: 4, gridY: 4, delayTime: 0.5,
+                gridX: 7, gridY: 10, delayTime: 0.2,
                 solutionCoords:
-                [(0,3),(1,3),(1,2),(1,1),(2,1),(2,0)],
-                modifications: nil
+                [(6,5),(5,5),(5,4),(4,4),(4,5),(4,6),(4,7),(1,8),(1,7),(1,6),(2,6),(2,5),(2,4),(1,4),(0,4),(0,5),(1,5),(2,5),(3,5),(3,4),(3,3),(3,2),(2,2),(0,1),(1,1),(1,0),(2,0),(3,0),(4,0),(4,1),(5,1),(5,2),(6,2)],
+                modifications: [(.flip, nil), (.spin, CGFloat.pi)]
             )
         ]
         levelGroups.append ((category: "Intro", array))

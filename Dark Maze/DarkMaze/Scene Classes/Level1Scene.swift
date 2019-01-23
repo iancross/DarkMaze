@@ -17,7 +17,7 @@ enum Jumps {
 
 
 class Level1Scene: SKScene {
-    let testing = false //testing variable controls touches moved and printing the green coords
+    let testing = true //testing variable controls touches moved and printing the green coords
     
     var tile2DArray = [[GridTile]]()
     var gameActive = false
@@ -150,8 +150,8 @@ class Level1Scene: SKScene {
     private func createInstructionText(text: String)->SKLabelNode{
         let instruction = Helper.createGenericLabel(text, fontsize: frame.width/13.5)
         instruction.verticalAlignmentMode = .top
-        instruction.position = CGPoint(x: frame.width / 2, y: frame.height * 14/18)
-        instruction.preferredMaxLayoutWidth = frame.width * 5/9
+        instruction.position = CGPoint(x: frame.width / 2, y: frame.height * 0.81)
+        instruction.preferredMaxLayoutWidth = frame.width * 0.59
         instruction.numberOfLines = 0
         instruction.lineBreakMode = .byWordWrapping
         return instruction
@@ -222,7 +222,7 @@ class Level1Scene: SKScene {
     func drawSolution(){
         addSkipButton()
         if let mods = Level!.modifications{
-            for (mod, modData) in mods{
+            for (i, (mod, modData)) in mods.enumerated(){
                 switch mod {
                 case .divideAndConquer:
                     drawDivideAndConquer()
@@ -242,11 +242,15 @@ class Level1Scene: SKScene {
                     //drawSplitPath(splitPaths: modData as! [[(Int, Int)]])
                     print ("split path")
                 default:
-                    drawNormal()
+                    print("calling draw normal from default")
+                    if i == mods.count - 1{
+                        drawNormal()
+                    }
                 }
             }
         }
         else{
+            print("calling draw normal from getting nil in mods")
             drawNormal()
         }
     }
@@ -259,6 +263,7 @@ class Level1Scene: SKScene {
     }
     
     func drawNormal(){
+        print("drawingNormal")
         for (index,coord) in Level!.solutionCoords.enumerated(){
             let tile = tile2DArray[coord.y][coord.x]
             runDrawingActions(tiles: [tile],
@@ -269,6 +274,7 @@ class Level1Scene: SKScene {
     }
     
     func drawJumbled(pairs: [((x: Int,y: Int),(x: Int,y: Int))]){
+        print ("drawingJumbled")
         for pair in pairs{
             let (coord1, _) = pair
             let (_, coord2) = pair
@@ -283,6 +289,7 @@ class Level1Scene: SKScene {
     }
 
     func drawBlockReveal(blocksToDisplay: [Int]){
+        print ("drawingBlockedReveal")
         var solutionCoordIndex = 0
         for (i,num) in blocksToDisplay.enumerated(){
             var solutionTiles = [GridTile]()
@@ -300,6 +307,7 @@ class Level1Scene: SKScene {
     
     
     func drawDivideAndConquer(){
+        print ("drawingDivideAndConquer")
         let numTiles = Level!.solutionCoords.count
         var left,right: Int
         if numTiles % 2 == 0 { //even
@@ -374,14 +382,15 @@ class Level1Scene: SKScene {
     //it's the responsibility of each modification to set gameActive to false
     //if need be
     func modifyGrid(){
+        var actions: [SKAction] = []
         if let mods = Level!.modifications{
             for (mod, modData) in mods{
                 switch mod {
                 case .flip:
-                    flipGrid()
+                    actions.append(flipGrid())
                 case .spin:
                     if let r = modData as? CGFloat{
-                        spinGrid(rotation: r)
+                        actions.append(spinGrid(rotation: r))
                     }
                 case .splitPath:
                     print ("splitPath")
@@ -398,34 +407,42 @@ class Level1Scene: SKScene {
                     setFirstTile()
                 }
             }
+            print("actions \(actions)")
+            gridNode.run(SKAction.sequence(actions)){
+                print ("gridNode running")
+                self.gameActive = true
+                self.setFirstTile()
+            }
         }
         else{
             gameActive = true
             setFirstTile()
         }
     }
-    func spinGrid(rotation: CGFloat){
+    func spinGrid(rotation: CGFloat) -> SKAction{
         gridSpinning = true
         let d = abs(rotation / (CGFloat.pi / 4.0) * 0.3)
         print("\(rotation) / \(CGFloat.pi / 4.0) * 0.4 = \(d)")
-        let sequence = SKAction.rotate(byAngle: rotation, duration: Double(d))
-        setFirstTile()
-        gridNode.run(sequence){
-            print ("gameActive = true in spinGrid")
-            self.gameActive = true
-        }
+        let action = SKAction.rotate(byAngle: rotation, duration: Double(d))
+        //setFirstTile()
+        return action
+//        gridNode.run(sequence){
+//            print ("gameActive = true in spinGrid")
+//            self.gameActive = true
+//        }
     }
-    func flipGrid(){
+    func flipGrid()->SKAction{
         let sequence = SKAction.sequence(
             [SKAction.run { self.gameActive = false },
             SKAction.wait(forDuration: 0.2),
             SKAction.scaleX(to: -1.0, duration: 1.0),
             SKAction.wait(forDuration: 0.3)])
-        setFirstTile()
-        gridNode.run(sequence){
-            print ("gameActive = true in flipGrid")
-            self.gameActive = true
-        }
+        //setFirstTile()
+        return sequence
+//        gridNode.run(sequence){
+//            print ("gameActive = true in flipGrid")
+//            self.gameActive = true
+//        }
     }
     private func swapTiles(coord1: (x: Int, y: Int), coord2: (x: Int, y: Int), lastPair: Bool){
         gameActive = false
@@ -439,11 +456,6 @@ class Level1Scene: SKScene {
         
         //now swap gridCoords
         let original = tile1.gridCoord
-
-//        tile1.gridCoord = tile2.gridCoord
-//        tile2.gridCoord = original
-//        tile2DArray[coord1.y][coord1.x] = tile2
-//        tile2DArray[coord2.y][coord2.x] = tile1
     }
     
     private func runBezierMovement(tile1: GridTile, tile2: GridTile, controlPointPair: [CGPoint], endPosition: CGPoint, lastSwappedPair: Bool){
