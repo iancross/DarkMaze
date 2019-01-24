@@ -17,7 +17,7 @@ enum Jumps {
 
 
 class Level1Scene: SKScene {
-    let testing = true //testing variable controls touches moved and printing the green coords
+    let testing = false //testing variable controls touches moved and printing the green coords
     
     var tile2DArray = [[GridTile]]()
     var gameActive = false
@@ -388,6 +388,7 @@ class Level1Scene: SKScene {
                 switch mod {
                 case .flip:
                     actions.append(flipGrid())
+                    //we also need to flip the arrows oops
                 case .spin:
                     if let r = modData as? CGFloat{
                         actions.append(spinGrid(rotation: r))
@@ -412,6 +413,9 @@ class Level1Scene: SKScene {
                 print ("gridNode running")
                 self.gameActive = true
                 self.setFirstTile()
+                
+                //testing
+                self.testingFlipAllTiles()
             }
         }
         else{
@@ -419,6 +423,13 @@ class Level1Scene: SKScene {
             setFirstTile()
         }
     }
+    
+    func testingFlipAllTiles(){
+        for coord in (Level?.solutionCoords)!{
+            tile2DArray[coord.y][coord.x].setColor(color: .purple)
+        }
+    }
+    
     func spinGrid(rotation: CGFloat) -> SKAction{
         gridSpinning = true
         let d = abs(rotation / (CGFloat.pi / 4.0) * 0.3)
@@ -965,7 +976,7 @@ class Level1Scene: SKScene {
         else{
             switchToEndGameScene()
         }
-            
+        
     }
     
     private func tutorialContinue(){
@@ -978,7 +989,7 @@ class Level1Scene: SKScene {
             LevelsData.shared.nextLevel()
             (self.delegate as? GameDelegate)?.levelSelect()
         }
-            
+        
     }
     
     private func switchToEndGameScene(){
@@ -1187,7 +1198,12 @@ class Level1Scene: SKScene {
         }
         arrow.position = point
         arrow.zRotation += rotation
-        gridNode.addChild(arrow)
+        if let a = arrow.parent{
+            //do nothing
+        }
+        else{
+            gridNode.addChild(arrow)
+        }
     }
 /*---------------------- End Arrows ----------------------*/
     

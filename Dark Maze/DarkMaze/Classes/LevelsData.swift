@@ -357,7 +357,7 @@ class LevelsData{
                 gridX: 7, gridY: 10, delayTime: 0.2,
                 solutionCoords:
                 [(6,5),(5,5),(5,4),(4,4),(4,5),(4,6),(4,7),(1,8),(1,7),(1,6),(2,6),(2,5),(2,4),(1,4),(0,4),(0,5),(1,5),(2,5),(3,5),(3,4),(3,3),(3,2),(2,2),(0,1),(1,1),(1,0),(2,0),(3,0),(4,0),(4,1),(5,1),(5,2),(6,2)],
-                modifications: [(.flip, nil), (.spin, CGFloat.pi)]
+                modifications: [(.jumbled, [((2,2),(1,3)),((3,2),(2,3))]),(.flip, nil), (.spin, CGFloat.pi)]
             )
         ]
         levelGroups.append ((category: "Intro", array))
@@ -771,8 +771,8 @@ class LevelsData{
             LevelData(
                 gridX: 4, gridY: 5, delayTime: 0.5,
                 solutionCoords:
-                [(0,2),(0,1),(1,1),(1,2),(2,2),(2,3),(2,4),(3,4)],
-                modifications: nil
+                [(0,4),(0,3),(0,2),(0,1),(1,1),(2,1),(2,0)],
+                modifications: [(.jumbled,[((0,1),(1,2)),((1,1),(2,2)),((2,1),(3,2)),((2,0),(3,1))])]
             ),
             LevelData(
                 gridX: 5, gridY: 5, delayTime: 0.5,
