@@ -20,5 +20,6 @@ protocol GameDelegate: SKSceneDelegate {
     func levelSelect()
     func playGame()
     func mainMenu()
+    func settings()
 }
 

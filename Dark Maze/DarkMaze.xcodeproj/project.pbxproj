@@ -37,6 +37,7 @@
 		C3EF4A1F1FD7749000528247 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3EF4A1D1FD7749000528247 /* Main.storyboard */; };
 		C3EF4A211FD7749000528247 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C3EF4A201FD7749000528247 /* Assets.xcassets */; };
 		C3EF4A241FD7749000528247 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3EF4A221FD7749000528247 /* LaunchScreen.storyboard */; };
+		C3EF9F6F21FE5573002635D3 /* SettingsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3EF9F6E21FE5572002635D3 /* SettingsScene.swift */; };
 		C3FD8ACB20141ADF006ED708 /* TextBoxButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3FD8ACA20141ADF006ED708 /* TextBoxButton.swift */; };
 /* End PBXBuildFile section */
 
@@ -87,6 +88,7 @@
 		C3EF4A251FD7749000528247 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C3EF4A2B1FD7770600528247 /* MYBLS___.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MYBLS___.TTF"; sourceTree = "<group>"; };
 		C3EF4A2C1FD7771100528247 /* MYSCARS_.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = MYSCARS_.TTF; sourceTree = "<group>"; };
+		C3EF9F6E21FE5572002635D3 /* SettingsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScene.swift; sourceTree = "<group>"; };
 		C3FD8ACA20141ADF006ED708 /* TextBoxButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextBoxButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -160,6 +162,7 @@
 			isa = PBXGroup;
 			children = (
 				C3EF4A191FD7749000528247 /* MenuScene.swift */,
+				C3EF9F6E21FE5572002635D3 /* SettingsScene.swift */,
 				C364CEBF1FE74F98009140C7 /* Level1Scene.swift */,
 				C30DB1C92015684900CE670C /* EndGameScene.swift */,
 			);
@@ -375,6 +378,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3EF9F6F21FE5573002635D3 /* SettingsScene.swift in Sources */,
 				C3FD8ACB20141ADF006ED708 /* TextBoxButton.swift in Sources */,
 				C37B707E1FE9D94D00F71B73 /* GridTile.swift in Sources */,
 				C3EF4A1A1FD7749000528247 /* MenuScene.swift in Sources */,

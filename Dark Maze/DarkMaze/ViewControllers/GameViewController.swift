@@ -31,11 +31,10 @@ class GameViewController: UIViewController, GameDelegate, GADBannerViewDelegate 
             
             view.preferredFramesPerSecond = 30
             mainMenu()
-            //gameOver(unlockedLevel: false)
 
             view.ignoresSiblingOrder = true
-            view.showsFPS = true
-            view.showsNodeCount = true
+//            view.showsFPS = true
+//            view.showsNodeCount = true
         }
     }
     
@@ -59,6 +58,10 @@ class GameViewController: UIViewController, GameDelegate, GADBannerViewDelegate 
     
     func mainMenu() {
         switchScene(scene: MenuScene(size: GameStyle.shared.defaultSceneSize))
+    }
+    
+    func settings(){
+        switchScene(scene: SettingsScene(size: GameStyle.shared.defaultSceneSize))
     }
     
     func levelSelect(){

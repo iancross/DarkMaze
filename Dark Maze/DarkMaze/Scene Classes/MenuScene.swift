@@ -13,7 +13,10 @@ import GameplayKit
 class MenuScene: SKScene {
     var darkMaze: SKLabelNode? = nil
     var tapToBegin: SKLabelNode? = nil
-    
+    var buttonsNode: SKNode? = nil
+    var levelSelectButton: TextBoxButton? = nil
+    var settingsButton: TextBoxButton? = nil
+    var aboutButton: TextBoxButton? = nil
     var blockPoints = [CGPoint]()
     var tileLoop = 20
     var currentTile: GridTile?
@@ -32,28 +35,37 @@ class MenuScene: SKScene {
     }
     
     override func didMove(to view: SKView) {
-        initDarkMazeLabel()
+        createButtons()
         let actionList = SKAction.sequence(
-            [SKAction.fadeIn(withDuration: 2.0),
-            SKAction.fadeOut(withDuration: 2.0)]
+            [SKAction.fadeAlpha(to: 1, duration: 2.5),
+            SKAction.fadeAlpha(to: 0.3, duration: 2.5)]
         )
         darkMaze?.run(SKAction.repeatForever(actionList))
-        tapToBegin?.run(SKAction.repeatForever(actionList))
+        buttonsNode?.run(SKAction.repeatForever(actionList))
         createNewStartPoint()
     }
     
-    func initDarkMazeLabel(){
-        darkMaze = SKLabelNode(text: "Dark Maze")
-        darkMaze!.position = CGPoint(x: frame.midX, y: frame.midY)
-        darkMaze!.fontName = GameStyle.shared.mainFontString
-        darkMaze!.fontSize = screenWidth*0.12
-        addChild(darkMaze!)
+    
+    private func createButtons(){
+        let interval: CGFloat = 0.11
+        let font = screenWidth*0.09
+        buttonsNode = SKNode()
+        buttonsNode!.position = CGPoint(x: screenWidth/2.0, y: screenHeight*0.05)
         
-        tapToBegin = SKLabelNode(text: "Tap to begin")
-        tapToBegin!.position = CGPoint(x: frame.midX, y: frame.midY - darkMaze!.frame.height)
-        tapToBegin!.fontName = GameStyle.shared.mainFontString
-        tapToBegin!.fontSize = screenWidth*0.05
-        addChild(tapToBegin!)
+        levelSelectButton = TextBoxButton(x: 0, y: screenHeight*interval*4, text: "Level Select", fontsize:font, buffers: buffers)
+        settingsButton = TextBoxButton(x: 0, y: screenHeight*interval*3, text: "Settings", fontsize:font, buffers: buffers)
+        aboutButton = TextBoxButton(x: 0, y: screenHeight*interval*2, text: "About", fontsize:font, buffers: buffers)
+        buttonsNode!.addChild(levelSelectButton!)
+        buttonsNode!.addChild(settingsButton!)
+        buttonsNode!.addChild(aboutButton!)
+        
+        darkMaze = SKLabelNode(text: "Dark Maze")
+        darkMaze!.position = CGPoint(x: 0, y: screenHeight*0.65)
+        darkMaze!.fontName = GameStyle.shared.mainFontString
+        darkMaze!.fontSize = screenWidth*0.15
+        
+        buttonsNode?.addChild(darkMaze!)
+        self.addChild(buttonsNode!)
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -81,12 +93,59 @@ class MenuScene: SKScene {
             tileLoop = 0
         }
     }
+    
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //Helper.switchScene(sceneName: "LevelSelectScene", gameDelegate: self.delegate as? GameDelegate, view: self.view!)
-        (self.delegate as? GameDelegate)?.levelSelect()
-
-//        (self.delegate as? GameDelegate)?.switchToViewController()
-        //view?.presentScene(nil)
+        for child in self.children{
+            child.removeAllActions()
+            child.alpha = 1.0
+        }
+        for i in buttonsNode?.children ?? []{
+            if let child = i as? TextBoxButton{
+                if !child.within(point: (touches.first?.location(in: buttonsNode!))!){
+                    child.originalState()
+                }
+                else{
+                    child.tappedState()
+                }
+            }
+        }
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for i in buttonsNode?.children ?? []{
+            if let child = i as? TextBoxButton{
+                if !child.within(point: (touches.first?.location(in: buttonsNode!))!){
+                    child.originalState()
+                }
+                else{
+                    child.tappedState()
+                }
+            }
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let t = touches.first?.location(in: buttonsNode ?? self)
+        for i in buttonsNode?.children ?? []{
+            if let child = i as? TextBoxButton{
+                if child.within(point: (touches.first?.location(in: buttonsNode!))!){
+                    handleButtonTouch(t!)
+                }
+            }
+        }
+    }
+    
+    func handleButtonTouch(_ point: CGPoint){
+        if levelSelectButton!.within(point: point){
+            (self.delegate as? GameDelegate)?.levelSelect()
+        }
+        else if settingsButton!.within(point: point){
+            (self.delegate as? GameDelegate)?.settings()
+        }
+        else if aboutButton!.within(point: point){
+            (self.delegate as? GameDelegate)?.levelSelect()
+        }
     }
     func createNewStartPoint(){
         let newX = arc4random_uniform(UInt32(self.frame.width))

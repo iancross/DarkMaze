@@ -71,21 +71,6 @@ class EndGameScene: SKScene {
         else {
             buttonsNode.position = CGPoint(x: frame.midX, y: frame.height*4/8)
         }
-
-//        if nodes.count == 2{
-//            let height = self.frame.height
-//            print ("height is \(height)")
-////            let y = (height - bannerHeight - nodes.last!.position.y)/2 + nodes.last!.position.y
-//            let y = (nodes.last!.position.y - bannerHeight)/2 + bannerHeight
-//
-//            buttonsNode.position = CGPoint(x: frame.midX, y: y)
-//        }
-//        else if nodes.count == 1{
-//            buttonsNode.position = CGPoint(x: frame.midX, y: frame.height*3/8)
-//        }
-//        else{
-//            buttonsNode.position = CGPoint(x: frame.midX, y: frame.height*4/8)
-//        }
         self.addChild(buttonsNode)
         buttonsNode.run(SKAction.sequence([SKAction.wait(forDuration: Double(nodes.count + 1)*0.5),
                                           SKAction.fadeIn(withDuration: 1.0)]))

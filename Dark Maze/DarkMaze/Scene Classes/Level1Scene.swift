@@ -360,10 +360,12 @@ class Level1Scene: SKScene {
     }
     
     func setFirstTile(){
-        print ("setting first tile")
-        let firstTile = self.tile2DArray[(Level!.solutionCoords.first?.y)!][(Level!.solutionCoords.first?.x)!]
-        firstTile.firstTile()
-        drawArrows(firstTile: firstTile)
+        if startArrow.parent == nil{
+            print ("setting first tile")
+            let firstTile = self.tile2DArray[(Level!.solutionCoords.first?.y)!][(Level!.solutionCoords.first?.x)!]
+            firstTile.firstTile()
+            drawArrows(firstTile: firstTile)
+        }
     }
     
     func insertLevelTitle(){
@@ -388,6 +390,7 @@ class Level1Scene: SKScene {
                 switch mod {
                 case .flip:
                     actions.append(flipGrid())
+                    
                     //we also need to flip the arrows oops
                 case .spin:
                     if let r = modData as? CGFloat{
@@ -415,7 +418,7 @@ class Level1Scene: SKScene {
                 self.setFirstTile()
                 
                 //testing
-                self.testingFlipAllTiles()
+                //self.testingFlipAllTiles()
             }
         }
         else{
@@ -426,7 +429,9 @@ class Level1Scene: SKScene {
     
     func testingFlipAllTiles(){
         for coord in (Level?.solutionCoords)!{
-            tile2DArray[coord.y][coord.x].setColor(color: .purple)
+            let t = tile2DArray[coord.y][coord.x]
+            t.setColor(color: .purple)
+            drawPath(currTile: t, repeatTile: false, alpha: 1.0)
         }
     }
     
@@ -1197,13 +1202,10 @@ class Level1Scene: SKScene {
             rotation = (orient * .pi/2.0)
         }
         arrow.position = point
+//        arrow.xScale *= gridNode.xScale
+//        arrow.yScale *= gridNode.yScale
         arrow.zRotation += rotation
-        if let a = arrow.parent{
-            //do nothing
-        }
-        else{
-            gridNode.addChild(arrow)
-        }
+        gridNode.addChild(arrow)
     }
 /*---------------------- End Arrows ----------------------*/
     

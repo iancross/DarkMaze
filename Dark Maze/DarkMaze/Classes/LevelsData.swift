@@ -765,8 +765,8 @@ class LevelsData{
             LevelData(
                 gridX: 4, gridY: 4, delayTime: 0.5,
                 solutionCoords:
-                [(3,3),(3,2),(3,1),(2,1),(1,1),(0,1),(0,0)],
-                modifications: nil
+                [(3,2),(2,2),(2,1),(3,1)],
+                modifications: [(.flip, nil),(.spin, CGFloat.pi)]
             ),
             LevelData(
                 gridX: 4, gridY: 5, delayTime: 0.5,
