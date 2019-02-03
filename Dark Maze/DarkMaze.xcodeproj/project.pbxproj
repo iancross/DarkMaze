@@ -39,6 +39,7 @@
 		C3EF4A241FD7749000528247 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3EF4A221FD7749000528247 /* LaunchScreen.storyboard */; };
 		C3EF9F6F21FE5573002635D3 /* SettingsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3EF9F6E21FE5572002635D3 /* SettingsScene.swift */; };
 		C3EF9F71220670AF002635D3 /* home-5-xxl.png in Resources */ = {isa = PBXBuildFile; fileRef = C3EF9F70220670AF002635D3 /* home-5-xxl.png */; };
+		C3EF9F7322073D20002635D3 /* backButton.png in Resources */ = {isa = PBXBuildFile; fileRef = C3EF9F7222073D20002635D3 /* backButton.png */; };
 		C3FD8ACB20141ADF006ED708 /* TextBoxButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3FD8ACA20141ADF006ED708 /* TextBoxButton.swift */; };
 /* End PBXBuildFile section */
 
@@ -91,6 +92,7 @@
 		C3EF4A2C1FD7771100528247 /* MYSCARS_.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = MYSCARS_.TTF; sourceTree = "<group>"; };
 		C3EF9F6E21FE5572002635D3 /* SettingsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScene.swift; sourceTree = "<group>"; };
 		C3EF9F70220670AF002635D3 /* home-5-xxl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home-5-xxl.png"; sourceTree = "<group>"; };
+		C3EF9F7222073D20002635D3 /* backButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backButton.png; sourceTree = "<group>"; };
 		C3FD8ACA20141ADF006ED708 /* TextBoxButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextBoxButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -174,6 +176,7 @@
 		C38464C02055E48C00239EE0 /* Sprites */ = {
 			isa = PBXGroup;
 			children = (
+				C3EF9F7222073D20002635D3 /* backButton.png */,
 				C3EF9F70220670AF002635D3 /* home-5-xxl.png */,
 				C365F40320F4471B003AB2D3 /* ccw_boots.atlas */,
 				C3BA45C42069A69500D72A3F /* cracking.atlas */,
@@ -359,6 +362,7 @@
 				C365F40420F4471B003AB2D3 /* ccw_boots.atlas in Resources */,
 				C37E691920A5F5D70067B47C /* lock_sprite200x200.png in Resources */,
 				C3BA45C52069A69500D72A3F /* cracking.atlas in Resources */,
+				C3EF9F7322073D20002635D3 /* backButton.png in Resources */,
 				C38464C22055EC4700239EE0 /* nextArrow.png in Resources */,
 				C3189DFE1FD7798F000A52A6 /* MYSCARS_.TTF in Resources */,
 				C3EF4A1F1FD7749000528247 /* Main.storyboard in Resources */,

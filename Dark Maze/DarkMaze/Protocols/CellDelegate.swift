@@ -11,6 +11,6 @@ import Foundation
 
 protocol CellDelegate {
     func closeFrame(indexPath: IndexPath)
-    func switchToGame()
+    func switchToGame(sceneString: String)
 }
 

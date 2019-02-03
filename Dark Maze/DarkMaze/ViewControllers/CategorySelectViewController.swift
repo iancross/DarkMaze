@@ -17,7 +17,12 @@ enum Scrolling {
 }
 
 class CategorySelectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, CellDelegate {
-    
+    @IBOutlet weak var headerHeight: NSLayoutConstraint!
+    @IBAction func backButtonTapped(_ sender: UIButton) {
+        switchToGame(sceneString: "MenuScene")
+    }
+
+    @IBOutlet weak var backButton: UIButton!
     let defaultHeight = 42 as CGFloat
     var scrollDirection: Scrolling = .none
     var lastContentOffset: CGPoint = CGPoint()
@@ -34,7 +39,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     @IBOutlet weak var customTableView: UITableView!
     
     override func viewDidLoad() {
-        
+        //backButton.transform = CGAffineTransform.init(scaleX: -1, y: 1)
         customTableView.decelerationRate = UIScrollViewDecelerationRateNormal
         let i = IndexPath(item:12, section: 0)
         lastContentOffset = CGPoint.zero
@@ -189,16 +194,21 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         cell?.reverseState()
     }
     
-    func switchToGame(){
+    func switchToGame(sceneString: String){
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let ivc = storyboard.instantiateViewController(withIdentifier: "GameViewController") as? GameViewController
-        ivc?.sceneString = "Level1Scene"
+        ivc?.sceneString = sceneString
         let appDelegate: AppDelegate = (UIApplication.shared.delegate as? AppDelegate)!
         
         UIView.animate(withDuration: 0.7, animations: {self.view.alpha = 0}){
             (completed) in
             appDelegate.window?.set(rootViewController: ivc!)
-            ivc?.playGame()
+            if sceneString == "Level1Scene"{
+                ivc?.playGame()
+            }
+            else{
+                ivc?.mainMenu()
+            }
         }
     }
     
