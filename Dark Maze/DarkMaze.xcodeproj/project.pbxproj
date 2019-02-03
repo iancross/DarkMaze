@@ -38,6 +38,7 @@
 		C3EF4A211FD7749000528247 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C3EF4A201FD7749000528247 /* Assets.xcassets */; };
 		C3EF4A241FD7749000528247 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3EF4A221FD7749000528247 /* LaunchScreen.storyboard */; };
 		C3EF9F6F21FE5573002635D3 /* SettingsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3EF9F6E21FE5572002635D3 /* SettingsScene.swift */; };
+		C3EF9F71220670AF002635D3 /* home-5-xxl.png in Resources */ = {isa = PBXBuildFile; fileRef = C3EF9F70220670AF002635D3 /* home-5-xxl.png */; };
 		C3FD8ACB20141ADF006ED708 /* TextBoxButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3FD8ACA20141ADF006ED708 /* TextBoxButton.swift */; };
 /* End PBXBuildFile section */
 
@@ -89,6 +90,7 @@
 		C3EF4A2B1FD7770600528247 /* MYBLS___.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MYBLS___.TTF"; sourceTree = "<group>"; };
 		C3EF4A2C1FD7771100528247 /* MYSCARS_.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = MYSCARS_.TTF; sourceTree = "<group>"; };
 		C3EF9F6E21FE5572002635D3 /* SettingsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScene.swift; sourceTree = "<group>"; };
+		C3EF9F70220670AF002635D3 /* home-5-xxl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home-5-xxl.png"; sourceTree = "<group>"; };
 		C3FD8ACA20141ADF006ED708 /* TextBoxButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextBoxButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -172,6 +174,7 @@
 		C38464C02055E48C00239EE0 /* Sprites */ = {
 			isa = PBXGroup;
 			children = (
+				C3EF9F70220670AF002635D3 /* home-5-xxl.png */,
 				C365F40320F4471B003AB2D3 /* ccw_boots.atlas */,
 				C3BA45C42069A69500D72A3F /* cracking.atlas */,
 				C38464C12055EC4700239EE0 /* nextArrow.png */,
@@ -350,6 +353,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C3189DFD1FD77988000A52A6 /* MYBLS___.TTF in Resources */,
+				C3EF9F71220670AF002635D3 /* home-5-xxl.png in Resources */,
 				C32CB86120BE10CB008BD6C4 /* unlock_sprite200x200.png in Resources */,
 				C37E691720A296860067B47C /* ChainSprite1000.png in Resources */,
 				C365F40420F4471B003AB2D3 /* ccw_boots.atlas in Resources */,

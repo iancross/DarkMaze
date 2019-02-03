@@ -21,13 +21,14 @@ class MenuScene: SKScene {
     var tileLoop = 20
     var currentTile: GridTile?
     var blocksize: CGFloat = screenWidth/7.0
+    let spacingInterval: CGFloat = 0.11
     
     
     override init(size: CGSize) {
         super.init(size: size)
         backgroundColor = UIColor.black
         anchorPoint = CGPoint(x: 0, y:0)
-        var initializingLevelDataHack = LevelsData.shared.currentLevelSuccess
+        _ = LevelsData.shared.currentLevelSuccess
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -42,19 +43,18 @@ class MenuScene: SKScene {
         )
         darkMaze?.run(SKAction.repeatForever(actionList))
         buttonsNode?.run(SKAction.repeatForever(actionList))
-        createNewStartPoint()
+        //createNewStartPoint()
     }
     
     
     private func createButtons(){
-        let interval: CGFloat = 0.11
         let font = screenWidth*0.09
         buttonsNode = SKNode()
         buttonsNode!.position = CGPoint(x: screenWidth/2.0, y: screenHeight*0.05)
         
-        levelSelectButton = TextBoxButton(x: 0, y: screenHeight*interval*4, text: "Level Select", fontsize:font, buffers: buffers)
-        settingsButton = TextBoxButton(x: 0, y: screenHeight*interval*3, text: "Settings", fontsize:font, buffers: buffers)
-        aboutButton = TextBoxButton(x: 0, y: screenHeight*interval*2, text: "About", fontsize:font, buffers: buffers)
+        levelSelectButton = TextBoxButton(x: 0, y: screenHeight*spacingInterval*4, text: "Level Select", fontsize:font, buffers: buffers)
+        settingsButton = TextBoxButton(x: 0, y: screenHeight*spacingInterval*3, text: "Settings", fontsize:font, buffers: buffers)
+        aboutButton = TextBoxButton(x: 0, y: screenHeight*spacingInterval*2, text: "About", fontsize:font, buffers: buffers)
         buttonsNode!.addChild(levelSelectButton!)
         buttonsNode!.addChild(settingsButton!)
         buttonsNode!.addChild(aboutButton!)
@@ -68,32 +68,40 @@ class MenuScene: SKScene {
         self.addChild(buttonsNode!)
     }
     
-    override func update(_ currentTime: TimeInterval) {
-        if tileLoop < 15{
-            tileLoop += 1
-        }
-        else{
-            let prevBlock = blockPoints.first
-            blockPoints.remove(at: 0)
-            var newPoint = blockRandomPoint(prevPoint: blockPoints.first!)
-            while newPoint.x == prevBlock?.x && newPoint.y == prevBlock?.y{
-                newPoint = blockRandomPoint(prevPoint: blockPoints.first!)
+//    override func update(_ currentTime: TimeInterval) {
+//        if tileLoop < 15{
+//            tileLoop += 1
+//        }
+//        else{
+//            let prevBlock = blockPoints.first
+//            blockPoints.remove(at: 0)
+//            var newPoint = blockRandomPoint(prevPoint: blockPoints.first!)
+//            while newPoint.x == prevBlock?.x && newPoint.y == prevBlock?.y{
+//                newPoint = blockRandomPoint(prevPoint: blockPoints.first!)
+//            }
+//            blockPoints.append(newPoint)
+//            currentTile = GridTile(coord: (0,0), width: blocksize, height: blocksize)
+//            currentTile?.position = newPoint
+//            addChild(currentTile!)
+//            let actionList = SKAction.sequence(
+//                [SKAction.run { [weak self] in self?.currentTile?.switchToWhite() },
+//                 SKAction.fadeOut(withDuration: 1.7),
+//                 SKAction.removeFromParent()
+//                ]
+//            )
+//            currentTile?.run(actionList)
+//            tileLoop = 0
+//        }
+//    }
+        override func update(_ currentTime: TimeInterval) {
+            if tileLoop < 15{
+                tileLoop += 1
             }
-            blockPoints.append(newPoint)
-            currentTile = GridTile(coord: (0,0), width: blocksize, height: blocksize)
-            currentTile?.position = newPoint
-            addChild(currentTile!)
-            let actionList = SKAction.sequence(
-                [SKAction.run { [weak self] in self?.currentTile?.switchToWhite() },
-                 SKAction.fadeOut(withDuration: 1.7),
-                 SKAction.removeFromParent()
-                ]
-            )
-            currentTile?.run(actionList)
-            tileLoop = 0
+            else{
+                let tile = GridTile(coord: (0,0), width: blocksize, height: blocksize)
+                tile.position = CGPoint(x: screenWidth, y: spacingInterval * screenHeight / 2.0)
+            }
         }
-    }
-    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for child in self.children{
