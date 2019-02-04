@@ -10,13 +10,16 @@ import Foundation
 import SpriteKit
 
 class TextBoxButton: SKNode{
-    var text: String
+    var text: String {
+        didSet{
+            labelNode.text = text
+        }
+    }
     var labelNode: SKLabelNode
     var outline: SKShapeNode
     var buffer: CGFloat = 40
     
     init(x: CGFloat, y: CGFloat, text: String, fontsize: CGFloat, buffers: (x: CGFloat, y: CGFloat)) {
-        self.text = text
         labelNode = SKLabelNode(fontNamed: GameStyle.shared.mainFontString)
         labelNode.text = text
         labelNode.fontSize = fontsize
@@ -28,6 +31,7 @@ class TextBoxButton: SKNode{
         outline.lineWidth = 2 + fontsize/70.0
 //        outline.position = CGPoint(x: x, y: y)
 //        labelNode.position = CGPoint(x: x, y: y)
+        self.text = text
         super.init()
         self.position = CGPoint(x: x, y: y)
         self.addChild(outline)
