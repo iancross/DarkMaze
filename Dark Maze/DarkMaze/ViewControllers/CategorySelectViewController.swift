@@ -23,10 +23,10 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     @IBOutlet weak var backButton: UIButton!
-    let defaultHeight = 42 as CGFloat
+    var defaultHeight = 0 as CGFloat
     var scrollDirection: Scrolling = .none
     var lastContentOffset: CGPoint = CGPoint()
-    var cellSizeBuffer: CGFloat = 30
+    var cellSizeBuffer: CGFloat = 0
     var bannerView = GADBannerView()
     var tableDidLoad = false
     
@@ -39,7 +39,9 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
     @IBOutlet weak var customTableView: UITableView!
     
     override func viewDidLoad() {
-        //backButton.transform = CGAffineTransform.init(scaleX: -1, y: 1)
+        defaultHeight = screenHeight / 11
+        cellSizeBuffer = screenHeight / 19
+
         customTableView.decelerationRate = UIScrollViewDecelerationRateNormal
         let i = IndexPath(item:12, section: 0)
         lastContentOffset = CGPoint.zero
@@ -139,7 +141,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             switch scrollDirection{
             default:
                 cell.alpha = 0.0
-                UIView.animate(withDuration: 1.0, delay: 0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
+                UIView.animate(withDuration: 0.7, delay: 0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
                     cell.alpha = 1.0
                 },
                 completion: nil)
@@ -200,7 +202,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         ivc?.sceneString = sceneString
         let appDelegate: AppDelegate = (UIApplication.shared.delegate as? AppDelegate)!
         
-        UIView.animate(withDuration: 0.7, animations: {self.view.alpha = 0}){
+        UIView.animate(withDuration: 0.5, animations: {self.view.alpha = 0}){
             (completed) in
             appDelegate.window?.set(rootViewController: ivc!)
             if sceneString == "Level1Scene"{

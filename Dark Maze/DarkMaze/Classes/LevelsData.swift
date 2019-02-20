@@ -72,7 +72,6 @@ class LevelsData{
         //Flash() //just literally flash the grid
         //WhereToEnd() //multiple end arrows
 
-        //_BrokenTest()
         initCoreData()
         print ("end init")
     }
@@ -82,48 +81,66 @@ class LevelsData{
     //https://stackoverflow.com/questions/35372450/core-data-one-to-many-relationship-in-swift
     private func initCoreData(){
         
-        //testing
-        deleteCoreData()
-        
+        if testing{
+            deleteCoreData()
+        }
+        if !doesDataExist(){
+            initLevelData()
+        }
+    }
+    
+    private func initLevelData(){
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             print("something bad app delegate ------------------------------------")
             return
         }
-        if !doesDataExist(){
-            let managedContext = appDelegate.persistentContainer.viewContext
-            let pageEntity = NSEntityDescription.entity(forEntityName: "Page",in: managedContext)!
-            let levelEntity = NSEntityDescription.entity(forEntityName: "Level",in: managedContext)!
-            for i in 0...levelGroups.count-1{
-                let page = Page(entity: pageEntity, insertInto: managedContext)
-                if i == 0{
-                    page.unlocked = true
-                }
-                else{
-                    page.unlocked = false
-                }
-                
-//                //testing
-//                page.unlocked = true
-                
-                page.number = Int32(i)
-                for (j,levelData) in levelGroups[i].levels.enumerated(){
-                    let level = Level(entity: levelEntity, insertInto: managedContext)
-                    level.attemptsBeforeSuccess = 0
-                    
-                    level.completed = true
-                    level.number = Int32(j)
-                    level.page = page
-                    level.totalAttempts = 0
-                    level.attemptsBeforeSuccess = 0
-                    level.firstTimeBonus = false
-                }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let pageEntity = NSEntityDescription.entity(forEntityName: "Page",in: managedContext)!
+        let levelEntity = NSEntityDescription.entity(forEntityName: "Level",in: managedContext)!
+        for i in 0...levelGroups.count-1{
+            let page = Page(entity: pageEntity, insertInto: managedContext)
+            if i == 0{
+                page.unlocked = true
             }
-            do {
-                try managedContext.save()
-            } catch let error as NSError {
-                print("Could not save. \(error), \(error.userInfo)")
+            else{
+                page.unlocked = false
+            }
+            
+            //                //testing
+            //                page.unlocked = true
+            
+            page.number = Int32(i)
+            for (j,levelData) in levelGroups[i].levels.enumerated(){
+                let level = Level(entity: levelEntity, insertInto: managedContext)
+                level.attemptsBeforeSuccess = 0
+                level.completed = false
+                
+                //remove later!!!
+                if testing{
+                    level.completed = true
+                }
+                
+                level.number = Int32(j)
+                level.page = page
+                level.totalAttempts = 0
+                level.attemptsBeforeSuccess = 0
+                level.firstTimeBonus = false
             }
         }
+        //remove later!!!!!
+        testing = false
+        do {
+            try managedContext.save()
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+        }
+    }
+    
+    public func resetGame(){
+        deleteCoreData()
+        initLevelData()
+        currentLevelSuccess = false
+        selectedLevel = (page: 0, level: 0)
     }
     
     func doesDataExist()->Bool{

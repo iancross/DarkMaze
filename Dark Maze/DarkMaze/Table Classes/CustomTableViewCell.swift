@@ -9,11 +9,9 @@
 import UIKit
 import SpriteKit
 
-protocol test{
-    func test()
-}
+
 class CustomTableViewCell: UITableViewCell {
-    let boarderBuffer: CGFloat = 15.0
+    let boarderBuffer: CGFloat = screenHeight/38
     var willAnimate = true
     var drawing: SKView?
     var button: UIButton?
@@ -29,8 +27,8 @@ class CustomTableViewCell: UITableViewCell {
     var numLevels: Int?
     var expanded = false
     var accessibleElements: [UIAccessibilityElement] = []
-    var levelBuffer = 5
-    let progressLabelBuffer: CGFloat = 5
+    var levelBuffer = screenHeight/113
+    let progressLabelBuffer: CGFloat = screenHeight/113
     let NonBonusLevels = 8
 
     
@@ -54,9 +52,9 @@ class CustomTableViewCell: UITableViewCell {
         progressString = "\(progress)/\(outOfTotal)"
         self.progress = progress
         numLevels = outOfTotal
-        mainFontSize = frame.width/13
+        mainFontSize = frame.width/12.5
         defaultHeight = origHeight
-        verticalSpacing = 45
+        verticalSpacing = screenHeight/12.5
         indexPath = path
     }
     

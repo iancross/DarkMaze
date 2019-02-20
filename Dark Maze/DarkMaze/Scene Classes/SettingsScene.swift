@@ -13,7 +13,7 @@ class SettingsScene: SKScene {
     
     var header = SKLabelNode()
     var backButton = SKSpriteNode()
-    var fontSize = screenWidth * 0.075
+    var fontSize = screenWidth * 0.08
     let buffer = screenWidth * 0.1
     var settingsButton: TextBoxButton?
     var longerSettingButton: TextBoxButton?
@@ -41,7 +41,7 @@ class SettingsScene: SKScene {
         header = SKLabelNode(text: "Settings")
         header.position = CGPoint(x: screenWidth/2.0, y: screenHeight*0.85)
         header.fontName = GameStyle.shared.mainFontString
-        header.fontSize = screenWidth*0.12
+        header.fontSize = screenWidth*0.128
         self.addChild(header)
     }
     
@@ -154,7 +154,7 @@ class SettingsScene: SKScene {
                 if let r = resetButton{
                     if r.within(point: t.location(in: self)){
                         r.originalState()
-                        LevelsData.shared.deleteCoreData()
+                        LevelsData.shared.resetGame()
                     }
                 }
                 if let l = longerSettingButton{

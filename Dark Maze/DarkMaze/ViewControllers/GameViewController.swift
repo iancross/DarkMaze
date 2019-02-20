@@ -69,7 +69,7 @@ class GameViewController: UIViewController, GameDelegate, GADBannerViewDelegate 
         let ivc = storyboard.instantiateViewController(withIdentifier: "CategorySelectView")
         let appDelegate: AppDelegate = (UIApplication.shared.delegate as? AppDelegate)!
 
-        UIView.animate(withDuration: 0.7, animations: {self.view.alpha = 0}){
+        UIView.animate(withDuration: 0.5, animations: {self.view.alpha = 0}){
             (completed) in
             self.cleanUp()
             appDelegate.window?.set(rootViewController: ivc)
