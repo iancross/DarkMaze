@@ -24,6 +24,7 @@
 		C360D94B20E5AAEA00580E80 /* DarkMaze.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C360D94920E5AAEA00580E80 /* DarkMaze.xcdatamodeld */; };
 		C364CEC01FE74F98009140C7 /* Level1Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C364CEBF1FE74F98009140C7 /* Level1Scene.swift */; };
 		C365F40420F4471B003AB2D3 /* ccw_boots.atlas in Resources */ = {isa = PBXBuildFile; fileRef = C365F40320F4471B003AB2D3 /* ccw_boots.atlas */; };
+		C36FA27C2224B6A100724AB3 /* background.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36FA27B2224B6A100724AB3 /* background.mp3 */; };
 		C37B707E1FE9D94D00F71B73 /* GridTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37B707D1FE9D94D00F71B73 /* GridTile.swift */; };
 		C37E691720A296860067B47C /* ChainSprite1000.png in Resources */ = {isa = PBXBuildFile; fileRef = C37E691620A296860067B47C /* ChainSprite1000.png */; };
 		C37E691920A5F5D70067B47C /* lock_sprite200x200.png in Resources */ = {isa = PBXBuildFile; fileRef = C37E691820A5F5D70067B47C /* lock_sprite200x200.png */; };
@@ -71,6 +72,7 @@
 		C360D94A20E5AAEA00580E80 /* DarkMaze.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DarkMaze.xcdatamodel; sourceTree = "<group>"; };
 		C364CEBF1FE74F98009140C7 /* Level1Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level1Scene.swift; sourceTree = "<group>"; };
 		C365F40320F4471B003AB2D3 /* ccw_boots.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = ccw_boots.atlas; path = ../../../../Photoshop/ccw_boots.atlas; sourceTree = "<group>"; };
+		C36FA27B2224B6A100724AB3 /* background.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = background.mp3; sourceTree = "<group>"; };
 		C37B707D1FE9D94D00F71B73 /* GridTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridTile.swift; sourceTree = "<group>"; };
 		C37E691620A296860067B47C /* ChainSprite1000.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ChainSprite1000.png; sourceTree = "<group>"; };
 		C37E691820A5F5D70067B47C /* lock_sprite200x200.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lock_sprite200x200.png; sourceTree = "<group>"; };
@@ -173,6 +175,14 @@
 			path = "Scene Classes";
 			sourceTree = "<group>";
 		};
+		C36FA27A2224B65700724AB3 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				C36FA27B2224B6A100724AB3 /* background.mp3 */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
 		C38464C02055E48C00239EE0 /* Sprites */ = {
 			isa = PBXGroup;
 			children = (
@@ -238,6 +248,7 @@
 		C3EF4A121FD7749000528247 /* DarkMaze */ = {
 			isa = PBXGroup;
 			children = (
+				C36FA27A2224B65700724AB3 /* Sounds */,
 				C352CF3A2075940D00FCD5D0 /* ViewControllers */,
 				C34AA0C8207044F600DB2229 /* Protocols */,
 				C352CF3B2075945B00FCD5D0 /* Table Classes */,
@@ -358,6 +369,7 @@
 				C3189DFD1FD77988000A52A6 /* MYBLS___.TTF in Resources */,
 				C3EF9F71220670AF002635D3 /* home-5-xxl.png in Resources */,
 				C32CB86120BE10CB008BD6C4 /* unlock_sprite200x200.png in Resources */,
+				C36FA27C2224B6A100724AB3 /* background.mp3 in Resources */,
 				C37E691720A296860067B47C /* ChainSprite1000.png in Resources */,
 				C365F40420F4471B003AB2D3 /* ccw_boots.atlas in Resources */,
 				C37E691920A5F5D70067B47C /* lock_sprite200x200.png in Resources */,

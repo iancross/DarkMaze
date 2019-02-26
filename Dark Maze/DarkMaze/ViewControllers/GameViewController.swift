@@ -11,6 +11,7 @@ import UIKit
 import SpriteKit
 import GameplayKit
 import GoogleMobileAds
+import AVFoundation
 
 enum scenes {
     case menu
@@ -18,6 +19,8 @@ enum scenes {
     case game
     case endGame
 }
+
+var backgroundAudioPlayer = AVAudioPlayer()
 
 class GameViewController: UIViewController, GameDelegate, GADBannerViewDelegate {
 
@@ -27,6 +30,8 @@ class GameViewController: UIViewController, GameDelegate, GADBannerViewDelegate 
     override func viewDidLoad() {
         self.view.backgroundColor = UIColor.black
         super.viewDidLoad()
+        setupAudioSession()
+        playBackgroundMusic()
         if let view = self.view as! SKView? {
             
             view.preferredFramesPerSecond = 30
@@ -36,6 +41,34 @@ class GameViewController: UIViewController, GameDelegate, GADBannerViewDelegate 
 //            view.showsFPS = true
 //            view.showsNodeCount = true
         }
+        
+    }
+    
+    //This category indicates that audio playback is a central feature of your app
+    private func setupAudioSession(){
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(AVAudioSessionCategoryPlayback)
+        } catch {
+            print("Setting category to AVAudioSessionCategoryPlayback failed.")
+        }
+    }
+    public func playBackgroundMusic(){
+        do {
+            print ("things should be playing now!!!!!!!!!!!!!!!!!!!!")
+            let url = Bundle.main.url(forResource: "background", withExtension: "mp3")!
+            backgroundAudioPlayer = try AVAudioPlayer(contentsOf: url)
+            backgroundAudioPlayer.prepareToPlay()
+            backgroundAudioPlayer.numberOfLoops = 0
+            backgroundAudioPlayer.play()
+            
+        } catch  {
+            print ("error")
+        }
+    }
+    
+    public func stopBackgroundMusic(){
+        backgroundAudioPlayer.stop()
     }
     
     func cleanUp(){
