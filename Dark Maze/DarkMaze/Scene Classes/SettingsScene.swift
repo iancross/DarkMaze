@@ -15,7 +15,7 @@ class SettingsScene: SKScene {
     var backButton = SKSpriteNode()
     var fontSize = screenWidth * 0.08
     let buffer = screenWidth * 0.1
-    var settingsButton: TextBoxButton?
+    var backgroundSoundsButton: TextBoxButton?
     var longerSettingButton: TextBoxButton?
     var resetButton: TextBoxButton?
     
@@ -32,7 +32,7 @@ class SettingsScene: SKScene {
     override func didMove(to view: SKView) {
         createHeader()
         createBackButton()
-        settingsButton = createTextNextToButton(description: "Sounds", buttonText: "ON", height: 0.75 * screenHeight)
+        backgroundSoundsButton = createTextNextToButton(description: "Ambient Sounds", buttonText: "ON", height: 0.75 * screenHeight)
         longerSettingButton = createTextNextToButton(description: "Longer Setting", buttonText: "ON", height: 0.65 * screenHeight)
         addResetButton(description: "Reset Game", height: 0.55 * screenHeight)
     }
@@ -76,7 +76,7 @@ class SettingsScene: SKScene {
                 }
             }
             else{
-                if let s = settingsButton{
+                if let s = backgroundSoundsButton{
                     if s.within(point: t.location(in: self)){
                         s.tappedState()
                     }
@@ -106,7 +106,7 @@ class SettingsScene: SKScene {
             }
             else{
                 touchedNode.alpha = 1.0
-                if let s = settingsButton{
+                if let s = backgroundSoundsButton{
                     if s.within(point: t.location(in: self)){
                         s.tappedState()
                     }
@@ -145,10 +145,11 @@ class SettingsScene: SKScene {
                 }
             }
             else{
-                if let s = settingsButton{
+                if let s = backgroundSoundsButton{
                     if s.within(point: t.location(in: self)){
                         s.originalState()
-                        flip(button: settingsButton)
+                        flip(button: backgroundSoundsButton)
+                        AudioController.shared.backgroundToggledOnOff()
                     }
                 }
                 if let r = resetButton{

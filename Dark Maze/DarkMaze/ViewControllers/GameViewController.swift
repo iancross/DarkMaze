@@ -13,6 +13,8 @@ import GameplayKit
 import GoogleMobileAds
 import AVFoundation
 
+
+
 enum scenes {
     case menu
     case levelSelect
@@ -20,7 +22,6 @@ enum scenes {
     case endGame
 }
 
-var backgroundAudioPlayer = AVAudioPlayer()
 
 class GameViewController: UIViewController, GameDelegate, GADBannerViewDelegate {
 
@@ -31,7 +32,7 @@ class GameViewController: UIViewController, GameDelegate, GADBannerViewDelegate 
         self.view.backgroundColor = UIColor.black
         super.viewDidLoad()
         setupAudioSession()
-        playBackgroundMusic()
+        AudioController.shared.playBackgroundMusic()
         if let view = self.view as! SKView? {
             
             view.preferredFramesPerSecond = 30
@@ -53,23 +54,8 @@ class GameViewController: UIViewController, GameDelegate, GADBannerViewDelegate 
             print("Setting category to AVAudioSessionCategoryPlayback failed.")
         }
     }
-    public func playBackgroundMusic(){
-        do {
-            print ("things should be playing now!!!!!!!!!!!!!!!!!!!!")
-            let url = Bundle.main.url(forResource: "background", withExtension: "mp3")!
-            backgroundAudioPlayer = try AVAudioPlayer(contentsOf: url)
-            backgroundAudioPlayer.prepareToPlay()
-            backgroundAudioPlayer.numberOfLoops = 0
-            backgroundAudioPlayer.play()
-            
-        } catch  {
-            print ("error")
-        }
-    }
+
     
-    public func stopBackgroundMusic(){
-        backgroundAudioPlayer.stop()
-    }
     
     func cleanUp(){
         if let v = self.view as? SKView{

@@ -85,7 +85,9 @@ class LevelsData{
             deleteCoreData()
         }
         if !doesDataExist(){
+            print ("data doesn't exist")
             initLevelData()
+            AudioController.shared.initAudioSettings()
         }
     }
     

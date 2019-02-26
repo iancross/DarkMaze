@@ -9,6 +9,8 @@
 import Foundation
 import SpriteKit
 import GoogleMobileAds
+import AVFoundation
+
 
 class Helper{
     static let shared = Helper()
@@ -34,6 +36,8 @@ class Helper{
 
 
 }
+
+
 
 public func getAddSizeForScreen()->GADAdSize{
     return GADAdSizeFromCGSize(CGSize(width: screenWidth, height: screenHeight * 0.15))
