@@ -24,12 +24,15 @@ class AudioController{
     
     public func playBackgroundMusic(){
         do {
-            print ("things should be playing now!!!!!!!!!!!!!!!!!!!!")
             let url = Bundle.main.url(forResource: "background", withExtension: "mp3")!
             backgroundAudioPlayer = try AVAudioPlayer(contentsOf: url)
             backgroundAudioPlayer!.prepareToPlay()
             backgroundAudioPlayer!.numberOfLoops = -1
-            backgroundAudioPlayer!.play()
+            
+            if isBackgroundMusicEnabled(){
+                print ("things should be playing now!!!!!!!!!!!!!!!!!!!!")
+                backgroundAudioPlayer!.play()
+            }
             
         } catch  {
             print ("error")
@@ -43,8 +46,8 @@ class AudioController{
                 flipSettingInCoreData(key: "backgroundMusicEnabled", newValue: false)
             }
             else{
-                playBackgroundMusic()
                 flipSettingInCoreData(key: "backgroundMusicEnabled", newValue: true)
+                playBackgroundMusic()
             }
         }
     }
@@ -103,7 +106,6 @@ class AudioController{
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Settings")
         do {
             if let s = try managedContext.fetch(fetchRequest) as? [NSManagedObject]{
-                print ("the managed object is size of \(s.count)")
                 if s.count > 0{
                     if let enabled = s[0].value(forKey: "backgroundMusicEnabled") as? Bool {
                         print ("we have the setting")
