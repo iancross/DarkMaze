@@ -14,7 +14,7 @@ enum Jumps {
     case square
     case plus
 }
-var testing = true //testing variable controls touches moved and printing the green coords
+var testing = false //testing variable controls touches moved and printing the green coords
 
 class Level1Scene: SKScene {
     var tile2DArray = [[GridTile]]()

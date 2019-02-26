@@ -15,12 +15,11 @@ import CoreData
 class AudioController{
     static let shared = AudioController()
     
-    var backgroundAudioPlayer = AVAudioPlayer()
+    var backgroundAudioPlayer: AVAudioPlayer?
     
     //MARK Music
     
     init(){
-
     }
     
     public func playBackgroundMusic(){
@@ -28,9 +27,9 @@ class AudioController{
             print ("things should be playing now!!!!!!!!!!!!!!!!!!!!")
             let url = Bundle.main.url(forResource: "background", withExtension: "mp3")!
             backgroundAudioPlayer = try AVAudioPlayer(contentsOf: url)
-            backgroundAudioPlayer.prepareToPlay()
-            backgroundAudioPlayer.numberOfLoops = -1
-            backgroundAudioPlayer.play()
+            backgroundAudioPlayer!.prepareToPlay()
+            backgroundAudioPlayer!.numberOfLoops = -1
+            backgroundAudioPlayer!.play()
             
         } catch  {
             print ("error")
@@ -38,17 +37,18 @@ class AudioController{
     }
     
     public func backgroundToggledOnOff(){
-        if backgroundAudioPlayer.isPlaying{
-            backgroundAudioPlayer.stop()
-        }
-        else{
-            playBackgroundMusic()
+        if let player = backgroundAudioPlayer{
+            if isBackgroundMusicEnabled(){
+                player.stop()
+                flipSettingInCoreData(key: "backgroundMusicEnabled", newValue: false)
+            }
+            else{
+                playBackgroundMusic()
+                flipSettingInCoreData(key: "backgroundMusicEnabled", newValue: true)
+            }
         }
     }
-    
-    private func stopBackgroundMusic(){
-        backgroundAudioPlayer.stop()
-    }
+
     
     public func initAudioSettings(){
         print ("this is being called")
@@ -68,6 +68,32 @@ class AudioController{
         playBackgroundMusic()
     }
     
+
+    
+    private func flipSettingInCoreData(key: String, newValue: Bool){
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Settings")
+        do {
+            if let s = try managedContext.fetch(fetchRequest) as? [NSManagedObject]{
+                if s.count > 0{
+                    s[0].setValue(newValue, forKey: "backgroundMusicEnabled")
+                }
+            }
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+        
+        do {
+            try managedContext.save()
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+        }
+    }
+    
     private func isBackgroundMusicEnabled() -> Bool{
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return false
@@ -77,9 +103,13 @@ class AudioController{
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Settings")
         do {
             if let s = try managedContext.fetch(fetchRequest) as? [NSManagedObject]{
-                if let enabled = s[0].value(forKey: "backgroundMusicEnabled") as? Bool {
-                    print ("we have the setting")
-                    return enabled
+                print ("the managed object is size of \(s.count)")
+                if s.count > 0{
+                    if let enabled = s[0].value(forKey: "backgroundMusicEnabled") as? Bool {
+                        print ("we have the setting")
+                        print ("the enabled bool in isBackgroundMusicEnabled is \(enabled)")
+                        return enabled
+                    }
                 }
             }
         } catch let error as NSError {

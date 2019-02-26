@@ -169,7 +169,7 @@ class LevelsData{
         
         let managedContext = appDelegate.persistentContainer.viewContext
         
-        let entities = ["Level","Page"]
+        let entities = ["Level","Page","Settings"]
         for entity in entities {
             let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity)
             let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
