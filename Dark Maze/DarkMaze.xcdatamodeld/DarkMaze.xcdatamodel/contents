@@ -14,7 +14,7 @@
         <relationship name="level" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Level" syncable="YES"/>
     </entity>
     <entity name="Settings" representedClassName="Settings" syncable="YES" codeGenerationType="class">
-        <attribute name="backgroundMusicEnabled" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="ambientSounds" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
     </entity>
     <elements>
         <element name="Level" positionX="-63" positionY="0" width="128" height="135"/>

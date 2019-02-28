@@ -140,7 +140,7 @@ class LevelsData{
     
     public func resetGame(){
         deleteCoreData()
-        initLevelData()
+        initCoreData()
         currentLevelSuccess = false
         selectedLevel = (page: 0, level: 0)
     }

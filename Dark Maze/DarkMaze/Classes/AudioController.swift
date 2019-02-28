@@ -29,7 +29,7 @@ class AudioController{
             backgroundAudioPlayer!.prepareToPlay()
             backgroundAudioPlayer!.numberOfLoops = -1
             
-            if isBackgroundMusicEnabled(){
+            if isSettingEnabled(settingName: "ambientSounds"){
                 print ("things should be playing now!!!!!!!!!!!!!!!!!!!!")
                 backgroundAudioPlayer!.play()
             }
@@ -40,13 +40,14 @@ class AudioController{
     }
     
     public func backgroundToggledOnOff(){
+        print ("backgroundToggleOnOff")
         if let player = backgroundAudioPlayer{
-            if isBackgroundMusicEnabled(){
+            if isSettingEnabled(settingName: "ambientSounds"){
                 player.stop()
-                flipSettingInCoreData(key: "backgroundMusicEnabled", newValue: false)
+                flipSettingInCoreData(key: "ambientSounds", newValue: false)
             }
             else{
-                flipSettingInCoreData(key: "backgroundMusicEnabled", newValue: true)
+                flipSettingInCoreData(key: "ambientSounds", newValue: true)
                 playBackgroundMusic()
             }
         }
@@ -62,7 +63,7 @@ class AudioController{
         let managedContext = appDelegate.persistentContainer.viewContext
         let settingsEntity = NSEntityDescription.entity(forEntityName: "Settings",in: managedContext)!
         let settings = Settings(entity: settingsEntity, insertInto: managedContext)
-        settings.backgroundMusicEnabled = true
+        settings.ambientSounds = true
         do {
             try managedContext.save()
         } catch let error as NSError {
@@ -83,7 +84,7 @@ class AudioController{
         do {
             if let s = try managedContext.fetch(fetchRequest) as? [NSManagedObject]{
                 if s.count > 0{
-                    s[0].setValue(newValue, forKey: "backgroundMusicEnabled")
+                    s[0].setValue(newValue, forKey: key)
                 }
             }
         } catch let error as NSError {
@@ -97,7 +98,7 @@ class AudioController{
         }
     }
     
-    private func isBackgroundMusicEnabled() -> Bool{
+    public func isSettingEnabled(settingName: String) -> Bool{
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return false
         }
@@ -107,9 +108,9 @@ class AudioController{
         do {
             if let s = try managedContext.fetch(fetchRequest) as? [NSManagedObject]{
                 if s.count > 0{
-                    if let enabled = s[0].value(forKey: "backgroundMusicEnabled") as? Bool {
+                    if let enabled = s[0].value(forKey: settingName) as? Bool {
                         print ("we have the setting")
-                        print ("the enabled bool in isBackgroundMusicEnabled is \(enabled)")
+                        print ("the enabled bool in \(settingName) is \(enabled)")
                         return enabled
                     }
                 }

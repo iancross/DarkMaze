@@ -32,8 +32,8 @@ class SettingsScene: SKScene {
     override func didMove(to view: SKView) {
         createHeader()
         createBackButton()
-        backgroundSoundsButton = createTextNextToButton(description: "Ambient Sounds", buttonText: "ON", height: 0.75 * screenHeight)
-        longerSettingButton = createTextNextToButton(description: "Longer Setting", buttonText: "ON", height: 0.65 * screenHeight)
+        backgroundSoundsButton = createTextNextToButton(description: "Ambient Sounds", height: 0.75 * screenHeight, buttonName: "ambientSounds")
+        longerSettingButton = createTextNextToButton(description: "Game Sounds", height: 0.65 * screenHeight, buttonName: "ambientSounds") //just putting ambient sounds for a second here
         addResetButton(description: "Reset Game", height: 0.55 * screenHeight)
     }
     
@@ -53,14 +53,18 @@ class SettingsScene: SKScene {
         addChild(backButton)
     }
     
-    private func createTextNextToButton(description: String, buttonText: String, height: CGFloat) -> TextBoxButton{
+    private func createTextNextToButton(description: String, height: CGFloat, buttonName: String) -> TextBoxButton{
         let s = SKLabelNode()
+        var buttonText = ""
+        let enabled = AudioController.shared.isSettingEnabled(settingName: buttonName)
+        if enabled { buttonText = "ON" } else { buttonText = "OFF" }
+        
         let label = Helper.createGenericLabel(description, fontsize: fontSize)
         label.position = CGPoint(x: screenWidth * 0.6, y: height)
         label.horizontalAlignmentMode = .right
         let button = TextBoxButton(x: 0, y: 0, text: buttonText, fontsize: fontSize, buffers: buffers)
         button.position = CGPoint(x: screenWidth * 0.6 + buffer + button.frame.width/2, y: height)
-        button.name = description
+        button.name = buttonName
         print ("\(button.name)")
         self.addChild(label)
         self.addChild(button)
@@ -149,7 +153,6 @@ class SettingsScene: SKScene {
                     if s.within(point: t.location(in: self)){
                         s.originalState()
                         flip(button: backgroundSoundsButton)
-                        AudioController.shared.backgroundToggledOnOff()
                     }
                 }
                 if let r = resetButton{
@@ -173,13 +176,37 @@ class SettingsScene: SKScene {
             self.addChild(resetButton!)
     }
     
+//    private func flip(button: TextBoxButton?){
+//        if let b = button{
+//            let text = b.text
+//            let setting = AudioController.shared.isSettingEnabled(settingName: b.name!)
+//            b.run(SKAction.sequence([
+//                SKAction.scaleX(to: 0, duration: 0.4),
+//                SKAction.run {
+//                    print("\(text)")
+//                    if text == "ON"{
+//                        print("turning off")
+//                        b.text = "OFF"
+//                    }
+//                    else if text == "OFF"{
+//                        print ("turning on")
+//                        b.text = "ON"
+//                    }
+//                },
+//                SKAction.scaleX(to: 1, duration: 0.4)
+//                ])){
+//                //AudioController.shared.backgroundToggledOnOff()
+//            }
+//        }
+//    }
+    
     private func flip(button: TextBoxButton?){
         if let b = button{
             let text = b.text
-            b.run(SKAction.sequence([
+            //let setting = AudioController.shared.isSettingEnabled(settingName: b.name!)
+            b.runWithBlock(SKAction.sequence([
                 SKAction.scaleX(to: 0, duration: 0.4),
                 SKAction.run {
-                    print("\(text)")
                     if text == "ON"{
                         print("turning off")
                         b.text = "OFF"
@@ -190,7 +217,11 @@ class SettingsScene: SKScene {
                     }
                 },
                 SKAction.scaleX(to: 1, duration: 0.4)
-            ]))
+                ]))
+            {
+                    print("flipped")
+                    AudioController.shared.backgroundToggledOnOff()
+            }
         }
     }
 }
