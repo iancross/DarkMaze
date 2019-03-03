@@ -59,6 +59,7 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     func reverseState(){
+        
         expanded = !expanded
         initView()
     }
@@ -76,7 +77,7 @@ class CustomTableViewCell: UITableViewCell {
         removeButton()
         clean()
         setupScene()
-        drawProgressLine()
+        //drawProgressLine()
         addCategoryLabel(alpha: 1.0)
     }
 
@@ -175,7 +176,6 @@ class CustomTableViewCell: UITableViewCell {
                             box.addChild(star)
                             star.zPosition = box.zPosition + 1
                             star.position = CGPoint(x: -box.outline.frame.width/2.0+3.0, y: box.outline.frame.width/2.0-3.0)
-                            //star.position = box.position
                         }
                     }
                     else if levelNumber > nextLevelToComplete{
@@ -235,6 +235,7 @@ class CustomTableViewCell: UITableViewCell {
             }
         }
         cellDelegate?.closeFrame(indexPath: indexPath)
+        AudioController.shared.levelOpenClose()
     }
     
     private func setupScene(){

@@ -182,6 +182,8 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             tableView.endUpdates()
             
             cell?.reverseState()
+        
+            AudioController.shared.levelOpenClose()
         }
         
     }

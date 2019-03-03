@@ -14,26 +14,43 @@ import CoreData
 
 class AudioController{
     static let shared = AudioController()
-    
+    let BACKGROUND_VOLUME:Float = 0.7
     var backgroundAudioPlayer: AVAudioPlayer?
+    var soundEffectsAudioPlayer: AVAudioPlayer?
+    
     
     //MARK Music
     
     init(){
     }
     
+    public func levelOpenClose(){
+        //if isSettingEnabled(settingName: "Game Sounds"){
+        do {
+            if let url = Bundle.main.url(forResource: "levelOpenClose", withExtension: "wav"){
+                soundEffectsAudioPlayer = try AVAudioPlayer(contentsOf: url)
+                soundEffectsAudioPlayer!.prepareToPlay()
+                soundEffectsAudioPlayer!.numberOfLoops = 0
+                soundEffectsAudioPlayer!.play()
+            }
+        } catch  {
+            print ("error")
+        }
+    }
+    
     public func playBackgroundMusic(){
         do {
-            let url = Bundle.main.url(forResource: "background", withExtension: "mp3")!
-            backgroundAudioPlayer = try AVAudioPlayer(contentsOf: url)
-            backgroundAudioPlayer!.prepareToPlay()
-            backgroundAudioPlayer!.numberOfLoops = -1
-            
-            if isSettingEnabled(settingName: "ambientSounds"){
-                print ("things should be playing now!!!!!!!!!!!!!!!!!!!!")
-                backgroundAudioPlayer!.play()
+            if let url = Bundle.main.url(forResource: "background", withExtension: "mp3"){
+                backgroundAudioPlayer = try AVAudioPlayer(contentsOf: url)
+                backgroundAudioPlayer!.prepareToPlay()
+                backgroundAudioPlayer!.numberOfLoops = -1
+                backgroundAudioPlayer!.volume = BACKGROUND_VOLUME
+                
+                if isSettingEnabled(settingName: "ambientSounds"){
+                    print ("things should be playing now!!!!!!!!!!!!!!!!!!!!")
+                    backgroundAudioPlayer!.play()
+                }
             }
-            
         } catch  {
             print ("error")
         }
