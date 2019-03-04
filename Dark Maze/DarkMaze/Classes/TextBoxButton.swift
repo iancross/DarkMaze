@@ -78,6 +78,11 @@ class TextBoxButton: SKNode{
         outline.run(action)
         labelNode.run(action)
     }
+    
+    override func hasActions() -> Bool {
+        return outline.hasActions()
+    }
+    
     func runWithBlock(_ action: SKAction, block: @escaping () -> Void) {
         outline.run(action, completion: block)
         labelNode.run(action)

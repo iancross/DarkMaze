@@ -6,19 +6,20 @@
         <attribute name="firstTimeBonus" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="number" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="totalAttempts" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="page" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Page" syncable="YES"/>
+        <relationship name="page" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Page" inverseName="level" inverseEntity="Page" syncable="YES"/>
     </entity>
     <entity name="Page" representedClassName="Page" syncable="YES" codeGenerationType="class">
         <attribute name="number" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="unlocked" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="level" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Level" syncable="YES"/>
+        <relationship name="level" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Level" inverseName="page" inverseEntity="Level" syncable="YES"/>
     </entity>
     <entity name="Settings" representedClassName="Settings" syncable="YES" codeGenerationType="class">
         <attribute name="ambientSounds" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="gameSounds" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
     </entity>
     <elements>
         <element name="Level" positionX="-63" positionY="0" width="128" height="135"/>
         <element name="Page" positionX="-63" positionY="-18" width="128" height="90"/>
-        <element name="Settings" positionX="-54" positionY="45" width="128" height="60"/>
+        <element name="Settings" positionX="-54" positionY="45" width="128" height="75"/>
     </elements>
 </model>

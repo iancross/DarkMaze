@@ -72,24 +72,15 @@ class AudioController{
                 player.prepareToPlay()
                 player.play()
             }
+            else{
+                print (backgroundAudioPlayer?.isPlaying)
+                print ("Player Stop")
+                player.stop()
+            }
         }
         else{
             setupAudioPlayers()
             print ("this should only be called once gaaaaaaaaa ---------------------------------------------------------------------------------------------------")
-        }
-    }
-    
-    public func backgroundToggledOnOff(){
-        print ("backgroundToggleOnOff")
-        if let player = backgroundAudioPlayer{
-            if isSettingEnabled(settingName: "ambientSounds"){
-                player.stop()
-                flipSettingInCoreData(key: "ambientSounds", newValue: false)
-            }
-            else{
-                flipSettingInCoreData(key: "ambientSounds", newValue: true)
-                playBackgroundMusic()
-            }
         }
     }
 
@@ -104,6 +95,7 @@ class AudioController{
         let settingsEntity = NSEntityDescription.entity(forEntityName: "Settings",in: managedContext)!
         let settings = Settings(entity: settingsEntity, insertInto: managedContext)
         settings.ambientSounds = true
+        settings.gameSounds = true
         do {
             try managedContext.save()
         } catch let error as NSError {
@@ -114,9 +106,9 @@ class AudioController{
     
 
     
-    private func flipSettingInCoreData(key: String, newValue: Bool){
+    public func flipSettingInCoreData(key: String, newValue: Bool){
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            return
+            return 
         }
         
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -133,9 +125,14 @@ class AudioController{
         
         do {
             try managedContext.save()
+            if key == "ambientSounds"{
+                playBackgroundMusic()
+            }
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
         }
+        
+
     }
     
     public func isSettingEnabled(settingName: String) -> Bool{

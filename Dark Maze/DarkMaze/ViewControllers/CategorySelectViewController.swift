@@ -19,6 +19,7 @@ enum Scrolling {
 class CategorySelectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, CellDelegate {
     @IBOutlet weak var headerHeight: NSLayoutConstraint!
     @IBAction func backButtonTapped(_ sender: UIButton) {
+        AudioController.shared.playButtonClick()
         switchToGame(sceneString: "MenuScene")
     }
 
@@ -43,12 +44,9 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         cellSizeBuffer = screenHeight / 19
 
         customTableView.decelerationRate = UIScrollViewDecelerationRateNormal
-        let i = IndexPath(item:12, section: 0)
         lastContentOffset = CGPoint.zero
         addBannerViewToView()
         customTableView.decelerationRate = UIScrollViewDecelerationRateFast
-        let selected = IndexPath(row: getTopLevelToScrollTo(), section: 0)
-        //print("selectedLevel is \(selected)")
         
         self.customTableView.rowHeight = defaultHeight;
         super.viewDidLoad()
@@ -61,7 +59,6 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
                                               multiplier: 1,
                                               constant: 0))
         let originalSelectedIndexPath = IndexPath(row: LevelsData.shared.selectedLevel.page, section: 0)
-        //print ("selectedIndexPath is \(selectedIndexPath)")
         selectedRowIndex = originalSelectedIndexPath
         customTableView.selectRow(at: selectedRowIndex, animated: true, scrollPosition: .none)
         customTableView.scrollToRow(at: IndexPath(row: getTopLevelToScrollTo(), section: 0), at: .top, animated: true)

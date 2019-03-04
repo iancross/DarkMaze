@@ -33,7 +33,7 @@ class SettingsScene: SKScene {
         createHeader()
         createBackButton()
         backgroundSoundsButton = createTextNextToButton(description: "Ambient Sounds", height: 0.75 * screenHeight, buttonName: "ambientSounds")
-        longerSettingButton = createTextNextToButton(description: "Game Sounds", height: 0.65 * screenHeight, buttonName: "ambientSounds") //just putting ambient sounds for a second here
+        longerSettingButton = createTextNextToButton(description: "Game Sounds", height: 0.65 * screenHeight, buttonName: "gameSounds") //just putting ambient sounds for a second here
         addResetButton(description: "Reset Game", height: 0.55 * screenHeight)
     }
     
@@ -54,7 +54,6 @@ class SettingsScene: SKScene {
     }
     
     private func createTextNextToButton(description: String, height: CGFloat, buttonName: String) -> TextBoxButton{
-        let s = SKLabelNode()
         var buttonText = ""
         let enabled = AudioController.shared.isSettingEnabled(settingName: buttonName)
         if enabled { buttonText = "ON" } else { buttonText = "OFF" }
@@ -62,10 +61,10 @@ class SettingsScene: SKScene {
         let label = Helper.createGenericLabel(description, fontsize: fontSize)
         label.position = CGPoint(x: screenWidth * 0.6, y: height)
         label.horizontalAlignmentMode = .right
-        let button = TextBoxButton(x: 0, y: 0, text: buttonText, fontsize: fontSize, buffers: buffers)
+        let button = TextBoxButton(x: 0, y: 0, text: "ON", fontsize: fontSize, buffers: buffers)
+        button.text = buttonText
         button.position = CGPoint(x: screenWidth * 0.6 + buffer + button.frame.width/2, y: height)
         button.name = buttonName
-        print ("\(button.name)")
         self.addChild(label)
         self.addChild(button)
         return button
@@ -81,7 +80,7 @@ class SettingsScene: SKScene {
             }
             else{
                 if let s = backgroundSoundsButton{
-                    if s.within(point: t.location(in: self)){
+                    if s.within(point: t.location(in: self)) && !s.hasActions(){
                         s.tappedState()
                     }
                 }
@@ -111,7 +110,7 @@ class SettingsScene: SKScene {
             else{
                 touchedNode.alpha = 1.0
                 if let s = backgroundSoundsButton{
-                    if s.within(point: t.location(in: self)){
+                    if s.within(point: t.location(in: self))  && !s.hasActions(){
                         s.tappedState()
                     }
                     else{
@@ -151,14 +150,16 @@ class SettingsScene: SKScene {
             }
             else{
                 if let s = backgroundSoundsButton{
-                    if s.within(point: t.location(in: self)){
+                    if s.within(point: t.location(in: self))  && !s.hasActions() {
                         s.originalState()
                         flip(button: backgroundSoundsButton)
                     }
                 }
                 if let r = resetButton{
                     if r.within(point: t.location(in: self)){
+                        (self.delegate as? GameDelegate)?.mainMenu()
                         r.originalState()
+                        AudioController.shared.backgroundAudioPlayer?.stop() //need to add this for some reason
                         LevelsData.shared.resetGame()
                     }
                 }
@@ -179,24 +180,29 @@ class SettingsScene: SKScene {
     
     private func flip(button: TextBoxButton?){
         if let b = button{
+            let isEnabled = AudioController.shared.isSettingEnabled(settingName: b.name!)
+            AudioController.shared.flipSettingInCoreData(key: b.name!, newValue: !isEnabled)
             let text = b.text
+            
             b.runWithBlock(SKAction.sequence([
                 SKAction.scaleX(to: 0, duration: 0.15),
                 SKAction.run {
-                    
-                    if text == "ON"{
-                        print("turning off")
-                        b.text = "OFF"
-                    }
-                    else if text == "OFF"{
-                        print ("turning on")
+                    if !isEnabled{
                         b.text = "ON"
                     }
+                    else{
+                        b.text = "OFF"
+                    }
+//                    if text == "ON"{
+//                        b.text = "OFF"
+//                    }
+//                    else if text == "OFF"{
+//                        b.text = "ON"
+//                    }
                 },
                 SKAction.scaleX(to: 1, duration: 0.15)
                 ]))
             {
-                AudioController.shared.backgroundToggledOnOff()
                 print("flipped")
             }
         }
