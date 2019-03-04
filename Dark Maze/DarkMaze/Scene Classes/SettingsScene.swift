@@ -146,6 +146,7 @@ class SettingsScene: SKScene {
             if let name = touchedNode.name{
                 if name == "BackButton"{
                     (self.delegate as? GameDelegate)?.mainMenu()
+                    AudioController.shared.playButtonClick()
                 }
             }
             else{
@@ -176,37 +177,13 @@ class SettingsScene: SKScene {
             self.addChild(resetButton!)
     }
     
-//    private func flip(button: TextBoxButton?){
-//        if let b = button{
-//            let text = b.text
-//            let setting = AudioController.shared.isSettingEnabled(settingName: b.name!)
-//            b.run(SKAction.sequence([
-//                SKAction.scaleX(to: 0, duration: 0.4),
-//                SKAction.run {
-//                    print("\(text)")
-//                    if text == "ON"{
-//                        print("turning off")
-//                        b.text = "OFF"
-//                    }
-//                    else if text == "OFF"{
-//                        print ("turning on")
-//                        b.text = "ON"
-//                    }
-//                },
-//                SKAction.scaleX(to: 1, duration: 0.4)
-//                ])){
-//                //AudioController.shared.backgroundToggledOnOff()
-//            }
-//        }
-//    }
-    
     private func flip(button: TextBoxButton?){
         if let b = button{
             let text = b.text
-            //let setting = AudioController.shared.isSettingEnabled(settingName: b.name!)
             b.runWithBlock(SKAction.sequence([
-                SKAction.scaleX(to: 0, duration: 0.4),
+                SKAction.scaleX(to: 0, duration: 0.15),
                 SKAction.run {
+                    
                     if text == "ON"{
                         print("turning off")
                         b.text = "OFF"
@@ -216,11 +193,11 @@ class SettingsScene: SKScene {
                         b.text = "ON"
                     }
                 },
-                SKAction.scaleX(to: 1, duration: 0.4)
+                SKAction.scaleX(to: 1, duration: 0.15)
                 ]))
             {
-                    print("flipped")
-                    AudioController.shared.backgroundToggledOnOff()
+                AudioController.shared.backgroundToggledOnOff()
+                print("flipped")
             }
         }
     }

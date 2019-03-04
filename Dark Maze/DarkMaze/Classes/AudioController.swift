@@ -14,45 +14,68 @@ import CoreData
 
 class AudioController{
     static let shared = AudioController()
-    let BACKGROUND_VOLUME:Float = 0.7
+    let BACKGROUND_VOLUME:Float = 0.6
+    let LEVELOPENCLOSE_VOLUME: Float = 0.8
+    
     var backgroundAudioPlayer: AVAudioPlayer?
-    var soundEffectsAudioPlayer: AVAudioPlayer?
+    var levelOpenCloseAudioPlayer: AVAudioPlayer?
+    var buttonClickAudioplayer: AVAudioPlayer?
     
     
     //MARK Music
     
     init(){
+        setupAudioPlayers()
     }
     
-    public func levelOpenClose(){
-        //if isSettingEnabled(settingName: "Game Sounds"){
+    private func setupAudioPlayers(){
         do {
+            ////i might need to change how i actually play it. probably don't need to keep loading the contents
             if let url = Bundle.main.url(forResource: "levelOpenClose", withExtension: "wav"){
-                soundEffectsAudioPlayer = try AVAudioPlayer(contentsOf: url)
-                soundEffectsAudioPlayer!.prepareToPlay()
-                soundEffectsAudioPlayer!.numberOfLoops = 0
-                soundEffectsAudioPlayer!.play()
+                levelOpenCloseAudioPlayer = try AVAudioPlayer(contentsOf: url)
             }
+            if let url = Bundle.main.url(forResource: "background", withExtension: "mp3"){
+                backgroundAudioPlayer = try AVAudioPlayer(contentsOf: url)
+                playBackgroundMusic()
+            }
+            if let url = Bundle.main.url(forResource: "buttonClick", withExtension: "wav"){
+                buttonClickAudioplayer = try AVAudioPlayer(contentsOf: url)
+            }
+            
         } catch  {
             print ("error")
         }
     }
     
+    
+    public func levelOpenClose(){
+        //if isSettingEnabled(settingName: "Game Sounds"){
+        if let player = levelOpenCloseAudioPlayer{
+            player.prepareToPlay()
+            player.volume = LEVELOPENCLOSE_VOLUME
+            player.play()
+        }
+    }
+    
+    public func playButtonClick(){
+        if let player = buttonClickAudioplayer{
+            player.prepareToPlay()
+            player.play()
+        }
+    }
+    
     public func playBackgroundMusic(){
-        do {
-            if let url = Bundle.main.url(forResource: "background", withExtension: "mp3"){
-                backgroundAudioPlayer = try AVAudioPlayer(contentsOf: url)
-                backgroundAudioPlayer!.prepareToPlay()
-                backgroundAudioPlayer!.numberOfLoops = -1
-                backgroundAudioPlayer!.volume = BACKGROUND_VOLUME
-                
-                if isSettingEnabled(settingName: "ambientSounds"){
-                    print ("things should be playing now!!!!!!!!!!!!!!!!!!!!")
-                    backgroundAudioPlayer!.play()
-                }
+        if let player = backgroundAudioPlayer{
+            if isSettingEnabled(settingName: "ambientSounds") && !backgroundAudioPlayer!.isPlaying{
+                player.numberOfLoops = -1
+                player.volume = BACKGROUND_VOLUME
+                player.prepareToPlay()
+                player.play()
             }
-        } catch  {
-            print ("error")
+        }
+        else{
+            setupAudioPlayers()
+            print ("this should only be called once gaaaaaaaaa ---------------------------------------------------------------------------------------------------")
         }
     }
     
