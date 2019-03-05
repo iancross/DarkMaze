@@ -14,9 +14,10 @@ import CoreData
 
 class AudioController{
     static let shared = AudioController()
-    let BACKGROUND_VOLUME:Float = 0.6
-    let LEVELOPENCLOSE_VOLUME: Float = 0.8
+    let BACKGROUND_VOLUME:Float = 0.3
+    let LEVELOPENCLOSE_VOLUME: Float = 0.4
     
+    var gameSoundsEnabled: Bool = true
     var backgroundAudioPlayer: AVAudioPlayer?
     var levelOpenCloseAudioPlayer: AVAudioPlayer?
     var buttonClickAudioplayer: AVAudioPlayer?
@@ -27,6 +28,12 @@ class AudioController{
     init(){
         setupAudioPlayers()
         playBackgroundMusic()
+    }
+    
+    public func reInitPlayersAndSounds(){
+        print("in reInitPlayersAndSounds")
+        playBackgroundMusic()
+        gameSoundsEnabled = isSettingEnabled(settingName: "gameSounds")
     }
     
     private func setupAudioPlayers(){
@@ -50,24 +57,29 @@ class AudioController{
     
     
     public func levelOpenClose(){
-        //if isSettingEnabled(settingName: "Game Sounds"){
-        if let player = levelOpenCloseAudioPlayer{
-            player.prepareToPlay()
-            player.volume = LEVELOPENCLOSE_VOLUME
-            player.play()
+        if gameSoundsEnabled{
+            if let player = levelOpenCloseAudioPlayer{
+                player.prepareToPlay()
+                player.volume = LEVELOPENCLOSE_VOLUME
+                player.play()
+            }
         }
     }
     
     public func playButtonClick(){
-        if let player = buttonClickAudioplayer{
-            player.prepareToPlay()
-            player.play()
+        if gameSoundsEnabled{
+            if let player = buttonClickAudioplayer{
+                player.volume = LEVELOPENCLOSE_VOLUME
+                player.prepareToPlay()
+                player.play()
+            }
         }
     }
     
     public func playBackgroundMusic(){
         if let player = backgroundAudioPlayer{
-            if isSettingEnabled(settingName: "ambientSounds") && !backgroundAudioPlayer!.isPlaying{
+            if isSettingEnabled(settingName: "ambientSounds"){ //&& !backgroundAudioPlayer!.isPlaying{
+                print ("we made it past the check to see whether the setting was enabled AND the background audio wasn't already playing")
                 player.numberOfLoops = -1
                 player.volume = BACKGROUND_VOLUME
                 player.prepareToPlay()
@@ -126,6 +138,9 @@ class AudioController{
         
         do {
             try managedContext.save()
+            if key == "gameSounds"{
+                gameSoundsEnabled = newValue
+            }
             if key == "ambientSounds"{
                 playBackgroundMusic()
             }
@@ -147,7 +162,6 @@ class AudioController{
             if let s = try managedContext.fetch(fetchRequest) as? [NSManagedObject]{
                 if s.count > 0{
                     if let enabled = s[0].value(forKey: settingName) as? Bool {
-                        print ("we have the setting")
                         print ("the enabled bool in \(settingName) is \(enabled)")
                         return enabled
                     }
