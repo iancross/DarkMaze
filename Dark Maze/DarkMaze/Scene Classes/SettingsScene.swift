@@ -9,7 +9,7 @@
 import Foundation
 import SpriteKit
 import GameplayKit
-class SettingsScene: SKScene {
+class SettingsScene: SKScene, Alertable {
     
     var header = SKLabelNode()
     var backButton = SKSpriteNode()
@@ -157,10 +157,7 @@ class SettingsScene: SKScene {
                 }
                 if let r = resetButton{
                     if r.within(point: t.location(in: self)){
-                        (self.delegate as? GameDelegate)?.mainMenu()
-                        r.originalState()
-                        AudioController.shared.backgroundAudioPlayer?.stop() //need to add this for some reason
-                        LevelsData.shared.resetGame()
+                        showAlertWithOptions(withTitle: "Reset all game data?", message: "This can't be undone.")
                     }
                 }
                 if let l = longerSettingButton{
@@ -183,7 +180,6 @@ class SettingsScene: SKScene {
             let isEnabled = AudioController.shared.isSettingEnabled(settingName: b.name!)
             AudioController.shared.flipSettingInCoreData(key: b.name!, newValue: !isEnabled)
             let text = b.text
-            
             b.runWithBlock(SKAction.sequence([
                 SKAction.scaleX(to: 0, duration: 0.15),
                 SKAction.run {
@@ -206,5 +202,29 @@ class SettingsScene: SKScene {
                 print("flipped")
             }
         }
+    }
+    
+    //called from the alertable protocol
+    private func resetGame(){
+        (self.delegate as? GameDelegate)?.mainMenu()
+        resetButton!.originalState()
+        AudioController.shared.backgroundAudioPlayer?.stop() //need to add this for some reason
+        LevelsData.shared.resetGame()
+    }
+    
+    func showAlertWithOptions(withTitle title: String, message: String){
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        let okAction = UIAlertAction(title: "OK", style: .default) {
+            _ in
+            self.resetGame()
+        }
+        alertController.addAction(okAction)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default) {
+            _ in
+        }
+        alertController.addAction(cancelAction)
+        
+        view?.window?.rootViewController?.present(alertController, animated: true)
     }
 }

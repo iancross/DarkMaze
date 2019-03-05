@@ -32,7 +32,6 @@ class GameViewController: UIViewController, GameDelegate, GADBannerViewDelegate 
         self.view.backgroundColor = UIColor.black
         super.viewDidLoad()
         setupAudioSession()
-        AudioController.shared.playBackgroundMusic()
         if let view = self.view as! SKView? {
             
             view.preferredFramesPerSecond = 30

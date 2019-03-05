@@ -29,6 +29,7 @@ class MenuScene: SKScene {
         backgroundColor = UIColor.black
         anchorPoint = CGPoint(x: 0, y:0)
         _ = LevelsData.shared.currentLevelSuccess
+        AudioController.shared.playBackgroundMusic()
     }
     
     required init?(coder aDecoder: NSCoder) {

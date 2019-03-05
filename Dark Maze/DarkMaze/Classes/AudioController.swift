@@ -26,6 +26,7 @@ class AudioController{
     
     init(){
         setupAudioPlayers()
+        playBackgroundMusic()
     }
     
     private func setupAudioPlayers(){
@@ -86,7 +87,7 @@ class AudioController{
 
     
     public func initAudioSettings(){
-        print ("this is being called")
+        print ("Initializing Audio Settings, called from LevelsData")
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             print("something bad app delegate ------------------------------------")
             return
