@@ -14,7 +14,7 @@ enum Jumps {
     case square
     case plus
 }
-var testing = false //testing variable controls touches moved and printing the green coords
+var testing = true //testing variable controls touches moved and printing the green coords
 
 class Level1Scene: SKScene {
     var tile2DArray = [[GridTile]]()
@@ -99,6 +99,7 @@ class Level1Scene: SKScene {
     }
     
     override func update(_ currentTime: TimeInterval) {
+        print ("Game Active is \(gameActive)")
         if gridViewable {
             for row in tile2DArray{
                 for tile in row{
@@ -383,6 +384,8 @@ class Level1Scene: SKScene {
     //if need be
     func modifyGrid(){
         var actions: [SKAction] = []
+        
+        var jumbledPairs: [((Int,Int),(Int,Int))]?
         if let mods = Level!.modifications{
             for (mod, modData) in mods{
                 switch mod {
@@ -397,12 +400,13 @@ class Level1Scene: SKScene {
                 case .splitPath:
                     print ("splitPath")
                 case .jumbled:
-                    if let pairs = modData as? [((Int,Int),(Int,Int))]{
-                        gameActive = false
-                        for (i,(x, y)) in pairs.enumerated(){
-                            swapTiles(coord1: x, coord2: y, lastPair: i == pairs.count-1)
-                        }
-                    }
+                    jumbledPairs = modData as? [((Int,Int),(Int,Int))]
+//                    {
+////                        gameActive = false
+////                        for (i,(x, y)) in pairs.enumerated(){
+////                            swapTiles(coord1: x, coord2: y, lastPair: i == pairs.count-1)
+////                        }
+//                    }
                 default:
                     print ("this is being called")
                     gameActive = true
@@ -412,8 +416,16 @@ class Level1Scene: SKScene {
             print("actions \(actions)")
             gridNode.run(SKAction.sequence(actions)){
                 print ("gridNode running")
-                self.gameActive = true
-                self.setFirstTile()
+                if let pairs = jumbledPairs{
+                    self.gameActive = false
+                    for (i,(x, y)) in pairs.enumerated(){
+                        self.swapTiles(coord1: x, coord2: y, lastPair: i == pairs.count-1)
+                    }
+                }
+                else{
+                    self.gameActive = true
+                    self.setFirstTile()
+                }
                 
                 //testing
                 //self.testingFlipAllTiles()
@@ -983,6 +995,7 @@ class Level1Scene: SKScene {
     }
     
     private func tutorialContinue(){
+
         if currentLevel == 0{
             //LevelsData.shared.nextLevel()
             removeAllChildren()
@@ -992,6 +1005,10 @@ class Level1Scene: SKScene {
             LevelsData.shared.nextLevel()
             (self.delegate as? GameDelegate)?.levelSelect()
         }
+        else{
+            print ("fuck")
+        }
+        
         
     }
     

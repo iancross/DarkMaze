@@ -43,37 +43,31 @@ class LevelsData{
     private var levelGroups = [(category: String, levels: [LevelData])]()
     
     init(){
-        print ("begin init")
         currentLevelSuccess = false
+        
         //used by the gameplay if you play an earlier level
         selectedLevel = (page: 0, level: 0)
-        //levelGroups = [(category: String, levels: [LevelData])]()
-        //SplitPath()
+
         Intro()
         Normal()
         Jump()
+        Spin()
         ThisLooksFamiliar() //go back over itself
         MeetInTheMiddle()
-        DivideAndConquer()
-        Spin()
         Jumbled()
-        Combo1()
         BlockReveal()
         MultiJump()
-        
+        DivideAndConquer()
 
         //disappearing trail()
         //Flip()
-        //Spin()
         //Disorient() //Multiple spins and flips
-        //MovedTiles
         //Reverse()
-        //HyperSpeed() //just speed it up like crazy
+        //Show every other tile
         //Flash() //just literally flash the grid
         //WhereToEnd() //multiple end arrows
 
         initCoreData()
-        print ("end init")
     }
     
     
@@ -288,8 +282,11 @@ class LevelsData{
                     }
                 }
             }
+            
+            //we always update the attempts
             if let totalAttempts = levels[0].value(forKey: "totalAttempts") as? Int32{
                 levels[0].setValue(totalAttempts+1, forKey: "totalAttempts")
+
             }
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
@@ -303,8 +300,37 @@ class LevelsData{
         }
     }
     
-    func selectedLevelFirstAttemptSuccess()-> Bool{
-        return firstAttemptSuccess(forLevel: (selectedLevel))
+    func displayFirstTimeBonus()-> Bool{
+        let toTest: (page: Int, level: Int) = selectedLevel
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return false
+        }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Level")
+        let pagePredicate = NSPredicate(format: "page.number == \(toTest.page)")
+        let levelPredicate = NSPredicate(format: "number == \(toTest.level)")
+        let compoundPredicate = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.and, subpredicates: [pagePredicate,levelPredicate])
+        fetchRequest.predicate = compoundPredicate
+        
+        do {
+            //we want bonus == true, attemptsBeforeSuccess == 0, attempts = 1
+            let levels = try managedContext.fetch(fetchRequest) as [NSManagedObject]
+            if let bonus = levels[0].value(forKey: "firstTimeBonus") as? Bool {
+                if let attemptsBeforeSuccess = levels[0].value(forKey: "attemptsBeforeSuccess") as? Int32 {
+                    if let totalAttempts = levels[0].value(forKey: "totalAttempts") as? Int32 {
+                        print ("we made it all the way in")
+                        print ("bonus is \(bonus)")
+                        print ("attempsBeforeSuccess is \(attemptsBeforeSuccess == 0)")
+                        print ("totalAttempts is \(totalAttempts)")
+                        return bonus && attemptsBeforeSuccess == 0 && totalAttempts == 1
+                    }
+                }
+            }
+            return false
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+        return false
     }
     
     func firstAttemptSuccess(forLevel toTest: (page: Int, level: Int))->Bool{
@@ -319,15 +345,19 @@ class LevelsData{
         fetchRequest.predicate = compoundPredicate
         
         do {
+            //we want bonus == true, attemptsBeforeSuccess == 0, attempts = 1
             let levels = try managedContext.fetch(fetchRequest) as [NSManagedObject]
             if let bonus = levels[0].value(forKey: "firstTimeBonus") as? Bool {
-                print ("------- The value of bonus is  \(bonus)")
-                return bonus
+                if let attemptsBeforeSuccess = levels[0].value(forKey: "attemptsBeforeSuccess") as? Int32 {
+                    print ("we made it all the way in")
+                    return bonus && attemptsBeforeSuccess == 0
+
+                }
             }
+            return false
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
-        print ("something fucked uppppppppppppp")
         return false
     }
     
@@ -354,9 +384,12 @@ class LevelsData{
                 let levels = try managedContext.fetch(fetchRequest2) as [NSManagedObject]
                 print ("count of all levels in page \(String(describing: num)) is \(levels.count)")
                 for l in levels{
-                    print ("---- completed \(l.value(forKeyPath: "completed") as! Int32)")
-                    print ("---- level number \(l.value(forKeyPath: "number") as! Int32))")
-                    print ("---- attemptsBeforeSuccess \(l.value(forKeyPath: "attemptsBeforeSuccess") as! Int32))")
+                    if i <= 3{
+                        print ("---- completed \(l.value(forKeyPath: "completed") as! Bool)")
+                        print ("---- level number \(l.value(forKeyPath: "number") as! Int32))")
+                        print ("---- attemptsBeforeSuccess \(l.value(forKeyPath: "attemptsBeforeSuccess") as! Int32))")
+                        print ("---- totalAttempts \(l.value(forKeyPath: "totalAttempts") as! Int32))")
+                    }
                 }
             }
         } catch let error as NSError {
@@ -709,58 +742,6 @@ class LevelsData{
         levelGroups.append ((category: "Spin", array))
     }
     
-    func Combo1(){
-        let array = [
-            LevelData(
-                gridX: 4, gridY: 4, delayTime: 0.5,
-                solutionCoords:
-                [(2,3),(3,3),(3,2),(3,1),(2,1),(1,1),(0,1),(2,2),(2,1),(2,0)],
-                modifications: nil
-            ),
-            LevelData(
-                gridX: 4, gridY: 4, delayTime: 0.5,
-                solutionCoords:
-                [(3,2),(2,2),(1,2),(1,3),(0,2),(0,1),(1,1),(2,1),(3,1),(3,0)],
-                modifications: [(.spin, -CGFloat.pi/4.0)]
-            ),
-            LevelData(
-                gridX: 4, gridY: 4, delayTime: 0.5,
-                solutionCoords:
-                [(3,2),(3,1),(2,1),(2,2),(1,2),(1,1),(1,0),(0,0)],
-                modifications: [(.spin, 3.0*CGFloat.pi/4.0)]
-            ),
-            LevelData(
-                gridX: 4, gridY: 5, delayTime: 0.5,
-                solutionCoords:
-                [(0,2),(0,3),(1,3),(1,2),(1,1),(2,1),(3,1),(3,2),(3,3),(3,4)],
-                modifications: [(.spin, CGFloat.pi/2.0)]
-            ),
-            LevelData(
-                gridX: 5, gridY: 4, delayTime: 0.5,
-                solutionCoords:
-                [(2,0),(3,0),(4,0),(4,1),(4,2),(3,2),(2,2),(1,2),(1,1),(0,1),(0,2),(0,3)],
-                modifications: [(.spin, -CGFloat.pi/2.0)]
-            ),
-            LevelData(
-                gridX: 5, gridY: 5, delayTime: 0.5,
-                solutionCoords:
-                [(4,3),(3,3),(3,2),(2,2),(2,1),(1,1),(1,2),(0,2)],
-                modifications: [(.spin, -3.0*CGFloat.pi/2.0)]
-            ),
-            LevelData(
-                gridX: 5, gridY: 5, delayTime: 0.5,
-                solutionCoords:
-                [(2,4),(2,3),(3,3),(3,2),(3,1),(3,0),(2,0),(1,0),(1,1),(1,2),(0,2)],
-                modifications: [(.spin, 2.0*CGFloat.pi)]
-            ),
-            LevelData(
-                gridX: 6, gridY: 6, delayTime: 0.5,
-                solutionCoords:
-                [(0,5),(1,5),(1,4),(0,4),(0,3),(1,3),(2,3),(3,3),(4,3),(4,4),(4,5),(5,5)],
-                modifications: [(.spin, 3.0*CGFloat.pi/2.0)]
-            )]
-        levelGroups.append ((category: "Combo 1", array))
-    }
     private func Jumbled(){
         let array = [
             LevelData(

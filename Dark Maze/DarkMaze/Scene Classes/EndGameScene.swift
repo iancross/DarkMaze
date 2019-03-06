@@ -78,7 +78,7 @@ class EndGameScene: SKScene {
     
     func collectBonuses() -> [SKNode]{
         var nodes = [SKNode]()
-        if LevelsData.shared.selectedLevelFirstAttemptSuccess(){
+        if LevelsData.shared.displayFirstTimeBonus(){
             nodes.append(firstTryBonus())
         }
         if displayUnlockLevelBonus!{
