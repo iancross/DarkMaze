@@ -124,7 +124,7 @@ class LevelsData{
             }
         }
         //remove later!!!!!
-        testing = false
+        //testing = false
         do {
             try managedContext.save()
         } catch let error as NSError {
@@ -423,7 +423,7 @@ class LevelsData{
             LevelData(
                 gridX: 4, gridY: 4, delayTime: 0.5,
                 solutionCoords:
-                [(0,1),(1,1),(2,1),(2,2),(3,2)],
+                [(2,0),(2,1),(2,2),(1,2),(1,3)],
                  modifications: nil
             ),
             LevelData(

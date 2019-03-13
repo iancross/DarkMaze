@@ -68,32 +68,7 @@ class MenuScene: SKScene {
         buttonsNode?.addChild(darkMaze!)
         self.addChild(buttonsNode!)
     }
-    
-//    override func update(_ currentTime: TimeInterval) {
-//        if tileLoop < 15{
-//            tileLoop += 1
-//        }
-//        else{
-//            let prevBlock = blockPoints.first
-//            blockPoints.remove(at: 0)
-//            var newPoint = blockRandomPoint(prevPoint: blockPoints.first!)
-//            while newPoint.x == prevBlock?.x && newPoint.y == prevBlock?.y{
-//                newPoint = blockRandomPoint(prevPoint: blockPoints.first!)
-//            }
-//            blockPoints.append(newPoint)
-//            currentTile = GridTile(coord: (0,0), width: blocksize, height: blocksize)
-//            currentTile?.position = newPoint
-//            addChild(currentTile!)
-//            let actionList = SKAction.sequence(
-//                [SKAction.run { [weak self] in self?.currentTile?.switchToWhite() },
-//                 SKAction.fadeOut(withDuration: 1.7),
-//                 SKAction.removeFromParent()
-//                ]
-//            )
-//            currentTile?.run(actionList)
-//            tileLoop = 0
-//        }
-//    }
+
         override func update(_ currentTime: TimeInterval) {
             if tileLoop < 15{
                 tileLoop += 1

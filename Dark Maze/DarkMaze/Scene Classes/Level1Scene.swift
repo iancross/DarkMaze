@@ -14,7 +14,7 @@ enum Jumps {
     case square
     case plus
 }
-var testing = true //testing variable controls touches moved and printing the green coords
+var testing = false //testing variable controls touches moved and printing the green coords
 
 class Level1Scene: SKScene {
     var tile2DArray = [[GridTile]]()
@@ -99,7 +99,6 @@ class Level1Scene: SKScene {
     }
     
     override func update(_ currentTime: TimeInterval) {
-        print ("Game Active is \(gameActive)")
         if gridViewable {
             for row in tile2DArray{
                 for tile in row{
@@ -225,14 +224,14 @@ class Level1Scene: SKScene {
                 switch mod {
                 case .divideAndConquer:
                     drawDivideAndConquer()
+                case .meetInTheMiddle:
+                    drawMeetInTheMiddle()
                 case .blockReveal:
                     if let arr = modData as? [Int]{
                         drawBlockReveal(blocksToDisplay: arr)
                     }
                 case .jumbled:
-                    print ("fuck")
                     if let pairs = modData as? [((x: Int,y: Int),(x: Int,y: Int))]{
-                        print ("drawing pairs!!!")
                         drawJumbled(pairs: pairs)
                     }
                     //I think we might have to just DRAW it jumbled and then the graph is later represented as it should be
@@ -249,7 +248,6 @@ class Level1Scene: SKScene {
             }
         }
         else{
-            print("calling draw normal from getting nil in mods")
             drawNormal()
         }
     }
@@ -304,6 +302,30 @@ class Level1Scene: SKScene {
        
     }
     
+    func drawMeetInTheMiddle(){
+        var leftIndex = 0
+        var rightIndex = Level!.solutionCoords.count - 1
+        var coord1, coord2: (x:Int,y:Int)
+        var tile1, tile2: GridTile
+        var lastTile = false
+        while leftIndex < rightIndex{
+            if leftIndex + 1 == rightIndex{
+                lastTile = true
+            }
+            coord1 = Level!.solutionCoords[leftIndex]
+            coord2 = Level!.solutionCoords[rightIndex]
+            tile1 = tile2DArray[coord1.y][coord1.x]
+            tile2 = tile2DArray[coord2.y][coord2.x]
+            runDrawingActions(tiles: [tile1, tile2], lastTile: lastTile, delay: Level!.delayTime * Double(leftIndex))
+            leftIndex = leftIndex + 1
+            rightIndex = rightIndex - 1
+        }
+        if leftIndex == rightIndex{
+            coord1 = Level!.solutionCoords[leftIndex]
+            tile1 = tile2DArray[coord1.y][coord1.x]
+            runDrawingActions(tiles: [tile1], lastTile: true, delay: Level!.delayTime * Double(leftIndex))
+        }
+    }
     
     func drawDivideAndConquer(){
         print ("drawingDivideAndConquer")
@@ -342,7 +364,6 @@ class Level1Scene: SKScene {
                         self.drawGridLines()
                         //marking the first tile as available
                         self.beginGame()
-                        print ("gameActive = true in 'runDrawingActions'")
                         self.skipButton?.hide()
                     }
                 }
@@ -401,12 +422,6 @@ class Level1Scene: SKScene {
                     print ("splitPath")
                 case .jumbled:
                     jumbledPairs = modData as? [((Int,Int),(Int,Int))]
-//                    {
-////                        gameActive = false
-////                        for (i,(x, y)) in pairs.enumerated(){
-////                            swapTiles(coord1: x, coord2: y, lastPair: i == pairs.count-1)
-////                        }
-//                    }
                 default:
                     print ("this is being called")
                     gameActive = true
@@ -452,23 +467,15 @@ class Level1Scene: SKScene {
         let action = SKAction.rotate(byAngle: rotation, duration: Double(d))
         //setFirstTile()
         return action
-//        gridNode.run(sequence){
-//            print ("gameActive = true in spinGrid")
-//            self.gameActive = true
-//        }
     }
+    
     func flipGrid()->SKAction{
         let sequence = SKAction.sequence(
             [SKAction.run { self.gameActive = false },
             SKAction.wait(forDuration: 0.2),
             SKAction.scaleX(to: -1.0, duration: 1.0),
             SKAction.wait(forDuration: 0.3)])
-        //setFirstTile()
         return sequence
-//        gridNode.run(sequence){
-//            print ("gameActive = true in flipGrid")
-//            self.gameActive = true
-//        }
     }
     private func swapTiles(coord1: (x: Int, y: Int), coord2: (x: Int, y: Int), lastPair: Bool){
         gameActive = false
@@ -501,7 +508,6 @@ class Level1Scene: SKScene {
             tile1.position = endPosition
             if lastSwappedPair{
                 self.setFirstTile()
-                print ("gameActive = true in runBezierMovement")
                 self.gameActive = true
             }
         }
@@ -510,11 +516,8 @@ class Level1Scene: SKScene {
     private func getBezierControlPoints(a: CGPoint, b: CGPoint)->[[CGPoint]]{
         let mid = calcMidPointOf(a: a, b: b)
         let slope = calcSlopeOf(a: a, b: b)
-        print ("slope is \(slope)")
         let hypotenuseD = calcDistanceBetweenPoints(a: a, b: b)
-        print("hypotenuse distance between a and b is \(hypotenuseD)")
         let sideDistance = calcSidesOfPerfectRightTriangleGiven(hypotenuse: hypotenuseD)
-        print ("sideDistance of a right perfect triangle is \(sideDistance)")
         let distanceFromMidToRightAngle = calcSideOfRightTriangle(hypotenuse: sideDistance, side: hypotenuseD/2)/1.5 //dividing by 2 to make it a bit closer
         let vertexPoints = calcPointsGiven(source: mid, slope: calcPerpendicularSlope(s: slope), distance: distanceFromMidToRightAngle)
         let controlPoints = [calcMidPointOf(a: a, b: vertexPoints[0]), calcMidPointOf(a: b, b: vertexPoints[0])]
@@ -658,11 +661,11 @@ class Level1Scene: SKScene {
                     startArrow.removeAllActions()
 
                     //testing
-                    if testing{
-                        print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
-                        tile.tile.fillColor = UIColor.green
-                        return //comment out to get grid coords for levels
-                    }
+//                    if testing{
+//                        print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
+//                        tile.tile.fillColor = UIColor.green
+//                        return //comment out to get grid coords for levels
+//                    }
 
                     lastTouchedTile = tile
                     touchTile(tile: lastTouchedTile!, alpha: blockAlphaMin + CGFloat(touchedTiles + 1) * blockAlphaIncrement)

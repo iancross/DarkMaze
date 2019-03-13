@@ -131,7 +131,7 @@ class EndGameScene: SKScene {
         return bonusesNode
     }
     func addButtons(text: String){
-        let font = screenWidth*0.11 //GameStyle.shared.TextBoxFontSize
+        let font = screenWidth*0.09
 
         repeatOrNextButton = TextBoxButton(x: 0, y: frame.height/8, text: text, fontsize:font, buffers: buffers)
         repeatOrNextButton?.name = "repeat"
@@ -162,7 +162,7 @@ class EndGameScene: SKScene {
         return (successMessage: successMessage, variableText: variableText )
     }
     func addSuccessMessage(text: String){
-        successMessageNode = Helper.createGenericLabel(text, fontsize: 0.19*screenWidth)
+        successMessageNode = Helper.createGenericLabel(text, fontsize: screenWidth*0.16)
         successMessageNode.position = CGPoint(x: frame.midX, y: frame.height*7/8)
         //successMessageNode.text = text
         self.addChild(successMessageNode)
