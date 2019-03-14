@@ -125,7 +125,7 @@ class CustomTableViewCell: UITableViewCell {
         button?.backgroundColor = UIColor.clear
         button?.setTitle("", for: .normal)
         button?.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-        button?.bringSubview(toFront: self)
+        button?.bringSubviewToFront(self)
         if let butt = button{
             self.addSubview(butt)
         }
@@ -435,7 +435,7 @@ class CustomTableViewCell: UITableViewCell {
                 // 3.
                 elementForTapMe.accessibilityLabel   = "Level \(i)"
                 elementForTapMe.accessibilityFrame   = frameForTapMe
-                elementForTapMe.accessibilityTraits  = UIAccessibilityTraitButton
+                elementForTapMe.accessibilityTraits  = UIAccessibilityTraits.button
                 
                 // 4.
                 accessibleElements.append(elementForTapMe)

@@ -57,6 +57,11 @@
                BlueprintName = "DarkMazeUnitTests"
                ReferencedContainer = "container:DarkMaze.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "DarkMazeUnitTests">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>

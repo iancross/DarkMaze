@@ -43,10 +43,10 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         defaultHeight = screenHeight / 11
         cellSizeBuffer = screenHeight / 19
 
-        customTableView.decelerationRate = UIScrollViewDecelerationRateNormal
+        customTableView.decelerationRate = UIScrollView.DecelerationRate.normal
         lastContentOffset = CGPoint.zero
         addBannerViewToView()
-        customTableView.decelerationRate = UIScrollViewDecelerationRateFast
+        customTableView.decelerationRate = UIScrollView.DecelerationRate.fast
         
         self.customTableView.rowHeight = defaultHeight;
         super.viewDidLoad()
@@ -138,7 +138,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             switch scrollDirection{
             default:
                 cell.alpha = 0.0
-                UIView.animate(withDuration: 0.7, delay: 0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
+                UIView.animate(withDuration: 0.7, delay: 0, options: UIView.AnimationOptions.allowUserInteraction, animations: {
                     cell.alpha = 1.0
                 },
                 completion: nil)
@@ -243,10 +243,10 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
                                               constant: 0))
         
         view.addConstraint(NSLayoutConstraint(item: bannerView,
-                                              attribute: NSLayoutConstraint.Attribute.height,
-                                              relatedBy: NSLayoutConstraint.Relation.equal,
+                                              attribute: NSLayoutConstraint.NSLayoutConstraint.Attribute.height,
+                                              relatedBy: NSLayoutConstraint.NSLayoutConstraint.Relation.equal,
                                               toItem: nil,
-                                              attribute: NSLayoutConstraint.Attribute.notAnAttribute,
+                                              attribute: NSLayoutConstraint.NSLayoutConstraint.Attribute.notAnAttribute,
                                               multiplier: 1,
                                               constant: bannerView.frame.height))
         let request = GADRequest()

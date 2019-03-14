@@ -40,7 +40,7 @@ class LevelsData{
     
     var currentLevelSuccess: Bool
     var selectedLevel: (page: Int, level: Int)
-    private var levelGroups = [(category: String, levels: [LevelData])]()
+    public var levelGroups = [(category: String, levels: [LevelData])]()
     
     init(){
         currentLevelSuccess = false
@@ -634,7 +634,7 @@ class LevelsData{
         levelGroups.append ((category: "Divide and Conquer", array))
     }
     
-    private func ThisLooksFamiliar(){
+    private func ThisLooksFamiliar(){ //bug here if we crack somewhere that's already been highlighted
         let array = [
             LevelData(
                 gridX: 4, gridY: 4, delayTime: 0.5,

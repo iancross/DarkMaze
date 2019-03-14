@@ -30,7 +30,7 @@ extension Alertable where Self: SKScene {
         
         let settingsAction = UIAlertAction(title: "Settings", style: .default) { _ in
             
-            guard let url = URL(string: UIApplicationOpenSettingsURLString) else { return }
+            guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
             if #available(iOS 10.0, *) {
                 UIApplication.shared.open(url)
             } else {

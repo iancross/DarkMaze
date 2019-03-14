@@ -48,7 +48,7 @@ class GameViewController: UIViewController, GameDelegate, GADBannerViewDelegate 
     private func setupAudioSession(){
         let audioSession = AVAudioSession.sharedInstance()
         do {
-            try audioSession.setCategory(AVAudioSessionCategoryPlayback)
+            try audioSession.setCategory(convertFromAVAudioSessionCategory(AVAudioSession.Category.playback))
         } catch {
             print("Setting category to AVAudioSessionCategoryPlayback failed.")
         }
@@ -157,4 +157,9 @@ extension UIWindow {
             }
         }
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromAVAudioSessionCategory(_ input: AVAudioSession.Category) -> String {
+	return input.rawValue
 }

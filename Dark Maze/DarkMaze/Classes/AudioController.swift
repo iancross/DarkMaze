@@ -42,7 +42,7 @@ class AudioController{
             if let url = Bundle.main.url(forResource: "levelOpenClose", withExtension: "wav"){
                 levelOpenCloseAudioPlayer = try AVAudioPlayer(contentsOf: url)
             }
-            if let url = Bundle.main.url(forResource: "background", withExtension: "mp3"){
+            if let url = Bundle.main.url(forResource: "caveAmbience", withExtension: "mp3"){
                 backgroundAudioPlayer = try AVAudioPlayer(contentsOf: url)
                 playBackgroundMusic()
             }
