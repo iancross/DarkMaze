@@ -175,9 +175,12 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             }
             
             selectedRowIndex = indexPath
+            print ("index Path is \(indexPath)")
             tableView.beginUpdates()
             tableView.endUpdates()
             
+            tableView.scrollToRow(at: indexPath, at: .none, animated: true)
+
             cell?.reverseState()
         
             AudioController.shared.levelOpenClose()
