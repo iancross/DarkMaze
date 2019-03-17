@@ -33,6 +33,7 @@ enum GridModification {
     case thisLooksFamiliar //the path loops back onto itself
     case jumbled
     case blockReveal
+    case multipleEndArrows
 }
 
 class LevelsData{
@@ -58,8 +59,8 @@ class LevelsData{
         BlockReveal()
         MultiJump()
         DivideAndConquer()
-
-        //disappearing trail()
+        WhereToEnd()
+        
         //Flip()
         //Disorient() //Multiple spins and flips
         //Reverse()
@@ -406,11 +407,17 @@ class LevelsData{
                 modifications: nil
             ),
             LevelData(
-                gridX: 7, gridY: 10, delayTime: 0.2,
+                gridX: 4, gridY: 4, delayTime: 0.3,
                 solutionCoords:
-                [(6,5),(5,5),(5,4),(4,4),(4,5),(4,6),(4,7),(1,8),(1,7),(1,6),(2,6),(2,5),(2,4),(1,4),(0,4),(0,5),(1,5),(2,5),(3,5),(3,4),(3,3),(3,2),(2,2),(0,1),(1,1),(1,0),(2,0),(3,0),(4,0),(4,1),(5,1),(5,2),(6,2)],
-                modifications: [(.jumbled, [((2,2),(1,3)),((3,2),(2,3))]),(.flip, nil), (.spin, CGFloat.pi)]
+                [(0,1),(1,1),(2,1),(2,2),(2,3),(1,3),(0,3),(0,2),(1,2),(2,2),(3,2)],
+                modifications: [(.thisLooksFamiliar, nil), (.spin, CGFloat.pi/2)]
             )
+//            LevelData(
+//                gridX: 7, gridY: 10, delayTime: 0.2,
+//                solutionCoords:
+//                [(6,5),(5,5),(5,4),(4,4),(4,5),(4,6),(4,7),(1,8),(1,7),(1,6),(2,6),(2,5),(2,4),(1,4),(0,4),(0,5),(1,5),(2,5),(3,5),(3,4),(3,3),(3,2),(2,2),(0,1),(1,1),(1,0),(2,0),(3,0),(4,0),(4,1),(5,1),(5,2),(6,2)],
+//                modifications: [(.jumbled, [((2,2),(1,3)),((3,2),(2,3))]),(.flip, nil), (.spin, CGFloat.pi)]
+//            )
         ]
         levelGroups.append ((category: "Intro", array))
     }
@@ -922,6 +929,24 @@ class LevelsData{
             modifications: [(.flip, nil)]
             )]
         levelGroups.append ((category: "broken", array))
+    }
+    
+    private func WhereToEnd(){
+        let array = [
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(0,1),(1,1),(2,1),(2,2),(3,2)],
+                modifications: nil
+            ),
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.3,
+                solutionCoords:
+                [(0,1),(1,1),(2,1),(2,2),(2,3),(1,3),(0,3),(0,2),(1,2),(2,2),(3,2)],
+                modifications: [(.multipleEndArrows, [(3,0)])]
+            )
+        ]
+        levelGroups.append ((category: "Where To End", array))
     }
 }
 

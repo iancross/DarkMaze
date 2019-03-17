@@ -243,10 +243,10 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
                                               constant: 0))
         
         view.addConstraint(NSLayoutConstraint(item: bannerView,
-                                              attribute: NSLayoutConstraint.NSLayoutConstraint.Attribute.height,
-                                              relatedBy: NSLayoutConstraint.NSLayoutConstraint.Relation.equal,
+                                              attribute: NSLayoutConstraint.Attribute.height,
+                                              relatedBy: NSLayoutConstraint.Relation.equal,
                                               toItem: nil,
-                                              attribute: NSLayoutConstraint.NSLayoutConstraint.Attribute.notAnAttribute,
+                                              attribute: NSLayoutConstraint.Attribute.notAnAttribute,
                                               multiplier: 1,
                                               constant: bannerView.frame.height))
         let request = GADRequest()

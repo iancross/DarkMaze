@@ -14,7 +14,7 @@ enum Jumps {
     case square
     case plus
 }
-var testing = false //testing variable controls touches moved and printing the green coords
+var testing = false//testing variable controls touches moved and printing the green coords
 
 class Level1Scene: SKScene {
     var tile2DArray = [[GridTile]]()
@@ -51,6 +51,9 @@ class Level1Scene: SKScene {
     var pathLines: [SKShapeNode] = []
     var gridSpinning = false
     var nextPageUnlocked = false
+    var endArrowCoords: [(Int,Int)]?
+
+    
     override init(size: CGSize) {
         super.init(size: size)
         backgroundColor = UIColor.black
@@ -115,7 +118,7 @@ class Level1Scene: SKScene {
             text = "After a short countdown, you'll be shown how to escape the maze. Pay attention, you'll need to do it in the dark..."
         }
         else if currentLevel == 1{
-            text = "Be warned, the light may play tricks on you. You must prepare yourself for harder mazes yet to come..."
+            text = "Be warned, the mazes are unstable. The light revealing the path may play tricks on you..."
         }
         tutorial(text: text, buttonText: "Continue")
         continueButtonFunction = countdown
@@ -386,6 +389,16 @@ class Level1Scene: SKScene {
             firstTile.firstTile()
             drawArrows(firstTile: firstTile)
         }
+        
+        if let coords = endArrowCoords{
+            print ("about to go through the end arrow coords")
+            for (coordX, coordY) in coords{
+                let tile = tile2DArray[coordY][coordX]
+                if let arrowCopy = endArrow.copy() as? SKSpriteNode{
+                    placeArrow(tile: tile, arrow: arrowCopy, orient: 1)
+                }
+            }
+        }
     }
     
     func insertLevelTitle(){
@@ -405,7 +418,6 @@ class Level1Scene: SKScene {
     //if need be
     func modifyGrid(){
         var actions: [SKAction] = []
-        
         var jumbledPairs: [((Int,Int),(Int,Int))]?
         if let mods = Level!.modifications{
             for (mod, modData) in mods{
@@ -422,28 +434,33 @@ class Level1Scene: SKScene {
                     print ("splitPath")
                 case .jumbled:
                     jumbledPairs = modData as? [((Int,Int),(Int,Int))]
+                case .multipleEndArrows:
+                    print("modData is \(modData)")
+                    endArrowCoords = modData as? [(Int,Int)]
                 default:
                     print ("this is being called")
                     gameActive = true
                     setFirstTile()
                 }
             }
-            print("actions \(actions)")
-            gridNode.run(SKAction.sequence(actions)){
-                print ("gridNode running")
-                if let pairs = jumbledPairs{
-                    self.gameActive = false
-                    for (i,(x, y)) in pairs.enumerated(){
-                        self.swapTiles(coord1: x, coord2: y, lastPair: i == pairs.count-1)
+            if actions.count > 0{
+                gridNode.run(SKAction.sequence(actions)){
+                    print ("gridNode running")
+                    if let pairs = jumbledPairs{
+                        self.gameActive = false
+                        for (i,(x, y)) in pairs.enumerated(){
+                            self.swapTiles(coord1: x, coord2: y, lastPair: i == pairs.count-1)
+                        }
+                    }
+                    else{
+                        self.gameActive = true
+                        self.setFirstTile()
                     }
                 }
-                else{
-                    self.gameActive = true
-                    self.setFirstTile()
-                }
-                
-                //testing
-                //self.testingFlipAllTiles()
+            }
+            else{
+                self.gameActive = true
+                self.setFirstTile()
             }
         }
         else{
@@ -463,9 +480,7 @@ class Level1Scene: SKScene {
     func spinGrid(rotation: CGFloat) -> SKAction{
         gridSpinning = true
         let d = abs(rotation / (CGFloat.pi / 4.0) * 0.3)
-        print("\(rotation) / \(CGFloat.pi / 4.0) * 0.4 = \(d)")
         let action = SKAction.rotate(byAngle: rotation, duration: Double(d))
-        //setFirstTile()
         return action
     }
     
@@ -650,7 +665,6 @@ class Level1Scene: SKScene {
         }
         self.drawGridLines()
         self.beginGame()
-        print ("gameActive = true in skip")
         skipButton?.hide()
     }
     
@@ -676,7 +690,6 @@ class Level1Scene: SKScene {
     }
     
     func touchTile(tile: GridTile, alpha: CGFloat){
-        print ("tile state when it's touched is \(tile.state)")
         if let successfulTouch = tile.touched(alpha: alpha){
             if successfulTouch{
                 if let gameOver = gameOverSuccessOrFailure(alpha: alpha){
@@ -697,8 +710,13 @@ class Level1Scene: SKScene {
             print ("nil was returned")
             //if the tile is already touched but it's the bridge
             if isTileAdjacentAndUpcoming(tileToTest: tile){
-                if gameOverSuccessOrFailure(alpha: alpha) != nil{
-                    flipTile(tile: tile, a: alpha, repeatTile: true, highlightPathAfterFlip: true)
+                if let success = gameOverSuccessOrFailure(alpha: alpha){
+                    if success {
+                        flipTile(tile: tile, a: alpha, repeatTile: true, highlightPathAfterFlip: true)
+                    }
+                    else{
+                        
+                    }
                     return
                 }
                 flipTile(tile: tile, a: alpha, repeatTile: true, highlightPathAfterFlip: false)
@@ -767,7 +785,6 @@ class Level1Scene: SKScene {
         
     func updateGridForPotentialJump(){
         if nextTileIsJump(fromTileNumber: touchedTiles){
-            //print ("this tile need a jump indication \(Level?.solutionCoords[touchedTiles-1])")
             let j = jumpsTypes.removeFirst()
             if let coord = Level?.solutionCoords[touchedTiles-1]{
                 tile2DArray[coord.y][coord.x].jumpIndication = j
@@ -894,13 +911,11 @@ class Level1Scene: SKScene {
         var path = [SKShapeNode]()
         //we are dealing with the first coordinate
         if touchedTiles == 1{//tupleContains(a: currTile.gridCoord, v: (Level?.solutionCoords[0])!){
-            print ("first coord")
             let point = CGPoint(x: currTile.position.x + startPathCoord.x * blocksize / 2.0, y: currTile.position.y + startPathCoord.y * blocksize / 2.0)
             path = [connectPoints(points: [point, currTile.position], repeatTile: repeatTile, alpha: alpha)]
         }
         //we are dealing with the last solution coord
         else if touchedTiles == (Level?.solutionCoords.count ?? 0){//tupleContains(a: currTile.gridCoord, v: (Level?.solutionCoords.last)!){
-            print ("last")
             let prevCoord = (Level?.solutionCoords[touchedTiles-2])!
             let prevTile = tile2DArray[prevCoord.y][prevCoord.x]
             let point = CGPoint(x: currTile.position.x + endPathCoord.x * blocksize / 2.0, y: currTile.position.y + endPathCoord.y * blocksize / 2.0)
@@ -909,7 +924,6 @@ class Level1Scene: SKScene {
         }
         //all the tiles in the middle
         else{
-            print ("middle")
             let prevCoord = (Level?.solutionCoords[touchedTiles-2])!
             let prevTile = tile2DArray[prevCoord.y][prevCoord.x]
             path = [connectPoints(points: [prevTile.position, currTile.position], repeatTile: repeatTile, alpha: alpha)]
@@ -981,12 +995,18 @@ class Level1Scene: SKScene {
                 }
             }
             else if currentLevel == 1{
-                if !success{
+                if success{
                     LevelsData.shared.levelCompleted(success: true)
+                    nextPageUnlocked = true
+                    text = "You've managed to pass this maze. Not all of them will be this simple..."
+                    buttonText = "Continue"
                 }
-                nextPageUnlocked = true
-                text = "You're obviously not prepared. Let's start at the beginning..."
-                buttonText = "Continue"
+                else{
+                    LevelsData.shared.levelCompleted(success: true)
+                    nextPageUnlocked = true
+                    text = "You're obviously not prepared. Let's start at the beginning..."
+                    buttonText = "Continue"
+                }
             }
             tutorial(text: text, buttonText: buttonText)
             continueButtonFunction = tutorialContinue
@@ -1000,13 +1020,20 @@ class Level1Scene: SKScene {
     private func tutorialContinue(){
 
         if currentLevel == 0{
-            //LevelsData.shared.nextLevel()
             removeAllChildren()
             (self.delegate as? GameDelegate)?.playGame()
         }
         else if currentLevel == 1{
-            LevelsData.shared.nextLevel()
-            (self.delegate as? GameDelegate)?.levelSelect()
+            if let b = continueButton{
+                if b.text == "Try Again"{
+                    removeAllChildren()
+                    (self.delegate as? GameDelegate)?.playGame()
+                }
+                else{
+                    LevelsData.shared.nextLevel()
+                    (self.delegate as? GameDelegate)?.levelSelect()
+                }
+            }
         }
         else{
             print ("fuck")

@@ -48,7 +48,7 @@ class GameViewController: UIViewController, GameDelegate, GADBannerViewDelegate 
     private func setupAudioSession(){
         let audioSession = AVAudioSession.sharedInstance()
         do {
-            try audioSession.setCategory(convertFromAVAudioSessionCategory(AVAudioSession.Category.playback))
+            try audioSession.setCategory(AVAudioSession.Category.playback, mode: AVAudioSession.Mode.default)
         } catch {
             print("Setting category to AVAudioSessionCategoryPlayback failed.")
         }
