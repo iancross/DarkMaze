@@ -223,6 +223,13 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         bannerView.rootViewController = self
         bannerView.backgroundColor = .black
         bannerView.adUnitID = GameStyle.shared.adMobTestToken
+//        bannerView.translatesAutoresizingMaskIntoConstraints = false
+//        let horizontalConstraint = bannerView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+//        let verticalConstraint = bannerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+//        let widthConstraint = bannerView.widthAnchor.constraint(equalToConstant: 100)
+//        let heightConstraint = newView.heightAnchor.constraint(equalToConstant: 100)
+//
+        
         view.addConstraint(NSLayoutConstraint(item: bannerView,
                                               attribute: .leading,
                                               relatedBy: .equal,
@@ -244,7 +251,6 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
                                               attribute: .bottom,
                                               multiplier: 1,
                                               constant: 0))
-        
         view.addConstraint(NSLayoutConstraint(item: bannerView,
                                               attribute: NSLayoutConstraint.Attribute.height,
                                               relatedBy: NSLayoutConstraint.Relation.equal,

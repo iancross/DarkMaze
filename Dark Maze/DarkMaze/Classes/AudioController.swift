@@ -21,6 +21,8 @@ class AudioController{
     var backgroundAudioPlayer: AVAudioPlayer?
     var levelOpenCloseAudioPlayer: AVAudioPlayer?
     var buttonClickAudioplayer: AVAudioPlayer?
+    var footstepAudioPlayer: AVAudioPlayer?
+    var footstepCounter = 0
     
     
     //MARK Music
@@ -56,6 +58,7 @@ class AudioController{
     }
     
     
+    
     public func levelOpenClose(){
         if gameSoundsEnabled{
             if let player = levelOpenCloseAudioPlayer{
@@ -76,10 +79,24 @@ class AudioController{
         }
     }
     
+    public func playFootstep(){
+        do  {
+            if let url = Bundle.main.url(forResource: String(footstepCounter + 1), withExtension: "wav"){
+                footstepAudioPlayer = try AVAudioPlayer(contentsOf: url)
+                footstepAudioPlayer!.prepareToPlay()
+                footstepAudioPlayer!.play()
+                footstepCounter = (footstepCounter + 1) % 9
+            }
+
+        }
+        catch{
+            print ("sound error")
+        }
+    }
+    
     public func playBackgroundMusic(){
         if let player = backgroundAudioPlayer{
             if isSettingEnabled(settingName: "ambientSounds"){ //&& !backgroundAudioPlayer!.isPlaying{
-                print ("we made it past the check to see whether the setting was enabled AND the background audio wasn't already playing")
                 player.numberOfLoops = -1
                 player.volume = BACKGROUND_VOLUME
                 player.prepareToPlay()
@@ -87,7 +104,6 @@ class AudioController{
             }
             else{
                 print (backgroundAudioPlayer?.isPlaying)
-                print ("Player Stop")
                 player.stop()
             }
         }
@@ -99,7 +115,6 @@ class AudioController{
 
     
     public func initAudioSettings(){
-        print ("Initializing Audio Settings, called from LevelsData")
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             print("something bad app delegate ------------------------------------")
             return
@@ -162,7 +177,6 @@ class AudioController{
             if let s = try managedContext.fetch(fetchRequest) as? [NSManagedObject]{
                 if s.count > 0{
                     if let enabled = s[0].value(forKey: settingName) as? Bool {
-                        print ("the enabled bool in \(settingName) is \(enabled)")
                         return enabled
                     }
                 }

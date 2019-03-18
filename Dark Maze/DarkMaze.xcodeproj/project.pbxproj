@@ -30,6 +30,16 @@
 		C37E691720A296860067B47C /* ChainSprite1000.png in Resources */ = {isa = PBXBuildFile; fileRef = C37E691620A296860067B47C /* ChainSprite1000.png */; };
 		C37E691920A5F5D70067B47C /* lock_sprite200x200.png in Resources */ = {isa = PBXBuildFile; fileRef = C37E691820A5F5D70067B47C /* lock_sprite200x200.png */; };
 		C38464C22055EC4700239EE0 /* nextArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = C38464C12055EC4700239EE0 /* nextArrow.png */; };
+		C3976A6B22406337008E7BF5 /* 9.wav in Resources */ = {isa = PBXBuildFile; fileRef = C3976A6122406336008E7BF5 /* 9.wav */; };
+		C3976A6C22406337008E7BF5 /* 4.wav in Resources */ = {isa = PBXBuildFile; fileRef = C3976A6222406336008E7BF5 /* 4.wav */; };
+		C3976A6D22406337008E7BF5 /* 10.wav in Resources */ = {isa = PBXBuildFile; fileRef = C3976A6322406336008E7BF5 /* 10.wav */; };
+		C3976A6E22406337008E7BF5 /* 2.wav in Resources */ = {isa = PBXBuildFile; fileRef = C3976A6422406336008E7BF5 /* 2.wav */; };
+		C3976A6F22406337008E7BF5 /* 6.wav in Resources */ = {isa = PBXBuildFile; fileRef = C3976A6522406336008E7BF5 /* 6.wav */; };
+		C3976A7022406337008E7BF5 /* 8.wav in Resources */ = {isa = PBXBuildFile; fileRef = C3976A6622406336008E7BF5 /* 8.wav */; };
+		C3976A7122406337008E7BF5 /* 1.wav in Resources */ = {isa = PBXBuildFile; fileRef = C3976A6722406336008E7BF5 /* 1.wav */; };
+		C3976A7222406337008E7BF5 /* 3.wav in Resources */ = {isa = PBXBuildFile; fileRef = C3976A6822406336008E7BF5 /* 3.wav */; };
+		C3976A7322406337008E7BF5 /* 5.wav in Resources */ = {isa = PBXBuildFile; fileRef = C3976A6922406336008E7BF5 /* 5.wav */; };
+		C3976A7422406337008E7BF5 /* 7.wav in Resources */ = {isa = PBXBuildFile; fileRef = C3976A6A22406337008E7BF5 /* 7.wav */; };
 		C3B46D8A207840D400C1EAC6 /* CellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B46D89207840D400C1EAC6 /* CellDelegate.swift */; };
 		C3B46D8C2078FB2500C1EAC6 /* SKTextureGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B46D8B2078FB2500C1EAC6 /* SKTextureGradient.swift */; };
 		C3BA45C52069A69500D72A3F /* cracking.atlas in Resources */ = {isa = PBXBuildFile; fileRef = C3BA45C42069A69500D72A3F /* cracking.atlas */; };
@@ -83,6 +93,16 @@
 		C37E691620A296860067B47C /* ChainSprite1000.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ChainSprite1000.png; sourceTree = "<group>"; };
 		C37E691820A5F5D70067B47C /* lock_sprite200x200.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lock_sprite200x200.png; sourceTree = "<group>"; };
 		C38464C12055EC4700239EE0 /* nextArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nextArrow.png; sourceTree = "<group>"; };
+		C3976A6122406336008E7BF5 /* 9.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 9.wav; sourceTree = "<group>"; };
+		C3976A6222406336008E7BF5 /* 4.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 4.wav; sourceTree = "<group>"; };
+		C3976A6322406336008E7BF5 /* 10.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 10.wav; sourceTree = "<group>"; };
+		C3976A6422406336008E7BF5 /* 2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 2.wav; sourceTree = "<group>"; };
+		C3976A6522406336008E7BF5 /* 6.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 6.wav; sourceTree = "<group>"; };
+		C3976A6622406336008E7BF5 /* 8.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 8.wav; sourceTree = "<group>"; };
+		C3976A6722406336008E7BF5 /* 1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 1.wav; sourceTree = "<group>"; };
+		C3976A6822406336008E7BF5 /* 3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 3.wav; sourceTree = "<group>"; };
+		C3976A6922406336008E7BF5 /* 5.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 5.wav; sourceTree = "<group>"; };
+		C3976A6A22406337008E7BF5 /* 7.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 7.wav; sourceTree = "<group>"; };
 		C39E37F4208139C100A53519 /* DarkMazeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkMazeUITests.swift; sourceTree = "<group>"; };
 		C39E37F6208139C100A53519 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C3B46D89207840D400C1EAC6 /* CellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellDelegate.swift; sourceTree = "<group>"; };
@@ -191,6 +211,7 @@
 		C36FA27A2224B65700724AB3 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				C3976A602240630B008E7BF5 /* footstepSounds */,
 				C3CF36C9222B6A71009A03BF /* levelOpenClose.ogg */,
 				C3CF36CC222B7021009A03BF /* levelOpenClose.wav */,
 				C3CF36CA222B6CAD009A03BF /* caveAmbience.mp3 */,
@@ -221,6 +242,24 @@
 				C3189E011FD77D0B000A52A6 /* LevelSelectScene.swift */,
 			);
 			path = FilesToRemove;
+			sourceTree = "<group>";
+		};
+		C3976A602240630B008E7BF5 /* footstepSounds */ = {
+			isa = PBXGroup;
+			children = (
+				C3976A6722406336008E7BF5 /* 1.wav */,
+				C3976A6422406336008E7BF5 /* 2.wav */,
+				C3976A6822406336008E7BF5 /* 3.wav */,
+				C3976A6222406336008E7BF5 /* 4.wav */,
+				C3976A6922406336008E7BF5 /* 5.wav */,
+				C3976A6522406336008E7BF5 /* 6.wav */,
+				C3976A6A22406337008E7BF5 /* 7.wav */,
+				C3976A6622406336008E7BF5 /* 8.wav */,
+				C3976A6122406336008E7BF5 /* 9.wav */,
+				C3976A6322406336008E7BF5 /* 10.wav */,
+			);
+			name = footstepSounds;
+			path = "New Group";
 			sourceTree = "<group>";
 		};
 		C39E37F3208139C100A53519 /* DarkMazeUITests */ = {
@@ -391,16 +430,26 @@
 				C32CB86120BE10CB008BD6C4 /* unlock_sprite200x200.png in Resources */,
 				C36FA27C2224B6A100724AB3 /* background.mp3 in Resources */,
 				C37E691720A296860067B47C /* ChainSprite1000.png in Resources */,
+				C3976A7222406337008E7BF5 /* 3.wav in Resources */,
+				C3976A6B22406337008E7BF5 /* 9.wav in Resources */,
 				C365F40420F4471B003AB2D3 /* ccw_boots.atlas in Resources */,
 				C37E691920A5F5D70067B47C /* lock_sprite200x200.png in Resources */,
 				C3BA45C52069A69500D72A3F /* cracking.atlas in Resources */,
 				C3EF9F7322073D20002635D3 /* backButton.png in Resources */,
+				C3976A6F22406337008E7BF5 /* 6.wav in Resources */,
 				C3CF36CB222B6CAD009A03BF /* caveAmbience.mp3 in Resources */,
 				C38464C22055EC4700239EE0 /* nextArrow.png in Resources */,
+				C3976A7022406337008E7BF5 /* 8.wav in Resources */,
 				C3CF36CD222B7021009A03BF /* levelOpenClose.wav in Resources */,
+				C3976A6C22406337008E7BF5 /* 4.wav in Resources */,
+				C3976A6D22406337008E7BF5 /* 10.wav in Resources */,
+				C3976A7122406337008E7BF5 /* 1.wav in Resources */,
 				C3189DFE1FD7798F000A52A6 /* MYSCARS_.TTF in Resources */,
+				C3976A7422406337008E7BF5 /* 7.wav in Resources */,
 				C3EF4A1F1FD7749000528247 /* Main.storyboard in Resources */,
+				C3976A6E22406337008E7BF5 /* 2.wav in Resources */,
 				C3EF4A211FD7749000528247 /* Assets.xcassets in Resources */,
+				C3976A7322406337008E7BF5 /* 5.wav in Resources */,
 				C3EF4A241FD7749000528247 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

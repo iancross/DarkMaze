@@ -880,15 +880,16 @@ class Level1Scene: SKScene {
             }
         }
         let paths = self.drawPath(currTile: tile, repeatTile: repeatTile, alpha: alpha)
-        tile.run(flip) {
+        let sequence = SKAction.sequence(
+            [SKAction.run{ AudioController.shared.playFootstep()},
+            flip]
+        )
+        tile.run(sequence) {
             //if we aren't passing over a previously flipped tile
-            //if !repeatTile{
-                tile.removeOutline()
-                tile.switchToWhite()
-                tile.setAlpha(alpha: a)
-                self.addJumpIndication(t: tile)
-            
-            //}
+            tile.removeOutline()
+            tile.switchToWhite()
+            tile.setAlpha(alpha: a)
+            self.addJumpIndication(t: tile)
             tile.run(SKAction.scaleX(to: 1, y: 1, duration: duration)){
                 for path in paths {
                     tile.path = path

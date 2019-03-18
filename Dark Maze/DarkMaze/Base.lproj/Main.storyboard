@@ -41,7 +41,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="zMh-GX-bI9">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="zMh-GX-bI9">
                                 <rect key="frame" x="0.0" y="117" width="414" height="619"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="separatorColor" red="0.67000001669999998" green="0.67000001669999998" blue="0.67000001669999998" alpha="1" colorSpace="deviceRGB"/>
@@ -104,7 +104,6 @@
                             <constraint firstItem="VWA-aZ-Rql" firstAttribute="top" secondItem="3qo-i1-Ya2" secondAttribute="top" id="NUz-oc-N3m"/>
                             <constraint firstItem="zMh-GX-bI9" firstAttribute="top" secondItem="VWA-aZ-Rql" secondAttribute="bottom" constant="1" id="RTm-1M-dKk"/>
                             <constraint firstItem="Wka-RE-aVL" firstAttribute="top" secondItem="f2L-Js-Zy0" secondAttribute="bottom" constant="-33" id="VTO-gw-Zez"/>
-                            <constraint firstItem="zMh-GX-bI9" firstAttribute="bottom" secondItem="Wka-RE-aVL" secondAttribute="bottom" id="fY0-dg-I8g"/>
                             <constraint firstItem="zMh-GX-bI9" firstAttribute="trailing" secondItem="Wka-RE-aVL" secondAttribute="trailing" id="kVS-KF-BlP"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Wka-RE-aVL"/>
