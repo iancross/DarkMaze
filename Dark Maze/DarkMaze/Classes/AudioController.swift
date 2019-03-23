@@ -22,6 +22,7 @@ class AudioController{
     var levelOpenCloseAudioPlayer: AVAudioPlayer?
     var buttonClickAudioplayer: AVAudioPlayer?
     var footstepAudioPlayer: AVAudioPlayer?
+    var crackingAudioPlayer: AVAudioPlayer?
     var footstepCounter = 0
     
     
@@ -36,6 +37,22 @@ class AudioController{
         print("in reInitPlayersAndSounds")
         playBackgroundMusic()
         gameSoundsEnabled = isSettingEnabled(settingName: "gameSounds")
+    }
+    
+    public func decreaseBackgroundVolume(){
+        setBackgroundVolume(v: 0.05)
+    }
+    
+    public func increaseBackgroundVolume(){
+        setBackgroundVolume(v: 0.3)
+    }
+    
+    private func setBackgroundVolume(v: Float){
+        if let player = backgroundAudioPlayer{
+            if player.isPlaying {
+                player.volume = v
+            }
+        }
     }
     
     private func setupAudioPlayers(){
@@ -88,6 +105,20 @@ class AudioController{
                 footstepCounter = (footstepCounter + 1) % 9
             }
 
+        }
+        catch{
+            print ("sound error")
+        }
+    }
+    
+    public func playCracking(){
+        do  {
+            if let url = Bundle.main.url(forResource: "crackingSound", withExtension: "wav"){
+                crackingAudioPlayer = try AVAudioPlayer(contentsOf: url)
+                crackingAudioPlayer!.prepareToPlay()
+                crackingAudioPlayer!.play()
+            }
+            
         }
         catch{
             print ("sound error")

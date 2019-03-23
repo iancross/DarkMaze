@@ -34,6 +34,7 @@ enum GridModification {
     case jumbled
     case blockReveal
     case multipleEndArrows
+    case flash
 }
 
 class LevelsData{
@@ -59,14 +60,12 @@ class LevelsData{
         BlockReveal()
         MultiJump()
         DivideAndConquer()
+        Flash()
         WhereToEnd()
         
         //Flip()
         //Disorient() //Multiple spins and flips
-        //Reverse()
-        //Show every other tile
-        //Flash() //just literally flash the grid
-        //WhereToEnd() //multiple end arrows
+        //Distraction()
 
         initCoreData()
     }
@@ -812,11 +811,56 @@ class LevelsData{
     func MultiJump(){
         let array = [
             LevelData(
-                gridX: 3, gridY: 3, delayTime: 0.5,
-                solutionCoords:[(0,2),(0,1),(0,0),(1,0),(1,1),(1,2),(2,2),(2,1),(2,0)],
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(0,0),(2,0),(3,0),(3,1),(1,2),(1,3),(2,3),(3,3)],
+                modifications: nil
+            ),
+            LevelData(
+                gridX: 4, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(3,0),(2,0),(1,0),(0,1),(1,1),(2,2),(1,2),(2,3),(3,3)],
+                modifications: nil
+            ),
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(4,3),(3,3),(3,4),(2,4),(1,4),(0,4),(0,3),(2,2),(2,1),(3,1),(3,0)],
+                modifications: nil
+            ),
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(2,0),(2,1),(1,1),(1,2),(0,2),(4,2),(3,2),(3,3),(2,3),(2,4)],
+                modifications: nil
+            ),
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(0,4),(0,3),(1,3),(4,3),(4,2),(3,2),(2,2),(2,1),(2,0),(3,0),(4,0)],
+                modifications: nil
+            ),
+            LevelData(
+                gridX: 5, gridY: 6, delayTime: 0.5,
+                solutionCoords:
+                [(0,4),(0,3),(1,3),(2,3),(4,1),(3,1),(3,0),(2,0),(1,0),(1,1),(0,1)],
+                modifications: nil
+            ),
+            LevelData(
+                gridX: 6, gridY: 6, delayTime: 0.5,
+                solutionCoords:
+                [(4,5),(4,4),(3,4),(2,4),(1,4),(1,3),(1,2),(1,1),(1,0),(0,0),(3,2),(3,1),(3,0),(4,0)],
+                modifications: nil
+            ),
+            LevelData(
+                gridX: 6, gridY: 7, delayTime: 0.5,
+                solutionCoords:
+                [(2,6),(2,5),(1,5),(0,5),(0,4),(0,3),(1,3),(4,2),(4,3),(5,3),(5,2),(5,1),(4,1),(3,1),(3,2),(3,3),(3,4),(4,4),(5,4)],
                 modifications: nil
             )
+            
         ]
+        
         levelGroups.append ((category: "Multi-Jump", array))
     }
     
@@ -947,6 +991,24 @@ class LevelsData{
             )
         ]
         levelGroups.append ((category: "Where To End", array))
+    }
+    
+    private func Flash(){
+        let array = [
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(0,1),(1,1),(2,1),(2,2),(3,2)],
+                modifications: [(.flash, nil)]
+            ),
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.3,
+                solutionCoords:
+                [(0,1),(1,1),(2,1),(2,2),(2,3),(1,3),(0,3),(0,2),(1,2),(2,2),(3,2)],
+                modifications: [(.flash, nil)]
+            )
+        ]
+        levelGroups.append ((category: "Flash", array))
     }
 }
 

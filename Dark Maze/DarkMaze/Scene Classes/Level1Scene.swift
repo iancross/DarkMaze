@@ -67,6 +67,7 @@ class Level1Scene: SKScene {
     
     override func didMove(to view: SKView) {
         super.didMove(to: view)
+        AudioController.shared.decreaseBackgroundVolume()
         initializeGame()
     }
     
@@ -111,18 +112,7 @@ class Level1Scene: SKScene {
         }
     }
     
-    private func tutorialBeforeCountdown(){
-        
-        var text = ""
-        if currentLevel == 0{
-            text = "After a short countdown, you'll be shown how to escape the maze. Pay attention, you'll need to do it in the dark..."
-        }
-        else if currentLevel == 1{
-            text = "Be warned, the mazes are unstable. The light revealing the path may play tricks on you..."
-        }
-        tutorial(text: text, buttonText: "Continue")
-        continueButtonFunction = countdown
-    }
+    
     private func tutorial(text: String, buttonText: String){
         tutorialActive = true
         let instructionNode = SKNode()
@@ -225,6 +215,8 @@ class Level1Scene: SKScene {
         if let mods = Level!.modifications{
             for (i, (mod, modData)) in mods.enumerated(){
                 switch mod {
+                case .flash:
+                    drawFlash()
                 case .divideAndConquer:
                     drawDivideAndConquer()
                 case .meetInTheMiddle:
@@ -269,6 +261,17 @@ class Level1Scene: SKScene {
             runDrawingActions(tiles: [tile],
                 lastTile: (index == self.Level!.solutionCoords.count-1),
                 delay: Level!.delayTime * Double(index)
+            )
+        }
+    }
+    
+    func drawFlash(){
+        print("drawingFlash")
+        for (index,coord) in Level!.solutionCoords.enumerated(){
+            let tile = tile2DArray[coord.y][coord.x]
+            runDrawingActions(tiles: [tile],
+                              lastTile: (index == self.Level!.solutionCoords.count-1),
+                              delay: Level!.delayTime //* Double(index)
             )
         }
     }
@@ -625,7 +628,7 @@ class Level1Scene: SKScene {
     
     override func  touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         //testing
-        if !testing{
+        //if !testing{
             let point = touches.first
             let positionInScene = point?.location(in: gridNode)
             if gameActive {
@@ -653,7 +656,7 @@ class Level1Scene: SKScene {
                     }
                 }
             }
-        }
+        //}
     }
     
     func skip(touch: CGPoint){
@@ -847,6 +850,7 @@ class Level1Scene: SKScene {
         case .diamond:
             let diamond = SKShapeNode(rectOf: CGSize(width: blocksize/5, height: blocksize/5))
             diamond.fillColor = .black
+            diamond.lineWidth = 0
             diamond.zRotation += CGFloat(Double.pi/2.0)
             t.addChild(diamond)
             diamond.position = .zero
@@ -966,7 +970,20 @@ class Level1Scene: SKScene {
         let tile = tile2DArray[coord.y][coord.x]
         return (tile.tile.fillColor != .black)
     }
-
+    
+    private func tutorialBeforeCountdown(){
+        
+        var text = ""
+        if currentLevel == 0{
+            text = "After a short countdown, you'll be shown how to escape the maze. Pay attention, you'll need to do it in the dark..."
+        }
+        else if currentLevel == 1{
+            text = "Each set of mazes presents a different challenge. Pay attention, they build upon each other..."
+        }
+        tutorial(text: text, buttonText: "Continue")
+        continueButtonFunction = countdown
+    }
+    
     // If all the solutions coords are filled (and there wasn't a
     // failure) show the end game success (failure = false). Otherwise,
     // show the end game failure (failure = true)
@@ -986,7 +1003,7 @@ class Level1Scene: SKScene {
             var buttonText = ""
             if currentLevel == 0{
                 if success {
-                    text = "Always try to escape on your first try, this will give you a bonus to help you later..."
+                    text = "You've managed to pass this maze, but be warned. The light revealing the path may play tricks on you..."
                     buttonText = "Next Level"
                     LevelsData.shared.nextLevel()
                 }
@@ -999,7 +1016,7 @@ class Level1Scene: SKScene {
                 if success{
                     LevelsData.shared.levelCompleted(success: true)
                     nextPageUnlocked = true
-                    text = "You've managed to pass this maze. Not all of them will be this simple..."
+                    text = "You're ready to begin. Be careful and always follow the path!"
                     buttonText = "Continue"
                 }
                 else{
@@ -1013,6 +1030,7 @@ class Level1Scene: SKScene {
             continueButtonFunction = tutorialContinue
         }
         else{
+            AudioController.shared.increaseBackgroundVolume()
             switchToEndGameScene()
         }
         
@@ -1156,7 +1174,8 @@ class Level1Scene: SKScene {
         crack.scale(to: CGSize(width: blocksize, height: blocksize))
         crack.run(
             SKAction.sequence(
-                [SKAction.animate(with: crackingFrames, timePerFrame: 2/Double(numImages), resize: false, restore: false),
+                [SKAction.run({AudioController.shared.playCracking()}),
+                 SKAction.animate(with: crackingFrames, timePerFrame: 2/Double(numImages), resize: false, restore: false),
                      SKAction.run({ [weak self] in
                         self?.gridNode.isHidden = true
                         self?.categoryNode?.isHidden = true

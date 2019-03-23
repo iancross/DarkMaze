@@ -60,9 +60,14 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
                                               constant: 0))
         let originalSelectedIndexPath = IndexPath(row: LevelsData.shared.selectedLevel.page, section: 0)
         selectedRowIndex = originalSelectedIndexPath
+        
+        print ("selectedRowIndex is \(selectedRowIndex)")
         customTableView.selectRow(at: selectedRowIndex, animated: true, scrollPosition: .none)
-        customTableView.scrollToRow(at: IndexPath(row: getTopLevelToScrollTo(), section: 0), at: .top, animated: true)
-        //customTableView.scrollToNearestSelectedRow(at: .middle, animated: true)
+        
+        customTableView.reloadData()
+        DispatchQueue.main.async {
+            self.customTableView.scrollToRow(at: IndexPath(row: self.getTopLevelToScrollTo(), section: 0), at: .top, animated: true)
+        }
     }
     
     func getTopLevelToScrollTo()->Int{
@@ -72,7 +77,9 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
 //            }
 //        }
 //        return 0
+        print ("selected level page is \(LevelsData.shared.selectedLevel.page - 1)")
         if LevelsData.shared.selectedLevel.page > 0{
+            
             return LevelsData.shared.selectedLevel.page - 1
         }
         return 0
