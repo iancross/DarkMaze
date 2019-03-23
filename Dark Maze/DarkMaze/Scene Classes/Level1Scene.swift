@@ -436,6 +436,7 @@ class Level1Scene: SKScene {
                 case .splitPath:
                     print ("splitPath")
                 case .jumbled:
+                    actions.append(SKAction.run { /* placeholder */ })
                     jumbledPairs = modData as? [((Int,Int),(Int,Int))]
                 case .multipleEndArrows:
                     print("modData is \(modData)")
