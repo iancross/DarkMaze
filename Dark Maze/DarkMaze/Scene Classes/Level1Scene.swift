@@ -14,7 +14,7 @@ enum Jumps {
     case square
     case plus
 }
-var testing = false//testing variable controls touches moved and printing the green coords
+var testing = true//testing variable controls touches moved and printing the green coords
 
 class Level1Scene: SKScene {
     var tile2DArray = [[GridTile]]()
@@ -225,6 +225,7 @@ class Level1Scene: SKScene {
                     drawMeetInTheMiddle()
                 case .distractions:
                     distractionsEnabled = true
+                    drawNormal()
                 case .blockReveal:
                     if let arr = modData as? [Int]{
                         drawBlockReveal(blocksToDisplay: arr)
@@ -379,9 +380,34 @@ class Level1Scene: SKScene {
                 }
             }
             if distractionsEnabled{
-                //here's where we change colors
+                let distractionTile = getRandomTile(tilesToAvoid: tiles)
+                let actionList = SKAction.sequence(
+                    [SKAction.wait(forDuration: delay),
+                     SKAction.run { distractionTile.tile.fillColor = .green },
+                     SKAction.fadeOut(withDuration: 0.7)
+                    ])
+                distractionTile.tile.run(actionList)
             }
         }
+    }
+    
+    //returs a random tile that is not in the set of tiles passed in
+    func getRandomTile(tilesToAvoid: [GridTile]) -> GridTile{
+        var randomTileFound = false
+        var randomTile: GridTile?
+        while !randomTileFound{
+            randomTile = tile2DArray.randomElement()?.randomElement()
+            print (randomTile!.gridCoord)
+            for tile in tilesToAvoid{
+                if tupleContains(a: tile.gridCoord, v: (randomTile?.gridCoord)!){
+                    randomTileFound = false
+                }
+                else {
+                    randomTileFound = true
+                }
+            }
+        }
+        return randomTile ?? tile2DArray[0][0]
     }
     
     func beginGame(){
