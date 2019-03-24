@@ -33,6 +33,7 @@ enum GridModification {
     case thisLooksFamiliar //the path loops back onto itself
     case jumbled
     case blockReveal
+    case distractions
     case multipleEndArrows
     case flash
 }
@@ -53,6 +54,7 @@ class LevelsData{
         Intro()
         Normal()
         Jump()
+        Distraction()
         Spin()
         ThisLooksFamiliar() //go back over itself
         MeetInTheMiddle()
@@ -62,6 +64,7 @@ class LevelsData{
         DivideAndConquer()
         Flash()
         WhereToEnd()
+        
         
         //Flip()
         //Disorient() //Multiple spins and flips
@@ -419,6 +422,31 @@ class LevelsData{
 //            )
         ]
         levelGroups.append ((category: "Intro", array))
+    }
+    
+    private func Distraction(){
+        let array = [
+            
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(2,4),(2,3),(3,3),(3,2),(3,1),(3,0),(2,0),(1,0),(1,1),(1,2),(0,2)],
+                modifications: [(.distractions, nil)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 6, delayTime: 0.5,
+                solutionCoords:
+                [(1,5),(1,4),(0,4),(0,3),(1,3),(2,3),(3,3),(4,3),(4,2),(3,2),(2,2),(2,1),(2,0)],
+                modifications: [(.distractions, nil)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 6, delayTime: 0.5,
+                solutionCoords:
+                [(0,0),(0,1),(0,2),(0,3),(0,4),(0,5),(1,5),(2,5),(3,5),(4,5),(4,4),(4,3),(3,3),(2,3),(2,2),(2,1),(2,0),(3,0),(4,0),(4,1)],
+                modifications: [(.distractions, nil)]
+            )
+        ]
+        levelGroups.append ((category: "Distractions", array))
     }
     
     //Description:

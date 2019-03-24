@@ -52,6 +52,8 @@ class Level1Scene: SKScene {
     var gridSpinning = false
     var nextPageUnlocked = false
     var endArrowCoords: [(Int,Int)]?
+    var distractionsEnabled = false
+
 
     
     override init(size: CGSize) {
@@ -221,6 +223,8 @@ class Level1Scene: SKScene {
                     drawDivideAndConquer()
                 case .meetInTheMiddle:
                     drawMeetInTheMiddle()
+                case .distractions:
+                    distractionsEnabled = true
                 case .blockReveal:
                     if let arr = modData as? [Int]{
                         drawBlockReveal(blocksToDisplay: arr)
@@ -373,6 +377,9 @@ class Level1Scene: SKScene {
                         self.skipButton?.hide()
                     }
                 }
+            }
+            if distractionsEnabled{
+                //here's where we change colors
             }
         }
     }
@@ -790,6 +797,7 @@ class Level1Scene: SKScene {
     func updateGridForPotentialJump(){
         if nextTileIsJump(fromTileNumber: touchedTiles){
             let j = jumpsTypes.removeFirst()
+            print ("jump type coming up is \(j)")
             if let coord = Level?.solutionCoords[touchedTiles-1]{
                 tile2DArray[coord.y][coord.x].jumpIndication = j
             }
@@ -842,7 +850,7 @@ class Level1Scene: SKScene {
     func addSymbol(t: GridTile, j: Jumps){
         switch j{
         case .circle:
-            let circle = SKShapeNode(circleOfRadius: blocksize/10)
+            let circle = SKShapeNode(circleOfRadius: blocksize/9)
             circle.fillColor = .black
             circle.lineWidth = 0
             t.addChild(circle)
@@ -852,9 +860,28 @@ class Level1Scene: SKScene {
             let diamond = SKShapeNode(rectOf: CGSize(width: blocksize/5, height: blocksize/5))
             diamond.fillColor = .black
             diamond.lineWidth = 0
-            diamond.zRotation += CGFloat(Double.pi/2.0)
+            diamond.zRotation += CGFloat(Double.pi/4)
             t.addChild(diamond)
             diamond.position = .zero
+        case .square:
+            let square = SKShapeNode(rectOf: CGSize(width: blocksize/5, height: blocksize/5))
+            square.fillColor = .black
+            square.lineWidth = 0
+            t.addChild(square)
+            square.position = .zero
+        case .plus:
+            let plus1 = SKShapeNode(rectOf: CGSize(width: blocksize/11, height: blocksize/3.5))
+            plus1.fillColor = .black
+            plus1.lineWidth = 0
+            plus1.zRotation += CGFloat(Double.pi/4)
+            t.addChild(plus1)
+            plus1.position = .zero
+            let plus2 = SKShapeNode(rectOf: CGSize(width: blocksize/3.5, height: blocksize/11))
+            plus2.fillColor = .black
+            plus2.zRotation += CGFloat(Double.pi/4)
+            plus2.lineWidth = 0
+            t.addChild(plus2)
+            plus2.position = .zero
         default:
             print("default")
         }
