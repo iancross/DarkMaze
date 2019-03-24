@@ -26,6 +26,7 @@
 		C365F40420F4471B003AB2D3 /* ccw_boots.atlas in Resources */ = {isa = PBXBuildFile; fileRef = C365F40320F4471B003AB2D3 /* ccw_boots.atlas */; };
 		C36FA27C2224B6A100724AB3 /* background.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36FA27B2224B6A100724AB3 /* background.mp3 */; };
 		C36FA27E2224E7AE00724AB3 /* AudioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36FA27D2224E7AE00724AB3 /* AudioController.swift */; };
+		C374709E2248053100717C80 /* DarkMazeIcon1024x1024.png in Resources */ = {isa = PBXBuildFile; fileRef = C374709D2248053000717C80 /* DarkMazeIcon1024x1024.png */; };
 		C37B707E1FE9D94D00F71B73 /* GridTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37B707D1FE9D94D00F71B73 /* GridTile.swift */; };
 		C37E691720A296860067B47C /* ChainSprite1000.png in Resources */ = {isa = PBXBuildFile; fileRef = C37E691620A296860067B47C /* ChainSprite1000.png */; };
 		C37E691920A5F5D70067B47C /* lock_sprite200x200.png in Resources */ = {isa = PBXBuildFile; fileRef = C37E691820A5F5D70067B47C /* lock_sprite200x200.png */; };
@@ -90,6 +91,7 @@
 		C365F40320F4471B003AB2D3 /* ccw_boots.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = ccw_boots.atlas; path = ../../../../Photoshop/ccw_boots.atlas; sourceTree = "<group>"; };
 		C36FA27B2224B6A100724AB3 /* background.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = background.mp3; sourceTree = "<group>"; };
 		C36FA27D2224E7AE00724AB3 /* AudioController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioController.swift; sourceTree = "<group>"; };
+		C374709D2248053000717C80 /* DarkMazeIcon1024x1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DarkMazeIcon1024x1024.png; sourceTree = "<group>"; };
 		C37B707D1FE9D94D00F71B73 /* GridTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridTile.swift; sourceTree = "<group>"; };
 		C37E691620A296860067B47C /* ChainSprite1000.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ChainSprite1000.png; sourceTree = "<group>"; };
 		C37E691820A5F5D70067B47C /* lock_sprite200x200.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lock_sprite200x200.png; sourceTree = "<group>"; };
@@ -318,6 +320,7 @@
 				C3EF4A2D1FD7771900528247 /* Fonts */,
 				C3EF4A1D1FD7749000528247 /* Main.storyboard */,
 				C3EF4A201FD7749000528247 /* Assets.xcassets */,
+				C374709D2248053000717C80 /* DarkMazeIcon1024x1024.png */,
 				C3EF4A221FD7749000528247 /* LaunchScreen.storyboard */,
 				C3EF4A251FD7749000528247 /* Info.plist */,
 				C3EF4A131FD7749000528247 /* AppDelegate.swift */,
@@ -448,6 +451,7 @@
 				C3976A6C22406337008E7BF5 /* 4.wav in Resources */,
 				C3976A6D22406337008E7BF5 /* 10.wav in Resources */,
 				C3976A7122406337008E7BF5 /* 1.wav in Resources */,
+				C374709E2248053100717C80 /* DarkMazeIcon1024x1024.png in Resources */,
 				C3189DFE1FD7798F000A52A6 /* MYSCARS_.TTF in Resources */,
 				C3976A7422406337008E7BF5 /* 7.wav in Resources */,
 				C3EF4A1F1FD7749000528247 /* Main.storyboard in Resources */,

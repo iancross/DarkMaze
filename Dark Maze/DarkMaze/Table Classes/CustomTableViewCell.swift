@@ -18,7 +18,6 @@ class CustomTableViewCell: UITableViewCell {
     var indexPath = IndexPath()
     var cellDelegate: CellDelegate?
     var defaultHeight: CGFloat = 0
-    var verticalSpacing: CGFloat = 10
     var levels = [TextBoxButton]()
     var mainFontSize: CGFloat = 0
     var categoryString = String()
@@ -54,7 +53,6 @@ class CustomTableViewCell: UITableViewCell {
         numLevels = outOfTotal
         mainFontSize = frame.width/12.5
         defaultHeight = origHeight
-        verticalSpacing = screenHeight/12.5
         indexPath = path
     }
     
@@ -137,7 +135,7 @@ class CustomTableViewCell: UITableViewCell {
         let levelCount = LevelsData.shared.getNumLevelsOnPage(page: indexPath.row)
         let n = GameStyle.shared.numLevelsOnLine
         for i in 0...levelCount/n{
-            
+            print (frame.maxY)
             let top = (drawing?.frame.maxY)! - defaultHeight + 7
             let lines = CGFloat(ceil(Double(levelCount)/Double(n)))
             let offset = (top / lines) - 1.0

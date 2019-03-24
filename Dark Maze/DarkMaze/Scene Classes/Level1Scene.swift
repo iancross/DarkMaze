@@ -53,6 +53,7 @@ class Level1Scene: SKScene {
     var nextPageUnlocked = false
     var endArrowCoords: [(Int,Int)]?
     var distractionsEnabled = false
+    var previousDistractionTile: GridTile?
 
 
     
@@ -383,7 +384,7 @@ class Level1Scene: SKScene {
                 let distractionTile = getRandomTile(tilesToAvoid: tiles)
                 let actionList = SKAction.sequence(
                     [SKAction.wait(forDuration: delay),
-                     SKAction.run { distractionTile.tile.fillColor = .green },
+                     SKAction.run { distractionTile.tile.fillColor = .random() },
                      SKAction.fadeOut(withDuration: 0.7)
                     ])
                 distractionTile.tile.run(actionList)
@@ -399,7 +400,7 @@ class Level1Scene: SKScene {
             randomTile = tile2DArray.randomElement()?.randomElement()
             print (randomTile!.gridCoord)
             for tile in tilesToAvoid{
-                if tupleContains(a: tile.gridCoord, v: (randomTile?.gridCoord)!){
+                if tupleContains(a: tile.gridCoord, v: (randomTile?.gridCoord)!) || tupleContains(a: previousDistractionTile?.gridCoord ?? (-1,-1), v: (randomTile?.gridCoord)!){
                     randomTileFound = false
                 }
                 else {
@@ -407,6 +408,7 @@ class Level1Scene: SKScene {
                 }
             }
         }
+        previousDistractionTile = randomTile ?? tile2DArray[0][0]
         return randomTile ?? tile2DArray[0][0]
     }
     
@@ -1338,5 +1340,22 @@ class Level1Scene: SKScene {
         let (v1, v2) = a
         if v1 == c1 && v2 == c2 { return true } 
         return false
+    }
+}
+extension CGFloat {
+    static func random() -> CGFloat {
+        return CGFloat(arc4random()) / CGFloat(UInt32.max)
+    }
+}
+
+extension UIColor {
+    static func random() -> UIColor {
+        let colors: [UIColor] = [.red, .orange, .yellow, .green, .blue, .purple, .brown]
+        return colors.randomElement()!
+        
+        //        return UIColor(red:   .random(),
+//                       green: .random(),
+//                       blue:  .random(),
+//                       alpha: 1.0)
     }
 }
