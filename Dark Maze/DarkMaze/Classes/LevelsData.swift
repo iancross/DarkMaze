@@ -47,28 +47,25 @@ class LevelsData{
     
     init(){
         currentLevelSuccess = false
-        
         //used by the gameplay if you play an earlier level
         selectedLevel = (page: 0, level: 0)
 
         Intro()
         Normal()
         Jump()
-        Distraction()
-        Spin()
         ThisLooksFamiliar() //go back over itself
+        Spin()
         MeetInTheMiddle()
+        WhereToEnd()
+        //Flip()
         Jumbled()
         BlockReveal()
         MultiJump()
+        Distraction()
         DivideAndConquer()
         Flash()
-        WhereToEnd()
+        //Finale()
         
-        
-        //Flip()
-        //Disorient() //Multiple spins and flips
-
         initCoreData()
     }
     
@@ -528,25 +525,25 @@ class LevelsData{
             LevelData(
                 gridX: 5, gridY: 5, delayTime: 0.5,
                 solutionCoords:
-                [(2,0),(2,1),(1,1),(1,2),(0,2),(4,2),(3,2),(3,3),(2,3),(2,4)],
-                 modifications: nil
-            ),
-            LevelData(
-                gridX: 5, gridY: 5, delayTime: 0.5,
-                solutionCoords:
-                [(0,4),(0,3),(1,3),(4,3),(4,2),(3,2),(2,2),(2,1),(2,0),(3,0),(4,0)],
+                [(2,0),(2,1),(1,1),(1,2),(0,2),(4,2),(3,2),(3,3),(2,3),(2,4),(1,4),(0,4)],
                  modifications: nil
             ),
             LevelData(
                 gridX: 5, gridY: 6, delayTime: 0.5,
                 solutionCoords:
                 [(0,4),(0,3),(1,3),(2,3),(4,1),(3,1),(3,0),(2,0),(1,0),(1,1),(0,1)],
+                modifications: nil
+            ),
+            LevelData(
+                gridX: 5, gridY: 6, delayTime: 0.5,
+                solutionCoords:
+                [(4,0),(4,1),(3,1),(3,0),(2,0),(1,0),(1,1),(3,4),(3,3),(4,3),(4,2),(3,2),(2,2),(1,2),(0,2)],
                  modifications: nil
             ),
             LevelData(
                 gridX: 6, gridY: 6, delayTime: 0.5,
                 solutionCoords:
-                [(4,5),(4,4),(3,4),(2,4),(1,4),(1,3),(1,2),(1,1),(1,0),(0,0),(3,2),(3,1),(3,0),(4,0)],
+                [(4,5),(4,4),(3,4),(2,4),(1,4),(1,3),(1,2),(1,1),(1,0),(0,0),(3,2),(3,1),(3,0),(4,0),(4,1),(5,1)],
                  modifications: nil
             ),
             LevelData(
@@ -560,6 +557,62 @@ class LevelsData{
         
         levelGroups.append ((category: "Jump", array))
     }
+    
+    private func ThisLooksFamiliar(){ //bug here if we crack somewhere that's already been highlighted
+        let array = [
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(0,1),(1,1),(2,1),(2,2),(2,3),(1,3),(0,3),(0,2),(1,2),(2,2),(3,2)],
+                modifications: [(.thisLooksFamiliar, nil)]
+            ),
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(0,1),(0,2),(0,3),(1,3),(2,3),(3,3),(3,2),(3,1),(3,0),(2,0),(1,0),(0,0),(0,1),(0,2),(0,3)],
+                modifications: [(.thisLooksFamiliar, nil)]
+            ),
+            LevelData(
+                gridX: 4, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(0,1),(1,1),(1,2),(2,2),(2,3),(2,4),(3,4),(3,3),(3,2),(2,2),(1,2),(0,2)],
+                modifications: [(.thisLooksFamiliar, nil)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(4,3),(4,2),(3,2),(2,2),(1,2),(1,1),(1,0),(2,0),(3,0),(3,1),(3,2),(3,3),(2,3),(1,3),(0,3)],
+                modifications: [(.thisLooksFamiliar, nil)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(3,0),(3,1),(2,1),(1,1),(1,0),(2,0),(2,1),(2,2),(2,3),(2,4),(1,4),(1,3),(2,3),(3,3),(3,4)],
+                modifications: [(.thisLooksFamiliar, nil)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 6, delayTime: 0.5,
+                solutionCoords:
+                [(0,0),(0,1),(1,1),(1,2),(2,2),(2,1),(3,1),(3,0),(2,0),(2,1),(2,2),(2,3),(3,3),(4,3)],
+                modifications: [(.thisLooksFamiliar, nil)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 6, delayTime: 0.5,
+                solutionCoords:
+                [(2,0),(2,1),(2,2),(2,3),(2,4),(2,5),(1,5),(1,4),(2,4),(3,4),(4,4),(4,3),(3,3),(2,3),(1,3),(1,2),(2,2),(3,2),(4,2)],
+                modifications: [(.thisLooksFamiliar, nil)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 6, delayTime: 0.5,
+                solutionCoords:
+                [(4,2),(3,2),(2,2),(2,1),(3,1),(3,2),(3,3),(3,4),(3,5),(4,5),(4,4),(3,4),(2,4),(1,4),(0,4),(0,3),(1,3),(1,4),(1,5)],
+                modifications: [(.thisLooksFamiliar, nil)]
+            )]
+        levelGroups.append ((category: "This Looks Familiar", array))
+    }
+    
+    //LEFT OFF HERE FOR LEVEL DESIGN~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
     
     private func MeetInTheMiddle(){
         let array = [
@@ -667,58 +720,7 @@ class LevelsData{
         levelGroups.append ((category: "Divide and Conquer", array))
     }
     
-    private func ThisLooksFamiliar(){ //bug here if we crack somewhere that's already been highlighted
-        let array = [
-            LevelData(
-                gridX: 4, gridY: 4, delayTime: 0.5,
-                solutionCoords:
-                [(0,1),(1,1),(2,1),(2,2),(2,3),(1,3),(0,3),(0,2),(1,2),(2,2),(3,2)],
-                modifications: [(.thisLooksFamiliar, nil)]
-            ),
-            LevelData(
-                gridX: 4, gridY: 4, delayTime: 0.5,
-                solutionCoords:
-                [(0,1),(0,2),(0,3),(1,3),(2,3),(3,3),(3,2),(3,1),(3,0),(2,0),(1,0),(0,0),(0,1),(0,2),(0,3)],
-                modifications: [(.thisLooksFamiliar, nil)]
-            ),
-            LevelData(
-                gridX: 4, gridY: 5, delayTime: 0.5,
-                solutionCoords:
-                [(0,1),(1,1),(1,2),(2,2),(2,3),(2,4),(3,4),(3,3),(3,2),(2,2),(1,2),(0,2)],
-                modifications: [(.thisLooksFamiliar, nil)]
-            ),
-            LevelData(
-                gridX: 5, gridY: 5, delayTime: 0.5,
-                solutionCoords:
-                [(4,3),(4,2),(3,2),(2,2),(1,2),(1,1),(1,0),(2,0),(3,0),(3,1),(3,2),(3,3),(2,3),(1,3),(0,3)],
-                modifications: [(.thisLooksFamiliar, nil)]
-            ),
-            LevelData(
-                gridX: 5, gridY: 5, delayTime: 0.5,
-                solutionCoords:
-                [(3,0),(3,1),(2,1),(1,1),(1,0),(2,0),(2,1),(2,2),(2,3),(2,4),(1,4),(1,3),(2,3),(3,3),(3,4)],
-                modifications: [(.thisLooksFamiliar, nil)]
-            ),
-            LevelData(
-                gridX: 5, gridY: 6, delayTime: 0.5,
-                solutionCoords:
-                [(0,0),(0,1),(1,1),(1,2),(2,2),(2,1),(3,1),(3,0),(2,0),(2,1),(2,2),(2,3),(3,3),(4,3)],
-                modifications: [(.thisLooksFamiliar, nil)]
-            ),
-            LevelData(
-                gridX: 5, gridY: 6, delayTime: 0.5,
-                solutionCoords:
-                [(2,0),(2,1),(2,2),(2,3),(2,4),(2,5),(1,5),(1,4),(2,4),(3,4),(4,4),(4,3),(3,3),(2,3),(1,3),(1,2),(2,2),(3,2),(4,2)],
-                modifications: [(.thisLooksFamiliar, nil)]
-            ),
-            LevelData(
-                gridX: 5, gridY: 6, delayTime: 0.5,
-                solutionCoords:
-                [(4,2),(3,2),(2,2),(2,1),(3,1),(3,2),(3,3),(3,4),(3,5),(4,5),(4,4),(3,4),(2,4),(1,4),(0,4),(0,3),(1,3),(1,4),(1,5)],
-                modifications: [(.thisLooksFamiliar, nil)]
-            )]
-        levelGroups.append ((category: "This Looks Familiar", array))
-    }
+    
     
     private func Spin(){
         let array = [

@@ -83,6 +83,7 @@ class EndGameScene: SKScene {
         }
         if displayUnlockLevelBonus!{
             nodes.append(levelUnlockedBonus())
+            LevelsData.shared.nextLevel()
         }
         return nodes
     }
@@ -132,18 +133,24 @@ class EndGameScene: SKScene {
     }
     func addButtons(text: String){
         let font = screenWidth*0.09
-
-        repeatOrNextButton = TextBoxButton(x: 0, y: frame.height/8, text: text, fontsize:font, buffers: buffers)
-        repeatOrNextButton?.name = "repeat"
-        levelSelectButton = TextBoxButton(x: 0, y: 0.0, text: "Level Select", fontsize:font, buffers: buffers)
-        mainMenuButton = TextBoxButton(x: 0, y: -frame.height/8, text: "Main Menu", fontsize:font, buffers: buffers)
-
+        
+        if displayUnlockLevelBonus!{
+            levelSelectButton = TextBoxButton(x: 0, y: frame.height/8, text: "Level Select", fontsize:font, buffers: buffers)
+            mainMenuButton = TextBoxButton(x: 0, y: 0, text: "Main Menu", fontsize:font, buffers: buffers)
+            buttonsNode.addChild(mainMenuButton!)
+            buttonsNode.addChild(levelSelectButton!)
+        }
+        else{
+            repeatOrNextButton = TextBoxButton(x: 0, y: frame.height/8, text: text, fontsize:font, buffers: buffers)
+            repeatOrNextButton?.name = "repeat"
+            levelSelectButton = TextBoxButton(x: 0, y: 0.0, text: "Level Select", fontsize:font, buffers: buffers)
+            mainMenuButton = TextBoxButton(x: 0, y: -frame.height/8, text: "Main Menu", fontsize:font, buffers: buffers)
+            buttonsNode.addChild(mainMenuButton!)
+            buttonsNode.addChild(levelSelectButton!)
+            buttonsNode.addChild(repeatOrNextButton!)
+        }
         buttonsNode.position = CGPoint.zero
-        buttonsNode.scene?.backgroundColor = UIColor.orange
         buttonsNode.name = "BUTTONNODE"
-        buttonsNode.addChild(mainMenuButton!)
-        buttonsNode.addChild(levelSelectButton!)
-        buttonsNode.addChild(repeatOrNextButton!)
         buttonsNode.alpha = 0
     }
 
@@ -211,7 +218,7 @@ class EndGameScene: SKScene {
     }
     
     func handleTouchForEndGameMenu(_ point: CGPoint){
-        if repeatOrNextButton!.within(point: point){
+        if repeatOrNextButton?.within(point: point) ?? false{
             if repeatOrNextButton?.text == "Next Level"{
                 LevelsData.shared.nextLevel()
             }

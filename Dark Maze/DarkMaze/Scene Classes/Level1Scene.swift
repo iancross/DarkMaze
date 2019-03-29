@@ -14,7 +14,7 @@ enum Jumps {
     case square
     case plus
 }
-var testing = true//testing variable controls touches moved and printing the green coords
+var testing = false//testing variable controls touches moved and printing the green coords
 
 class Level1Scene: SKScene {
     var tile2DArray = [[GridTile]]()
@@ -664,7 +664,7 @@ class Level1Scene: SKScene {
     
     override func  touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         //testing
-        //if !testing{
+        if !testing{
             let point = touches.first
             let positionInScene = point?.location(in: gridNode)
             if gameActive {
@@ -692,7 +692,7 @@ class Level1Scene: SKScene {
                     }
                 }
             }
-        //}
+        }
     }
     
     func skip(touch: CGPoint){
@@ -714,11 +714,11 @@ class Level1Scene: SKScene {
                     startArrow.removeAllActions()
 
                     //testing
-//                    if testing{
-//                        print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
-//                        tile.tile.fillColor = UIColor.green
-//                        return //comment out to get grid coords for levels
-//                    }
+                    if testing{
+                        print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
+                        tile.tile.fillColor = UIColor.green
+                        return //comment out to get grid coords for levels
+                    }
 
                     lastTouchedTile = tile
                     touchTile(tile: lastTouchedTile!, alpha: blockAlphaMin + CGFloat(touchedTiles + 1) * blockAlphaIncrement)
@@ -1204,7 +1204,7 @@ class Level1Scene: SKScene {
                     path.glowWidth = 1
                 }
              }),
-             SKAction.wait(forDuration: 2.4)
+             SKAction.wait(forDuration: 2.2)
             ])
         pathLines[0].run(sequence){
             self.endGame(success: true)
