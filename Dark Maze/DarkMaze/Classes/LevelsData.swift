@@ -68,7 +68,6 @@ class LevelsData{
         
         //Flip()
         //Disorient() //Multiple spins and flips
-        //Distraction()
 
         initCoreData()
     }

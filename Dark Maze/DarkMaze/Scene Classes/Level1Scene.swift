@@ -308,7 +308,7 @@ class Level1Scene: SKScene {
                 solutionTiles.append(tile2DArray[coord!.y][coord!.x])
                 counter += 1
             }
-            runDrawingActions(tiles: solutionTiles, lastTile: false, delay: Level!.delayTime * Double(i))
+            runDrawingActions(tiles: solutionTiles, lastTile: i == blocksToDisplay.count-1, delay: Level!.delayTime * Double(i))
             solutionCoordIndex += counter
         }
        
@@ -1191,10 +1191,10 @@ class Level1Scene: SKScene {
 
     func successHighlightPath(){
         print("count is \(pathLines.count)")
-        _ = Double(pathLines.count)
         let sequence = SKAction.sequence(
-            [//SKAction.wait(forDuration: 1.0),
-             SKAction.run({
+            [   SKAction.run({AudioController.shared.playSuccessSound()}),
+                SKAction.wait(forDuration: 0.45),
+                SKAction.run({
                 for (i,path) in self.pathLines.enumerated(){
                     if i == 0 || i == self.pathLines.count-1{
                         path.lineCap = .butt
@@ -1204,7 +1204,7 @@ class Level1Scene: SKScene {
                     path.glowWidth = 1
                 }
              }),
-             SKAction.wait(forDuration: 1.3)
+             SKAction.wait(forDuration: 2.4)
             ])
         pathLines[0].run(sequence){
             self.endGame(success: true)

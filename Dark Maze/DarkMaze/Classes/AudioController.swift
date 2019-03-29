@@ -16,6 +16,7 @@ class AudioController{
     static let shared = AudioController()
     let BACKGROUND_VOLUME:Float = 0.3
     let LEVELOPENCLOSE_VOLUME: Float = 0.4
+    let FOOTSTEP_VOLUME: Float = 0.5
     
     var gameSoundsEnabled: Bool = true
     var backgroundAudioPlayer: AVAudioPlayer?
@@ -23,6 +24,7 @@ class AudioController{
     var buttonClickAudioplayer: AVAudioPlayer?
     var footstepAudioPlayer: AVAudioPlayer?
     var crackingAudioPlayer: AVAudioPlayer?
+    var successAudioPlayer: AVAudioPlayer?
     var footstepCounter = 0
     
     
@@ -40,7 +42,7 @@ class AudioController{
     }
     
     public func decreaseBackgroundVolume(){
-        setBackgroundVolume(v: 0.05)
+        setBackgroundVolume(v: 0.08)
     }
     
     public func increaseBackgroundVolume(){
@@ -68,6 +70,10 @@ class AudioController{
             if let url = Bundle.main.url(forResource: "buttonClick", withExtension: "wav"){
                 buttonClickAudioplayer = try AVAudioPlayer(contentsOf: url)
             }
+            if let url = Bundle.main.url(forResource: "combinedChoir", withExtension: "wav"){
+                successAudioPlayer = try AVAudioPlayer(contentsOf: url)
+            }
+            
             
         } catch  {
             print ("error")
@@ -96,10 +102,21 @@ class AudioController{
         }
     }
     
+    public func playSuccessSound(){
+        if gameSoundsEnabled{
+            if let player = successAudioPlayer {
+                player.volume = LEVELOPENCLOSE_VOLUME
+                player.prepareToPlay()
+                player.play()
+            }
+        }
+    }
+    
     public func playFootstep(){
         do  {
             if let url = Bundle.main.url(forResource: String(footstepCounter + 1), withExtension: "wav"){
                 footstepAudioPlayer = try AVAudioPlayer(contentsOf: url)
+                footstepAudioPlayer!.volume = FOOTSTEP_VOLUME
                 footstepAudioPlayer!.prepareToPlay()
                 footstepAudioPlayer!.play()
                 footstepCounter = (footstepCounter + 1) % 9

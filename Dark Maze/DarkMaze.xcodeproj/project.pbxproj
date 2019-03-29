@@ -27,6 +27,9 @@
 		C36FA27C2224B6A100724AB3 /* background.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36FA27B2224B6A100724AB3 /* background.mp3 */; };
 		C36FA27E2224E7AE00724AB3 /* AudioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36FA27D2224E7AE00724AB3 /* AudioController.swift */; };
 		C374709E2248053100717C80 /* DarkMazeIcon1024x1024.png in Resources */ = {isa = PBXBuildFile; fileRef = C374709D2248053000717C80 /* DarkMazeIcon1024x1024.png */; };
+		C37470A0224B162E00717C80 /* successChoir.wav in Resources */ = {isa = PBXBuildFile; fileRef = C374709F224B162D00717C80 /* successChoir.wav */; };
+		C37470A2224B175A00717C80 /* choir.wav in Resources */ = {isa = PBXBuildFile; fileRef = C37470A1224B175A00717C80 /* choir.wav */; };
+		C37470A4224B1ADA00717C80 /* combinedChoir.wav in Resources */ = {isa = PBXBuildFile; fileRef = C37470A3224B1ADA00717C80 /* combinedChoir.wav */; };
 		C37B707E1FE9D94D00F71B73 /* GridTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37B707D1FE9D94D00F71B73 /* GridTile.swift */; };
 		C37E691720A296860067B47C /* ChainSprite1000.png in Resources */ = {isa = PBXBuildFile; fileRef = C37E691620A296860067B47C /* ChainSprite1000.png */; };
 		C37E691920A5F5D70067B47C /* lock_sprite200x200.png in Resources */ = {isa = PBXBuildFile; fileRef = C37E691820A5F5D70067B47C /* lock_sprite200x200.png */; };
@@ -92,6 +95,9 @@
 		C36FA27B2224B6A100724AB3 /* background.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = background.mp3; sourceTree = "<group>"; };
 		C36FA27D2224E7AE00724AB3 /* AudioController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioController.swift; sourceTree = "<group>"; };
 		C374709D2248053000717C80 /* DarkMazeIcon1024x1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DarkMazeIcon1024x1024.png; sourceTree = "<group>"; };
+		C374709F224B162D00717C80 /* successChoir.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = successChoir.wav; sourceTree = "<group>"; };
+		C37470A1224B175A00717C80 /* choir.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = choir.wav; sourceTree = "<group>"; };
+		C37470A3224B1ADA00717C80 /* combinedChoir.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = combinedChoir.wav; sourceTree = "<group>"; };
 		C37B707D1FE9D94D00F71B73 /* GridTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridTile.swift; sourceTree = "<group>"; };
 		C37E691620A296860067B47C /* ChainSprite1000.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ChainSprite1000.png; sourceTree = "<group>"; };
 		C37E691820A5F5D70067B47C /* lock_sprite200x200.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lock_sprite200x200.png; sourceTree = "<group>"; };
@@ -215,6 +221,9 @@
 		C36FA27A2224B65700724AB3 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				C37470A1224B175A00717C80 /* choir.wav */,
+				C37470A3224B1ADA00717C80 /* combinedChoir.wav */,
+				C374709F224B162D00717C80 /* successChoir.wav */,
 				C3976A7522408128008E7BF5 /* crackingSound.wav */,
 				C3976A602240630B008E7BF5 /* footstepSounds */,
 				C3CF36C9222B6A71009A03BF /* levelOpenClose.ogg */,
@@ -433,6 +442,7 @@
 				C3CF36CF222CBF2A009A03BF /* buttonClick.wav in Resources */,
 				C3189DFD1FD77988000A52A6 /* MYBLS___.TTF in Resources */,
 				C3EF9F71220670AF002635D3 /* home-5-xxl.png in Resources */,
+				C37470A4224B1ADA00717C80 /* combinedChoir.wav in Resources */,
 				C32CB86120BE10CB008BD6C4 /* unlock_sprite200x200.png in Resources */,
 				C36FA27C2224B6A100724AB3 /* background.mp3 in Resources */,
 				C37E691720A296860067B47C /* ChainSprite1000.png in Resources */,
@@ -450,11 +460,13 @@
 				C3CF36CD222B7021009A03BF /* levelOpenClose.wav in Resources */,
 				C3976A6C22406337008E7BF5 /* 4.wav in Resources */,
 				C3976A6D22406337008E7BF5 /* 10.wav in Resources */,
+				C37470A0224B162E00717C80 /* successChoir.wav in Resources */,
 				C3976A7122406337008E7BF5 /* 1.wav in Resources */,
 				C374709E2248053100717C80 /* DarkMazeIcon1024x1024.png in Resources */,
 				C3189DFE1FD7798F000A52A6 /* MYSCARS_.TTF in Resources */,
 				C3976A7422406337008E7BF5 /* 7.wav in Resources */,
 				C3EF4A1F1FD7749000528247 /* Main.storyboard in Resources */,
+				C37470A2224B175A00717C80 /* choir.wav in Resources */,
 				C3976A6E22406337008E7BF5 /* 2.wav in Resources */,
 				C3EF4A211FD7749000528247 /* Assets.xcassets in Resources */,
 				C3976A7322406337008E7BF5 /* 5.wav in Resources */,
