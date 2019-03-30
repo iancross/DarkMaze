@@ -761,6 +761,11 @@ class Level1Scene: SKScene {
                 flipTile(tile: tile, a: alpha, repeatTile: true, highlightPathAfterFlip: false)
                 updateGridState()
             }
+            else {
+                if touchedTiles > 0 && !tupleContains(a: tile.gridCoord, v: Level?.solutionCoords[touchedTiles-1] ?? (-1,-1)){
+                    giveHint()
+                }
+            }
         }
     }
 /*---------------------- End Touches ----------------------*/

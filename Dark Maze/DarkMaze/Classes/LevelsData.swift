@@ -67,6 +67,10 @@ class LevelsData{
         //Finale()
         
         initCoreData()
+        let p = mostRecentlyUnlockedPage()
+        let l = nextLevelToCompleteOnPage(page: p)
+        print ("most recently unlocked page is \(p)")
+        selectedLevel = (page: p, level: l)
     }
     
     
@@ -94,15 +98,7 @@ class LevelsData{
         let levelEntity = NSEntityDescription.entity(forEntityName: "Level",in: managedContext)!
         for i in 0...levelGroups.count-1{
             let page = Page(entity: pageEntity, insertInto: managedContext)
-            if i == 0{
-                page.unlocked = true
-            }
-            else{
-                page.unlocked = false
-            }
-            
-            //                //testing
-            //                page.unlocked = true
+            page.unlocked = false
             
             page.number = Int32(i)
             for (j,levelData) in levelGroups[i].levels.enumerated(){
@@ -243,6 +239,32 @@ class LevelsData{
         }
         return 0
     }
+    
+    func mostRecentlyUnlockedPage() -> Int{
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return 0
+        }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Page")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "number", ascending: true)]
+        do {
+            if let pages = try managedContext.fetch(fetchRequest) as? [Page]{
+                for page in pages{
+                    print ("page is \(page.number) and the unlocked bool is \(page.unlocked)")
+                    if !page.unlocked{
+                        return Int(page.number)
+                    }
+
+                }
+                //if all levels are completed
+                return pages.count
+            }
+            
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+        return 0
+    }
 
     
     func getNumPages() -> Int{
@@ -275,6 +297,11 @@ class LevelsData{
                         if attemptsBeforeSuccess == 0{
                             levels[0].setValue(true, forKey: "firstTimeBonus")
                         }
+                        
+                        print ("\(selectedLevel.level) ==?? \(levelGroups[selectedLevel.page].levels.count - 1)")
+                        if selectedLevel.level >= levelGroups[selectedLevel.page].levels.count - 1 && selectedLevel.page < levelGroups.count{
+                            unlock(page: selectedLevel.page + 1)
+                        }
                     }
                     else{
                         levels[0].setValue(attemptsBeforeSuccess+1, forKey: "attemptsBeforeSuccess")
@@ -286,6 +313,34 @@ class LevelsData{
             if let totalAttempts = levels[0].value(forKey: "totalAttempts") as? Int32{
                 levels[0].setValue(totalAttempts+1, forKey: "totalAttempts")
 
+            }
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+        
+        //now save
+        do {
+            try managedContext.save()
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+        }
+    }
+    
+    func unlock(page: Int){
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Page")
+        let pagePredicate = NSPredicate(format: "number == \(selectedLevel.page)")
+        fetchRequest.predicate = pagePredicate
+        
+        //update completed and update attemptsBeforeSuccess
+        do {
+            let pages = try managedContext.fetch(fetchRequest) as [NSManagedObject]
+            if let page = pages[0] as? Page {
+                print ("setting page to unlocked")
+                page.setValue(true, forKey: "unlocked")
             }
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
@@ -317,10 +372,6 @@ class LevelsData{
             if let bonus = levels[0].value(forKey: "firstTimeBonus") as? Bool {
                 if let attemptsBeforeSuccess = levels[0].value(forKey: "attemptsBeforeSuccess") as? Int32 {
                     if let totalAttempts = levels[0].value(forKey: "totalAttempts") as? Int32 {
-                        print ("we made it all the way in")
-                        print ("bonus is \(bonus)")
-                        print ("attempsBeforeSuccess is \(attemptsBeforeSuccess == 0)")
-                        print ("totalAttempts is \(totalAttempts)")
                         return bonus && attemptsBeforeSuccess == 0 && totalAttempts == 1
                     }
                 }
@@ -563,13 +614,7 @@ class LevelsData{
             LevelData(
                 gridX: 4, gridY: 4, delayTime: 0.5,
                 solutionCoords:
-                [(0,1),(1,1),(2,1),(2,2),(2,3),(1,3),(0,3),(0,2),(1,2),(2,2),(3,2)],
-                modifications: [(.thisLooksFamiliar, nil)]
-            ),
-            LevelData(
-                gridX: 4, gridY: 4, delayTime: 0.5,
-                solutionCoords:
-                [(0,1),(0,2),(0,3),(1,3),(2,3),(3,3),(3,2),(3,1),(3,0),(2,0),(1,0),(0,0),(0,1),(0,2),(0,3)],
+                [(3,3),(3,2),(2,2),(2,1),(2,0),(1,0),(1,1),(2,1),(3,1)],
                 modifications: [(.thisLooksFamiliar, nil)]
             ),
             LevelData(
@@ -599,13 +644,19 @@ class LevelsData{
             LevelData(
                 gridX: 5, gridY: 6, delayTime: 0.5,
                 solutionCoords:
-                [(2,0),(2,1),(2,2),(2,3),(2,4),(2,5),(1,5),(1,4),(2,4),(3,4),(4,4),(4,3),(3,3),(2,3),(1,3),(1,2),(2,2),(3,2),(4,2)],
+                [(4,3),(3,3),(2,3),(1,3),(0,3),(3,2),(3,3),(3,4),(2,4),(1,4),(1,3),(1,2),(1,1),(2,1),(2,0)],
                 modifications: [(.thisLooksFamiliar, nil)]
             ),
             LevelData(
-                gridX: 5, gridY: 6, delayTime: 0.5,
+                gridX: 5, gridY: 7, delayTime: 0.5,
                 solutionCoords:
-                [(4,2),(3,2),(2,2),(2,1),(3,1),(3,2),(3,3),(3,4),(3,5),(4,5),(4,4),(3,4),(2,4),(1,4),(0,4),(0,3),(1,3),(1,4),(1,5)],
+                [(0,4),(0,3),(1,3),(1,2),(2,2),(3,2),(4,2),(4,3),(4,4),(3,4),(2,4),(2,3),(2,2),(2,1),(1,1),(1,0),(0,0)],
+                modifications: [(.thisLooksFamiliar, nil)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 7, delayTime: 0.5,
+                solutionCoords:
+                [(4,0),(3,0),(2,0),(2,1),(3,1),(3,2),(4,2),(4,3),(4,4),(0,6),(0,5),(0,4),(1,4),(2,4),(3,4),(3,3),(4,3)],
                 modifications: [(.thisLooksFamiliar, nil)]
             )]
         levelGroups.append ((category: "This Looks Familiar", array))
@@ -613,7 +664,60 @@ class LevelsData{
     
     //LEFT OFF HERE FOR LEVEL DESIGN~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
-    
+    private func Spin(){
+        let array = [
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(2,3),(2,2),(2,1),(1,1),(0,1)],
+                modifications: [(.spin, CGFloat.pi/2.0)]
+            ),
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(3,0),(3,1),(2,1),(2,0),(1,0),(0,0),(0,1),(0,2),(0,3)],
+                modifications: [(.spin, -CGFloat.pi/2.0)]
+            ),
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(3,2),(3,1),(2,1),(2,2),(1,2),(1,1),(1,0),(0,0)],
+                modifications: [(.spin, 3.0*CGFloat.pi/4.0)]
+            ),
+            LevelData(
+                gridX: 4, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(0,2),(0,3),(1,3),(1,2),(1,1),(2,1),(3,1),(3,2),(3,3),(3,4)],
+                modifications: [(.spin, CGFloat.pi/2.0)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(3,0),(3,1),(3,2),(3,3),(2,3),(2,2),(3,2),(4,2),(4,1),(3,1),(2,1),(1,1),(0,1)],
+                modifications: [(.spin, -CGFloat.pi/2.0)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(4,3),(4,2),(3,2),(1,3),(0,3),(0,2),(0,1),(1,1),(1,0)],
+                modifications: [(.spin, 3.0*CGFloat.pi/4.0)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(3,0),(3,1),(3,2),(2,2),(2,1),(3,1),(4,1),(1,2),(1,3),(2,3),(2,4)],
+                modifications: [(.spin, CGFloat.pi/2.0)]
+            ),
+            LevelData(
+                gridX: 6, gridY: 6, delayTime: 0.5,
+                solutionCoords:
+                [(0,5),(1,5),(2,5),(2,4),(2,3),(2,2),(1,2),(1,3),(2,3),(3,3),(4,3),(5,3),(5,4),(4,4),(4,2),(4,1),(4,0)],
+                modifications: [(.spin, -CGFloat.pi/2.0)]
+            ),
+            
+            ]
+        levelGroups.append ((category: "Spin", array))
+    }
     private func MeetInTheMiddle(){
         let array = [
             LevelData(
@@ -720,62 +824,7 @@ class LevelsData{
         levelGroups.append ((category: "Divide and Conquer", array))
     }
     
-    
-    
-    private func Spin(){
-        let array = [
-            LevelData(
-                gridX: 4, gridY: 4, delayTime: 0.5,
-                solutionCoords:
-                [(2,3),(2,2),(2,1),(1,1),(0,1)],
-                modifications: [(.spin, CGFloat.pi/2.0)]
-            ),
-            LevelData(
-                gridX: 4, gridY: 4, delayTime: 0.5,
-                solutionCoords:
-                [(3,0),(3,1),(2,1),(2,0),(1,0),(0,0),(0,1),(0,2),(0,3)],
-                modifications: [(.spin, -CGFloat.pi/2.0)]
-            ),
-            LevelData(
-                gridX: 4, gridY: 4, delayTime: 0.5,
-                solutionCoords:
-                [(3,2),(3,1),(2,1),(2,2),(1,2),(1,1),(1,0),(0,0)],
-                modifications: [(.spin, 3.0*CGFloat.pi/4.0)]
-            ),
-            LevelData(
-                gridX: 4, gridY: 5, delayTime: 0.5,
-                solutionCoords:
-                [(0,2),(0,3),(1,3),(1,2),(1,1),(2,1),(3,1),(3,2),(3,3),(3,4)],
-                modifications: [(.spin, CGFloat.pi/2.0)]
-            ),
-            LevelData(
-                gridX: 5, gridY: 4, delayTime: 0.5,
-                solutionCoords:
-                [(2,0),(3,0),(4,0),(4,1),(4,2),(3,2),(2,2),(1,2),(1,1),(0,1),(0,2),(0,3)],
-                modifications: [(.spin, -CGFloat.pi/2.0)]
-            ),
-            LevelData(
-                gridX: 5, gridY: 5, delayTime: 0.5,
-                solutionCoords:
-                [(4,3),(3,3),(3,2),(2,2),(2,1),(1,1),(1,2),(0,2)],
-                modifications: [(.spin, -3.0*CGFloat.pi/2.0)]
-            ),
-            LevelData(
-                gridX: 5, gridY: 5, delayTime: 0.5,
-                solutionCoords:
-                [(2,4),(2,3),(3,3),(3,2),(3,1),(3,0),(2,0),(1,0),(1,1),(1,2),(0,2)],
-                modifications: [(.spin, 2.0*CGFloat.pi)]
-            ),
-            LevelData(
-                gridX: 6, gridY: 6, delayTime: 0.5,
-                solutionCoords:
-                [(0,5),(1,5),(1,4),(0,4),(0,3),(1,3),(2,3),(3,3),(4,3),(4,4),(4,5),(5,5)],
-                modifications: [(.spin, 3.0*CGFloat.pi/2.0)]
-            ),
-            
-        ]
-        levelGroups.append ((category: "Spin", array))
-    }
+
     
     private func Jumbled(){
         let array = [
