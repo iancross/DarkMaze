@@ -14,7 +14,8 @@ enum Jumps {
     case square
     case plus
 }
-var testing = false//testing variable controls touches moved and printing the green coords
+var testing = false
+//testing variable controls touches moved and printing the green coords
 
 class Level1Scene: SKScene {
     var tile2DArray = [[GridTile]]()
@@ -215,34 +216,38 @@ class Level1Scene: SKScene {
     //the game begins.
     func drawSolution(){
         addSkipButton()
+        var willDraw = false //indicates whether one of the mods calls drawNormal()
         if let mods = Level!.modifications{
             for (i, (mod, modData)) in mods.enumerated(){
                 switch mod {
                 case .flash:
+                    willDraw = true
                     drawFlash()
                 case .divideAndConquer:
                     drawDivideAndConquer()
+                    willDraw = true
                 case .meetInTheMiddle:
                     drawMeetInTheMiddle()
+                    willDraw = true
                 case .distractions:
                     distractionsEnabled = true
-                    drawNormal()
                 case .blockReveal:
                     if let arr = modData as? [Int]{
                         drawBlockReveal(blocksToDisplay: arr)
+                        willDraw = true
                     }
                 case .jumbled:
+                    //we should have this work for all types of drawings. might need to modify the actual draw normal function.
                     if let pairs = modData as? [((x: Int,y: Int),(x: Int,y: Int))]{
                         drawJumbled(pairs: pairs)
+                        willDraw = true
                     }
                     //I think we might have to just DRAW it jumbled and then the graph is later represented as it should be
-                    //Leaving off here
                 case .splitPath:
-                    //drawSplitPath(splitPaths: modData as! [[(Int, Int)]])
                     print ("split path")
                 default:
                     print("calling draw normal from default")
-                    if i == mods.count - 1{
+                    if i == mods.count - 1 && !willDraw{
                         drawNormal()
                     }
                 }

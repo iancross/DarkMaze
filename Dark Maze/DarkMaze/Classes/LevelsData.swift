@@ -56,11 +56,11 @@ class LevelsData{
         ThisLooksFamiliar() //go back over itself
         Spin()
         MeetInTheMiddle()
+        MultiJump()
         WhereToEnd()
         //Flip()
         Jumbled()
         BlockReveal()
-        MultiJump()
         Distraction()
         DivideAndConquer()
         Flash()
@@ -662,7 +662,6 @@ class LevelsData{
         levelGroups.append ((category: "This Looks Familiar", array))
     }
     
-    //LEFT OFF HERE FOR LEVEL DESIGN~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
     private func Spin(){
         let array = [
@@ -718,6 +717,10 @@ class LevelsData{
             ]
         levelGroups.append ((category: "Spin", array))
     }
+    
+    //LEFT OFF HERE FOR LEVEL DESIGN~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    
     private func MeetInTheMiddle(){
         let array = [
             LevelData(
@@ -742,7 +745,7 @@ class LevelsData{
                 gridX: 5, gridY: 5, delayTime: 0.8,
                 solutionCoords:
                 [(0,4),(0,3),(1,3),(1,2),(2,2),(2,1),(2,0),(3,0),(4,0)],
-                modifications: [(.meetInTheMiddle, nil)]
+                modifications: [(.spin, -CGFloat.pi/2.0),(.meetInTheMiddle, nil)]//, ]
             ),
             LevelData(   //5
                 gridX: 5, gridY: 6, delayTime: 0.9,
@@ -751,21 +754,21 @@ class LevelsData{
                 modifications: [(.meetInTheMiddle, nil)]
             ),
             LevelData(
+                gridX: 4, gridY: 7, delayTime: 0.8,
+                solutionCoords:
+                [(0,5),(0,4),(0,3),(1,3),(1,2),(1,1),(1,0),(2,0),(2,1),(2,2),(2,3),(3,3),(3,4),(3,5),(3,6)],
+                modifications: [(.meetInTheMiddle, nil)]
+            ),
+            LevelData(
                 gridX: 5, gridY: 6, delayTime: 0.9,
                 solutionCoords:
-                [(0,0),(1,0),(2,0),(3,0),(4,0),(4,1),(3,1),(2,1),(1,1),(0,1),(0,2),(1,2),(2,2),(3,2),(3,3),(3,4),(2,4),(1,4),(0,4),(0,5),(1,5)],
+                [(0,0),(1,0),(2,0),(3,0),(4,0),(4,1),(3,1),(1,1),(0,1),(0,2),(1,2),(2,2),(3,2),(3,3),(3,4),(2,4),(1,4),(0,4),(0,5),(1,5)],
                 modifications: [(.meetInTheMiddle, nil)]
             ),
             LevelData(
                 gridX: 4, gridY: 7, delayTime: 0.8,
                 solutionCoords:
-                [(0,5),(0,4),(0,3),(1,3),(1,2),(1,1),(1,0),(2,0),(2,1),(2,2),(2,3),(3,3),(3,4),(3,5),(3,6),],
-                modifications: [(.meetInTheMiddle, nil)]
-            ),
-            LevelData(
-                gridX: 4, gridY: 8, delayTime: 0.8,
-                solutionCoords:
-                [(3,2),(2,2),(2,3),(3,3),(3,4),(3,5),(3,6),(2,6),(1,6),(1,7),(0,7),(0,6),(0,5),(0,4),(1,4),(1,3),(1,2),(0,2),(0,1),(0,0),(1,0)],
+                [(0,0),(0,1),(1,1),(2,1),(2,2),(2,3),(2,4),(0,6),(1,6),(1,5),(1,4),(1,3),(2,3),(3,3)],
                 modifications: [(.meetInTheMiddle, nil)]
             )]
         levelGroups.append ((category: "Meet In The Middle", array))
