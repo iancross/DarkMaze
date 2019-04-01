@@ -22,7 +22,7 @@ class GameStyle {
     var SubHeaderFontSize: CGFloat = 75
     var TextBoxFontSize: CGFloat = 90
     var LargeTextBoxFontSize: CGFloat = 130
-    let sceneTransition = SKTransition.fade(with: UIColor.black, duration: 0.8)
+    let sceneTransition = SKTransition.fade(with: UIColor.black, duration: 0.5)
     let numLevelsOnLine = 4
     let adMobTestToken = "ca-app-pub-3940256099942544/2934735716"
 

@@ -24,7 +24,7 @@ class CategoryHeader: SKNode{
         parentFrameWidth = frameWidth
         categoryLabel.verticalAlignmentMode = .center
         addToScene(node: categoryLabel)
-        drawCategoryStyleLines(labelWidth: categoryLabel.frame.width)
+        //drawCategoryStyleLines(labelWidth: categoryLabel.frame.width)
     }
     
     required init?(coder aDecoder: NSCoder) {

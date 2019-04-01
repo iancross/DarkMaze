@@ -47,7 +47,7 @@ class SettingsScene: SKScene, Alertable {
     
     private func createBackButton(){
         backButton = SKSpriteNode(imageNamed: "backButton")
-        backButton.position = CGPoint(x: screenWidth*0.1, y: screenHeight*0.92)
+        backButton.position = CGPoint(x: screenWidth*0.06, y: screenHeight*0.92)
         backButton.name = "BackButton"
         backButton.scale(to: CGSize(width: 28, height: 28))
         addChild(backButton)
@@ -153,10 +153,13 @@ class SettingsScene: SKScene, Alertable {
                     if s.within(point: t.location(in: self))  && !s.hasActions() {
                         s.originalState()
                         flip(button: backgroundSoundsButton)
+                        AudioController.shared.playButtonClick()
                     }
                 }
                 if let r = resetButton{
                     if r.within(point: t.location(in: self)){
+                        AudioController.shared.playButtonClick()
+                        r.originalState()
                         showAlertWithOptions(withTitle: "Reset all game data?", message: "This can't be undone.")
                     }
                 }
@@ -164,6 +167,7 @@ class SettingsScene: SKScene, Alertable {
                     if l.within(point: t.location(in: self)){
                         l.originalState()
                         flip(button: longerSettingButton)
+                        AudioController.shared.playButtonClick()
                     }
                 }
             }
@@ -179,7 +183,6 @@ class SettingsScene: SKScene, Alertable {
         if let b = button{
             let isEnabled = AudioController.shared.isSettingEnabled(settingName: b.name!)
             AudioController.shared.flipSettingInCoreData(key: b.name!, newValue: !isEnabled)
-            let text = b.text
             b.runWithBlock(SKAction.sequence([
                 SKAction.scaleX(to: 0, duration: 0.15),
                 SKAction.run {
@@ -189,12 +192,6 @@ class SettingsScene: SKScene, Alertable {
                     else{
                         b.text = "OFF"
                     }
-//                    if text == "ON"{
-//                        b.text = "OFF"
-//                    }
-//                    else if text == "OFF"{
-//                        b.text = "ON"
-//                    }
                 },
                 SKAction.scaleX(to: 1, duration: 0.15)
                 ]))
@@ -214,16 +211,16 @@ class SettingsScene: SKScene, Alertable {
     
     func showAlertWithOptions(withTitle title: String, message: String){
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        
-        let okAction = UIAlertAction(title: "OK", style: .default) {
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel ) {
+            _ in
+        }
+        alertController.addAction(cancelAction)
+        let okAction = UIAlertAction(title: "OK", style: .destructive) {
             _ in
             self.resetGame()
         }
         alertController.addAction(okAction)
-        let cancelAction = UIAlertAction(title: "Cancel", style: .default) {
-            _ in
-        }
-        alertController.addAction(cancelAction)
+
         
         view?.window?.rootViewController?.present(alertController, animated: true)
     }

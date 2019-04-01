@@ -44,7 +44,7 @@ class MenuScene: SKScene {
         )
         darkMaze?.run(SKAction.repeatForever(actionList))
         buttonsNode?.run(SKAction.repeatForever(actionList))
-        //createNewStartPoint()
+        createNewStartPoint()
     }
     
     
@@ -69,15 +69,33 @@ class MenuScene: SKScene {
         self.addChild(buttonsNode!)
     }
 
-        override func update(_ currentTime: TimeInterval) {
-            if tileLoop < 15{
-                tileLoop += 1
-            }
-            else{
-                let tile = GridTile(coord: (0,0), width: blocksize, height: blocksize)
-                tile.position = CGPoint(x: screenWidth, y: spacingInterval * screenHeight / 2.0)
-            }
+    override func update(_ currentTime: TimeInterval) {
+        if tileLoop < 15{
+            tileLoop += 1
         }
+        else{
+//            let tile = GridTile(coord: (0,0), width: blocksize, height: blocksize)
+//            tile.position = CGPoint(x: screenWidth, y: spacingInterval * screenHeight / 2.0)
+            let prevBlock = blockPoints.first
+            blockPoints.remove(at: 0)
+            var newPoint = blockRandomPoint(prevPoint: blockPoints.first!)
+            while newPoint.x == prevBlock?.x && newPoint.y == prevBlock?.y{
+                newPoint = blockRandomPoint(prevPoint: blockPoints.first!)
+            }
+            blockPoints.append(newPoint)
+            currentTile = GridTile(coord: (0,0), width: blocksize, height: blocksize)
+            currentTile?.position = newPoint
+            addChild(currentTile!)
+            let actionList = SKAction.sequence(
+                [SKAction.run { [weak self] in self?.currentTile?.switchToWhite() },
+                 SKAction.fadeOut(withDuration: 1.7),
+                 SKAction.removeFromParent()
+                ]
+            )
+            currentTile?.run(actionList)
+            tileLoop = 0
+        }
+    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for child in self.children{
@@ -115,6 +133,7 @@ class MenuScene: SKScene {
             if let child = i as? TextBoxButton{
                 if child.within(point: (touches.first?.location(in: buttonsNode!))!){
                     handleButtonTouch(t!)
+                    AudioController.shared.playButtonClick()
                 }
             }
         }
@@ -132,6 +151,7 @@ class MenuScene: SKScene {
         }
     }
     func createNewStartPoint(){
+        print ("create new Start point is being called")
         let newX = arc4random_uniform(UInt32(self.frame.width))
         let newY = arc4random_uniform(UInt32(self.frame.height))
         let startingPoint = CGPoint(x: CGFloat(newX), y: CGFloat(newY))

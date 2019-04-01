@@ -55,6 +55,10 @@ class Level1Scene: SKScene {
     var endArrowCoords: [(Int,Int)]?
     var distractionsEnabled = false
     var previousDistractionTile: GridTile?
+    var topPadding = UIApplication.shared.keyWindow?.safeAreaInsets.top
+    var backButton = SKSpriteNode()
+    var showAlertWhenGoingBack = true
+    
 
 
     
@@ -90,6 +94,17 @@ class Level1Scene: SKScene {
             countdown()
         }
     }
+    
+    private func createBackButton(){
+        backButton = SKSpriteNode(imageNamed: "backButton")
+        
+        backButton.position = CGPoint(x: screenWidth*0.06, y: screenHeight*0.95 - (topPadding ?? 0)/2)//y: screenHeight*0.92)
+        backButton.name = "BackButton"
+        backButton.scale(to: CGSize(width: 28, height: 28))
+        backButton.alpha = 0.9
+        addChild(backButton)
+    }
+    
     private func initPathPoints(coord: (x: Int, y: Int)) -> (x: CGFloat, y: CGFloat){
         if coord.x == 0{
             return (x: -1, y: 0)
@@ -127,7 +142,7 @@ class Level1Scene: SKScene {
         instructionNode.addChild(addIntroTitle())
         instructionNode.alpha = 0
         addChild(instructionNode)
-        instructionNode.run(SKAction.fadeIn(withDuration: 0.5))
+        instructionNode.run(SKAction.fadeIn(withDuration: 0.4))
     }
     
     private func addIntroTitle() -> SKLabelNode{
@@ -164,17 +179,18 @@ class Level1Scene: SKScene {
         number.fontColor = SKColor.white
         number.position = CGPoint(x: frame.midX, y: frame.midY + frame.midY/2)
         addChild(number)
+        let fadeDuration = 0.3
         let actionList = SKAction.sequence(
-            [SKAction.fadeIn(withDuration: 0.4),
-            SKAction.fadeOut(withDuration: 0.4),
+            [SKAction.fadeIn(withDuration: fadeDuration),
+            SKAction.fadeOut(withDuration: fadeDuration),
             SKAction.moveTo(y: frame.midY, duration: 0),
             SKAction.run({ self.decrementCountdown(number) }),
-            SKAction.fadeIn(withDuration: 0.4),
-            SKAction.fadeOut(withDuration: 0.4),
+            SKAction.fadeIn(withDuration: fadeDuration),
+            SKAction.fadeOut(withDuration: fadeDuration),
             SKAction.moveTo(y: frame.midY - frame.midY/2, duration: 0),
             SKAction.run({ self.decrementCountdown(number) }),
-            SKAction.fadeIn(withDuration: 0.4),
-            SKAction.fadeOut(withDuration: 0.4)
+            SKAction.fadeIn(withDuration: fadeDuration),
+            SKAction.fadeOut(withDuration: fadeDuration)
             ]
         )
         number.run(actionList){
@@ -420,6 +436,7 @@ class Level1Scene: SKScene {
     func beginGame(){
         gameActive = true
         insertLevelTitle()
+        createBackButton()
         let numSolutionBlocks = Level!.solutionCoords.count
         blockAlphaIncrement = (1.0 - blockAlphaMin) / CGFloat(numSolutionBlocks)
         modifyGrid()
@@ -450,8 +467,8 @@ class Level1Scene: SKScene {
         let category = LevelsData.shared.getPageCategory(page: LevelsData.shared.selectedLevel.page)
         let title = "\(category) \(progress)/\(outOfTotal)"
         
-        categoryNode = CategoryHeader(string: title, fontSize: blocksize/3.0, frameWidth: frame.width)
-        categoryNode?.position = CGPoint(x: frame.midX, y: frame.maxY - screenHeight*0.05)
+        categoryNode = CategoryHeader(string: title, fontSize: blocksize/2.7, frameWidth: frame.width)
+        categoryNode?.position = CGPoint(x: frame.midX, y: frame.maxY - screenHeight*0.05 - (topPadding ?? 0)/2)
         addChild(categoryNode!)
     }
     
@@ -602,11 +619,12 @@ class Level1Scene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         //can we handle just first touch here?
         for t in touches {
+            let positionInScene = t.location(in: self)
+            let touchedNode = self.atPoint(positionInScene)
             if gameActive {
                 handleTouch(t.location(in: gridNode))
                 break //not sure if i need this
             }
-            
             else{
                 if !countdownActive{
                     if tutorialActive{
@@ -638,6 +656,19 @@ class Level1Scene: SKScene {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
+            let positionInScene = t.location(in: self)
+            let touchedNode = self.atPoint(positionInScene)
+            if let name = touchedNode.name{
+                if name == "BackButton"{
+                    if AudioController.shared.isSettingEnabled(settingName: "showAlertWhenGoingBack") {
+                        showAlertWithOptions(withTitle: "Give up?", message: "Leaving the maze will count as a failed attempt")
+                    }
+                    else {
+                        LevelsData.shared.levelCompleted(success: false)
+                        (self.delegate as? GameDelegate)?.levelSelect()
+                    }
+                }
+            }
             if gameActive {
                 break
             }
@@ -656,6 +687,7 @@ class Level1Scene: SKScene {
                     }
                     else{
                         if (skipButton?.within(point: (t.location(in: self))))!{
+                            AudioController.shared.playButtonClick()
                             skip(touch: t.location(in: self))
                         }
                         else{
@@ -1201,6 +1233,7 @@ class Level1Scene: SKScene {
 
     func successHighlightPath(){
         print("count is \(pathLines.count)")
+        backButton.isHidden = true
         let sequence = SKAction.sequence(
             [   SKAction.run({AudioController.shared.playSuccessSound()}),
                 SKAction.wait(forDuration: 0.45),
@@ -1253,7 +1286,7 @@ class Level1Scene: SKScene {
     }
     
     func disappearGrid(){
-        gridNode.run(SKAction.fadeOut(withDuration: 0.6)){
+        gridNode.run(SKAction.fadeOut(withDuration: 0.4)){
             self.endGame(success: false)
         }
     }
@@ -1340,6 +1373,30 @@ class Level1Scene: SKScene {
     }
 /*---------------------- End Arrows ----------------------*/
     
+    func showAlertWithOptions(withTitle title: String, message: String){
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        let okAction = UIAlertAction(title: "Continue", style: .default) {
+            _ in
+            LevelsData.shared.levelCompleted(success: false)
+            (self.delegate as? GameDelegate)?.levelSelect()
+        }
+        alertController.addAction(okAction)
+        let okButDontShowAgain = UIAlertAction(title: "Continue and don't show again", style: .default ) {
+            _ in
+            //self.showAlertWhenGoingBack = false
+            AudioController.shared.flipSettingInCoreData(key: "showAlertWhenGoingBack", newValue: false)
+            LevelsData.shared.levelCompleted(success: false)
+            (self.delegate as? GameDelegate)?.levelSelect()
+        }
+        alertController.addAction(okButDontShowAgain)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel ) {
+            _ in
+        }
+        alertController.addAction(cancelAction)
+        
+        view?.window?.rootViewController?.present(alertController, animated: true)
+    }
 
     
     /*checks an array of tuples for one in particular

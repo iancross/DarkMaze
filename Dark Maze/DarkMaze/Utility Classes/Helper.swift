@@ -100,8 +100,8 @@ public func calcPointsGiven(source: CGPoint, slope: CGFloat?, distance: CGFloat)
         let p = distance * (1/1+pow(s, 2)).squareRoot()
         let x1 = source.x + p
         let x2 = source.x - p
-        var y1 = source.y + s * p
-        var y2 = source.y - s * p
+        let y1 = source.y + s * p
+        let y2 = source.y - s * p
         
         print ("the points are \([CGPoint(x: x1, y: y1), CGPoint(x: x2, y: y2)])")
         return [CGPoint(x: x1, y: y1), CGPoint(x: x2, y: y2)]

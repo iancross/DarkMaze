@@ -219,11 +219,14 @@ class CustomTableViewCell: UITableViewCell {
                     return
                 }
                 else if Int(button.text)!-1 <= nextLevelToComplete{
+                    let playClick = SKAction.run {
+                        AudioController.shared.playButtonClick()
+                    }
                     let embiggen = SKAction.scale(to: 1.3, duration: 0.4)
                     let loadScene = SKAction.run({
                         LevelsData.shared.selectedLevel = (page: self.indexPath.row, level: Int(button.text)! - 1)
                     })
-                    button.outline.run(SKAction.sequence([embiggen,loadScene])){ [weak self] in
+                    button.outline.run(SKAction.sequence([playClick,embiggen,loadScene])){ [weak self] in
                         self?.cellDelegate?.switchToGame(sceneString: "Level1Scene")
                     }
                     return

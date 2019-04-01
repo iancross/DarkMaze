@@ -172,6 +172,7 @@ class AudioController{
         let settings = Settings(entity: settingsEntity, insertInto: managedContext)
         settings.ambientSounds = true
         settings.gameSounds = true
+        settings.showAlertWhenGoingBack = true
         do {
             try managedContext.save()
         } catch let error as NSError {

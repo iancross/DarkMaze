@@ -61,7 +61,6 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         let originalSelectedIndexPath = IndexPath(row: LevelsData.shared.selectedLevel.page, section: 0)
         selectedRowIndex = originalSelectedIndexPath
         
-        print ("selectedRowIndex is \(selectedRowIndex)")
         customTableView.selectRow(at: selectedRowIndex, animated: true, scrollPosition: .none)
         
         customTableView.reloadData()

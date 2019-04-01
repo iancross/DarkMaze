@@ -47,7 +47,7 @@ class EndGameScene: SKScene {
     
     func bonuses(){
         let bannerHeight = kGADAdSizeFullBanner.size.height
-        var nodes: [SKNode] = collectBonuses()
+        let nodes: [SKNode] = collectBonuses()
         let positions: [CGPoint] =
             [CGPoint(x: frame.midX, y: frame.height*5.8/8),
              CGPoint(x: frame.midX, y: frame.height*5/8)]
@@ -57,7 +57,7 @@ class EndGameScene: SKScene {
             node.alpha = 0
             self.addChild(node)
             let sequence = SKAction.sequence([SKAction.wait(forDuration: Double(i+1)*0.5),
-                                              SKAction.fadeIn(withDuration: 1.0)])
+                                              SKAction.fadeIn(withDuration: 0.7)])
             node.run(sequence)
         }
         
@@ -212,6 +212,7 @@ class EndGameScene: SKScene {
             if let child = i as? TextBoxButton{
                 if child.within(point: (touches.first?.location(in: buttonsNode))!){
                     handleTouchForEndGameMenu(t!)
+                    AudioController.shared.playButtonClick()
                 }
             }
         }

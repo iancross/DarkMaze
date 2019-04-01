@@ -101,7 +101,7 @@ class LevelsData{
             page.unlocked = false
             
             page.number = Int32(i)
-            for (j,levelData) in levelGroups[i].levels.enumerated(){
+            for (j,_) in levelGroups[i].levels.enumerated(){
                 let level = Level(entity: levelEntity, insertInto: managedContext)
                 level.attemptsBeforeSuccess = 0
                 level.completed = false
@@ -638,7 +638,7 @@ class LevelsData{
             LevelData(
                 gridX: 5, gridY: 6, delayTime: 0.5,
                 solutionCoords:
-                [(0,0),(0,1),(1,1),(1,2),(2,2),(2,1),(3,1),(3,0),(2,0),(2,1),(2,2),(2,3),(3,3),(4,3)],
+                [(0,0),(0,1),(1,1),(1,2),(2,1),(3,1),(3,0),(2,0),(2,1),(2,2),(2,3),(3,3),(4,3)],
                 modifications: [(.thisLooksFamiliar, nil)]
             ),
             LevelData(
@@ -717,10 +717,7 @@ class LevelsData{
             ]
         levelGroups.append ((category: "Spin", array))
     }
-    
-    //LEFT OFF HERE FOR LEVEL DESIGN~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    
     private func MeetInTheMiddle(){
         let array = [
             LevelData(
@@ -773,6 +770,67 @@ class LevelsData{
             )]
         levelGroups.append ((category: "Meet In The Middle", array))
     }
+    
+    func MultiJump(){
+        let array = [
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(0,0),(2,0),(3,0),(3,1),(1,2),(1,3),(2,3),(3,3)],
+                modifications: nil
+            ),
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(2,0),(2,1),(2,3),(1,3),(1,2),(1,1),(3,2),(2,2),(1,2),(0,2)],
+                modifications: nil
+            ),
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(0,0),(1,0),(3,1),(4,1),(4,2),(0,3),(1,3),(2,3),(3,4),(2,4),(1,4)],
+                modifications: nil
+            ),
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(0,2),(1,2),(2,2),(2,1),(2,0),(4,3),(3,3),(2,3),(1,3),(0,3),(4,0),(3,0),(3,1),(3,2),(3,3),(3,4)],
+                modifications: nil
+            ),
+            LevelData(
+                gridX: 5, gridY: 6, delayTime: 0.5,
+                solutionCoords:
+                [(1,5),(1,4),(2,4),(3,4),(4,2),(3,2),(3,1),(4,1),(4,0),(2,0),(3,0),(3,1),(2,1),(2,2),(2,3),(2,4),(2,5)],
+                modifications: nil
+            ),
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(1,0),(2,0),(3,0),(4,2),(4,1),(3,4),(2,4),(1,4),(2,2),(1,2),(0,2)],
+                modifications: [(.spin, CGFloat.pi/2.0)]
+            ),
+            LevelData(
+                gridX: 6, gridY: 6, delayTime: 0.5,
+                solutionCoords:
+                [(0,0),(1,0),(2,0),(3,0),(4,0),(4,1),(4,2),(4,3),(4,4),(0,2),(1,2),(2,2),(2,3),(2,4),(1,5),(1,4),(0,4)],
+                modifications: [(.meetInTheMiddle, nil)]
+            ),
+            LevelData(
+                gridX: 6, gridY: 6, delayTime: 0.35,
+                solutionCoords:
+                [(0,0),(0,1),(0,2),(1,2),(2,2),(3,2),(3,1),(3,0),(2,0),(1,0),(2,1),(3,1),(4,1),(4,2),(4,3),(3,3),(2,3),(1,3),(1,2),(1,1),(0,3),(0,4),(0,5),(1,5),(1,4),(2,4),(3,4),(4,4),(5,4),(5,3),(5,2),(5,1),(5,0),(4,0),(2,5),(3,5),(4,5),(5,5)],
+                modifications: nil
+            )
+            
+        ]
+        
+        levelGroups.append ((category: "Multi-Jump", array))
+    }
+    
+    
+    //LEFT OFF HERE FOR LEVEL DESIGN~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    
     
     private func DivideAndConquer(){
         let array = [
@@ -888,61 +946,6 @@ class LevelsData{
         ]
         levelGroups.append ((category: "Jumbled", array))
         
-    }
-    func MultiJump(){
-        let array = [
-            LevelData(
-                gridX: 4, gridY: 4, delayTime: 0.5,
-                solutionCoords:
-                [(0,0),(2,0),(3,0),(3,1),(1,2),(1,3),(2,3),(3,3)],
-                modifications: nil
-            ),
-            LevelData(
-                gridX: 4, gridY: 5, delayTime: 0.5,
-                solutionCoords:
-                [(3,0),(2,0),(1,0),(0,1),(1,1),(2,2),(1,2),(2,3),(3,3)],
-                modifications: nil
-            ),
-            LevelData(
-                gridX: 5, gridY: 5, delayTime: 0.5,
-                solutionCoords:
-                [(4,3),(3,3),(3,4),(2,4),(1,4),(0,4),(0,3),(2,2),(2,1),(3,1),(3,0)],
-                modifications: nil
-            ),
-            LevelData(
-                gridX: 5, gridY: 5, delayTime: 0.5,
-                solutionCoords:
-                [(2,0),(2,1),(1,1),(1,2),(0,2),(4,2),(3,2),(3,3),(2,3),(2,4)],
-                modifications: nil
-            ),
-            LevelData(
-                gridX: 5, gridY: 5, delayTime: 0.5,
-                solutionCoords:
-                [(0,4),(0,3),(1,3),(4,3),(4,2),(3,2),(2,2),(2,1),(2,0),(3,0),(4,0)],
-                modifications: nil
-            ),
-            LevelData(
-                gridX: 5, gridY: 6, delayTime: 0.5,
-                solutionCoords:
-                [(0,4),(0,3),(1,3),(2,3),(4,1),(3,1),(3,0),(2,0),(1,0),(1,1),(0,1)],
-                modifications: nil
-            ),
-            LevelData(
-                gridX: 6, gridY: 6, delayTime: 0.5,
-                solutionCoords:
-                [(4,5),(4,4),(3,4),(2,4),(1,4),(1,3),(1,2),(1,1),(1,0),(0,0),(3,2),(3,1),(3,0),(4,0)],
-                modifications: nil
-            ),
-            LevelData(
-                gridX: 6, gridY: 7, delayTime: 0.5,
-                solutionCoords:
-                [(2,6),(2,5),(1,5),(0,5),(0,4),(0,3),(1,3),(4,2),(4,3),(5,3),(5,2),(5,1),(4,1),(3,1),(3,2),(3,3),(3,4),(4,4),(5,4)],
-                modifications: nil
-            )
-            
-        ]
-        
-        levelGroups.append ((category: "Multi-Jump", array))
     }
     
     private func Blackout(){

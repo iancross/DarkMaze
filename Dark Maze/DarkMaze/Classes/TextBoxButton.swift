@@ -40,7 +40,7 @@ class TextBoxButton: SKNode{
     
     func within(point: CGPoint) -> Bool{
         if self.contains(point) {
-            AudioController.shared.playButtonClick()
+//            AudioController.shared.playButtonClick()
             return true
         }
         else {
