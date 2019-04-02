@@ -18,6 +18,7 @@ class EndGameScene: SKScene {
     let buttonsNode = SKNode()
     var successMessageNode = SKLabelNode()
     var displayUnlockLevelBonus: Bool?
+
     
     //first open the option modal
     //then direct the user based on selection
@@ -29,7 +30,6 @@ class EndGameScene: SKScene {
         super.init(size: size)
         backgroundColor = UIColor.black
         anchorPoint = CGPoint(x: 0, y:0)
-
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -43,6 +43,25 @@ class EndGameScene: SKScene {
         addSuccessMessage(text: success.successMessage)
         addButtons(text: success.variableText)
         bonuses()
+        askForFeedback()
+    }
+    
+    func askForFeedback(){
+        let selectedLevel = LevelsData.shared.selectedLevel
+        if selectedLevel.page == 5 && !AudioController.shared.isSettingEnabled(settingName: "askedForFeedback1"){
+            AudioController.shared.flipSettingInCoreData(key: "askedForFeedback1", newValue: true)
+            openRatingPopup()
+        }
+        else if selectedLevel.page == 10 && !AudioController.shared.isSettingEnabled(settingName: "askedForFeedback2"){
+            AudioController.shared.flipSettingInCoreData(key: "askedForFeedback2", newValue: true)
+            openRatingPopup()
+        }
+    }
+    
+    func openRatingPopup(){
+        if #available(iOS 10.3, *){
+            SKStoreReviewController.requestReview()
+        }
     }
     
     func bonuses(){

@@ -58,7 +58,7 @@ class MenuScene: SKScene {
         aboutButton = TextBoxButton(x: 0, y: screenHeight*spacingInterval*2, text: "About", fontsize:font, buffers: buffers)
         buttonsNode!.addChild(levelSelectButton!)
         buttonsNode!.addChild(settingsButton!)
-        buttonsNode!.addChild(aboutButton!)
+        //buttonsNode!.addChild(aboutButton!)
         
         darkMaze = SKLabelNode(text: "Dark Maze")
         darkMaze!.position = CGPoint(x: 0, y: screenHeight*0.65)
@@ -146,8 +146,10 @@ class MenuScene: SKScene {
         else if settingsButton!.within(point: point){
             (self.delegate as? GameDelegate)?.settings()
         }
-        else if aboutButton!.within(point: point){
-            (self.delegate as? GameDelegate)?.levelSelect()
+        else if let b = aboutButton{
+            if b.within(point: point){
+                (self.delegate as? GameDelegate)?.levelSelect()
+            }
         }
     }
     func createNewStartPoint(){

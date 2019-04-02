@@ -43,6 +43,7 @@ class Level1Scene: SKScene {
     private var crackingFrames: [SKTexture] = []
     let endArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
     let startArrow = SKSpriteNode(imageNamed: "right_arrow_sprite")
+    let arrowForMultiArrows = SKSpriteNode(imageNamed: "right_arrow_sprite")
     var categoryNode: CategoryHeader?
     var jumpsTypes: [Jumps] = [.circle, .diamond, .square, .plus]
     var jumpsToDraw = [Jumps]()
@@ -451,10 +452,12 @@ class Level1Scene: SKScene {
         }
         
         if let coords = endArrowCoords{
+            arrowForMultiArrows.scale(to: CGSize(width: blocksize, height: blocksize))
             print ("about to go through the end arrow coords")
             for (coordX, coordY) in coords{
+
                 let tile = tile2DArray[coordY][coordX]
-                if let arrowCopy = endArrow.copy() as? SKSpriteNode{
+                if let arrowCopy = arrowForMultiArrows.copy() as? SKSpriteNode{
                     placeArrow(tile: tile, arrow: arrowCopy, orient: 1)
                 }
             }

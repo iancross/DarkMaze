@@ -173,6 +173,8 @@ class AudioController{
         settings.ambientSounds = true
         settings.gameSounds = true
         settings.showAlertWhenGoingBack = true
+        settings.askedForFeedback1 = false
+        settings.askedForFeedback2 = false
         do {
             try managedContext.save()
         } catch let error as NSError {

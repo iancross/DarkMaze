@@ -58,12 +58,13 @@ class LevelsData{
         MeetInTheMiddle()
         MultiJump()
         WhereToEnd()
-        //Flip()
-        Jumbled()
-        BlockReveal()
-        Distraction()
-        DivideAndConquer()
-        Flash()
+        //Jumbled()
+//        //Flip()
+//
+//        BlockReveal()
+//        Distraction()
+//        DivideAndConquer()
+//        Flash()
         //Finale()
         
         initCoreData()
@@ -970,21 +971,6 @@ class LevelsData{
         levelGroups.append ((category: "Blackout", array))
     }
     
-    private func Huge(){
-        let array = [LevelData(
-                gridX: 6, gridY: 10, delayTime: 0.3,
-                solutionCoords:
-                [(0,7),(1,7),(1,8),(1,9),(2,9),(3,9),(3,8),(4,8),(4,7),(4,6),(5,6),(5,5),(5,4),(4,4),(3,4),(2,4),(1,4),(1,3),(2,3),(2,2),(3,2),(4,2),(4,1),(5,1)],
-                modifications: [(.flip, nil), (.divideAndConquer, nil)]
-            ),LevelData(
-                gridX: 6, gridY: 10, delayTime: 0.7,
-                solutionCoords:
-                [(0,7),(1,7),(1,8),(1,9),(2,9),(3,9),(3,8),(4,8),(4,7),(4,6),(5,6),(5,5),(5,4),(4,4),(3,4),(2,4),(1,4),(1,3),(2,3),(2,2),(3,2),(4,2),(4,1),(5,1)],
-                 modifications: [(.flip, nil), (.divideAndConquer, nil)]
-            )]
-        levelGroups.append ((category: "Huge", array))
-    }
-    
     private func BlockReveal(){
         let array = [
             LevelData(
@@ -992,8 +978,6 @@ class LevelsData{
                 solutionCoords:
                 [(2,3),(3,3),(3,2),(3,1),(2,1),(1,1),(0,1),(2,2),(2,1),(2,0)],
                 modifications: [(.blockReveal, [2,3,2,10])]
-                                 
-                                 //[[(0,3),(0,2),(1,2),(1,3),(2,3),(2,2),(3,2),(3,3)], [(0,1),(1,1),(2,1),(3,1),(3,0),(2,0),(1,0),(0,0)]])]
             ),
             LevelData(
                 gridX: 4, gridY: 4, delayTime: 0.5,
@@ -1040,42 +1024,59 @@ class LevelsData{
         levelGroups.append ((category: "Blocked Reveal", array))
     }
     
-    private func _BryanTest(){
-        let array = [LevelData(
-            gridX: 5, gridY: 5, delayTime: 0.3,
-            solutionCoords:
-            [(1,1),(1,2),(2,2),(2,1),(3,1),(3,2),(3,3),(3,4),(2,4),(2,3),(1,3),(1,4),(0,4),(0,3),(0,2),(0,1)],
-             modifications: [(.flip, nil)]
-            )]
-        levelGroups.append ((category: "Bryan is a dangus", array))
-    }
-    private func _BrokenTest(){
-        let array = [LevelData(
-            gridX: 5, gridY: 5, delayTime: 0.3,
-            solutionCoords:
-            [(1,1),(1,2),(2,2),(2,1),(3,1),(3,2),(3,3),(3,4),(2,4),(2,3),(1,3),(1,4),(0,4),(0,3),(0,2),(0,1)],
-            modifications: [(.flip, nil)]
-            )]
-        levelGroups.append ((category: "broken", array))
-    }
     
     private func WhereToEnd(){
         let array = [
             LevelData(
                 gridX: 4, gridY: 4, delayTime: 0.5,
-                solutionCoords:
-                [(0,1),(1,1),(2,1),(2,2),(3,2)],
-                modifications: nil
+                solutionCoords: [(3,3),(3,2),(3,1),(3,0),(2,0),(2,1),(2,2),(1,2),(0,2),(0,1),(0,0)],
+                modifications: [(.multipleEndArrows, [(0,1),(0,0)])]
             ),
             LevelData(
-                gridX: 4, gridY: 4, delayTime: 0.3,
+                gridX: 5, gridY: 5, delayTime: 0.5,
                 solutionCoords:
-                [(0,1),(1,1),(2,1),(2,2),(2,3),(1,3),(0,3),(0,2),(1,2),(2,2),(3,2)],
-                modifications: [(.multipleEndArrows, [(3,0)])]
-            )
-        ]
+                [(1,0),(2,0),(3,0),(3,1),(2,1),(2,3),(1,3),(0,3),(0,2),(1,2),(1,3),(1,4)],
+                modifications: [(.multipleEndArrows,[(0,4),(2,4)])]
+            ),
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(0,1),(1,1),(2,1),(2,2),(2,3),(1,3),(0,3),(0,4),(1,4),(4,3),(4,2),(4,1),(3,1),(3,0),(2,0)],
+                modifications: [(.multipleEndArrows,[(4,0)])]
+            ),
+            LevelData(
+                gridX: 6, gridY: 6, delayTime: 0.5,
+                solutionCoords:
+                [(5,3),(4,3),(3,3),(3,4),(3,5),(4,5),(4,4),(3,4),(2,4),(4,1),(3,1),(3,0),(4,0),(5,0),(5,1),(5,2),(4,2),(3,2),(2,2),(2,1),(1,1),(0,1),(0,2)],
+                modifications: [(.multipleEndArrows,[(0,1),(0,0)])]
+            ),
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(3,0),(2,0),(1,0),(1,1),(2,1),(3,1),(3,2),(3,3),(2,3),(1,3),(1,2),(0,2),(0,1)],
+                modifications: [(.spin, CGFloat.pi/2.0),(.multipleEndArrows,[(0,1),(0,3)])]
+            ),
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(4,0),(3,0),(3,1),(4,1),(2,1),(2,2),(2,3),(3,3),(3,2),(2,2),(1,2),(1,3),(1,4)],
+                modifications: [(.spin, -CGFloat.pi/2.0),(.multipleEndArrows,[(0,2),(1,0)])]
+            ),
+            LevelData(
+                gridX: 4, gridY: 6, delayTime: 0.5,
+                solutionCoords:
+                [(3,5),(2,5),(1,5),(0,4),(0,3),(1,3),(1,4),(2,4),(2,3),(2,2),(1,2),(1,1),(2,1),(2,0)],
+                modifications: [(.multipleEndArrows,[(0,1),(0,0),(1,0)])]
+            ),
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(4,2),(4,1),(3,1),(2,1),(2,2),(2,3),(1,3),(0,3),(0,2),(1,2),(2,2),(3,2),(3,1),(3,0),(2,0),(1,0)],
+                modifications: [(.spin, CGFloat.pi/4.0),(.multipleEndArrows,[(0,0),(2,0),(3,0)])]
+            )]
         levelGroups.append ((category: "Where To End", array))
     }
+    
     
     private func Flash(){
         let array = [
