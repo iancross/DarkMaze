@@ -158,9 +158,16 @@ class MenuScene: SKScene {
         let newY = arc4random_uniform(UInt32(self.frame.height))
         let startingPoint = CGPoint(x: CGFloat(newX), y: CGFloat(newY))
         currentTile = GridTile(coord: (0,0), width: blocksize, height: blocksize)
+        let point = calcMidPointOf(a: buttonsNode?.position ?? CGPoint.zero, b: CGPoint(x: frame.midX, y: 0))
+        print("midpoint is \(point)")
         currentTile?.position = startingPoint
-        blockPoints.append(CGPoint(x: (currentTile?.frame.midX)!, y: (currentTile?.frame.midY)!)) //first is the prev
-        blockPoints.append(CGPoint(x: (currentTile?.frame.midX)!, y: (currentTile?.frame.midY)!)) //second is the current
+        currentTile?.position = point
+        blockPoints.append(point)
+        blockPoints.append(point)
+    
+        
+//        blockPoints.append(CGPoint(x: (currentTile?.frame.midX)!, y: (currentTile?.frame.midY)!)) //first is the prev
+//        blockPoints.append(CGPoint(x: (currentTile?.frame.midX)!, y: (currentTile?.frame.midY)!)) //second is the current
     }
     
     func blockRandomPoint(prevPoint: CGPoint) -> (CGPoint){

@@ -580,7 +580,7 @@ class Level1Scene: SKScene {
         [SKAction.run({
                 tile1.zPosition = 1
             }),
-            SKAction.follow(path.cgPath, asOffset: false, orientToPath: false, duration: 1.5)
+            SKAction.follow(path.cgPath, asOffset: false, orientToPath: false, duration: 2)
         ])
         
         tile1.run(s){
@@ -1276,7 +1276,12 @@ class Level1Scene: SKScene {
         crack.scale(to: CGSize(width: blocksize, height: blocksize))
         crack.run(
             SKAction.sequence(
-                [SKAction.run({AudioController.shared.playCracking()}),
+                [SKAction.run(
+                    {
+                        self.backButton.isHidden = true
+                        AudioController.shared.playCracking()
+                    }
+                ),
                  SKAction.animate(with: crackingFrames, timePerFrame: 2/Double(numImages), resize: false, restore: false),
                      SKAction.run({ [weak self] in
                         self?.gridNode.isHidden = true
