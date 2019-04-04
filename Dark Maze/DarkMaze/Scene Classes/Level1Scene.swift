@@ -14,7 +14,7 @@ enum Jumps {
     case square
     case plus
 }
-var testing = false
+var testing = true
 //testing variable controls touches moved and printing the green coords
 
 class Level1Scene: SKScene {
@@ -580,7 +580,7 @@ class Level1Scene: SKScene {
         [SKAction.run({
                 tile1.zPosition = 1
             }),
-            SKAction.follow(path.cgPath, asOffset: false, orientToPath: false, duration: 5)
+            SKAction.follow(path.cgPath, asOffset: false, orientToPath: false, duration: 1.5)
         ])
         
         tile1.run(s){

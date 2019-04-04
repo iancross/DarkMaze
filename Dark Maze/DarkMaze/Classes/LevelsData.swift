@@ -49,7 +49,7 @@ class LevelsData{
         currentLevelSuccess = false
         //used by the gameplay if you play an earlier level
         selectedLevel = (page: 0, level: 0)
-
+        Jumbled()
         Intro()
         Normal()
         Jump()
@@ -58,7 +58,6 @@ class LevelsData{
         MeetInTheMiddle()
         MultiJump()
         WhereToEnd()
-        //Jumbled()
 //        //Flip()
 //
 //        BlockReveal()
@@ -917,14 +916,24 @@ class LevelsData{
             LevelData(
                 gridX: 4, gridY: 5, delayTime: 0.5,
                 solutionCoords:
-                [(0,4),(0,3),(0,2),(0,1),(1,1),(2,1),(2,0)],
-                modifications: [(.jumbled,[((0,1),(1,2)),((1,1),(2,2)),((2,1),(3,2)),((2,0),(3,1))])]
+                [(2,4),(1,4),(1,3),(2,3),(2,2),(3,2),(3,1),(3,0)],
+                modifications: [(.jumbled, [
+                                ((3,2),(1,2)),
+                                ((3,1),(1,1)),
+                                ((3,0),(1,0)),
+                                ]
+                )]
             ),
             LevelData(
                 gridX: 5, gridY: 5, delayTime: 0.5,
                 solutionCoords:
-                [(4,0),(4,1),(4,2),(4,3),(3,3),(3,2),(2,2),(2,1),(1,1),(0,1)],
-                modifications: nil
+                [(3,4),(2,4),(2,3),(3,3),(3,2),(4,2),(4,1),(4,0)],
+                modifications: [(.jumbled, [
+                                 ((4,2),(2,2)),
+                                 ((4,1),(2,1)),
+                                 ((4,0),(2,0)),
+                                ]
+                )]
             ),
             LevelData(
                 gridX: 5, gridY: 5, delayTime: 0.5,
@@ -1029,14 +1038,14 @@ class LevelsData{
         let array = [
             LevelData(
                 gridX: 4, gridY: 4, delayTime: 0.5,
-                solutionCoords: [(3,3),(3,2),(3,1),(3,0),(2,0),(2,1),(2,2),(1,2),(0,2),(0,1),(0,0)],
-                modifications: [(.multipleEndArrows, [(0,1),(0,0)])]
+                solutionCoords: [(3,3),(3,2),(3,1),(3,0),(2,0),(2,1),(2,2),(1,2),(0,2),(0,1)],
+                modifications: [(.multipleEndArrows, [(0,3)])]
             ),
             LevelData(
                 gridX: 5, gridY: 5, delayTime: 0.5,
                 solutionCoords:
-                [(1,0),(2,0),(3,0),(3,1),(2,1),(2,3),(1,3),(0,3),(0,2),(1,2),(1,3),(1,4)],
-                modifications: [(.multipleEndArrows,[(0,4),(2,4)])]
+                [(1,0),(2,0),(3,0),(3,1),(2,1),(2,3),(1,3),(0,3),(0,2),(1,2),(1,3),(1,4),(2,4)],
+                modifications: [(.multipleEndArrows,[(0,4)])]
             ),
             LevelData(
                 gridX: 5, gridY: 5, delayTime: 0.5,
@@ -1072,7 +1081,7 @@ class LevelsData{
                 gridX: 5, gridY: 5, delayTime: 0.5,
                 solutionCoords:
                 [(4,2),(4,1),(3,1),(2,1),(2,2),(2,3),(1,3),(0,3),(0,2),(1,2),(2,2),(3,2),(3,1),(3,0),(2,0),(1,0)],
-                modifications: [(.spin, CGFloat.pi/4.0),(.multipleEndArrows,[(0,0),(2,0),(3,0)])]
+                modifications: [(.spin, -CGFloat.pi/4.0),(.multipleEndArrows,[(2,0),(3,0),(4,0)])]
             )]
         levelGroups.append ((category: "Where To End", array))
     }
