@@ -236,6 +236,7 @@ class Level1Scene: SKScene {
         var willDraw = false //indicates whether one of the mods calls drawNormal()
         if let mods = Level!.modifications{
             for (i, (mod, modData)) in mods.enumerated(){
+                print (modData)
                 switch mod {
                 case .flash:
                     willDraw = true
@@ -263,10 +264,11 @@ class Level1Scene: SKScene {
                 case .splitPath:
                     print ("split path")
                 default:
+                    print("do nothing, this should never be called")
+                }
+                if i == mods.count - 1 && !willDraw{
                     print("calling draw normal from default")
-                    if i == mods.count - 1 && !willDraw{
-                        drawNormal()
-                    }
+                    drawNormal()
                 }
             }
         }
@@ -486,7 +488,10 @@ class Level1Scene: SKScene {
             for (mod, modData) in mods{
                 switch mod {
                 case .flip:
-                    actions.append(flipGrid())
+                    if let flipAcrossXAxis = modData as? Bool {
+                        print ("flipping")
+                        actions.append(flipGrid(flipAcrossXAxis: flipAcrossXAxis))
+                    }
                     
                     //we also need to flip the arrows oops
                 case .spin:
@@ -517,17 +522,20 @@ class Level1Scene: SKScene {
                         }
                     }
                     else{
+                        print ("main action sequence ended")
                         self.gameActive = true
                         self.setFirstTile()
                     }
                 }
             }
             else{
+                print("????????????????????????????????????")
                 self.gameActive = true
                 self.setFirstTile()
             }
         }
         else{
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             gameActive = true
             setFirstTile()
         }
@@ -548,11 +556,19 @@ class Level1Scene: SKScene {
         return action
     }
     
-    func flipGrid()->SKAction{
+    func flipGrid(flipAcrossXAxis: Bool)->SKAction{
+        var flip = SKAction()
+        if flipAcrossXAxis{
+            flip = SKAction.scaleX(to: -1.0, duration: 1.0)
+        }
+        else{
+            flip = SKAction.scaleY(to: -1.0, duration: 1.0)
+        }
+        
         let sequence = SKAction.sequence(
             [SKAction.run { self.gameActive = false },
             SKAction.wait(forDuration: 0.2),
-            SKAction.scaleX(to: -1.0, duration: 1.0),
+            flip,
             SKAction.wait(forDuration: 0.3)])
         return sequence
     }
@@ -681,6 +697,7 @@ class Level1Scene: SKScene {
                         if(continueButton?.within(point: (t.location(in: self))))!{
                             removeAllChildren()
                             if let f = continueButtonFunction{
+                                AudioController.shared.playButtonClick()
                                 f()
                             }
                         }
@@ -1072,6 +1089,7 @@ class Level1Scene: SKScene {
         return (tile.tile.fillColor != .black)
     }
     
+   
     private func tutorialBeforeCountdown(){
         
         var text = ""
@@ -1079,7 +1097,7 @@ class Level1Scene: SKScene {
             text = "After a short countdown, you'll be shown how to escape the maze. Pay attention, you'll need to do it in the dark..."
         }
         else if currentLevel == 1{
-            text = "Each set of mazes presents a different challenge. Pay attention, they build upon each other..."
+            text = "Let's try another simple maze.                                                     Hint: tap on the screen or on the 'skip' button to skip an animation/transition."
         }
         tutorial(text: text, buttonText: "Continue")
         continueButtonFunction = countdown
@@ -1104,12 +1122,12 @@ class Level1Scene: SKScene {
             var buttonText = ""
             if currentLevel == 0{
                 if success {
-                    text = "You've managed to pass this maze, but be warned. The light revealing the path may play tricks on you..."
+                    text = "You've managed to pass this maze, but be warned. The light revealing the path may play tricks on you later..."
                     buttonText = "Next Level"
                     LevelsData.shared.nextLevel()
                 }
                 else{
-                    text = "You stepped outside the maze..."
+                    text = "You stepped outside the maze... Follow the light to escape the darkness!"
                     buttonText = "Try Again"
                 }
             }
@@ -1117,14 +1135,14 @@ class Level1Scene: SKScene {
                 if success{
                     LevelsData.shared.levelCompleted(success: true)
                     nextPageUnlocked = true
-                    text = "You're ready to begin. Be careful and always follow the path!"
+                    text = "After this, each set of mazes presents a different challenge. Pay attention, they build upon each other..."
                     buttonText = "Continue"
                 }
                 else{
                     LevelsData.shared.levelCompleted(success: true)
                     nextPageUnlocked = true
-                    text = "You're obviously not prepared. Let's start at the beginning..."
-                    buttonText = "Continue"
+                    text = "You're obviously not prepared yet. Remember to use the arrows to guide you. Let's try again..."
+                    buttonText = "Try Again"
                 }
             }
             tutorial(text: text, buttonText: buttonText)

@@ -49,8 +49,8 @@ class LevelsData{
         currentLevelSuccess = false
         //used by the gameplay if you play an earlier level
         selectedLevel = (page: 0, level: 0)
-        Jumbled()
         Intro()
+        Distraction()
         Normal()
         Jump()
         ThisLooksFamiliar() //go back over itself
@@ -58,12 +58,15 @@ class LevelsData{
         MeetInTheMiddle()
         MultiJump()
         WhereToEnd()
-//        //Flip()
+        Jumbled()
+        Flip()
+        Flash()
+//
 //
 //        BlockReveal()
 //        Distraction()
 //        DivideAndConquer()
-//        Flash()
+//
         //Finale()
         
         initCoreData()
@@ -456,17 +459,11 @@ class LevelsData{
                 modifications: nil
             ),
             LevelData(
-                gridX: 4, gridY: 4, delayTime: 0.3,
+                gridX: 4, gridY: 4, delayTime: 0.5,
                 solutionCoords:
-                [(0,1),(1,1),(2,1),(2,2),(2,3),(1,3),(0,3),(0,2),(1,2),(2,2),(3,2)],
-                modifications: [(.thisLooksFamiliar, nil), (.spin, CGFloat.pi/2)]
+                [(3,3),(2,3),(1,3),(0,3),(0,2),(1,2),(1,1),(1,0)],
+                modifications: nil//[(.thisLooksFamiliar, nil), (.spin, CGFloat.pi/2)]
             )
-//            LevelData(
-//                gridX: 7, gridY: 10, delayTime: 0.2,
-//                solutionCoords:
-//                [(6,5),(5,5),(5,4),(4,4),(4,5),(4,6),(4,7),(1,8),(1,7),(1,6),(2,6),(2,5),(2,4),(1,4),(0,4),(0,5),(1,5),(2,5),(3,5),(3,4),(3,3),(3,2),(2,2),(0,1),(1,1),(1,0),(2,0),(3,0),(4,0),(4,1),(5,1),(5,2),(6,2)],
-//                modifications: [(.jumbled, [((2,2),(1,3)),((3,2),(2,3))]),(.flip, nil), (.spin, CGFloat.pi)]
-//            )
         ]
         levelGroups.append ((category: "Intro", array))
     }
@@ -475,21 +472,63 @@ class LevelsData{
         let array = [
             
             LevelData(
-                gridX: 5, gridY: 5, delayTime: 0.5,
+                gridX: 7, gridY: 7, delayTime: 0.5,
                 solutionCoords:
-                [(2,4),(2,3),(3,3),(3,2),(3,1),(3,0),(2,0),(1,0),(1,1),(1,2),(0,2)],
+                [(0,3),(1,3),(2,3),(3,3),(3,2),(3,1),(2,1),(1,1),(1,2),(1,3),(1,4),(1,5),(2,0),(3,0),(4,0),(4,1),(4,2),(5,2),(5,1),(5,0),(6,2),(6,3)],
                 modifications: [(.distractions, nil)]
             ),
             LevelData(
-                gridX: 5, gridY: 6, delayTime: 0.5,
+                gridX: 7, gridY: 7, delayTime: 0.5,
                 solutionCoords:
-                [(1,5),(1,4),(0,4),(0,3),(1,3),(2,3),(3,3),(4,3),(4,2),(3,2),(2,2),(2,1),(2,0)],
+                [(3,6),(3,5),(4,5),(4,4),(5,4),(5,3),(5,2),(4,2),(2,5),(2,4),(3,4),(3,3),(4,3),(5,3),(6,3),(6,2),(6,1),(5,1),(4,1),(3,1),(3,0)],
                 modifications: [(.distractions, nil)]
             ),
             LevelData(
-                gridX: 5, gridY: 6, delayTime: 0.5,
+                gridX: 7, gridY: 7, delayTime: 0.5,
                 solutionCoords:
-                [(0,0),(0,1),(0,2),(0,3),(0,4),(0,5),(1,5),(2,5),(3,5),(4,5),(4,4),(4,3),(3,3),(2,3),(2,2),(2,1),(2,0),(3,0),(4,0),(4,1)],
+                [(4,6),(5,6),(5,5),(6,5),(6,4),(5,4),(5,3),(5,2),(5,1),(6,1),(0,3),(0,2),(1,2),(1,1),(1,0),(2,0),(2,1),(3,1),(3,2),(3,3),(3,4),(3,5),(3,6)],
+                modifications: [(.distractions, nil)]
+            ),
+            LevelData(
+                gridX: 7, gridY: 7, delayTime: 0.5,
+                solutionCoords:
+                [(6,2),(6,3),(5,3),(4,3),(4,4),(5,4),(5,5),(4,5),(3,5),(2,5),(2,6),(3,6),(0,3),(0,2),(0,1),(1,1),(1,2),(2,2),(2,1),(2,0),(6,0),(3,0),(4,0),(5,0),(6,0)],
+                modifications: [(.jumbled, [
+                                ((1,3),(3,2)),
+                                ((1,2),(3,1)),
+                                ((2,6),(3,6)),
+                                ((2,5),(3,5)),
+                                ]),
+                                (.distractions, nil)]
+            ),
+            LevelData(
+                gridX: 7, gridY: 7, delayTime: 0.5,
+                solutionCoords:
+                [(0,1),(1,1),(1,2),(2,2),(3,2),(3,3),(4,3),(4,4),(3,4),(2,4),(1,4),(1,5),(0,5),(0,6),(1,6),(2,6),(3,6),(4,6),(5,6),(5,5),(5,4),(5,3),(5,2),(5,1),(5,0)],
+                modifications: [(.jumbled, [
+                                ((1,2),(2,1)),
+                                ((0,4),(2,5)),
+                                ((4,0),(6,0)),
+                                ((4,5),(6,5)),
+                                ]),
+                                (.distractions, nil)]
+            ),
+            LevelData(
+                gridX: 7, gridY: 7, delayTime: 0.5,
+                solutionCoords:
+                [(0,3),(1,3),(1,2),(5,1),(4,1),(4,2),(5,2),(6,2),(4,6),(3,6),(3,5),(4,5),(5,5),(6,5),(1,5),(1,6)],
+                modifications: [(.distractions, nil)]
+            ),
+            LevelData(
+                gridX: 7, gridY: 7, delayTime: 0.5,
+                solutionCoords:
+                [(6,5),(6,4),(6,3),(5,3),(4,3),(3,3),(2,3),(2,4),(2,5),(3,5),(4,5),(5,5),(5,4),(5,3),(5,2),(5,1),(5,0),(4,0),(4,1),(4,2),(4,3),(4,4),(4,5),(4,6),(3,6),(3,5),(3,4),(3,3),(3,2),(3,1),(2,1),(2,0),(1,0),(1,1),(0,1)],
+                modifications: [(.distractions, nil)]
+            ),
+            LevelData(
+                gridX: 7, gridY: 7, delayTime: 0.35,
+                solutionCoords:
+                [(6,0),(5,0),(4,0),(3,0),(2,0),(1,0),(0,0),(0,1),(1,1),(2,1),(3,1),(4,1),(5,1),(6,1),(6,2),(6,3),(6,4),(6,5),(6,6),(5,6),(4,6),(3,6),(3,5),(4,5),(5,5),(5,4),(4,4),(3,4),(2,4),(2,5),(2,6),(1,6),(0,6),(0,5),(1,5),(1,4),(1,3),(2,3),(3,3),(4,3),(5,3),(5,2),(4,2),(3,2),(2,2),(1,2),(0,2),(0,3),(0,4),],
                 modifications: [(.distractions, nil)]
             )
         ]
@@ -1010,6 +1049,73 @@ class LevelsData{
         levelGroups.append ((category: "Jumbled", array))
         
     }
+    private func Flip(){
+        let array = [
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(1,3),(0,3),(0,2),(1,2),(2,2),(3,2),(1,1),(1,0),(2,0),(2,1),(2,2),(2,3)],
+                modifications: [(.flip, true)]
+            ),
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(0,1),(0,0),(1,0),(1,1),(2,1),(3,1),(3,2),(2,2),(1,2),(1,3)],
+                modifications: [(.meetInTheMiddle, nil),(.flip, false)]
+            ),
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(1,3),(2,3),(2,2),(2,1),(3,1),(3,2),(2,2),(1,2),(2,0),(1,0),(0,0)],
+                modifications: [(.flip, false)]
+            ),
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(0,1),(1,1),(2,1),(2,0),(3,0),(3,1)],
+                modifications: [(.spin, CGFloat.pi/2),(.flip, false)]
+            ),
+            LevelData(
+                gridX: 4, gridY: 4, delayTime: 0.5,
+                solutionCoords:
+                [(3,2),(3,1),(2,1),(2,2),(1,2),(1,1),(1,0),(0,0)],
+                modifications: [(.spin, -CGFloat.pi/4),(.flip, true)]
+            ),
+            LevelData(
+                gridX: 4, gridY: 6, delayTime: 0.5,
+                solutionCoords:
+                [(2,5),(2,4),(2,3),(3,3),(3,2),(3,1),(3,0),(2,0),(1,0),(1,1),(1,2),(0,2)],
+                modifications: [(.flip, false),(.flip, true)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(3,4),(3,3),(1,0),(1,1),(1,2),(2,4),(1,4),(0,4),(3,1),(3,2),(4,2),(4,1)],
+                modifications: [(.jumbled, [
+                                ((1,2),(2,2)),
+                                ((1,1),(2,1)),
+                                ((1,0),(2,0))
+                                ]),
+                                (.multipleEndArrows, [(4,3)]),
+                                (.flip, true)
+                ]
+            ),
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(0,3),(0,2),(0,1),(1,1),(2,1),(3,1),(3,2),(3,3),(3,4),(2,4),(1,4),(0,4),(1,2),(1,3),(2,3),(2,2),(2,0),(1,0)],
+                modifications: [(.jumbled, [
+                                ((1,0),(3,0)),
+                                ((2,0),(4,0)),
+                                ((3,4),(4,3)),
+                                ((3,3),(4,2))
+                                ]),
+                                (.flip, false)
+                ]
+            )
+        ]
+        levelGroups.append ((category: "Flip", array))
+    }
     
     private func Blackout(){
         let array = [
@@ -1143,16 +1249,52 @@ class LevelsData{
     private func Flash(){
         let array = [
             LevelData(
-                gridX: 4, gridY: 4, delayTime: 0.5,
+                gridX: 5, gridY: 5, delayTime: 0.5,
                 solutionCoords:
-                [(0,1),(1,1),(2,1),(2,2),(3,2)],
+                [(0,3),(0,4),(1,4),(2,4),(3,4),(3,3),(3,2),(3,1),(3,0),(2,0),(1,0),(1,1),(1,2),(2,2),(3,2),(4,2)],
                 modifications: [(.flash, nil)]
             ),
             LevelData(
-                gridX: 4, gridY: 4, delayTime: 0.3,
+                gridX: 5, gridY: 5, delayTime: 0.5,
                 solutionCoords:
-                [(0,1),(1,1),(2,1),(2,2),(2,3),(1,3),(0,3),(0,2),(1,2),(2,2),(3,2)],
+                [(4,0),(3,0),(3,1),(2,1),(1,1),(1,0),(0,4),(0,3),(1,3),(2,3),(2,4),(3,4),(4,4)],
                 modifications: [(.flash, nil)]
+            ),
+            LevelData(
+                gridX: 6, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(4,0),(5,0),(5,1),(5,2),(5,3),(4,3),(4,2),(3,2),(2,2),(1,2),(0,2),(0,3),(0,4),(1,4),(2,4),(2,3),(2,2),(2,1),(2,0),(3,0)],
+                modifications: [(.flash, nil)]
+            ),
+            LevelData(
+                gridX: 6, gridY: 6, delayTime: 0.5,
+                solutionCoords:
+                [(5,5),(5,4),(5,3),(5,2),(5,1),(5,0),(4,0),(3,0),(2,0),(1,0),(1,1),(1,2),(1,3),(2,3),(3,3),(3,2),(2,5),(1,5),(0,5),(0,4)],
+                modifications: [(.flash, nil),(.flip, true)]
+            ),
+            LevelData(
+                gridX: 6, gridY: 7, delayTime: 0.5,
+                solutionCoords:
+                [(5,6),(4,6),(3,6),(2,6),(2,5),(2,4),(2,3),(2,2),(1,2),(0,2),(0,3),(0,4),(1,4),(2,4),(3,4),(4,4),(4,3),(5,3),(5,2),(5,1),(4,1),(4,0),(3,0)],
+                modifications: [(.flash, nil),(.multipleEndArrows, [(5,0)])]
+            ),
+            LevelData(
+                gridX: 7, gridY: 7, delayTime: 0.5,
+                solutionCoords:
+                [(0,3),(0,2),(1,2),(1,1),(2,1),(2,0),(3,0),(4,0),(4,1),(5,1),(5,2),(5,3),(6,3),(6,4),(6,5),(5,5),(4,5),(4,4),(3,4),(2,4),(1,4),(1,5),(2,5),(2,6)],
+                modifications: [(.flash, nil)]
+            ),
+            LevelData(
+                gridX: 6, gridY: 8, delayTime: 0.5,
+                solutionCoords:
+                [(3,7),(4,7),(4,6),(3,6),(2,6),(1,6),(0,6),(0,5),(0,4),(0,3),(0,2),(1,2),(2,2),(3,2),(4,2),(4,1),(4,0),(3,0),(2,0),(2,1),(2,2),(2,3),(2,4),(3,4),(4,4),(5,4),(5,5)],
+                modifications: [(.flash, nil),(.multipleEndArrows, [(0,1)]),(.flip, true)]
+            ),
+            LevelData(
+                gridX: 5, gridY: 5, delayTime: 0.5,
+                solutionCoords:
+                [(4,1),(3,1),(3,0),(2,0),(1,0),(1,1),(1,2),(2,2),(2,3),(2,4),(1,4),(0,4),(0,3)],
+                modifications: [(.flash, nil), (.spin, CGFloat.pi/2), (.flip, true)]
             )
         ]
         levelGroups.append ((category: "Flash", array))
