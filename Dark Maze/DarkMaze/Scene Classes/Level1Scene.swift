@@ -91,6 +91,9 @@ class Level1Scene: SKScene {
         if LevelsData.shared.getPageCategory(page: currentPage) == "Intro"{
             tutorialBeforeCountdown()
         }
+        else if LevelsData.shared.getPageCategory(page: currentPage) == "Finale"{
+            finaleWarning()
+        }
         else {
             countdown()
         }
@@ -280,7 +283,9 @@ class Level1Scene: SKScene {
     func addSkipButton(){
         let bottomOfGridY = screenHeight/2.0 - (gridNode.calculateAccumulatedFrame().height/2.0)
         let y = bottomOfGridY - bottomOfGridY/2.0
-        skipButton = TextBoxButton(x: screenWidth/4.0, y: y, text: "Skip", fontsize: blocksize/3.0, buffers: (blocksize/5.0,blocksize/5.0))
+        print ("screenHeight is \(screenHeight)")
+        print ("blocksize is \(blocksize)")
+        skipButton = TextBoxButton(x: screenWidth/4.0, y: y, text: "Skip", fontsize: screenWidth/20.0, buffers: (screenWidth/22.0, screenWidth/22.0))
         self.addChild(skipButton!)
     }
     
@@ -472,7 +477,7 @@ class Level1Scene: SKScene {
         let category = LevelsData.shared.getPageCategory(page: LevelsData.shared.selectedLevel.page)
         let title = "\(category) \(progress)/\(outOfTotal)"
         
-        categoryNode = CategoryHeader(string: title, fontSize: blocksize/2.7, frameWidth: frame.width)
+        categoryNode = CategoryHeader(string: title, fontSize: screenWidth/15.0, frameWidth: frame.width)
         categoryNode?.position = CGPoint(x: frame.midX, y: frame.maxY - screenHeight*0.05 - (topPadding ?? 0)/2)
         addChild(categoryNode!)
     }
@@ -507,9 +512,7 @@ class Level1Scene: SKScene {
                     print("modData is \(modData)")
                     endArrowCoords = modData as? [(Int,Int)]
                 default:
-                    print ("this is being called")
-                    gameActive = true
-                    setFirstTile()
+                    print ("default is being called")
                 }
             }
             if actions.count > 0{
@@ -680,10 +683,12 @@ class Level1Scene: SKScene {
             if let name = touchedNode.name{
                 if name == "BackButton"{
                     if AudioController.shared.isSettingEnabled(settingName: "showAlertWhenGoingBack") {
+                        AudioController.shared.playButtonClick()
                         showAlertWithOptions(withTitle: "Give up?", message: "Leaving the maze will count as a failed attempt")
                     }
                     else {
                         LevelsData.shared.levelCompleted(success: false)
+                        AudioController.shared.playButtonClick()
                         (self.delegate as? GameDelegate)?.levelSelect()
                     }
                 }
@@ -1098,6 +1103,22 @@ class Level1Scene: SKScene {
         }
         else if currentLevel == 1{
             text = "Let's try another simple maze.                                                     Hint: tap on the screen or on the 'skip' button to skip an animation/transition."
+        }
+        tutorial(text: text, buttonText: "Continue")
+        continueButtonFunction = countdown
+    }
+    
+    private func finaleWarning(){
+        var text = ""
+        if currentLevel == 0{
+            text = "This is your final challenge. You'll need to conquer every challenge seen so far. Understandable if you need to give up..."
+        }
+        else if currentLevel == 7{
+            text = "Somehow, you made it. It seems you've escaped the darkness..."
+        }
+        else{
+            countdown()
+            return
         }
         tutorial(text: text, buttonText: "Continue")
         continueButtonFunction = countdown
