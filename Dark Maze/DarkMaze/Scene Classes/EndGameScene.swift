@@ -26,7 +26,6 @@ class EndGameScene: SKScene {
     
     init(size: CGSize, unlockedLevel: Bool) {
         displayUnlockLevelBonus = unlockedLevel
-        print (size.height)
         super.init(size: size)
         backgroundColor = UIColor.black
         anchorPoint = CGPoint(x: 0, y:0)
@@ -81,7 +80,6 @@ class EndGameScene: SKScene {
         }
         
         let height = self.frame.height
-        print ("height is \(height)")
         
         if let last = nodes.last{
             let y = (last.position.y - bannerHeight)/2 + bannerHeight
@@ -153,7 +151,7 @@ class EndGameScene: SKScene {
     func addButtons(text: String){
         let font = screenWidth*0.09
         
-        if displayUnlockLevelBonus!{
+        if (displayUnlockLevelBonus ?? false){
             levelSelectButton = TextBoxButton(x: 0, y: frame.height/8, text: "Level Select", fontsize:font, buffers: buffers)
             mainMenuButton = TextBoxButton(x: 0, y: 0, text: "Main Menu", fontsize:font, buffers: buffers)
             buttonsNode.addChild(mainMenuButton!)
@@ -202,11 +200,13 @@ class EndGameScene: SKScene {
         }
         for i in buttonsNode.children{
             if let child = i as? TextBoxButton{
-                if !child.within(point: (touches.first?.location(in: buttonsNode))!){
-                    child.originalState()
-                }
-                else{
-                    child.tappedState()
+                if let t = touches.first?.location(in: buttonsNode){
+                    if !child.within(point: t){
+                        child.originalState()
+                    }
+                    else{
+                        child.tappedState()
+                    }
                 }
             }
         }
@@ -215,23 +215,26 @@ class EndGameScene: SKScene {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for i in buttonsNode.children{
             if let child = i as? TextBoxButton{
-                if !child.within(point: (touches.first?.location(in: buttonsNode))!){
-                    child.originalState()
-                }
-                else{
-                    child.tappedState()
+                if let t = touches.first?.location(in: buttonsNode){
+                    if !child.within(point: t){
+                        child.originalState()
+                    }
+                    else{
+                        child.tappedState()
+                    }
                 }
             }
         }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let t = touches.first?.location(in: buttonsNode)
         for i in buttonsNode.children{
             if let child = i as? TextBoxButton{
                 if child.within(point: (touches.first?.location(in: buttonsNode))!){
-                    handleTouchForEndGameMenu(t!)
-                    AudioController.shared.playButtonClick()
+                    if let t = touches.first?.location(in: buttonsNode){
+                        handleTouchForEndGameMenu(t)
+                        AudioController.shared.playButtonClick()
+                    }
                 }
             }
         }
@@ -245,11 +248,11 @@ class EndGameScene: SKScene {
             //Helper.switchScene(sceneName: "Level1Scene", gameDelegate: self.delegate as? GameDelegate, view: self.view!)
             (self.delegate as? GameDelegate)?.playGame()
         }
-        else if levelSelectButton!.within(point: point){
+        else if levelSelectButton?.within(point: point) ?? false{
             //Helper.switchScene(sceneName: "LevelSelectScene", gameDelegate: self.delegate as? GameDelegate, view: self.view!)
             (self.delegate as? GameDelegate)?.levelSelect()
         }
-        else if mainMenuButton!.within(point: point){
+        else if mainMenuButton?.within(point: point) ?? false{
             //Helper.switchScene(sceneName: "MenuScene", gameDelegate: self.delegate as? GameDelegate, view: self.view!)
             (self.delegate as? GameDelegate)?.mainMenu()
         }

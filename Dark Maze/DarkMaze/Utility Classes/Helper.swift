@@ -44,7 +44,6 @@ public func getAddSizeForScreen()->GADAdSize{
 }
 
 public func calcMidPointOf(a: CGPoint, b: CGPoint) -> CGPoint{
-    print("midpoint of \(a) and \(b) is \(CGPoint(x: (a.x + b.x)/2, y: (a.y + b.y)/2))")
     return CGPoint(x: (a.x + b.x)/2, y: (a.y + b.y)/2)
 }
 
@@ -89,12 +88,10 @@ public func calcPerpendicularSlope(s: CGFloat?) -> CGFloat?{
 //gets points on a line given the slope, an origin point, and a given distance.
 //returns 2 points due to +/-
 public func calcPointsGiven(source: CGPoint, slope: CGFloat?, distance: CGFloat) -> [CGPoint]{
-    print ("\(source),\(slope),\(distance)")
     if let s = slope {
         
         //need to account for case where the slope is 0
         if s == 0{
-            print ("we're in the case where the perpendicular slope is 0")
             return [CGPoint(x: source.x + distance, y:source.y),CGPoint(x: source.x - distance, y:source.y)]
         }
         let p = distance * (1/1+pow(s, 2)).squareRoot()
@@ -103,7 +100,6 @@ public func calcPointsGiven(source: CGPoint, slope: CGFloat?, distance: CGFloat)
         let y1 = source.y + s * p
         let y2 = source.y - s * p
         
-        print ("the points are \([CGPoint(x: x1, y: y1), CGPoint(x: x2, y: y2)])")
         return [CGPoint(x: x1, y: y1), CGPoint(x: x2, y: y2)]
     }
     else{

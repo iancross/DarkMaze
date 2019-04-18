@@ -131,11 +131,9 @@ class CustomTableViewCell: UITableViewCell {
     
     private func addLevels(){
         let nextLevelToComplete = LevelsData.shared.nextLevelToCompleteOnPage(page: indexPath.row)
-        print ("------------------- \(nextLevelToComplete)")
         let levelCount = LevelsData.shared.getNumLevelsOnPage(page: indexPath.row)
         let n = GameStyle.shared.numLevelsOnLine
         for i in 0...levelCount/n{
-            print (frame.maxY)
             let top = (drawing?.frame.maxY)! - defaultHeight + 7
             let lines = CGFloat(ceil(Double(levelCount)/Double(n)))
             let offset = (top / lines) - 1.0
@@ -251,7 +249,6 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     func drawProgressLine(){
-        //print("drawing is \()")
         let yBuffer: CGFloat = drawing!.frame.height/5
         let Circle = SKShapeNode(circleOfRadius: drawing!.frame.height/14 ) // Size of Circle
 

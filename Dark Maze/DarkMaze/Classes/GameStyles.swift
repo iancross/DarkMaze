@@ -24,8 +24,8 @@ class GameStyle {
     var LargeTextBoxFontSize: CGFloat = 130
     let sceneTransition = SKTransition.fade(with: UIColor.black, duration: 0.5)
     let numLevelsOnLine = 4
-    let adMobTestToken = "ca-app-pub-3940256099942544/2934735716"
-
+    let adMobLevelSelectToken = "ca-app-pub-1344161040949299/2897745758"
+    let adMobEndGameToken = "ca-app-pub-1344161040949299/3430252314"
 
     private init() {
         sceneTransition.pausesOutgoingScene = true

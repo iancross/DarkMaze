@@ -17,12 +17,13 @@
         <attribute name="ambientSounds" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="askedForFeedback1" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="askedForFeedback2" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="finaleWarningComplete" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="gameSounds" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="showAlertWhenGoingBack" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
     </entity>
     <elements>
         <element name="Level" positionX="-63" positionY="0" width="128" height="135"/>
         <element name="Page" positionX="-63" positionY="-18" width="128" height="90"/>
-        <element name="Settings" positionX="-54" positionY="45" width="128" height="120"/>
+        <element name="Settings" positionX="-54" positionY="45" width="128" height="135"/>
     </elements>
 </model>

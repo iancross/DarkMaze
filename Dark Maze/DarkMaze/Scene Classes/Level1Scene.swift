@@ -14,7 +14,7 @@ enum Jumps {
     case square
     case plus
 }
-var testing = true
+var testing = false
 //testing variable controls touches moved and printing the green coords
 
 class Level1Scene: SKScene {
@@ -34,7 +34,7 @@ class Level1Scene: SKScene {
     var blocksize: CGFloat = 0
     var cam: SKCameraNode?
     var blockAlphaIncrement: CGFloat = 0
-    var blockAlphaMin: CGFloat = 0.35
+    var blockAlphaMin: CGFloat = 0.30
     var Level: LevelData?
     var currentLevel = LevelsData.shared.selectedLevel.level
     let currentPage = LevelsData.shared.selectedLevel.page
@@ -143,7 +143,7 @@ class Level1Scene: SKScene {
         instructionNode.addChild(createInstructionText(text: text))
         continueButton = TextBoxButton(x: frame.width/2, y: frame.height * 5/18, text: buttonText, fontsize: frame.width/13, buffers: buffers)
         instructionNode.addChild(continueButton!)
-        instructionNode.addChild(addIntroTitle())
+        //instructionNode.addChild(addIntroTitle())
         instructionNode.alpha = 0
         addChild(instructionNode)
         instructionNode.run(SKAction.fadeIn(withDuration: 0.4))
@@ -239,7 +239,6 @@ class Level1Scene: SKScene {
         var willDraw = false //indicates whether one of the mods calls drawNormal()
         if let mods = Level!.modifications{
             for (i, (mod, modData)) in mods.enumerated(){
-                print (modData)
                 switch mod {
                 case .flash:
                     willDraw = true
@@ -264,13 +263,10 @@ class Level1Scene: SKScene {
                         willDraw = true
                     }
                     //I think we might have to just DRAW it jumbled and then the graph is later represented as it should be
-                case .splitPath:
-                    print ("split path")
                 default:
                     print("do nothing, this should never be called")
                 }
                 if i == mods.count - 1 && !willDraw{
-                    print("calling draw normal from default")
                     drawNormal()
                 }
             }
@@ -283,14 +279,11 @@ class Level1Scene: SKScene {
     func addSkipButton(){
         let bottomOfGridY = screenHeight/2.0 - (gridNode.calculateAccumulatedFrame().height/2.0)
         let y = bottomOfGridY - bottomOfGridY/2.0
-        print ("screenHeight is \(screenHeight)")
-        print ("blocksize is \(blocksize)")
         skipButton = TextBoxButton(x: screenWidth/4.0, y: y, text: "Skip", fontsize: screenWidth/20.0, buffers: (screenWidth/22.0, screenWidth/22.0))
         self.addChild(skipButton!)
     }
     
     func drawNormal(){
-        print("drawingNormal")
         for (index,coord) in Level!.solutionCoords.enumerated(){
             let tile = tile2DArray[coord.y][coord.x]
             runDrawingActions(tiles: [tile],
@@ -301,7 +294,6 @@ class Level1Scene: SKScene {
     }
     
     func drawFlash(){
-        print("drawingFlash")
         for (index,coord) in Level!.solutionCoords.enumerated(){
             let tile = tile2DArray[coord.y][coord.x]
             runDrawingActions(tiles: [tile],
@@ -312,7 +304,6 @@ class Level1Scene: SKScene {
     }
     
     func drawJumbled(pairs: [((x: Int,y: Int),(x: Int,y: Int))]){
-        print ("drawingJumbled")
         for pair in pairs{
             let (coord1, _) = pair
             let (_, coord2) = pair
@@ -327,7 +318,6 @@ class Level1Scene: SKScene {
     }
 
     func drawBlockReveal(blocksToDisplay: [Int]){
-        print ("drawingBlockedReveal")
         var solutionCoordIndex = 0
         for (i,num) in blocksToDisplay.enumerated(){
             var solutionTiles = [GridTile]()
@@ -369,7 +359,6 @@ class Level1Scene: SKScene {
     }
     
     func drawDivideAndConquer(){
-        print ("drawingDivideAndConquer")
         let numTiles = Level!.solutionCoords.count
         var left,right: Int
         if numTiles % 2 == 0 { //even
@@ -448,11 +437,12 @@ class Level1Scene: SKScene {
         let numSolutionBlocks = Level!.solutionCoords.count
         blockAlphaIncrement = (1.0 - blockAlphaMin) / CGFloat(numSolutionBlocks)
         modifyGrid()
+        
+
     }
     
     func setFirstTile(){
         if startArrow.parent == nil{
-            print ("setting first tile")
             let firstTile = self.tile2DArray[(Level!.solutionCoords.first?.y)!][(Level!.solutionCoords.first?.x)!]
             firstTile.firstTile()
             drawArrows(firstTile: firstTile)
@@ -460,7 +450,6 @@ class Level1Scene: SKScene {
         
         if let coords = endArrowCoords{
             arrowForMultiArrows.scale(to: CGSize(width: blocksize, height: blocksize))
-            print ("about to go through the end arrow coords")
             for (coordX, coordY) in coords{
 
                 let tile = tile2DArray[coordY][coordX]
@@ -469,6 +458,9 @@ class Level1Scene: SKScene {
                 }
             }
         }
+//        if testing{
+//            testingFlipAllTiles ()
+//        }
     }
     
     func insertLevelTitle(){
@@ -494,7 +486,6 @@ class Level1Scene: SKScene {
                 switch mod {
                 case .flip:
                     if let flipAcrossXAxis = modData as? Bool {
-                        print ("flipping")
                         actions.append(flipGrid(flipAcrossXAxis: flipAcrossXAxis))
                     }
                     
@@ -503,13 +494,10 @@ class Level1Scene: SKScene {
                     if let r = modData as? CGFloat{
                         actions.append(spinGrid(rotation: r))
                     }
-                case .splitPath:
-                    print ("splitPath")
                 case .jumbled:
                     actions.append(SKAction.run { /* placeholder */ })
                     jumbledPairs = modData as? [((Int,Int),(Int,Int))]
                 case .multipleEndArrows:
-                    print("modData is \(modData)")
                     endArrowCoords = modData as? [(Int,Int)]
                 default:
                     print ("default is being called")
@@ -517,7 +505,6 @@ class Level1Scene: SKScene {
             }
             if actions.count > 0{
                 gridNode.run(SKAction.sequence(actions)){
-                    print ("gridNode running")
                     if let pairs = jumbledPairs{
                         self.gameActive = false
                         for (i,(x, y)) in pairs.enumerated(){
@@ -525,30 +512,28 @@ class Level1Scene: SKScene {
                         }
                     }
                     else{
-                        print ("main action sequence ended")
                         self.gameActive = true
                         self.setFirstTile()
                     }
                 }
             }
             else{
-                print("????????????????????????????????????")
                 self.gameActive = true
                 self.setFirstTile()
             }
         }
         else{
-            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             gameActive = true
             setFirstTile()
         }
     }
     
     func testingFlipAllTiles(){
-        for coord in (Level?.solutionCoords)!{
+        for (i, coord) in (Level?.solutionCoords)!.enumerated(){
             let t = tile2DArray[coord.y][coord.x]
             t.setColor(color: .purple)
-            drawPath(currTile: t, repeatTile: false, alpha: 1.0)
+            t.alpha = (CGFloat(i)/CGFloat((Level?.solutionCoords)!.count)) + 0.2
+            //drawPath(currTile: t, repeatTile: false, alpha: 1.0)
         }
     }
     
@@ -700,7 +685,6 @@ class Level1Scene: SKScene {
                 if !countdownActive{
                     if tutorialActive{
                         if(continueButton?.within(point: (t.location(in: self))))!{
-                            removeAllChildren()
                             if let f = continueButtonFunction{
                                 AudioController.shared.playButtonClick()
                                 f()
@@ -808,7 +792,6 @@ class Level1Scene: SKScene {
         }
         //if nil was returned, it means we've already highlighted this tile
         else{
-            print ("nil was returned")
             //if the tile is already touched but it's the bridge
             if isTileAdjacentAndUpcoming(tileToTest: tile){
                 if let success = gameOverSuccessOrFailure(alpha: alpha){
@@ -892,7 +875,6 @@ class Level1Scene: SKScene {
     func updateGridForPotentialJump(){
         if nextTileIsJump(fromTileNumber: touchedTiles){
             let j = jumpsTypes.removeFirst()
-            print ("jump type coming up is \(j)")
             if let coord = Level?.solutionCoords[touchedTiles-1]{
                 tile2DArray[coord.y][coord.x].jumpIndication = j
             }
@@ -926,9 +908,7 @@ class Level1Scene: SKScene {
                 return true
             }
         }
-        else{
-            print("this index is past what is allowed in nextTileIsJump")
-        }
+
         return false
     }
     
@@ -1081,7 +1061,6 @@ class Level1Scene: SKScene {
         if i > 0{
             let coord = Level!.solutionCoords[i]
             let tile = tile2DArray[coord.y][coord.x]
-            print(tile.gridCoord)
             return tile
         }
         return nil
@@ -1089,7 +1068,6 @@ class Level1Scene: SKScene {
     
     private func tileIsRepeat(tileNumber: Int) -> Bool{
         let coord = Level!.solutionCoords[tileNumber]
-        print(coord)
         let tile = tile2DArray[coord.y][coord.x]
         return (tile.tile.fillColor != .black)
     }
@@ -1110,11 +1088,9 @@ class Level1Scene: SKScene {
     
     private func finaleWarning(){
         var text = ""
-        if currentLevel == 0{
-            text = "This is your final challenge. You'll need to conquer every challenge seen so far. Understandable if you need to give up..."
-        }
-        else if currentLevel == 7{
-            text = "Somehow, you made it. It seems you've escaped the darkness..."
+        if currentLevel == 0 && !AudioController.shared.isSettingEnabled(settingName: "finaleWarningComplete"){
+            text = "You must use every skill you've learned in order to pass your final test. Understandable if you need to give up..."
+            AudioController.shared.flipSettingInCoreData(key: "finaleWarningComplete", newValue: true)
         }
         else{
             countdown()
@@ -1138,9 +1114,9 @@ class Level1Scene: SKScene {
             child.removeFromParent()
         }
         nextPageUnlocked = !nextLevelUnlockedBefore && nextLevelUnlockedAfter
+        var text = ""
+        var buttonText = ""
         if LevelsData.shared.getPageCategory(page: currentPage) == "Intro"{
-            var text = ""
-            var buttonText = ""
             if currentLevel == 0{
                 if success {
                     text = "You've managed to pass this maze, but be warned. The light revealing the path may play tricks on you later..."
@@ -1169,11 +1145,33 @@ class Level1Scene: SKScene {
             tutorial(text: text, buttonText: buttonText)
             continueButtonFunction = tutorialContinue
         }
+        else if LevelsData.shared.getPageCategory(page: currentPage) == "Finale" && currentLevel == 7 && success{
+            text = "It seems you've escaped the darkness..."
+            buttonText = "Finish"
+            tutorial(text: text, buttonText: buttonText)
+            continueButtonFunction = winGame
+        }
         else{
             AudioController.shared.increaseBackgroundVolume()
             switchToEndGameScene()
         }
         
+    }
+    
+    private func winGame(){
+        continueButton?.originalState()
+        continueButton!.outline.fillColor = .clear
+        let whiteBox = SKShapeNode.init(rectOf: view?.frame.size ?? CGSize.zero)
+        whiteBox.fillColor = .white
+        whiteBox.alpha = 0
+        whiteBox.zPosition = -100
+        whiteBox.position = CGPoint(x: frame.midX, y: frame.midY)
+        self.addChild(whiteBox)
+        let sequence = SKAction.sequence([SKAction.fadeIn(withDuration: 3),SKAction.wait(forDuration: 1.5)])
+        whiteBox.run(sequence){
+            LevelsData.shared.nextLevel()
+            (self.delegate as? GameDelegate)?.mainMenu()
+        }
     }
     
     private func tutorialContinue(){
@@ -1194,11 +1192,6 @@ class Level1Scene: SKScene {
                 }
             }
         }
-        else{
-            print ("fuck")
-        }
-        
-        
     }
     
     private func switchToEndGameScene(){
@@ -1274,7 +1267,6 @@ class Level1Scene: SKScene {
     }
 
     func successHighlightPath(){
-        print("count is \(pathLines.count)")
         backButton.isHidden = true
         let sequence = SKAction.sequence(
             [   SKAction.run({AudioController.shared.playSuccessSound()}),

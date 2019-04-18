@@ -29,6 +29,7 @@ class GameViewController: UIViewController, GameDelegate, GADBannerViewDelegate 
     var sceneString = "MenuScene"
 
     override func viewDidLoad() {
+        
         self.view.backgroundColor = UIColor.black
         super.viewDidLoad()
         setupAudioSession()
@@ -108,7 +109,7 @@ class GameViewController: UIViewController, GameDelegate, GADBannerViewDelegate 
         view.addSubview(bannerView)
         bannerView.rootViewController = self
         bannerView.backgroundColor = .black
-        bannerView.adUnitID = GameStyle.shared.adMobTestToken
+        bannerView.adUnitID = GameStyle.shared.adMobEndGameToken
         view.addConstraint(NSLayoutConstraint(item: bannerView,
                                               attribute: .leading,
                                               relatedBy: .equal,
@@ -126,12 +127,12 @@ class GameViewController: UIViewController, GameDelegate, GADBannerViewDelegate 
         view.addConstraint(NSLayoutConstraint(item: bannerView,
                                               attribute: .bottom,
                                               relatedBy: .equal,
-                                              toItem: bottomLayoutGuide,
-                                              attribute: .top,
+                                              toItem: view.safeAreaLayoutGuide,
+                                              attribute: .bottom,
                                               multiplier: 1,
                                               constant: 0))
         let request = GADRequest()
-        request.testDevices = [kGADSimulatorID]
+        //request.testDevices = [kGADSimulatorID]
         bannerView.load(request)
     }
 }

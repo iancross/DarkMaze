@@ -12,6 +12,7 @@ import GameplayKit
 
 class MenuScene: SKScene {
     var darkMaze: SKLabelNode? = nil
+    //var escape: SKLabelNode? = nil
     var tapToBegin: SKLabelNode? = nil
     var buttonsNode: SKNode? = nil
     var levelSelectButton: TextBoxButton? = nil
@@ -43,6 +44,7 @@ class MenuScene: SKScene {
             SKAction.fadeAlpha(to: 0.3, duration: 2.5)]
         )
         darkMaze?.run(SKAction.repeatForever(actionList))
+        //escape?.run(SKAction.repeatForever(actionList))
         buttonsNode?.run(SKAction.repeatForever(actionList))
         createNewStartPoint()
     }
@@ -60,10 +62,16 @@ class MenuScene: SKScene {
         buttonsNode!.addChild(settingsButton!)
         //buttonsNode!.addChild(aboutButton!)
         
-        darkMaze = SKLabelNode(text: "Dark Maze")
+        darkMaze = SKLabelNode(text: "Darkk Maze")
         darkMaze!.position = CGPoint(x: 0, y: screenHeight*0.65)
         darkMaze!.fontName = GameStyle.shared.mainFontString
         darkMaze!.fontSize = screenWidth*0.15
+        
+//        escape = SKLabelNode(text: "Escape")
+//        escape!.position = CGPoint(x: 0, y: screenHeight*0.58)
+//        escape!.fontName = GameStyle.shared.mainFontString
+//        escape!.fontSize = screenWidth*0.14
+//        buttonsNode?.addChild(escape!)
         
         buttonsNode?.addChild(darkMaze!)
         self.addChild(buttonsNode!)
@@ -153,13 +161,11 @@ class MenuScene: SKScene {
         }
     }
     func createNewStartPoint(){
-        print ("create new Start point is being called")
         let newX = arc4random_uniform(UInt32(self.frame.width))
         let newY = arc4random_uniform(UInt32(self.frame.height))
         let startingPoint = CGPoint(x: CGFloat(newX), y: CGFloat(newY))
         currentTile = GridTile(coord: (0,0), width: blocksize, height: blocksize)
         let point = calcMidPointOf(a: buttonsNode?.position ?? CGPoint.zero, b: CGPoint(x: frame.midX, y: 0))
-        print("midpoint is \(point)")
         currentTile?.position = startingPoint
         currentTile?.position = point
         blockPoints.append(point)

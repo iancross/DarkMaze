@@ -196,7 +196,6 @@ class SettingsScene: SKScene, Alertable {
                 SKAction.scaleX(to: 1, duration: 0.15)
                 ]))
             {
-                print("flipped")
             }
         }
     }

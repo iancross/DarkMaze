@@ -23,8 +23,6 @@
 		C352CF39207570C300FCD5D0 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C352CF38207570C300FCD5D0 /* CustomTableViewCell.swift */; };
 		C360D94B20E5AAEA00580E80 /* DarkMaze.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C360D94920E5AAEA00580E80 /* DarkMaze.xcdatamodeld */; };
 		C364CEC01FE74F98009140C7 /* Level1Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C364CEBF1FE74F98009140C7 /* Level1Scene.swift */; };
-		C365F40420F4471B003AB2D3 /* ccw_boots.atlas in Resources */ = {isa = PBXBuildFile; fileRef = C365F40320F4471B003AB2D3 /* ccw_boots.atlas */; };
-		C36FA27C2224B6A100724AB3 /* background.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36FA27B2224B6A100724AB3 /* background.mp3 */; };
 		C36FA27E2224E7AE00724AB3 /* AudioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36FA27D2224E7AE00724AB3 /* AudioController.swift */; };
 		C374709E2248053100717C80 /* DarkMazeIcon1024x1024.png in Resources */ = {isa = PBXBuildFile; fileRef = C374709D2248053000717C80 /* DarkMazeIcon1024x1024.png */; };
 		C37470A0224B162E00717C80 /* successChoir.wav in Resources */ = {isa = PBXBuildFile; fileRef = C374709F224B162D00717C80 /* successChoir.wav */; };
@@ -59,7 +57,6 @@
 		C3EF4A211FD7749000528247 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C3EF4A201FD7749000528247 /* Assets.xcassets */; };
 		C3EF4A241FD7749000528247 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3EF4A221FD7749000528247 /* LaunchScreen.storyboard */; };
 		C3EF9F6F21FE5573002635D3 /* SettingsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3EF9F6E21FE5572002635D3 /* SettingsScene.swift */; };
-		C3EF9F71220670AF002635D3 /* home-5-xxl.png in Resources */ = {isa = PBXBuildFile; fileRef = C3EF9F70220670AF002635D3 /* home-5-xxl.png */; };
 		C3EF9F7322073D20002635D3 /* backButton.png in Resources */ = {isa = PBXBuildFile; fileRef = C3EF9F7222073D20002635D3 /* backButton.png */; };
 		C3FD8ACB20141ADF006ED708 /* TextBoxButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3FD8ACA20141ADF006ED708 /* TextBoxButton.swift */; };
 /* End PBXBuildFile section */
@@ -91,8 +88,6 @@
 		C352CF38207570C300FCD5D0 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 		C360D94A20E5AAEA00580E80 /* DarkMaze.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DarkMaze.xcdatamodel; sourceTree = "<group>"; };
 		C364CEBF1FE74F98009140C7 /* Level1Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level1Scene.swift; sourceTree = "<group>"; };
-		C365F40320F4471B003AB2D3 /* ccw_boots.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = ccw_boots.atlas; path = ../../../../Photoshop/ccw_boots.atlas; sourceTree = "<group>"; };
-		C36FA27B2224B6A100724AB3 /* background.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = background.mp3; sourceTree = "<group>"; };
 		C36FA27D2224E7AE00724AB3 /* AudioController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioController.swift; sourceTree = "<group>"; };
 		C374709D2248053000717C80 /* DarkMazeIcon1024x1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DarkMazeIcon1024x1024.png; sourceTree = "<group>"; };
 		C374709F224B162D00717C80 /* successChoir.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = successChoir.wav; sourceTree = "<group>"; };
@@ -118,7 +113,6 @@
 		C3B46D89207840D400C1EAC6 /* CellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellDelegate.swift; sourceTree = "<group>"; };
 		C3B46D8B2078FB2500C1EAC6 /* SKTextureGradient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKTextureGradient.swift; sourceTree = "<group>"; };
 		C3BA45C42069A69500D72A3F /* cracking.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = cracking.atlas; sourceTree = "<group>"; };
-		C3CF36C9222B6A71009A03BF /* levelOpenClose.ogg */ = {isa = PBXFileReference; lastKnownFileType = file; path = levelOpenClose.ogg; sourceTree = "<group>"; };
 		C3CF36CA222B6CAD009A03BF /* caveAmbience.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = caveAmbience.mp3; sourceTree = "<group>"; };
 		C3CF36CC222B7021009A03BF /* levelOpenClose.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = levelOpenClose.wav; sourceTree = "<group>"; };
 		C3CF36CE222CBF2A009A03BF /* buttonClick.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = buttonClick.wav; sourceTree = "<group>"; };
@@ -134,7 +128,6 @@
 		C3EF4A2B1FD7770600528247 /* MYBLS___.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MYBLS___.TTF"; sourceTree = "<group>"; };
 		C3EF4A2C1FD7771100528247 /* MYSCARS_.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = MYSCARS_.TTF; sourceTree = "<group>"; };
 		C3EF9F6E21FE5572002635D3 /* SettingsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScene.swift; sourceTree = "<group>"; };
-		C3EF9F70220670AF002635D3 /* home-5-xxl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home-5-xxl.png"; sourceTree = "<group>"; };
 		C3EF9F7222073D20002635D3 /* backButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backButton.png; sourceTree = "<group>"; };
 		C3FD8ACA20141ADF006ED708 /* TextBoxButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextBoxButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -226,10 +219,8 @@
 				C374709F224B162D00717C80 /* successChoir.wav */,
 				C3976A7522408128008E7BF5 /* crackingSound.wav */,
 				C3976A602240630B008E7BF5 /* footstepSounds */,
-				C3CF36C9222B6A71009A03BF /* levelOpenClose.ogg */,
 				C3CF36CC222B7021009A03BF /* levelOpenClose.wav */,
 				C3CF36CA222B6CAD009A03BF /* caveAmbience.mp3 */,
-				C36FA27B2224B6A100724AB3 /* background.mp3 */,
 				C3CF36CE222CBF2A009A03BF /* buttonClick.wav */,
 			);
 			path = Sounds;
@@ -239,8 +230,6 @@
 			isa = PBXGroup;
 			children = (
 				C3EF9F7222073D20002635D3 /* backButton.png */,
-				C3EF9F70220670AF002635D3 /* home-5-xxl.png */,
-				C365F40320F4471B003AB2D3 /* ccw_boots.atlas */,
 				C3BA45C42069A69500D72A3F /* cracking.atlas */,
 				C38464C12055EC4700239EE0 /* nextArrow.png */,
 				C37E691620A296860067B47C /* ChainSprite1000.png */,
@@ -441,15 +430,12 @@
 			files = (
 				C3CF36CF222CBF2A009A03BF /* buttonClick.wav in Resources */,
 				C3189DFD1FD77988000A52A6 /* MYBLS___.TTF in Resources */,
-				C3EF9F71220670AF002635D3 /* home-5-xxl.png in Resources */,
 				C37470A4224B1ADA00717C80 /* combinedChoir.wav in Resources */,
 				C32CB86120BE10CB008BD6C4 /* unlock_sprite200x200.png in Resources */,
-				C36FA27C2224B6A100724AB3 /* background.mp3 in Resources */,
 				C37E691720A296860067B47C /* ChainSprite1000.png in Resources */,
 				C3976A7222406337008E7BF5 /* 3.wav in Resources */,
 				C3976A6B22406337008E7BF5 /* 9.wav in Resources */,
 				C3976A7622408128008E7BF5 /* crackingSound.wav in Resources */,
-				C365F40420F4471B003AB2D3 /* ccw_boots.atlas in Resources */,
 				C37E691920A5F5D70067B47C /* lock_sprite200x200.png in Resources */,
 				C3BA45C52069A69500D72A3F /* cracking.atlas in Resources */,
 				C3EF9F7322073D20002635D3 /* backButton.png in Resources */,
@@ -702,6 +688,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/DarkMaze/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = ca;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				"OTHER_SWIFT_FLAGS[sdk=iphonesimulator*]" = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.crossibc.Dark-Maze";
@@ -724,6 +711,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/DarkMaze/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = ca;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.crossibc.Dark-Maze";
 				PRODUCT_NAME = "$(TARGET_NAME)";

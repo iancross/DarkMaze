@@ -36,7 +36,6 @@ class AudioController{
     }
     
     public func reInitPlayersAndSounds(){
-        print("in reInitPlayersAndSounds")
         playBackgroundMusic()
         gameSoundsEnabled = isSettingEnabled(settingName: "gameSounds")
     }
@@ -151,20 +150,17 @@ class AudioController{
                 player.play()
             }
             else{
-                print (backgroundAudioPlayer?.isPlaying)
                 player.stop()
             }
         }
         else{
             setupAudioPlayers()
-            print ("this should only be called once gaaaaaaaaa ---------------------------------------------------------------------------------------------------")
         }
     }
 
     
     public func initAudioSettings(){
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            print("something bad app delegate ------------------------------------")
             return
         }
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -175,6 +171,7 @@ class AudioController{
         settings.showAlertWhenGoingBack = true
         settings.askedForFeedback1 = false
         settings.askedForFeedback2 = false
+        settings.finaleWarningComplete = false
         do {
             try managedContext.save()
         } catch let error as NSError {

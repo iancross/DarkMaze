@@ -21,7 +21,8 @@ import GoogleMobileAds
         
         // Initialize the Google Mobile Ads SDK.
         // Sample AdMob app ID: ca-app-pub-3940256099942544~1458002511
-        GADMobileAds.configure(withApplicationID: "ca-app-pub-3940256099942544/2934735716")
+        GADMobileAds.sharedInstance()
+        GADMobileAds.configure(withApplicationID: "ca-app-pub-1344161040949299~2758991797")
         return true
     }
 

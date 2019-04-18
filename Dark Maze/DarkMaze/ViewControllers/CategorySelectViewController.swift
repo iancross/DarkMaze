@@ -76,7 +76,6 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
 //            }
 //        }
 //        return 0
-        print ("selected level page is \(LevelsData.shared.selectedLevel.page - 1)")
         if LevelsData.shared.selectedLevel.page > 0{
             
             return LevelsData.shared.selectedLevel.page - 1
@@ -181,7 +180,6 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             }
             
             selectedRowIndex = indexPath
-            print ("index Path is \(indexPath)")
             tableView.beginUpdates()
             tableView.endUpdates()
             
@@ -228,7 +226,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
         view.addSubview(bannerView)
         bannerView.rootViewController = self
         bannerView.backgroundColor = .black
-        bannerView.adUnitID = GameStyle.shared.adMobTestToken
+        bannerView.adUnitID = GameStyle.shared.adMobLevelSelectToken
 //        bannerView.translatesAutoresizingMaskIntoConstraints = false
 //        let horizontalConstraint = bannerView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
 //        let verticalConstraint = bannerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
@@ -265,7 +263,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
                                               multiplier: 1,
                                               constant: bannerView.frame.height))
         let request = GADRequest()
-        request.testDevices = [kGADSimulatorID]
+        //request.testDevices = [kGADSimulatorID]
         bannerView.load(request)
     }
 }
