@@ -14,7 +14,7 @@ import CoreData
 //gridsize - self explanatory
 //delayTime - time between tiles showing up (0 means they all show up at the same time)
 //levelCompleted: shows us what to color the level in level select
-let REQUIRED_TO_UNLOCK = 8
+let REQUIRED_TO_UNLOCK = 1
 
 struct LevelData {
     var gridX: Int
@@ -52,9 +52,9 @@ class LevelsData{
         Intro()
         Normal()
         Jump()
-        ThisLooksFamiliar() //go back over itself
+        LooksFamiliar() //go back over itself
         Spin()
-        MeetInTheMiddle()
+        OutsideIn()
         MultiJump()
         WhereToEnd()
         Jumbled()
@@ -199,7 +199,7 @@ class LevelsData{
                  NSPredicate(format: "completed == \(true)")])
             do {
                 let levelsCount = try (managedContext.fetch(fetchRequest) as [NSManagedObject]).count
-                return levelsCount >= levelGroups[page-1].levels.count//REQUIRED_TO_UNLOCK
+                return levelsCount >= REQUIRED_TO_UNLOCK || levelsCount == levelGroups[page-1].levels.count
             } catch let error as NSError {
                 print("Could not fetch. \(error), \(error.userInfo)")
             }
@@ -285,8 +285,14 @@ class LevelsData{
         return levelGroups[page].levels.count
     }
     func getPageCategory(page: Int) -> String{
-        return levelGroups[page].category
+        if page < levelGroups.count{
+            return levelGroups[page].category
+        }
+        else{
+            return " "
+        }
     }
+
     func levelCompleted(success: Bool){
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
@@ -310,9 +316,9 @@ class LevelsData{
                         }
                         
                         print ("\(selectedLevel.level) ==?? \(levelGroups[selectedLevel.page].levels.count - 1)")
-                        if selectedLevel.level >= levelGroups[selectedLevel.page].levels.count - 1
+                        if (selectedLevel.level == REQUIRED_TO_UNLOCK - 1 || selectedLevel.level == levelGroups[selectedLevel.page].levels.count - 1)
                             && selectedLevel.page < levelGroups.count{
-                        
+                            print ("about to unlock page")
                             unlock(page: selectedLevel.page + 1)
                         }
                     }
@@ -716,7 +722,7 @@ class LevelsData{
     }
     
     //might need to review these again
-    private func ThisLooksFamiliar(){
+    private func LooksFamiliar(){
         let array = [
             LevelData(
                 gridX: 4, gridY: 4, delayTime: 0.45,
@@ -766,7 +772,7 @@ class LevelsData{
                 [(4,0),(3,0),(2,0),(2,1),(3,1),(3,2),(4,2),(4,3),(4,4),(0,6),(0,5),(0,4),(1,4),(2,4),(3,4),(3,3),(4,3)],
                 modifications: [(.thisLooksFamiliar, nil)]
             )]
-        levelGroups.append ((category: "This Looks Familiar", array))
+        levelGroups.append ((category: "Looks Familiar", array))
     }
     
     
@@ -825,7 +831,7 @@ class LevelsData{
         levelGroups.append ((category: "Spin", array))
     }
 
-    private func MeetInTheMiddle(){
+    private func OutsideIn(){
         let array = [
             LevelData(
                 gridX: 4, gridY: 4, delayTime: 0.8,
@@ -875,7 +881,7 @@ class LevelsData{
                 [(0,0),(0,1),(1,1),(2,1),(2,2),(2,3),(2,4),(0,6),(1,6),(1,5),(1,4),(1,3),(2,3),(3,3)],
                 modifications: [(.meetInTheMiddle, nil)]
             )]
-        levelGroups.append ((category: "Meet In The Middle", array))
+        levelGroups.append ((category: "Outside In", array))
     }
     
     func MultiJump(){

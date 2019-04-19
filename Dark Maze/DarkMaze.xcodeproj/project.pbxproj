@@ -688,7 +688,6 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/DarkMaze/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = ca;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				"OTHER_SWIFT_FLAGS[sdk=iphonesimulator*]" = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.crossibc.Dark-Maze";
@@ -711,7 +710,6 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/DarkMaze/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = ca;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.crossibc.Dark-Maze";
 				PRODUCT_NAME = "$(TARGET_NAME)";

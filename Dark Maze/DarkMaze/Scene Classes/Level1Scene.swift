@@ -1105,7 +1105,7 @@ class Level1Scene: SKScene {
     // show the end game failure (failure = true)
     func endGame (success: Bool){
         let nextLevelUnlockedBefore = LevelsData.shared.isPageUnlocked(page: LevelsData.shared.selectedLevel.page + 1)
-        
+        let levelCompletedBefore = LevelsData.shared.nextLevelToCompleteOnPage(page: LevelsData.shared.selectedLevel.page) == LevelsData.shared.selectedLevel //need to modify nextLevelToCom to return nil if all levels are completed
         
         LevelsData.shared.levelCompleted(success: success)
         
@@ -1136,7 +1136,7 @@ class Level1Scene: SKScene {
                     buttonText = "Continue"
                 }
                 else{
-                    LevelsData.shared.levelCompleted(success: true)
+                    LevelsData.shared.levelCompleted(success: false)
                     nextPageUnlocked = true
                     text = "You're obviously not prepared yet. Remember to use the arrows to guide you. Let's try again..."
                     buttonText = "Try Again"

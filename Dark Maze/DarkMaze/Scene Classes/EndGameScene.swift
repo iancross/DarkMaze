@@ -18,6 +18,7 @@ class EndGameScene: SKScene {
     let buttonsNode = SKNode()
     var successMessageNode = SKLabelNode()
     var displayUnlockLevelBonus: Bool?
+    var allLevelsComplete: Bool?
 
     
     //first open the option modal
@@ -25,6 +26,7 @@ class EndGameScene: SKScene {
     //Main menu, level select, or next level?
     
     init(size: CGSize, unlockedLevel: Bool) {
+        allLevelsComplete = 
         displayUnlockLevelBonus = unlockedLevel
         super.init(size: size)
         backgroundColor = UIColor.black
@@ -127,8 +129,10 @@ class EndGameScene: SKScene {
     }
     
     func levelUnlockedBonus() -> SKNode{
+        let nextLevelName = LevelsData.shared.getPageCategory(page: LevelsData.shared.selectedLevel.page + 1)
+
         let bonusesNode = SKNode()
-        let unlockedLabel1 = Helper.createGenericLabel("Next Level", fontsize: screenWidth*0.1)
+        let unlockedLabel1 = Helper.createGenericLabel("'" + nextLevelName + "'", fontsize: screenWidth*0.086)
         unlockedLabel1.verticalAlignmentMode = .baseline
         unlockedLabel1.position.y = 5
         let unlockedLabel2 = Helper.createGenericLabel("Unlocked", fontsize: screenWidth*0.086)
@@ -137,7 +141,10 @@ class EndGameScene: SKScene {
         bonusesNode.addChild(unlockedLabel2)
         let unlockSprite = SKSpriteNode(imageNamed: "unlock_sprite200x200")
         unlockSprite.setScale(screenHeight / 1334 * 0.4)
-        unlockSprite.position = CGPoint(x: unlockedLabel1.frame.width/2 + screenWidth*0.01 + unlockSprite.frame.width/2, y: 5)
+        unlockSprite.position = CGPoint(
+            x: CGFloat.maximum(unlockedLabel1.frame.width, unlockedLabel2.frame.width)/2
+                + screenWidth*0.01 + unlockSprite.frame.width/2,
+            y: 5)
         let unlockSprite2 = unlockSprite.copy() as! SKSpriteNode
         unlockSprite2.position.x = -unlockSprite2.position.x - screenWidth*0.01
         
@@ -145,15 +152,22 @@ class EndGameScene: SKScene {
         bonusesNode.addChild(unlockSprite2)
         
         //the final position
-        bonusesNode.position = CGPoint(x: frame.midX, y: frame.height*6/8)
+        bonusesNode.position = CGPoint(x: frame.midX, y: frame.height*13/16)
         return bonusesNode
     }
+    
+    
     func addButtons(text: String){
         let font = screenWidth*0.09
-        
-        if (displayUnlockLevelBonus ?? false){
+        if (allLevelsComplete ?? false){
+            
+        }
+        else if (displayUnlockLevelBonus ?? false){
+//            repeatOrNextButton = TextBoxButton(x: 0, y: frame.height/8, text: text, fontsize:font, buffers: buffers)
+//            repeatOrNextButton?.name = "repeat"
             levelSelectButton = TextBoxButton(x: 0, y: frame.height/8, text: "Level Select", fontsize:font, buffers: buffers)
             mainMenuButton = TextBoxButton(x: 0, y: 0, text: "Main Menu", fontsize:font, buffers: buffers)
+//            buttonsNode.addChild(repeatOrNextButton!)
             buttonsNode.addChild(mainMenuButton!)
             buttonsNode.addChild(levelSelectButton!)
         }
