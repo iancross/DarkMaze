@@ -53,6 +53,7 @@ class Level1Scene: SKScene {
     var pathLines: [SKShapeNode] = []
     var gridSpinning = false
     var nextPageUnlocked = false
+    var pageCompleted = false
     var endArrowCoords: [(Int,Int)]?
     var distractionsEnabled = false
     var previousDistractionTile: GridTile?
@@ -569,9 +570,6 @@ class Level1Scene: SKScene {
         let controlPointPairs = getBezierControlPoints(a: tile1.position, b: tile2.position)
         runBezierMovement(tile1: tile1, tile2: tile2, controlPointPair: controlPointPairs[0], endPosition: tile2OriginalPosition, lastSwappedPair: false)
         runBezierMovement(tile1: tile2, tile2: tile1, controlPointPair: controlPointPairs[1], endPosition: tile1OriginalPosition, lastSwappedPair: lastPair)
-        
-        //now swap gridCoords
-        let original = tile1.gridCoord
     }
     
     private func runBezierMovement(tile1: GridTile, tile2: GridTile, controlPointPair: [CGPoint], endPosition: CGPoint, lastSwappedPair: Bool){
@@ -626,8 +624,6 @@ class Level1Scene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         //can we handle just first touch here?
         for t in touches {
-            let positionInScene = t.location(in: self)
-            let touchedNode = self.atPoint(positionInScene)
             if gameActive {
                 handleTouch(t.location(in: gridNode))
                 break //not sure if i need this
@@ -957,8 +953,6 @@ class Level1Scene: SKScene {
             plus2.lineWidth = 0
             t.addChild(plus2)
             plus2.position = .zero
-        default:
-            print("default")
         }
     }
     
@@ -1104,9 +1098,16 @@ class Level1Scene: SKScene {
     // failure) show the end game success (failure = false). Otherwise,
     // show the end game failure (failure = true)
     func endGame (success: Bool){
-        let nextLevelUnlockedBefore = LevelsData.shared.isPageUnlocked(page: LevelsData.shared.selectedLevel.page + 1)
-        let levelCompletedBefore = LevelsData.shared.nextLevelToCompleteOnPage(page: LevelsData.shared.selectedLevel.page) == LevelsData.shared.selectedLevel //need to modify nextLevelToCom to return nil if all levels are completed
+        let currPage = LevelsData.shared.selectedLevel.page
+        let nextLevelUnlockedBefore = LevelsData.shared.isPageUnlocked(page: currPage + 1)
         
+        if let nextLeveToCompleteOnPage = LevelsData.shared.nextLevelToCompleteOnPage(page: currPage){
+            print ("next level to complete on page is \(nextLeveToCompleteOnPage) and count is \(LevelsData.shared.levelGroups[currPage].levels.count)")
+            if success && nextLeveToCompleteOnPage == LevelsData.shared.levelGroups[currPage].levels.count-1{
+                print("HEREEREREREREREER")
+                pageCompleted = true
+            }
+        }
         LevelsData.shared.levelCompleted(success: success)
         
         let nextLevelUnlockedAfter = LevelsData.shared.isPageUnlocked(page: LevelsData.shared.selectedLevel.page + 1)
@@ -1195,7 +1196,7 @@ class Level1Scene: SKScene {
     }
     
     private func switchToEndGameScene(){
-        (self.delegate as? GameDelegate)?.gameOver(unlockedLevel: nextPageUnlocked)
+        (self.delegate as? GameDelegate)?.gameOver(unlockedLevel: nextPageUnlocked, pageCompleted: pageCompleted)
     }
     
     

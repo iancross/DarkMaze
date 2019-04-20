@@ -16,7 +16,7 @@ import SpriteKit
 import Foundation
 
 protocol GameDelegate: SKSceneDelegate {
-    func gameOver(unlockedLevel: Bool)
+    func gameOver(unlockedLevel: Bool, pageCompleted: Bool)
     func levelSelect()
     func playGame()
     func mainMenu()

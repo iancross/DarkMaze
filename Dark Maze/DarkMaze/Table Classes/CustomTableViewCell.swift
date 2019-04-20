@@ -161,7 +161,7 @@ class CustomTableViewCell: UITableViewCell {
                     box.isAccessibilityElement = true
                     box.updateText(String(levelNumber + 1))
 
-                    if levelNumber < nextLevelToComplete{
+                    if levelNumber < nextLevelToComplete ?? 100{
                         box.markAsCompletedLevel()
                         if LevelsData.shared.firstAttemptSuccess(forLevel: (indexPath.row, levelNumber)){
                             let star = SKLabelNode(fontNamed: GameStyle.shared.mainFontString)
@@ -174,7 +174,7 @@ class CustomTableViewCell: UITableViewCell {
                             star.position = CGPoint(x: -box.outline.frame.width/2.0+3.0, y: box.outline.frame.width/2.0-3.0)
                         }
                     }
-                    else if levelNumber > nextLevelToComplete{
+                    else if levelNumber > nextLevelToComplete ?? 0{
                         box.setAlpha(0.3)
                     }
                     levels.append(box)
@@ -209,14 +209,14 @@ class CustomTableViewCell: UITableViewCell {
         let nextLevelToComplete = LevelsData.shared.nextLevelToCompleteOnPage(page: indexPath.row)
         for button in levels{
             if button.within(point: point){
-                if Int(button.text)!-1 > nextLevelToComplete{
+                if Int(button.text)!-1 > nextLevelToComplete ?? 100{
                     let sequence = [SKAction.rotate(byAngle: 0.1, duration: 0.1),
                                     SKAction.rotate(byAngle: -0.2, duration: 0.1),
                                     SKAction.rotate(byAngle: 0.1, duration: 0.1)]
                     button.outline.run(SKAction.sequence(sequence))
                     return
                 }
-                else if Int(button.text)!-1 <= nextLevelToComplete{
+                else if Int(button.text)!-1 <= nextLevelToComplete ?? 100{
                     let playClick = SKAction.run {
                         AudioController.shared.playButtonClick()
                     }

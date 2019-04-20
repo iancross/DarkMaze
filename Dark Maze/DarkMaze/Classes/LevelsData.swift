@@ -68,7 +68,7 @@ class LevelsData{
         initCoreData()
         let p = mostRecentlyUnlockedPage()
         let l = nextLevelToCompleteOnPage(page: p)
-        selectedLevel = (page: p, level: l)
+        selectedLevel = (page: p, level: l ?? 0)
     }
     
     
@@ -226,9 +226,9 @@ class LevelsData{
     
     //returns the next level to complete within a page
     //Updated
-    func nextLevelToCompleteOnPage(page: Int) -> Int{
+    func nextLevelToCompleteOnPage(page: Int) -> Int?{
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            return 0
+            return nil
         }
         let managedContext = appDelegate.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Level")
@@ -242,13 +242,13 @@ class LevelsData{
                     }
                 }
                 //if all levels are completed
-                return levels.count
+                return nil
             }
             
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
-        return 0
+        return nil
     }
     
     func mostRecentlyUnlockedPage() -> Int{
@@ -625,42 +625,42 @@ class LevelsData{
                 [(0,3),(1,3),(1,2),(1,1),(2,1),(2,0)],
                  modifications: nil
             ),
-            LevelData(
-                gridX: 4, gridY: 4, delayTime: 0.45,
-                solutionCoords:
-                [(3,3),(3,2),(3,1),(2,1),(1,1),(0,1),(0,0)],
-                 modifications: nil
-            ),
-            LevelData(
-                gridX: 4, gridY: 5, delayTime: 0.45,
-                solutionCoords:
-                [(0,2),(0,1),(1,1),(1,2),(2,2),(2,3),(2,4),(3,4)],
-                 modifications: nil
-            ),
-            LevelData(
-                gridX: 5, gridY: 5, delayTime: 0.45,
-                solutionCoords:
-                [(4,0),(4,1),(4,2),(4,3),(3,3),(3,2),(2,2),(2,1),(1,1),(0,1)],
-                 modifications: nil
-            ),
-            LevelData(
-                gridX: 5, gridY: 5, delayTime: 0.45,
-                solutionCoords:
-                [(2,4),(2,3),(3,3),(3,2),(3,1),(3,0),(2,0),(1,0),(1,1),(1,2),(0,2)],
-                 modifications: nil
-            ),
-            LevelData(
-                gridX: 5, gridY: 6, delayTime: 0.45,
-                solutionCoords:
-                [(1,5),(1,4),(0,4),(0,3),(1,3),(2,3),(3,3),(4,3),(4,2),(3,2),(2,2),(2,1),(2,0)],
-                 modifications: nil
-            ),
-            LevelData(
-                gridX: 5, gridY: 6, delayTime: 0.45,
-                solutionCoords:
-                [(0,0),(0,1),(0,2),(0,3),(0,4),(0,5),(1,5),(2,5),(3,5),(4,5),(4,4),(4,3),(3,3),(2,3),(2,2),(2,1),(2,0),(3,0),(4,0),(4,1)],
-                 modifications: nil
-            )
+//            LevelData(
+//                gridX: 4, gridY: 4, delayTime: 0.45,
+//                solutionCoords:
+//                [(3,3),(3,2),(3,1),(2,1),(1,1),(0,1),(0,0)],
+//                 modifications: nil
+//            ),
+//            LevelData(
+//                gridX: 4, gridY: 5, delayTime: 0.45,
+//                solutionCoords:
+//                [(0,2),(0,1),(1,1),(1,2),(2,2),(2,3),(2,4),(3,4)],
+//                 modifications: nil
+//            ),
+//            LevelData(
+//                gridX: 5, gridY: 5, delayTime: 0.45,
+//                solutionCoords:
+//                [(4,0),(4,1),(4,2),(4,3),(3,3),(3,2),(2,2),(2,1),(1,1),(0,1)],
+//                 modifications: nil
+//            ),
+//            LevelData(
+//                gridX: 5, gridY: 5, delayTime: 0.45,
+//                solutionCoords:
+//                [(2,4),(2,3),(3,3),(3,2),(3,1),(3,0),(2,0),(1,0),(1,1),(1,2),(0,2)],
+//                 modifications: nil
+//            ),
+//            LevelData(
+//                gridX: 5, gridY: 6, delayTime: 0.45,
+//                solutionCoords:
+//                [(1,5),(1,4),(0,4),(0,3),(1,3),(2,3),(3,3),(4,3),(4,2),(3,2),(2,2),(2,1),(2,0)],
+//                 modifications: nil
+//            ),
+//            LevelData(
+//                gridX: 5, gridY: 6, delayTime: 0.45,
+//                solutionCoords:
+//                [(0,0),(0,1),(0,2),(0,3),(0,4),(0,5),(1,5),(2,5),(3,5),(4,5),(4,4),(4,3),(3,3),(2,3),(2,2),(2,1),(2,0),(3,0),(4,0),(4,1)],
+//                 modifications: nil
+//            )
         ]
         levelGroups.append ((category: "Normal", array))
         

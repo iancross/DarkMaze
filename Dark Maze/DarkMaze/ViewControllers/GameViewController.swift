@@ -66,8 +66,8 @@ class GameViewController: UIViewController, GameDelegate, GADBannerViewDelegate 
     }
     
     //GameDelegate requirements
-    func gameOver(unlockedLevel: Bool) {
-        switchScene(scene: EndGameScene (size: GameStyle.shared.sceneSizeWithAd, unlockedLevel: unlockedLevel))
+    func gameOver(unlockedLevel: Bool, pageCompleted: Bool) {
+        switchScene(scene: EndGameScene (size: GameStyle.shared.sceneSizeWithAd, unlockedLevel: unlockedLevel, pageCompleted: pageCompleted))
         addBannerViewToView()
     }
     

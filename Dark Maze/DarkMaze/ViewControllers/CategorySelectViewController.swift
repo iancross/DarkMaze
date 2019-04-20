@@ -118,7 +118,7 @@ class CategorySelectViewController: UIViewController, UITableViewDataSource, UIT
             let progress = LevelsData.shared.nextLevelToCompleteOnPage(page: indexPath.row)
             let outOfTotal = LevelsData.shared.getNumLevelsOnPage(page: indexPath.row)
             
-            cell.initCellData(category: cellCategory, progress: progress, outOfTotal: outOfTotal, path: indexPath, origHeight: defaultHeight)
+            cell.initCellData(category: cellCategory, progress: progress ?? outOfTotal, outOfTotal: outOfTotal, path: indexPath, origHeight: defaultHeight)
             if isPathUnlocked(path: indexPath){
 //                if LevelsData.shared.selectedLevel.page == indexPath.row && !tableDidLoad{
 //                    cell.initExpandedView()

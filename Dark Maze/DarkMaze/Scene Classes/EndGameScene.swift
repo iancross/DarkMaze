@@ -25,9 +25,10 @@ class EndGameScene: SKScene {
     //then direct the user based on selection
     //Main menu, level select, or next level?
     
-    init(size: CGSize, unlockedLevel: Bool) {
-        allLevelsComplete = 
+    init(size: CGSize, unlockedLevel: Bool, pageCompleted: Bool) {
         displayUnlockLevelBonus = unlockedLevel
+        allLevelsComplete = pageCompleted
+        print ("page completed is \(allLevelsComplete)")
         super.init(size: size)
         backgroundColor = UIColor.black
         anchorPoint = CGPoint(x: 0, y:0)
@@ -80,9 +81,7 @@ class EndGameScene: SKScene {
                                               SKAction.fadeIn(withDuration: 0.7)])
             node.run(sequence)
         }
-        
-        let height = self.frame.height
-        
+                
         if let last = nodes.last{
             let y = (last.position.y - bannerHeight)/2 + bannerHeight
             buttonsNode.position = CGPoint(x: frame.midX, y: y)
@@ -104,6 +103,9 @@ class EndGameScene: SKScene {
             nodes.append(levelUnlockedBonus())
             LevelsData.shared.nextLevel()
         }
+        else if allLevelsComplete ?? false{
+            nodes.append(pageCompletedBonus())
+        }
         return nodes
     }
     
@@ -115,17 +117,50 @@ class EndGameScene: SKScene {
         firstTryNode.addChild(label1)
         
         let starLabel1 = SKLabelNode(text: "\u{2605}")
-        starLabel1.fontColor = YELLOW //UIColor.init(red: 0.8, green: 0.8, blue: 0.0, alpha: 1.0)
+        starLabel1.fontColor = .white //YELLOW //UIColor.init(red: 0.8, green: 0.8, blue: 0.0, alpha: 1.0)
         starLabel1.fontSize = screenWidth*0.1
         starLabel1.horizontalAlignmentMode = .center
         starLabel1.position = CGPoint(x: label1.frame.width/2 + screenWidth*0.01 + starLabel1.frame.width/2, y: 5)
         
         let starLabel2 = starLabel1.copy() as! SKLabelNode
-        starLabel2.position.x = -starLabel2.position.x - 10
+        starLabel2.position.x = -starLabel2.position.x
         
         firstTryNode.addChild(starLabel1)
         firstTryNode.addChild(starLabel2)
         return firstTryNode
+    }
+    
+    func pageCompletedBonus()-> SKNode{
+        let nextLevelName = LevelsData.shared.getPageCategory(page: LevelsData.shared.selectedLevel.page)
+        
+        let bonusesNode = SKNode()
+        let unlockedLabel1 = Helper.createGenericLabel("'" + nextLevelName + "'", fontsize: screenWidth*0.086)
+        unlockedLabel1.verticalAlignmentMode = .baseline
+        unlockedLabel1.position.y = 5
+        let unlockedLabel2 = Helper.createGenericLabel("Completed", fontsize: screenWidth*0.086)
+        unlockedLabel2.verticalAlignmentMode = .top
+        bonusesNode.addChild(unlockedLabel1)
+        bonusesNode.addChild(unlockedLabel2)
+        
+        let starLabel1 = SKLabelNode(text: "\u{2713}")
+        starLabel1.fontColor = .white //YELLOW //UIColor.init(red: 0.8, green: 0.8, blue: 0.0, alpha: 1.0)
+        starLabel1.fontSize = screenWidth*0.12
+        starLabel1.horizontalAlignmentMode = .center
+        starLabel1.verticalAlignmentMode = .center
+        starLabel1.position = CGPoint(
+            x: CGFloat.maximum(unlockedLabel1.frame.width, unlockedLabel2.frame.width)/2
+                + screenWidth*0.01 + starLabel1.frame.width/2,
+            y: 5)
+        
+        let starLabel2 = starLabel1.copy() as! SKLabelNode
+        //starLabel2.horizontalAlignmentMode = .left
+        starLabel2.position.x = -starLabel2.position.x
+        bonusesNode.addChild(starLabel1)
+        bonusesNode.addChild(starLabel2)
+        
+        //the final position
+        bonusesNode.position = CGPoint(x: frame.midX, y: frame.height*13/16)
+        return bonusesNode
     }
     
     func levelUnlockedBonus() -> SKNode{
@@ -159,10 +194,7 @@ class EndGameScene: SKScene {
     
     func addButtons(text: String){
         let font = screenWidth*0.09
-        if (allLevelsComplete ?? false){
-            
-        }
-        else if (displayUnlockLevelBonus ?? false){
+        if (allLevelsComplete ?? false || displayUnlockLevelBonus ?? false){
 //            repeatOrNextButton = TextBoxButton(x: 0, y: frame.height/8, text: text, fontsize:font, buffers: buffers)
 //            repeatOrNextButton?.name = "repeat"
             levelSelectButton = TextBoxButton(x: 0, y: frame.height/8, text: "Level Select", fontsize:font, buffers: buffers)
