@@ -460,7 +460,7 @@ class Level1Scene: SKScene {
             }
         }
 //        if testing{
-//            testingFlipAllTiles ()
+//          testingFlipAllTiles ()
 //        }
     }
     
@@ -756,11 +756,11 @@ class Level1Scene: SKScene {
                     startArrow.removeAllActions()
 
                     //testing
-                    if testing{
-                        print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
-                        tile.tile.fillColor = UIColor.green
-                        return //comment out to get grid coords for levels
-                    }
+//                    if testing{
+//                        print ("(\(tile.gridCoord.x),\(tile.gridCoord.y)),",terminator:"")
+//                        tile.tile.fillColor = UIColor.green
+//                        return //comment out to get grid coords for levels
+//                    }
 
                     lastTouchedTile = tile
                     touchTile(tile: lastTouchedTile!, alpha: blockAlphaMin + CGFloat(touchedTiles + 1) * blockAlphaIncrement)
@@ -1074,7 +1074,7 @@ class Level1Scene: SKScene {
             text = "After a short countdown, you'll be shown how to escape the maze. Pay attention, you'll need to do it in the dark..."
         }
         else if currentLevel == 1{
-            text = "Let's try another simple maze.                                                     Hint: tap on the screen or on the 'skip' button to skip an animation/transition."
+            text = "Let's try another...                                                     Hint: tap on a square or drag your finger to navigate the maze"
         }
         tutorial(text: text, buttonText: "Continue")
         continueButtonFunction = countdown
@@ -1104,7 +1104,6 @@ class Level1Scene: SKScene {
         if let nextLeveToCompleteOnPage = LevelsData.shared.nextLevelToCompleteOnPage(page: currPage){
             print ("next level to complete on page is \(nextLeveToCompleteOnPage) and count is \(LevelsData.shared.levelGroups[currPage].levels.count)")
             if success && nextLeveToCompleteOnPage == LevelsData.shared.levelGroups[currPage].levels.count-1{
-                print("HEREEREREREREREER")
                 pageCompleted = true
             }
         }
@@ -1120,7 +1119,7 @@ class Level1Scene: SKScene {
         if LevelsData.shared.getPageCategory(page: currentPage) == "Intro"{
             if currentLevel == 0{
                 if success {
-                    text = "You've managed to pass this maze, but be warned. The light revealing the path may play tricks on you later..."
+                    text = "You've managed to pass this maze, but not all will be so simple..."
                     buttonText = "Next Level"
                     LevelsData.shared.nextLevel()
                 }
@@ -1139,7 +1138,7 @@ class Level1Scene: SKScene {
                 else{
                     LevelsData.shared.levelCompleted(success: false)
                     nextPageUnlocked = true
-                    text = "You're obviously not prepared yet. Remember to use the arrows to guide you. Let's try again..."
+                    text = "You're obviously not prepared yet. Remember to use the arrows to guide you..."
                     buttonText = "Try Again"
                 }
             }

@@ -17,6 +17,7 @@ import GoogleMobileAds
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        UIApplication.shared.isStatusBarHidden = true
         // Override point for customization after application launch.
         
         // Initialize the Google Mobile Ads SDK.

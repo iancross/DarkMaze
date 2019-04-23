@@ -103,7 +103,7 @@ class EndGameScene: SKScene {
             nodes.append(levelUnlockedBonus())
             LevelsData.shared.nextLevel()
         }
-        else if allLevelsComplete ?? false{
+        else if allLevelsComplete ?? false && LevelsData.shared.selectedLevel.page < LevelsData.shared.levelGroups.count - 1{
             nodes.append(pageCompletedBonus())
         }
         return nodes
@@ -117,7 +117,7 @@ class EndGameScene: SKScene {
         firstTryNode.addChild(label1)
         
         let starLabel1 = SKLabelNode(text: "\u{2605}")
-        starLabel1.fontColor = .white //YELLOW //UIColor.init(red: 0.8, green: 0.8, blue: 0.0, alpha: 1.0)
+        starLabel1.fontColor = YELLOW //UIColor.init(red: 0.8, green: 0.8, blue: 0.0, alpha: 1.0)
         starLabel1.fontSize = screenWidth*0.1
         starLabel1.horizontalAlignmentMode = .center
         starLabel1.position = CGPoint(x: label1.frame.width/2 + screenWidth*0.01 + starLabel1.frame.width/2, y: 5)
