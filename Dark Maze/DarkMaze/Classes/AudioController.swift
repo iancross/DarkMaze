@@ -112,32 +112,36 @@ class AudioController{
     }
     
     public func playFootstep(){
-        do  {
-            if let url = Bundle.main.url(forResource: String(footstepCounter + 1), withExtension: "wav"){
-                footstepAudioPlayer = try AVAudioPlayer(contentsOf: url)
-                footstepAudioPlayer!.volume = FOOTSTEP_VOLUME
-                footstepAudioPlayer!.prepareToPlay()
-                footstepAudioPlayer!.play()
-                footstepCounter = (footstepCounter + 1) % 9
-            }
+        if gameSoundsEnabled{
+            do  {
+                if let url = Bundle.main.url(forResource: String(footstepCounter + 1), withExtension: "wav"){
+                    footstepAudioPlayer = try AVAudioPlayer(contentsOf: url)
+                    footstepAudioPlayer!.volume = FOOTSTEP_VOLUME
+                    footstepAudioPlayer!.prepareToPlay()
+                    footstepAudioPlayer!.play()
+                    footstepCounter = (footstepCounter + 1) % 9
+                }
 
-        }
-        catch{
-            print ("sound error")
+            }
+            catch{
+                print ("sound error")
+            }
         }
     }
     
     public func playCracking(){
-        do  {
-            if let url = Bundle.main.url(forResource: "crackingSound", withExtension: "wav"){
-                crackingAudioPlayer = try AVAudioPlayer(contentsOf: url)
-                crackingAudioPlayer!.prepareToPlay()
-                crackingAudioPlayer!.play()
+        if gameSoundsEnabled{
+            do  {
+                if let url = Bundle.main.url(forResource: "crackingSound", withExtension: "wav"){
+                    crackingAudioPlayer = try AVAudioPlayer(contentsOf: url)
+                    crackingAudioPlayer!.prepareToPlay()
+                    crackingAudioPlayer!.play()
+                }
+                
             }
-            
-        }
-        catch{
-            print ("sound error")
+            catch{
+                print ("sound error")
+            }
         }
     }
     
